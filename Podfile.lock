@@ -1,0 +1,15 @@
+PODS:
+  - AudioKit (3.6)
+  - Shimmer (1.0.2)
+
+DEPENDENCIES:
+  - AudioKit (~> 3.5)
+  - Shimmer (~> 1.0)
+
+SPEC CHECKSUMS:
+  AudioKit: 7823de92f3c9570178d2347042867b6a93be1464
+  Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
+
+PODFILE CHECKSUM: 84c606983df837bbe2b5db394e45cd85c0204773
+
+COCOAPODS: 1.0.1

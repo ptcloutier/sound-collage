@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="yqA-2D-nKs">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Item-->
+        <scene sceneID="crF-tI-oZu">
+            <objects>
+                <viewController id="ZBM-cs-oHd" customClass="SCSamplerViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gOj-HM-pS1"/>
+                        <viewControllerLayoutGuide type="bottom" id="ZQF-2v-u0L"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="L1F-DA-8h8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="vsd-8B-wCM"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Gzs-hE-Rib" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3890.4000000000001" y="35.532233883058474"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="sR1-Bh-aMP">
+            <objects>
+                <viewController id="p5R-qm-pcu" customClass="SCKeyboardViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NRh-bo-vMP"/>
+                        <viewControllerLayoutGuide type="bottom" id="Cae-WH-z7d"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cG2-Pd-3hA">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ezP-eR-f7l">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qxt-Dq-3et">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Js-2B-oOs" userLabel="lowerKeyboardView">
+                                                <rect key="frame" x="0.0" y="0.0" width="125" height="633.5"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Opq-01-5Ih" userLabel="wholeNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="8" width="50" height="618"/>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" distribution="fillEqually" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="vhX-nv-S61" userLabel="halfNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
+                                                        <rect key="frame" x="64" y="30" width="50" height="588"/>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="vhX-nv-S61" firstAttribute="top" secondItem="3Js-2B-oOs" secondAttribute="topMargin" constant="22" id="C6h-n6-fx9"/>
+                                                    <constraint firstAttribute="bottomMargin" secondItem="Opq-01-5Ih" secondAttribute="bottom" id="H1z-Om-xmw"/>
+                                                    <constraint firstItem="vhX-nv-S61" firstAttribute="leading" secondItem="Opq-01-5Ih" secondAttribute="trailing" constant="6" id="Pgf-XH-TYg"/>
+                                                    <constraint firstItem="Opq-01-5Ih" firstAttribute="width" secondItem="3Js-2B-oOs" secondAttribute="width" multiplier="2:5" id="WUw-vm-mar"/>
+                                                    <constraint firstAttribute="bottomMargin" secondItem="vhX-nv-S61" secondAttribute="bottom" constant="8" id="ciH-Co-3az"/>
+                                                    <constraint firstItem="vhX-nv-S61" firstAttribute="width" secondItem="Opq-01-5Ih" secondAttribute="width" id="gY2-fp-Bl8"/>
+                                                    <constraint firstItem="Opq-01-5Ih" firstAttribute="leading" secondItem="3Js-2B-oOs" secondAttribute="leadingMargin" id="hY7-KS-hkw"/>
+                                                    <constraint firstItem="Opq-01-5Ih" firstAttribute="top" secondItem="3Js-2B-oOs" secondAttribute="topMargin" id="iKS-g4-VYZ"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rDT-rz-yuc" userLabel="upperKeyboardView">
+                                                <rect key="frame" x="120" y="0.0" width="125" height="633.5"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="2EQ-rU-5Cs" userLabel="wholeNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="8" width="50" height="599"/>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" distribution="fillEqually" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="pVS-wg-3h6" userLabel="halfNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
+                                                        <rect key="frame" x="64" y="30" width="50" height="569"/>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="pVS-wg-3h6" firstAttribute="width" secondItem="2EQ-rU-5Cs" secondAttribute="width" id="0j1-u0-TnB"/>
+                                                    <constraint firstItem="2EQ-rU-5Cs" firstAttribute="width" secondItem="rDT-rz-yuc" secondAttribute="width" multiplier="2:5" id="2Qp-v5-jsv"/>
+                                                    <constraint firstItem="2EQ-rU-5Cs" firstAttribute="leading" secondItem="rDT-rz-yuc" secondAttribute="leadingMargin" id="IBH-mR-Gjz"/>
+                                                    <constraint firstItem="2EQ-rU-5Cs" firstAttribute="top" secondItem="rDT-rz-yuc" secondAttribute="topMargin" id="QeU-dM-0Yd"/>
+                                                    <constraint firstItem="pVS-wg-3h6" firstAttribute="leading" secondItem="2EQ-rU-5Cs" secondAttribute="trailing" constant="6" id="UUV-B8-YLx"/>
+                                                    <constraint firstAttribute="bottomMargin" secondItem="pVS-wg-3h6" secondAttribute="bottom" constant="8" id="eLC-Np-Kmn"/>
+                                                    <constraint firstAttribute="bottomMargin" secondItem="2EQ-rU-5Cs" secondAttribute="bottom" id="eZo-B8-g79"/>
+                                                    <constraint firstItem="pVS-wg-3h6" firstAttribute="top" secondItem="rDT-rz-yuc" secondAttribute="topMargin" constant="22" id="nYG-Xw-8fT"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="qxt-Dq-3et" secondAttribute="bottom" id="awi-Uz-rXa"/>
+                                    <constraint firstItem="qxt-Dq-3et" firstAttribute="leading" secondItem="ezP-eR-f7l" secondAttribute="leading" id="bVp-Bc-f2j"/>
+                                    <constraint firstItem="qxt-Dq-3et" firstAttribute="top" secondItem="ezP-eR-f7l" secondAttribute="top" id="n3e-Wl-0Tc"/>
+                                    <constraint firstAttribute="trailing" secondItem="qxt-Dq-3et" secondAttribute="trailing" id="uqI-r7-PVb"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qxt-Dq-3et" firstAttribute="width" secondItem="cG2-Pd-3hA" secondAttribute="width" id="29i-FD-96E"/>
+                            <constraint firstItem="ezP-eR-f7l" firstAttribute="top" secondItem="NRh-bo-vMP" secondAttribute="bottom" id="7x1-KB-6F4"/>
+                            <constraint firstItem="ezP-eR-f7l" firstAttribute="leading" secondItem="cG2-Pd-3hA" secondAttribute="leading" id="Q7Z-Gz-nI8"/>
+                            <constraint firstAttribute="trailing" secondItem="ezP-eR-f7l" secondAttribute="trailing" id="gSx-az-aaq"/>
+                            <constraint firstItem="Cae-WH-z7d" firstAttribute="top" secondItem="ezP-eR-f7l" secondAttribute="bottom" id="qAA-oq-z2W"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="hKy-ac-H3I"/>
+                    <connections>
+                        <outlet property="doubleManualView" destination="qxt-Dq-3et" id="DvN-Pq-6p0"/>
+                        <outlet property="lowerHalfNotes" destination="vhX-nv-S61" id="a6p-m1-xsX"/>
+                        <outlet property="lowerKeyboardView" destination="3Js-2B-oOs" id="bNl-5q-mb8"/>
+                        <outlet property="lowerWholeNotes" destination="Opq-01-5Ih" id="hi1-nm-RBw"/>
+                        <outlet property="scrollView" destination="ezP-eR-f7l" id="CfC-QK-dbx"/>
+                        <outlet property="upperHalfNotes" destination="pVS-wg-3h6" id="gw8-5L-REQ"/>
+                        <outlet property="upperKeyboardView" destination="rDT-rz-yuc" id="p0r-7K-3dQ"/>
+                        <outlet property="upperWholeNotes" destination="2EQ-rU-5Cs" id="i36-IQ-A7A"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="58T-Kg-Xmi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4791.1999999999998" y="35.532233883058474"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="77J-Zd-rgc">
+            <objects>
+                <viewController id="Brs-gS-Ctn" customClass="SCSampleBankViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="xXt-bi-0jb"/>
+                        <viewControllerLayoutGuide type="bottom" id="H7x-ld-RLl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="pNQ-5h-lOO">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="Mum-u3-RoM"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="k11-Ki-zmW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5680.8000000000002" y="35.532233883058474"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="3io-WH-xwc">
+            <objects>
+                <viewController id="caG-9o-Y28" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="PuP-QC-APx"/>
+                        <viewControllerLayoutGuide type="bottom" id="F7s-j9-nJs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="IQS-lf-Tyo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="AKR-6E-6uh"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IFf-y6-xFB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6516" y="35.532233883058474"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="3j6-0G-hSv">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="yqA-2D-nKs" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="Sq7-Cl-eid">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="ZBM-cs-oHd" kind="relationship" relationship="viewControllers" id="pE3-qw-k5X"/>
+                        <segue destination="p5R-qm-pcu" kind="relationship" relationship="viewControllers" id="9jx-0o-OsZ"/>
+                        <segue destination="Brs-gS-Ctn" kind="relationship" relationship="viewControllers" id="Orr-0z-cVw"/>
+                        <segue destination="caG-9o-Y28" kind="relationship" relationship="viewControllers" id="1Qc-rr-A9d"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mae-Os-QuU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2951.1999999999998" y="35.532233883058474"/>
+        </scene>
+    </scenes>
+</document>

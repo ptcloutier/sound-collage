@@ -1,0 +1,722 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3729BBE7EC408BB62F612647 /* libPods-SoundCollage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90CD3584C263009DE4BF4AB6 /* libPods-SoundCollage.a */; };
+		A7054EC61EA82D7700BBC34E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7054EC51EA82D7700BBC34E /* Foundation.framework */; };
+		A71414FA1EA82B3B00BE9718 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414F91EA82B3B00BE9718 /* AVFoundation.framework */; };
+		A71414FC1EA82B4300BE9718 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */; };
+		A71414FF1EA82B5000BE9718 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FD1EA82B5000BE9718 /* CoreAudio.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		A71415001EA82B5000BE9718 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FE1EA82B5000BE9718 /* CoreAudioKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A822F71EA81BEC0061D0A0 /* AppDelegate.swift */; };
+		A7A822FD1EA81BEC0061D0A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7A822FB1EA81BEC0061D0A0 /* Main.storyboard */; };
+		A7A823001EA81BEC0061D0A0 /* SoundCollage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7A822FE1EA81BEC0061D0A0 /* SoundCollage.xcdatamodeld */; };
+		A7A823021EA81BEC0061D0A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7A823011EA81BEC0061D0A0 /* Assets.xcassets */; };
+		A7A823051EA81BEC0061D0A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7A823031EA81BEC0061D0A0 /* LaunchScreen.storyboard */; };
+		A7A823101EA81BEC0061D0A0 /* SoundCollageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8230F1EA81BEC0061D0A0 /* SoundCollageTests.swift */; };
+		A7A8231B1EA81BEC0061D0A0 /* SoundCollageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8231A1EA81BEC0061D0A0 /* SoundCollageUITests.swift */; };
+		A7A8232B1EA81D000061D0A0 /* SCSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823281EA81D000061D0A0 /* SCSample.swift */; };
+		A7A8232F1EA81D280061D0A0 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8232E1EA81D280061D0A0 /* AlertManager.swift */; };
+		A7A823311EA81D300061D0A0 /* SCAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823301EA81D300061D0A0 /* SCAudioPlayer.swift */; };
+		A7A8233B1EA81F500061D0A0 /* SCKeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823341EA81F500061D0A0 /* SCKeyboardViewController.swift */; };
+		A7A8233C1EA81F500061D0A0 /* SCNoteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823351EA81F500061D0A0 /* SCNoteButton.swift */; };
+		A7A8233D1EA81F500061D0A0 /* SCSampleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823361EA81F500061D0A0 /* SCSampleManager.swift */; };
+		A7A8233E1EA81F500061D0A0 /* SCSamplerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823371EA81F500061D0A0 /* SCSamplerCollectionViewCell.swift */; };
+		A7A8233F1EA81F500061D0A0 /* SCSamplerFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823381EA81F500061D0A0 /* SCSamplerFlowLayout.swift */; };
+		A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */; };
+		A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */; };
+		A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823421EA81F6C0061D0A0 /* SCStackView.swift */; };
+		A7C0616F1EA8307A00BBA41F /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7C0616E1EA8307A00BBA41F /* AudioKit.framework */; };
+		A7C061701EA8307A00BBA41F /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A7C0616E1EA8307A00BBA41F /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A7C061731EA833D500BBA41F /* record.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C061721EA833D400BBA41F /* record.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A7A8230C1EA81BEC0061D0A0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7A822EC1EA81BEC0061D0A0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A7A822F31EA81BEC0061D0A0;
+			remoteInfo = SoundCollage;
+		};
+		A7A823171EA81BEC0061D0A0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7A822EC1EA81BEC0061D0A0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A7A822F31EA81BEC0061D0A0;
+			remoteInfo = SoundCollage;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A7C061711EA8307A00BBA41F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A7C061701EA8307A00BBA41F /* AudioKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		62E84F2598E928AE8149BD9A /* Pods-SoundCollage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.release.xcconfig"; sourceTree = "<group>"; };
+		8DD07E77AAF50D57757AEF48 /* Pods-SoundCollage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.debug.xcconfig"; sourceTree = "<group>"; };
+		90CD3584C263009DE4BF4AB6 /* libPods-SoundCollage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SoundCollage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7054EC51EA82D7700BBC34E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A71414F91EA82B3B00BE9718 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		A71414FD1EA82B5000BE9718 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		A71414FE1EA82B5000BE9718 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
+		A7A822F41EA81BEC0061D0A0 /* SoundCollage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoundCollage.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7A822F71EA81BEC0061D0A0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A7A822FC1EA81BEC0061D0A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A7A822FF1EA81BEC0061D0A0 /* SoundCollage.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SoundCollage.xcdatamodel; sourceTree = "<group>"; };
+		A7A823011EA81BEC0061D0A0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A7A823041EA81BEC0061D0A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A7A823061EA81BEC0061D0A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7A8230B1EA81BEC0061D0A0 /* SoundCollageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoundCollageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7A8230F1EA81BEC0061D0A0 /* SoundCollageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundCollageTests.swift; sourceTree = "<group>"; };
+		A7A823111EA81BEC0061D0A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7A823161EA81BEC0061D0A0 /* SoundCollageUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoundCollageUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7A8231A1EA81BEC0061D0A0 /* SoundCollageUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundCollageUITests.swift; sourceTree = "<group>"; };
+		A7A8231C1EA81BEC0061D0A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7A823281EA81D000061D0A0 /* SCSample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSample.swift; sourceTree = "<group>"; };
+		A7A8232E1EA81D280061D0A0 /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		A7A823301EA81D300061D0A0 /* SCAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAudioPlayer.swift; sourceTree = "<group>"; };
+		A7A823321EA81D370061D0A0 /* SoundCollage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SoundCollage-Bridging-Header.h"; sourceTree = "<group>"; };
+		A7A823341EA81F500061D0A0 /* SCKeyboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCKeyboardViewController.swift; sourceTree = "<group>"; };
+		A7A823351EA81F500061D0A0 /* SCNoteButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCNoteButton.swift; sourceTree = "<group>"; };
+		A7A823361EA81F500061D0A0 /* SCSampleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleManager.swift; sourceTree = "<group>"; };
+		A7A823371EA81F500061D0A0 /* SCSamplerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSamplerCollectionViewCell.swift; sourceTree = "<group>"; };
+		A7A823381EA81F500061D0A0 /* SCSamplerFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSamplerFlowLayout.swift; sourceTree = "<group>"; };
+		A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSamplerViewController.swift; sourceTree = "<group>"; };
+		A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankViewController.swift; sourceTree = "<group>"; };
+		A7A823421EA81F6C0061D0A0 /* SCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCStackView.swift; sourceTree = "<group>"; };
+		A7C0616E1EA8307A00BBA41F /* AudioKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AudioKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7C061721EA833D400BBA41F /* record.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = record.png; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A7A822F11EA81BEC0061D0A0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7054EC61EA82D7700BBC34E /* Foundation.framework in Frameworks */,
+				A7C0616F1EA8307A00BBA41F /* AudioKit.framework in Frameworks */,
+				A71414FF1EA82B5000BE9718 /* CoreAudio.framework in Frameworks */,
+				A71415001EA82B5000BE9718 /* CoreAudioKit.framework in Frameworks */,
+				A71414FC1EA82B4300BE9718 /* CoreGraphics.framework in Frameworks */,
+				A71414FA1EA82B3B00BE9718 /* AVFoundation.framework in Frameworks */,
+				3729BBE7EC408BB62F612647 /* libPods-SoundCollage.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7A823081EA81BEC0061D0A0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7A823131EA81BEC0061D0A0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		095B8402F860F7E6A5BAF4F4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A7054EC51EA82D7700BBC34E /* Foundation.framework */,
+				A71414FD1EA82B5000BE9718 /* CoreAudio.framework */,
+				A71414FE1EA82B5000BE9718 /* CoreAudioKit.framework */,
+				A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */,
+				A71414F91EA82B3B00BE9718 /* AVFoundation.framework */,
+				90CD3584C263009DE4BF4AB6 /* libPods-SoundCollage.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		50898C8D4DA2581E20F8FABF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8DD07E77AAF50D57757AEF48 /* Pods-SoundCollage.debug.xcconfig */,
+				62E84F2598E928AE8149BD9A /* Pods-SoundCollage.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A7A822EB1EA81BEC0061D0A0 = {
+			isa = PBXGroup;
+			children = (
+				A7C0616E1EA8307A00BBA41F /* AudioKit.framework */,
+				A7A822F61EA81BEC0061D0A0 /* SoundCollage */,
+				A7A8230E1EA81BEC0061D0A0 /* SoundCollageTests */,
+				A7A823191EA81BEC0061D0A0 /* SoundCollageUITests */,
+				A7A822F51EA81BEC0061D0A0 /* Products */,
+				50898C8D4DA2581E20F8FABF /* Pods */,
+				095B8402F860F7E6A5BAF4F4 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		A7A822F51EA81BEC0061D0A0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A7A822F41EA81BEC0061D0A0 /* SoundCollage.app */,
+				A7A8230B1EA81BEC0061D0A0 /* SoundCollageTests.xctest */,
+				A7A823161EA81BEC0061D0A0 /* SoundCollageUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A7A822F61EA81BEC0061D0A0 /* SoundCollage */ = {
+			isa = PBXGroup;
+			children = (
+				A7A822F71EA81BEC0061D0A0 /* AppDelegate.swift */,
+				A7A823301EA81D300061D0A0 /* SCAudioPlayer.swift */,
+				A7A823321EA81D370061D0A0 /* SoundCollage-Bridging-Header.h */,
+				A7A822FB1EA81BEC0061D0A0 /* Main.storyboard */,
+				A7A8232E1EA81D280061D0A0 /* AlertManager.swift */,
+				A7A823361EA81F500061D0A0 /* SCSampleManager.swift */,
+				A7A823281EA81D000061D0A0 /* SCSample.swift */,
+				A7A823341EA81F500061D0A0 /* SCKeyboardViewController.swift */,
+				A7A823351EA81F500061D0A0 /* SCNoteButton.swift */,
+				A7A823371EA81F500061D0A0 /* SCSamplerCollectionViewCell.swift */,
+				A7A823381EA81F500061D0A0 /* SCSamplerFlowLayout.swift */,
+				A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */,
+				A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */,
+				A7A823421EA81F6C0061D0A0 /* SCStackView.swift */,
+				A7A823011EA81BEC0061D0A0 /* Assets.xcassets */,
+				A7A823031EA81BEC0061D0A0 /* LaunchScreen.storyboard */,
+				A7A823061EA81BEC0061D0A0 /* Info.plist */,
+				A7A822FE1EA81BEC0061D0A0 /* SoundCollage.xcdatamodeld */,
+				A7C061721EA833D400BBA41F /* record.png */,
+			);
+			path = SoundCollage;
+			sourceTree = "<group>";
+		};
+		A7A8230E1EA81BEC0061D0A0 /* SoundCollageTests */ = {
+			isa = PBXGroup;
+			children = (
+				A7A8230F1EA81BEC0061D0A0 /* SoundCollageTests.swift */,
+				A7A823111EA81BEC0061D0A0 /* Info.plist */,
+			);
+			path = SoundCollageTests;
+			sourceTree = "<group>";
+		};
+		A7A823191EA81BEC0061D0A0 /* SoundCollageUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A7A8231A1EA81BEC0061D0A0 /* SoundCollageUITests.swift */,
+				A7A8231C1EA81BEC0061D0A0 /* Info.plist */,
+			);
+			path = SoundCollageUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A7A822F31EA81BEC0061D0A0 /* SoundCollage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7A8231F1EA81BEC0061D0A0 /* Build configuration list for PBXNativeTarget "SoundCollage" */;
+			buildPhases = (
+				79C3BFC85D44C14B5AE91709 /* [CP] Check Pods Manifest.lock */,
+				A7A822F01EA81BEC0061D0A0 /* Sources */,
+				A7A822F11EA81BEC0061D0A0 /* Frameworks */,
+				A7A822F21EA81BEC0061D0A0 /* Resources */,
+				3D4E627D48FA3A86DD272EBA /* [CP] Embed Pods Frameworks */,
+				ED47EAD14DC1CFDA065959BB /* [CP] Copy Pods Resources */,
+				A7C061711EA8307A00BBA41F /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SoundCollage;
+			productName = SoundCollage;
+			productReference = A7A822F41EA81BEC0061D0A0 /* SoundCollage.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A7A8230A1EA81BEC0061D0A0 /* SoundCollageTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7A823221EA81BEC0061D0A0 /* Build configuration list for PBXNativeTarget "SoundCollageTests" */;
+			buildPhases = (
+				A7A823071EA81BEC0061D0A0 /* Sources */,
+				A7A823081EA81BEC0061D0A0 /* Frameworks */,
+				A7A823091EA81BEC0061D0A0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A7A8230D1EA81BEC0061D0A0 /* PBXTargetDependency */,
+			);
+			name = SoundCollageTests;
+			productName = SoundCollageTests;
+			productReference = A7A8230B1EA81BEC0061D0A0 /* SoundCollageTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A7A823151EA81BEC0061D0A0 /* SoundCollageUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7A823251EA81BEC0061D0A0 /* Build configuration list for PBXNativeTarget "SoundCollageUITests" */;
+			buildPhases = (
+				A7A823121EA81BEC0061D0A0 /* Sources */,
+				A7A823131EA81BEC0061D0A0 /* Frameworks */,
+				A7A823141EA81BEC0061D0A0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A7A823181EA81BEC0061D0A0 /* PBXTargetDependency */,
+			);
+			name = SoundCollageUITests;
+			productName = SoundCollageUITests;
+			productReference = A7A823161EA81BEC0061D0A0 /* SoundCollageUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A7A822EC1EA81BEC0061D0A0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0820;
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = ptcloutier;
+				TargetAttributes = {
+					A7A822F31EA81BEC0061D0A0 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = LHVTYN77KH;
+						ProvisioningStyle = Automatic;
+					};
+					A7A8230A1EA81BEC0061D0A0 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = LHVTYN77KH;
+						ProvisioningStyle = Automatic;
+						TestTargetID = A7A822F31EA81BEC0061D0A0;
+					};
+					A7A823151EA81BEC0061D0A0 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = LHVTYN77KH;
+						ProvisioningStyle = Automatic;
+						TestTargetID = A7A822F31EA81BEC0061D0A0;
+					};
+				};
+			};
+			buildConfigurationList = A7A822EF1EA81BEC0061D0A0 /* Build configuration list for PBXProject "SoundCollage" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A7A822EB1EA81BEC0061D0A0;
+			productRefGroup = A7A822F51EA81BEC0061D0A0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A7A822F31EA81BEC0061D0A0 /* SoundCollage */,
+				A7A8230A1EA81BEC0061D0A0 /* SoundCollageTests */,
+				A7A823151EA81BEC0061D0A0 /* SoundCollageUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A7A822F21EA81BEC0061D0A0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7C061731EA833D500BBA41F /* record.png in Resources */,
+				A7A823051EA81BEC0061D0A0 /* LaunchScreen.storyboard in Resources */,
+				A7A823021EA81BEC0061D0A0 /* Assets.xcassets in Resources */,
+				A7A822FD1EA81BEC0061D0A0 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7A823091EA81BEC0061D0A0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7A823141EA81BEC0061D0A0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3D4E627D48FA3A86DD272EBA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		79C3BFC85D44C14B5AE91709 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		ED47EAD14DC1CFDA065959BB /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A7A822F01EA81BEC0061D0A0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7A8233D1EA81F500061D0A0 /* SCSampleManager.swift in Sources */,
+				A7A8233E1EA81F500061D0A0 /* SCSamplerCollectionViewCell.swift in Sources */,
+				A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */,
+				A7A8233F1EA81F500061D0A0 /* SCSamplerFlowLayout.swift in Sources */,
+				A7A8232B1EA81D000061D0A0 /* SCSample.swift in Sources */,
+				A7A8232F1EA81D280061D0A0 /* AlertManager.swift in Sources */,
+				A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */,
+				A7A8233B1EA81F500061D0A0 /* SCKeyboardViewController.swift in Sources */,
+				A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */,
+				A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */,
+				A7A823001EA81BEC0061D0A0 /* SoundCollage.xcdatamodeld in Sources */,
+				A7A823311EA81D300061D0A0 /* SCAudioPlayer.swift in Sources */,
+				A7A8233C1EA81F500061D0A0 /* SCNoteButton.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7A823071EA81BEC0061D0A0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7A823101EA81BEC0061D0A0 /* SoundCollageTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7A823121EA81BEC0061D0A0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7A8231B1EA81BEC0061D0A0 /* SoundCollageUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A7A8230D1EA81BEC0061D0A0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A7A822F31EA81BEC0061D0A0 /* SoundCollage */;
+			targetProxy = A7A8230C1EA81BEC0061D0A0 /* PBXContainerItemProxy */;
+		};
+		A7A823181EA81BEC0061D0A0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A7A822F31EA81BEC0061D0A0 /* SoundCollage */;
+			targetProxy = A7A823171EA81BEC0061D0A0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A7A822FB1EA81BEC0061D0A0 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7A822FC1EA81BEC0061D0A0 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A7A823031EA81BEC0061D0A0 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7A823041EA81BEC0061D0A0 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A7A8231D1EA81BEC0061D0A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A7A8231E1EA81BEC0061D0A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A7A823201EA81BEC0061D0A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8DD07E77AAF50D57757AEF48 /* Pods-SoundCollage.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = LHVTYN77KH;
+				INFOPLIST_FILE = SoundCollage/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollage;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SoundCollage/SoundCollage-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		A7A823211EA81BEC0061D0A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 62E84F2598E928AE8149BD9A /* Pods-SoundCollage.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = LHVTYN77KH;
+				INFOPLIST_FILE = SoundCollage/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollage;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SoundCollage/SoundCollage-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		A7A823231EA81BEC0061D0A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = LHVTYN77KH;
+				INFOPLIST_FILE = SoundCollageTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollageTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SoundCollage.app/SoundCollage";
+			};
+			name = Debug;
+		};
+		A7A823241EA81BEC0061D0A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = LHVTYN77KH;
+				INFOPLIST_FILE = SoundCollageTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollageTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SoundCollage.app/SoundCollage";
+			};
+			name = Release;
+		};
+		A7A823261EA81BEC0061D0A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = LHVTYN77KH;
+				INFOPLIST_FILE = SoundCollageUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollageUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = SoundCollage;
+			};
+			name = Debug;
+		};
+		A7A823271EA81BEC0061D0A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = LHVTYN77KH;
+				INFOPLIST_FILE = SoundCollageUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollageUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = SoundCollage;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A7A822EF1EA81BEC0061D0A0 /* Build configuration list for PBXProject "SoundCollage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7A8231D1EA81BEC0061D0A0 /* Debug */,
+				A7A8231E1EA81BEC0061D0A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7A8231F1EA81BEC0061D0A0 /* Build configuration list for PBXNativeTarget "SoundCollage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7A823201EA81BEC0061D0A0 /* Debug */,
+				A7A823211EA81BEC0061D0A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7A823221EA81BEC0061D0A0 /* Build configuration list for PBXNativeTarget "SoundCollageTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7A823231EA81BEC0061D0A0 /* Debug */,
+				A7A823241EA81BEC0061D0A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7A823251EA81BEC0061D0A0 /* Build configuration list for PBXNativeTarget "SoundCollageUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7A823261EA81BEC0061D0A0 /* Debug */,
+				A7A823271EA81BEC0061D0A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		A7A822FE1EA81BEC0061D0A0 /* SoundCollage.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A7A822FF1EA81BEC0061D0A0 /* SoundCollage.xcdatamodel */,
+			);
+			currentVersion = A7A822FF1EA81BEC0061D0A0 /* SoundCollage.xcdatamodel */;
+			path = SoundCollage.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = A7A822EC1EA81BEC0061D0A0 /* Project object */;
+}
