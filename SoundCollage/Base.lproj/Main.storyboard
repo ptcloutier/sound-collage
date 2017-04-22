@@ -6,12 +6,13 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item-->
+        <!--SAMPLER-->
         <scene sceneID="crF-tI-oZu">
             <objects>
                 <viewController id="ZBM-cs-oHd" customClass="SCSamplerViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
@@ -24,13 +25,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="vsd-8B-wCM"/>
+                    <tabBarItem key="tabBarItem" title="SAMPLER" id="vsd-8B-wCM"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gzs-hE-Rib" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3890.4000000000001" y="35.532233883058474"/>
         </scene>
-        <!--Item-->
+        <!--KEYS-->
         <scene sceneID="sR1-Bh-aMP">
             <objects>
                 <viewController id="p5R-qm-pcu" customClass="SCKeyboardViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
@@ -42,41 +43,41 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ezP-eR-f7l">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wq4-CT-hCy">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qxt-Dq-3et">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vJA-ng-yuO">
+                                        <rect key="frame" x="0.0" y="-10" width="374" height="638"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Js-2B-oOs" userLabel="lowerKeyboardView">
-                                                <rect key="frame" x="0.0" y="0.0" width="125" height="633.5"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Js-2B-oOs" userLabel="lowerKeyboardView">
+                                                <rect key="frame" x="0.0" y="0.0" width="133" height="638"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Opq-01-5Ih" userLabel="wholeNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
-                                                        <rect key="frame" x="8" y="8" width="50" height="618"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Opq-01-5Ih" userLabel="lowerWholeNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="8" width="53" height="622.5"/>
                                                     </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" distribution="fillEqually" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="vhX-nv-S61" userLabel="halfNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
-                                                        <rect key="frame" x="64" y="30" width="50" height="588"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="vhX-nv-S61" userLabel="lowerHalfNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
+                                                        <rect key="frame" x="67" y="30" width="54" height="622.5"/>
                                                     </stackView>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="vhX-nv-S61" firstAttribute="top" secondItem="3Js-2B-oOs" secondAttribute="topMargin" constant="22" id="C6h-n6-fx9"/>
                                                     <constraint firstAttribute="bottomMargin" secondItem="Opq-01-5Ih" secondAttribute="bottom" id="H1z-Om-xmw"/>
                                                     <constraint firstItem="vhX-nv-S61" firstAttribute="leading" secondItem="Opq-01-5Ih" secondAttribute="trailing" constant="6" id="Pgf-XH-TYg"/>
+                                                    <constraint firstItem="vhX-nv-S61" firstAttribute="height" secondItem="Opq-01-5Ih" secondAttribute="height" id="UX9-LU-Nu9"/>
                                                     <constraint firstItem="Opq-01-5Ih" firstAttribute="width" secondItem="3Js-2B-oOs" secondAttribute="width" multiplier="2:5" id="WUw-vm-mar"/>
-                                                    <constraint firstAttribute="bottomMargin" secondItem="vhX-nv-S61" secondAttribute="bottom" constant="8" id="ciH-Co-3az"/>
                                                     <constraint firstItem="vhX-nv-S61" firstAttribute="width" secondItem="Opq-01-5Ih" secondAttribute="width" id="gY2-fp-Bl8"/>
                                                     <constraint firstItem="Opq-01-5Ih" firstAttribute="leading" secondItem="3Js-2B-oOs" secondAttribute="leadingMargin" id="hY7-KS-hkw"/>
                                                     <constraint firstItem="Opq-01-5Ih" firstAttribute="top" secondItem="3Js-2B-oOs" secondAttribute="topMargin" id="iKS-g4-VYZ"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rDT-rz-yuc" userLabel="upperKeyboardView">
-                                                <rect key="frame" x="120" y="0.0" width="125" height="633.5"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rDT-rz-yuc" userLabel="upperKeyboardView">
+                                                <rect key="frame" x="120" y="0.0" width="133" height="638"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="2EQ-rU-5Cs" userLabel="wholeNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
-                                                        <rect key="frame" x="8" y="8" width="50" height="599"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="2EQ-rU-5Cs" userLabel="upperWholeNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="8" width="53" height="622.5"/>
                                                     </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" distribution="fillEqually" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="pVS-wg-3h6" userLabel="halfNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
-                                                        <rect key="frame" x="64" y="30" width="50" height="569"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="pVS-wg-3h6" userLabel="upperHalfNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
+                                                        <rect key="frame" x="67" y="30" width="54" height="622.5"/>
                                                     </stackView>
                                                 </subviews>
                                                 <constraints>
@@ -85,39 +86,50 @@
                                                     <constraint firstItem="2EQ-rU-5Cs" firstAttribute="leading" secondItem="rDT-rz-yuc" secondAttribute="leadingMargin" id="IBH-mR-Gjz"/>
                                                     <constraint firstItem="2EQ-rU-5Cs" firstAttribute="top" secondItem="rDT-rz-yuc" secondAttribute="topMargin" id="QeU-dM-0Yd"/>
                                                     <constraint firstItem="pVS-wg-3h6" firstAttribute="leading" secondItem="2EQ-rU-5Cs" secondAttribute="trailing" constant="6" id="UUV-B8-YLx"/>
-                                                    <constraint firstAttribute="bottomMargin" secondItem="pVS-wg-3h6" secondAttribute="bottom" constant="8" id="eLC-Np-Kmn"/>
-                                                    <constraint firstAttribute="bottomMargin" secondItem="2EQ-rU-5Cs" secondAttribute="bottom" id="eZo-B8-g79"/>
                                                     <constraint firstItem="pVS-wg-3h6" firstAttribute="top" secondItem="rDT-rz-yuc" secondAttribute="topMargin" constant="22" id="nYG-Xw-8fT"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="pVS-wg-3h6" firstAttribute="height" secondItem="vhX-nv-S61" secondAttribute="height" id="3qd-Do-4nj"/>
+                                            <constraint firstItem="3Js-2B-oOs" firstAttribute="width" secondItem="vJA-ng-yuO" secondAttribute="height" multiplier="125:598" id="7jx-q0-aWZ"/>
+                                            <constraint firstItem="rDT-rz-yuc" firstAttribute="leading" secondItem="3Js-2B-oOs" secondAttribute="leading" constant="120" id="G7n-Ry-EC8"/>
+                                            <constraint firstItem="rDT-rz-yuc" firstAttribute="centerY" secondItem="vJA-ng-yuO" secondAttribute="centerY" id="NGk-KV-MRN"/>
+                                            <constraint firstItem="rDT-rz-yuc" firstAttribute="height" secondItem="3Js-2B-oOs" secondAttribute="height" id="VyX-DA-PAj"/>
+                                            <constraint firstItem="rDT-rz-yuc" firstAttribute="width" secondItem="vJA-ng-yuO" secondAttribute="height" multiplier="125:598" id="Wxd-sO-Ucu"/>
+                                            <constraint firstItem="rDT-rz-yuc" firstAttribute="top" secondItem="vJA-ng-yuO" secondAttribute="top" id="ZYL-Qn-cAt"/>
+                                            <constraint firstItem="3Js-2B-oOs" firstAttribute="top" secondItem="vJA-ng-yuO" secondAttribute="top" id="cOw-P4-ztm"/>
+                                            <constraint firstItem="3Js-2B-oOs" firstAttribute="leading" secondItem="vJA-ng-yuO" secondAttribute="leading" id="mh1-ck-3l8"/>
+                                            <constraint firstItem="2EQ-rU-5Cs" firstAttribute="height" secondItem="Opq-01-5Ih" secondAttribute="height" id="rcM-Yr-tCW"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="qxt-Dq-3et" secondAttribute="bottom" id="awi-Uz-rXa"/>
-                                    <constraint firstItem="qxt-Dq-3et" firstAttribute="leading" secondItem="ezP-eR-f7l" secondAttribute="leading" id="bVp-Bc-f2j"/>
-                                    <constraint firstItem="qxt-Dq-3et" firstAttribute="top" secondItem="ezP-eR-f7l" secondAttribute="top" id="n3e-Wl-0Tc"/>
-                                    <constraint firstAttribute="trailing" secondItem="qxt-Dq-3et" secondAttribute="trailing" id="uqI-r7-PVb"/>
+                                    <constraint firstItem="vJA-ng-yuO" firstAttribute="leading" secondItem="Wq4-CT-hCy" secondAttribute="leading" id="It7-Ph-0be"/>
+                                    <constraint firstItem="vJA-ng-yuO" firstAttribute="top" secondItem="Wq4-CT-hCy" secondAttribute="top" constant="-10" id="NRw-oC-79O"/>
+                                    <constraint firstAttribute="bottom" secondItem="vJA-ng-yuO" secondAttribute="bottom" id="Qev-E6-CYC"/>
+                                    <constraint firstItem="vJA-ng-yuO" firstAttribute="centerX" secondItem="Wq4-CT-hCy" secondAttribute="centerX" id="U2I-cJ-PSM"/>
+                                    <constraint firstItem="vJA-ng-yuO" firstAttribute="centerY" secondItem="Wq4-CT-hCy" secondAttribute="centerY" id="fjz-P8-Plz"/>
+                                    <constraint firstAttribute="trailing" secondItem="vJA-ng-yuO" secondAttribute="trailing" constant="1" id="iwk-kT-aDT"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="qxt-Dq-3et" firstAttribute="width" secondItem="cG2-Pd-3hA" secondAttribute="width" id="29i-FD-96E"/>
-                            <constraint firstItem="ezP-eR-f7l" firstAttribute="top" secondItem="NRh-bo-vMP" secondAttribute="bottom" id="7x1-KB-6F4"/>
-                            <constraint firstItem="ezP-eR-f7l" firstAttribute="leading" secondItem="cG2-Pd-3hA" secondAttribute="leading" id="Q7Z-Gz-nI8"/>
-                            <constraint firstAttribute="trailing" secondItem="ezP-eR-f7l" secondAttribute="trailing" id="gSx-az-aaq"/>
-                            <constraint firstItem="Cae-WH-z7d" firstAttribute="top" secondItem="ezP-eR-f7l" secondAttribute="bottom" id="qAA-oq-z2W"/>
+                            <constraint firstItem="Wq4-CT-hCy" firstAttribute="top" secondItem="NRh-bo-vMP" secondAttribute="bottom" id="EOo-Gj-lMV"/>
+                            <constraint firstItem="Wq4-CT-hCy" firstAttribute="leading" secondItem="cG2-Pd-3hA" secondAttribute="leading" id="GDK-N3-Skz"/>
+                            <constraint firstItem="Cae-WH-z7d" firstAttribute="top" secondItem="Wq4-CT-hCy" secondAttribute="bottom" id="aDc-h5-6Is"/>
+                            <constraint firstAttribute="trailing" secondItem="Wq4-CT-hCy" secondAttribute="trailing" id="m5V-xS-hb9"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="hKy-ac-H3I"/>
+                    <tabBarItem key="tabBarItem" title="KEYS" id="hKy-ac-H3I"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="doubleManualView" destination="qxt-Dq-3et" id="DvN-Pq-6p0"/>
+                        <outlet property="doubleManualView" destination="vJA-ng-yuO" id="gx6-an-P9y"/>
                         <outlet property="lowerHalfNotes" destination="vhX-nv-S61" id="a6p-m1-xsX"/>
                         <outlet property="lowerKeyboardView" destination="3Js-2B-oOs" id="bNl-5q-mb8"/>
                         <outlet property="lowerWholeNotes" destination="Opq-01-5Ih" id="hi1-nm-RBw"/>
-                        <outlet property="scrollView" destination="ezP-eR-f7l" id="CfC-QK-dbx"/>
+                        <outlet property="scrollView" destination="Wq4-CT-hCy" id="uSF-U5-9Dx"/>
                         <outlet property="upperHalfNotes" destination="pVS-wg-3h6" id="gw8-5L-REQ"/>
                         <outlet property="upperKeyboardView" destination="rDT-rz-yuc" id="p0r-7K-3dQ"/>
                         <outlet property="upperWholeNotes" destination="2EQ-rU-5Cs" id="i36-IQ-A7A"/>
@@ -127,7 +139,7 @@
             </objects>
             <point key="canvasLocation" x="4791.1999999999998" y="35.532233883058474"/>
         </scene>
-        <!--Item-->
+        <!--SAMPLE BANK-->
         <scene sceneID="77J-Zd-rgc">
             <objects>
                 <viewController id="Brs-gS-Ctn" customClass="SCSampleBankViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
@@ -140,13 +152,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="Mum-u3-RoM"/>
+                    <tabBarItem key="tabBarItem" title="SAMPLE BANK" id="Mum-u3-RoM"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k11-Ki-zmW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5680.8000000000002" y="35.532233883058474"/>
         </scene>
-        <!--Item-->
+        <!--SEQUENCER-->
         <scene sceneID="3io-WH-xwc">
             <objects>
                 <viewController id="caG-9o-Y28" sceneMemberID="viewController">
@@ -159,7 +171,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="AKR-6E-6uh"/>
+                    <tabBarItem key="tabBarItem" title="SEQUENCER" id="AKR-6E-6uh"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IFf-y6-xFB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

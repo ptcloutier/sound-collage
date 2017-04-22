@@ -20,21 +20,25 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
     var gradientLayer: CAGradientLayer!
-    var colorSets = [[CGColor]]()
-    var currentColorSet: Int!
     var audioPlayer: SCAudioPlayer!
     var lastRecording: URL?
     var recordingIsEnabled = false
     var recordingTimer: Timer? = nil
     var flashingOn = false
     var audioFilename: URL?
-    var selectedBtnIndex: Int?
-    
+    var selectedSampleIndex: Int?
+    var colorManager: SCColors?
+    var colorSets = [[CGColor]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.black
+        createColorSets()
+        colorManager = SCColors.init(colors: colorSets)
+        let startPoint = CGPoint(x: 0.0, y: 0.0)
+        let endPoint = CGPoint(x: 1.0, y: 1.0)
+        colorManager?.configureGradientLayer(in: self.view, from: startPoint, to: endPoint)
         setupCollectionView()
         setupControls()
     }
@@ -49,6 +53,10 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
         }
         collectionView?.bounds.size = (collectionView?.collectionViewLayout.collectionViewContentSize)!
         collectionView?.frame.origin.y = 80
+    }
+    
+    override open var shouldAutorotate: Bool {
+        return false
     }
     
     private func setupCollectionView(){
@@ -111,7 +119,10 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
         case true:
             createNewSample()
         case false:
-            playBack()
+            if let index = selectedSampleIndex {
+                SCAudioPlayer.shared.playBack(selectedSampleIndex: index)
+                selectedSampleIndex = nil
+            }
         }
     }
 
@@ -195,24 +206,7 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
     
     //MARK: Playback
 
-    func playBack(){
-        
-        var selectedSample: SCSample?
-        
-        for sample in SCSampleManager.shared.sampleBank {
-            if sample.key == selectedBtnIndex {
-                selectedSample = sample
-            }
-        }
-        guard let url = selectedSample?.url else {
-            print("playback url not found")
-            selectedBtnIndex = nil
-            return
-        }
-        SCAudioPlayer.shared.playSound(soundFileURL: url)
-        selectedBtnIndex = nil
-    }
-//    func playSample() {
+   //    func playSample() {
 //        
 //        guard let url = findSampleURL() else {
 //            print("playback url not found")
@@ -250,7 +244,7 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
             recordingTimer?.invalidate()
         } else {
             finishRecording(success: true)
-            selectedBtnIndex = nil
+            selectedSampleIndex = nil
         }
         
     }
@@ -318,7 +312,8 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
             audioRecorder.stop()
             audioRecorder = nil
             if audioFilename != nil {
-                let sample = SCSample.init(key: selectedBtnIndex!, url: audioFilename!)
+                let sample = SCSample.init(key: selectedSampleIndex!, url: audioFilename!)
+                print(sample.url!)
                 SCSampleManager.shared.sampleBank.append(sample)
             }
             recordingIsEnabled = false // so that we set the buttons to play
@@ -402,8 +397,9 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) {
             animateCell(cell: cell as! SCSamplerCollectionViewCell)
-            selectedBtnIndex = indexPath.row
+            selectedSampleIndex = indexPath.row
             playOrRecord()  // 4
+            colorManager?.morphColors()
         }
     }
     
@@ -426,6 +422,12 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                         )
         })
     }
+    
+    func createColorSets() {
+        colorSets.append([UIColor.black.cgColor, UIColor.lightGray.cgColor, UIColor.white.cgColor, UIColor.black.cgColor])
+        colorSets.append([UIColor.black.cgColor, UIColor.red.cgColor, UIColor.orange.cgColor, UIColor.magenta.cgColor, UIColor.yellow.cgColor, UIColor.black.cgColor])
+    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

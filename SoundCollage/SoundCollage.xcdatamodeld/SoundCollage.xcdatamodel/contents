@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="15G31" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="SampleBankMO" representedClassName="SampleBankMO" syncable="YES" codeGenerationType="class">
+        <relationship name="samples" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SampleMO" inverseName="sampleBankMO" inverseEntity="SampleMO" syncable="YES"/>
+    </entity>
+    <entity name="SampleMO" representedClassName="SampleMO" syncable="YES" codeGenerationType="class">
+        <attribute name="key" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="urlString" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="sampleBankMO" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SampleBankMO" inverseName="samples" inverseEntity="SampleBankMO" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="SampleMO" positionX="-63" positionY="-18" width="128" height="90"/>
+        <element name="SampleBankMO" positionX="-54" positionY="9" width="128" height="60"/>
+    </elements>
 </model>

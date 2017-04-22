@@ -19,6 +19,23 @@ class SCAudioPlayer: NSObject, AVAudioPlayerDelegate {
     var duplicatePlayers = [AVAudioPlayer]()
     let session:AVAudioSession = AVAudioSession.sharedInstance()
  
+    
+    func playBack(selectedSampleIndex: Int){
+        
+        var selectedSample: SCSample?
+        
+        for sample in SCSampleManager.shared.sampleBank {
+            if sample.key == selectedSampleIndex {
+                selectedSample = sample
+            }
+        }
+        guard let url = selectedSample?.url else {
+            print("playback url not found")
+            return
+        }
+        playSound(soundFileURL: url)
+    }
+
     func playSound (soundFileURL: URL){
         
 //        let soundFileNameURL = URL(fileURLWithPath: Bundle.main.path(forResource: soundFileName, ofType: "m4a", inDirectory:"Sounds")!)

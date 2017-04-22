@@ -11,12 +11,13 @@ import UIKit
 class SCNoteButton: UIButton {
     
     var note: Int = 0
+    let delegate: SCNoteButtonDelegate
     
-    required init(note: Int ) {
+    required init(note: Int, delegate: SCNoteButtonDelegate ) {
         // set myValue before super.init is called
         
         self.note = note
-        
+        self.delegate = delegate
         super.init(frame: .zero)
         
         // set other operations after super.init, if required
@@ -34,8 +35,10 @@ class SCNoteButton: UIButton {
             self.alpha = 1
         }, completion: nil)
         print(note)
+        SCAudioPlayer.shared.playBack(selectedSampleIndex: 0)
+        delegate.noteButtonDidPress(sender: self)
     }
-        
+    
     func setupButton(){
         
 //        self.contentMode = .scaleToFill
