@@ -11,8 +11,16 @@ import Foundation
 class SCSampleBank {
     
     var samples: [SCSample] = []
-    
-    init(samples: [SCSample]) {
-        self.samples = samples
+    var id: Int {
+        guard let lastID = UserDefaults.standard.value(forKey: "id") as? Int else {
+            return 0
+        }
+        let newID = lastID+1
+        return newID
     }
+    
+    init() {
+       
+    }
+
 }

@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="yqA-2D-nKs">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Brs-gS-Ctn">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -39,105 +37,97 @@
                         <viewControllerLayoutGuide type="top" id="NRh-bo-vMP"/>
                         <viewControllerLayoutGuide type="bottom" id="Cae-WH-z7d"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="cG2-Pd-3hA">
+                    <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="cG2-Pd-3hA">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wq4-CT-hCy">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jGu-5T-aSc">
+                                <rect key="frame" x="16" y="10" width="140" height="618"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vJA-ng-yuO">
-                                        <rect key="frame" x="0.0" y="-10" width="374" height="638"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Js-2B-oOs" userLabel="lowerKeyboardView">
-                                                <rect key="frame" x="0.0" y="0.0" width="133" height="638"/>
-                                                <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Opq-01-5Ih" userLabel="lowerWholeNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
-                                                        <rect key="frame" x="8" y="8" width="53" height="622.5"/>
-                                                    </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="vhX-nv-S61" userLabel="lowerHalfNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
-                                                        <rect key="frame" x="67" y="30" width="54" height="622.5"/>
-                                                    </stackView>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="vhX-nv-S61" firstAttribute="top" secondItem="3Js-2B-oOs" secondAttribute="topMargin" constant="22" id="C6h-n6-fx9"/>
-                                                    <constraint firstAttribute="bottomMargin" secondItem="Opq-01-5Ih" secondAttribute="bottom" id="H1z-Om-xmw"/>
-                                                    <constraint firstItem="vhX-nv-S61" firstAttribute="leading" secondItem="Opq-01-5Ih" secondAttribute="trailing" constant="6" id="Pgf-XH-TYg"/>
-                                                    <constraint firstItem="vhX-nv-S61" firstAttribute="height" secondItem="Opq-01-5Ih" secondAttribute="height" id="UX9-LU-Nu9"/>
-                                                    <constraint firstItem="Opq-01-5Ih" firstAttribute="width" secondItem="3Js-2B-oOs" secondAttribute="width" multiplier="2:5" id="WUw-vm-mar"/>
-                                                    <constraint firstItem="vhX-nv-S61" firstAttribute="width" secondItem="Opq-01-5Ih" secondAttribute="width" id="gY2-fp-Bl8"/>
-                                                    <constraint firstItem="Opq-01-5Ih" firstAttribute="leading" secondItem="3Js-2B-oOs" secondAttribute="leadingMargin" id="hY7-KS-hkw"/>
-                                                    <constraint firstItem="Opq-01-5Ih" firstAttribute="top" secondItem="3Js-2B-oOs" secondAttribute="topMargin" id="iKS-g4-VYZ"/>
-                                                </constraints>
-                                            </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rDT-rz-yuc" userLabel="upperKeyboardView">
-                                                <rect key="frame" x="120" y="0.0" width="133" height="638"/>
-                                                <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="2EQ-rU-5Cs" userLabel="upperWholeNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
-                                                        <rect key="frame" x="8" y="8" width="53" height="622.5"/>
-                                                    </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="pVS-wg-3h6" userLabel="upperHalfNotes" customClass="SCStackView" customModule="SoundCollage" customModuleProvider="target">
-                                                        <rect key="frame" x="67" y="30" width="54" height="622.5"/>
-                                                    </stackView>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="pVS-wg-3h6" firstAttribute="width" secondItem="2EQ-rU-5Cs" secondAttribute="width" id="0j1-u0-TnB"/>
-                                                    <constraint firstItem="2EQ-rU-5Cs" firstAttribute="width" secondItem="rDT-rz-yuc" secondAttribute="width" multiplier="2:5" id="2Qp-v5-jsv"/>
-                                                    <constraint firstItem="2EQ-rU-5Cs" firstAttribute="leading" secondItem="rDT-rz-yuc" secondAttribute="leadingMargin" id="IBH-mR-Gjz"/>
-                                                    <constraint firstItem="2EQ-rU-5Cs" firstAttribute="top" secondItem="rDT-rz-yuc" secondAttribute="topMargin" id="QeU-dM-0Yd"/>
-                                                    <constraint firstItem="pVS-wg-3h6" firstAttribute="leading" secondItem="2EQ-rU-5Cs" secondAttribute="trailing" constant="6" id="UUV-B8-YLx"/>
-                                                    <constraint firstItem="pVS-wg-3h6" firstAttribute="top" secondItem="rDT-rz-yuc" secondAttribute="topMargin" constant="22" id="nYG-Xw-8fT"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstItem="pVS-wg-3h6" firstAttribute="height" secondItem="vhX-nv-S61" secondAttribute="height" id="3qd-Do-4nj"/>
-                                            <constraint firstItem="3Js-2B-oOs" firstAttribute="width" secondItem="vJA-ng-yuO" secondAttribute="height" multiplier="125:598" id="7jx-q0-aWZ"/>
-                                            <constraint firstItem="rDT-rz-yuc" firstAttribute="leading" secondItem="3Js-2B-oOs" secondAttribute="leading" constant="120" id="G7n-Ry-EC8"/>
-                                            <constraint firstItem="rDT-rz-yuc" firstAttribute="centerY" secondItem="vJA-ng-yuO" secondAttribute="centerY" id="NGk-KV-MRN"/>
-                                            <constraint firstItem="rDT-rz-yuc" firstAttribute="height" secondItem="3Js-2B-oOs" secondAttribute="height" id="VyX-DA-PAj"/>
-                                            <constraint firstItem="rDT-rz-yuc" firstAttribute="width" secondItem="vJA-ng-yuO" secondAttribute="height" multiplier="125:598" id="Wxd-sO-Ucu"/>
-                                            <constraint firstItem="rDT-rz-yuc" firstAttribute="top" secondItem="vJA-ng-yuO" secondAttribute="top" id="ZYL-Qn-cAt"/>
-                                            <constraint firstItem="3Js-2B-oOs" firstAttribute="top" secondItem="vJA-ng-yuO" secondAttribute="top" id="cOw-P4-ztm"/>
-                                            <constraint firstItem="3Js-2B-oOs" firstAttribute="leading" secondItem="vJA-ng-yuO" secondAttribute="leading" id="mh1-ck-3l8"/>
-                                            <constraint firstItem="2EQ-rU-5Cs" firstAttribute="height" secondItem="Opq-01-5Ih" secondAttribute="height" id="rcM-Yr-tCW"/>
-                                        </constraints>
-                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qE0-9D-lZD" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pkt-hM-YfC" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="70" y="31" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xkn-PG-ctM" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="63" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8AA-m5-yaJ" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="70" y="101" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8hd-bp-SrQ" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="126" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PEd-g2-t8b" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="189" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3r2-hx-ErH" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="70" y="238" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H8L-sA-Kni" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="268" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cb5-fO-pCu" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="70" y="308" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xcy-hF-yFD" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="332" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yUG-ne-OMH" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="70" y="378" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oJZ-1c-idT" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="396" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="syJ-Go-6GG" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="460" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JKS-xx-ahD" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="70" y="478" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzN-jr-sfw" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="523" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="agE-4D-91g" customClass="SCNoteButton" customModule="SoundCollage" customModuleProvider="target">
+                                        <rect key="frame" x="70" y="541" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
                                 </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="vJA-ng-yuO" firstAttribute="leading" secondItem="Wq4-CT-hCy" secondAttribute="leading" id="It7-Ph-0be"/>
-                                    <constraint firstItem="vJA-ng-yuO" firstAttribute="top" secondItem="Wq4-CT-hCy" secondAttribute="top" constant="-10" id="NRw-oC-79O"/>
-                                    <constraint firstAttribute="bottom" secondItem="vJA-ng-yuO" secondAttribute="bottom" id="Qev-E6-CYC"/>
-                                    <constraint firstItem="vJA-ng-yuO" firstAttribute="centerX" secondItem="Wq4-CT-hCy" secondAttribute="centerX" id="U2I-cJ-PSM"/>
-                                    <constraint firstItem="vJA-ng-yuO" firstAttribute="centerY" secondItem="Wq4-CT-hCy" secondAttribute="centerY" id="fjz-P8-Plz"/>
-                                    <constraint firstAttribute="trailing" secondItem="vJA-ng-yuO" secondAttribute="trailing" constant="1" id="iwk-kT-aDT"/>
+                                    <constraint firstAttribute="width" constant="140" id="bRG-5A-IQC"/>
                                 </constraints>
-                            </scrollView>
+                            </view>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="Wq4-CT-hCy" firstAttribute="top" secondItem="NRh-bo-vMP" secondAttribute="bottom" id="EOo-Gj-lMV"/>
-                            <constraint firstItem="Wq4-CT-hCy" firstAttribute="leading" secondItem="cG2-Pd-3hA" secondAttribute="leading" id="GDK-N3-Skz"/>
-                            <constraint firstItem="Cae-WH-z7d" firstAttribute="top" secondItem="Wq4-CT-hCy" secondAttribute="bottom" id="aDc-h5-6Is"/>
-                            <constraint firstAttribute="trailing" secondItem="Wq4-CT-hCy" secondAttribute="trailing" id="m5V-xS-hb9"/>
+                            <constraint firstItem="jGu-5T-aSc" firstAttribute="leading" secondItem="cG2-Pd-3hA" secondAttribute="leadingMargin" id="2xz-N6-WBN"/>
+                            <constraint firstItem="Cae-WH-z7d" firstAttribute="top" secondItem="jGu-5T-aSc" secondAttribute="bottom" constant="-10" id="6L6-54-OOu"/>
+                            <constraint firstItem="jGu-5T-aSc" firstAttribute="top" secondItem="NRh-bo-vMP" secondAttribute="bottom" constant="10" id="NsQ-oT-jzt"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="KEYS" id="hKy-ac-H3I"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <connections>
-                        <outlet property="doubleManualView" destination="vJA-ng-yuO" id="gx6-an-P9y"/>
-                        <outlet property="lowerHalfNotes" destination="vhX-nv-S61" id="a6p-m1-xsX"/>
-                        <outlet property="lowerKeyboardView" destination="3Js-2B-oOs" id="bNl-5q-mb8"/>
-                        <outlet property="lowerWholeNotes" destination="Opq-01-5Ih" id="hi1-nm-RBw"/>
-                        <outlet property="scrollView" destination="Wq4-CT-hCy" id="uSF-U5-9Dx"/>
-                        <outlet property="upperHalfNotes" destination="pVS-wg-3h6" id="gw8-5L-REQ"/>
-                        <outlet property="upperKeyboardView" destination="rDT-rz-yuc" id="p0r-7K-3dQ"/>
-                        <outlet property="upperWholeNotes" destination="2EQ-rU-5Cs" id="i36-IQ-A7A"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="58T-Kg-Xmi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4791.1999999999998" y="35.532233883058474"/>
+            <point key="canvasLocation" x="4677.6000000000004" y="49.925037481259373"/>
         </scene>
         <!--SAMPLE BANK-->
         <scene sceneID="77J-Zd-rgc">
@@ -150,13 +140,41 @@
                     <view key="view" contentMode="scaleToFill" id="pNQ-5h-lOO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="yIO-dv-DSP">
+                                <rect key="frame" x="0.0" y="144" width="375" height="523"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewLayout key="collectionViewLayout" id="lpU-Yt-J8U"/>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SCSampleBankCell" id="OSE-Hg-jA8">
+                                        <rect key="frame" x="42.5" y="0.0" width="290" height="309"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="290" height="309"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </view>
+                                        <size key="customSize" width="290" height="309"/>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="yIO-dv-DSP" firstAttribute="width" secondItem="pNQ-5h-lOO" secondAttribute="width" id="23b-aB-557"/>
+                            <constraint firstItem="yIO-dv-DSP" firstAttribute="centerY" secondItem="pNQ-5h-lOO" secondAttribute="centerY" constant="72" id="IBP-hl-1v8"/>
+                            <constraint firstItem="yIO-dv-DSP" firstAttribute="centerX" secondItem="pNQ-5h-lOO" secondAttribute="centerX" id="aOZ-1U-IkH"/>
+                            <constraint firstItem="yIO-dv-DSP" firstAttribute="height" secondItem="pNQ-5h-lOO" secondAttribute="height" constant="-144" id="xjl-WW-IkZ"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="SAMPLE BANK" id="Mum-u3-RoM"/>
+                    <connections>
+                        <outlet property="collectionView" destination="yIO-dv-DSP" id="fQF-GA-Jwe"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k11-Ki-zmW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5680.8000000000002" y="35.532233883058474"/>
+            <point key="canvasLocation" x="3100" y="36"/>
         </scene>
         <!--SEQUENCER-->
         <scene sceneID="3io-WH-xwc">
@@ -175,28 +193,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IFf-y6-xFB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6516" y="35.532233883058474"/>
-        </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="3j6-0G-hSv">
-            <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="yqA-2D-nKs" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="Sq7-Cl-eid">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="ZBM-cs-oHd" kind="relationship" relationship="viewControllers" id="pE3-qw-k5X"/>
-                        <segue destination="p5R-qm-pcu" kind="relationship" relationship="viewControllers" id="9jx-0o-OsZ"/>
-                        <segue destination="Brs-gS-Ctn" kind="relationship" relationship="viewControllers" id="Orr-0z-cVw"/>
-                        <segue destination="caG-9o-Y28" kind="relationship" relationship="viewControllers" id="1Qc-rr-A9d"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Mae-Os-QuU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2951.1999999999998" y="35.532233883058474"/>
+            <point key="canvasLocation" x="5519" y="50"/>
         </scene>
     </scenes>
 </document>

@@ -13,13 +13,13 @@ import AVFoundation
 
 class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
     
+    var sampleBank: SCSampleBank? 
     var collectionView: UICollectionView?
     var shimmeringView = FBShimmeringView()
     var recordBtn = UIButton()
     var newRecordingTitle: String?
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
-    var gradientLayer: CAGradientLayer!
     var audioPlayer: SCAudioPlayer!
     var lastRecording: URL?
     var recordingIsEnabled = false
@@ -27,18 +27,11 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
     var flashingOn = false
     var audioFilename: URL?
     var selectedSampleIndex: Int?
-    var colorManager: SCColors?
-    var colorSets = [[CGColor]]()
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.black
-        createColorSets()
-        colorManager = SCColors.init(colors: colorSets)
-        let startPoint = CGPoint(x: 0.0, y: 0.0)
-        let endPoint = CGPoint(x: 1.0, y: 1.0)
-        colorManager?.configureGradientLayer(in: self.view, from: startPoint, to: endPoint)
         setupCollectionView()
         setupControls()
     }
@@ -78,27 +71,12 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
         recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress(_:)), for: .touchUpInside)
         
         
-        guard let tabHeight = self.tabBarController?.tabBar.frame.height else {
-            return
-        }
+        let tabHeight = CGFloat(49.0)
         let buttonHeight = view.frame.width/6
         let yPosition = view.frame.height-tabHeight-buttonHeight
         recordBtn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
         recordBtn.center = CGPoint(x: view.center.x, y: yPosition)
         view.addSubview(recordBtn)
-        
-        //        let controlsView = UIStackView.init(arrangedSubviews: [recordBtn, samplesBtn])
-//        controlsView.frame = CGRect(x: 0, y: yPosition, width: view.frame.width-80, height: 60)
-//        controlsView.center = CGPoint(x: view.frame.width/2, y: yPosition-controlsView.frame.height/2)
-//        controlsView.axis = .horizontal
-//        controlsView.distribution = .fillEqually
-//        controlsView.alignment = .center
-//        controlsView.spacing = 60
-//        view.addSubview(controlsView)
-        //        controlsView.translatesAutoresizingMaskIntoConstraints = false
-        //        view.addConstraint(NSLayoutConstraint(item: controlsView, attribute: .width, relatedBy: .equal, toItem: collectionView, attribute: .width, multiplier: 1, constant: 0))
-        //        view.addConstraint(NSLayoutConstraint(item: controlsView, attribute: .height, relatedBy: .lessThanOrEqual, toItem: <#T##Any?#>, attribute: <#T##NSLayoutAttribute#>, multiplier: <#T##CGFloat#>, constant: <#T##CGFloat#>))
-        
     }
     
     
@@ -311,10 +289,12 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
             
             audioRecorder.stop()
             audioRecorder = nil
-            if audioFilename != nil {
-                let sample = SCSample.init(key: selectedSampleIndex!, url: audioFilename!)
-                print(sample.url!)
-                SCSampleManager.shared.sampleBank.append(sample)
+            if selectedSampleIndex != nil && audioFilename != nil {
+                let sample = SCSample.init(samplerID: selectedSampleIndex!, url: audioFilename!)
+                print(sample.url)
+                if let sampleBank = SCDataManager.shared.currentSampleBank {
+                sampleBank.samples.append(sample)
+                }
             }
             recordingIsEnabled = false // so that we set the buttons to play
         }
@@ -391,16 +371,20 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 10
+        cell.morphColors()
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) {
-            animateCell(cell: cell as! SCSamplerCollectionViewCell)
-            selectedSampleIndex = indexPath.row
-            playOrRecord()  // 4
-            colorManager?.morphColors()
+        guard let cell = collectionView.cellForItem(at: indexPath) as? SCSamplerCollectionViewCell else {
+            fatalError("wrong cell dequeued")
         }
+        //Configure the cell
+        animateCell(cell: cell)
+        selectedSampleIndex = indexPath.row // maybe remove this property and just pass index
+        playOrRecord()  // 4
+        cell.morphColors()
+        
     }
     
     func animateCell(cell: SCSamplerCollectionViewCell) {
@@ -422,13 +406,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                         )
         })
     }
-    
-    func createColorSets() {
-        colorSets.append([UIColor.black.cgColor, UIColor.lightGray.cgColor, UIColor.white.cgColor, UIColor.black.cgColor])
-        colorSets.append([UIColor.black.cgColor, UIColor.red.cgColor, UIColor.orange.cgColor, UIColor.magenta.cgColor, UIColor.yellow.cgColor, UIColor.black.cgColor])
-    }
-
-    
+        
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

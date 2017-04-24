@@ -17,23 +17,34 @@ class SCAudioPlayer: NSObject, AVAudioPlayerDelegate {
     
     var players = [URL:AVAudioPlayer]()
     var duplicatePlayers = [AVAudioPlayer]()
-    let session:AVAudioSession = AVAudioSession.sharedInstance()
+    let session: AVAudioSession = AVAudioSession.sharedInstance()
  
     
-    func playBack(selectedSampleIndex: Int){
+    func playBack(selectedSampleIndex: Int) {
+        
+        guard let sample = getSample(selectedSampleIndex: selectedSampleIndex) else {
+            print("playback sample not found")
+            return
+        }
+        playSound(soundFileURL: sample.url)
+    }
+    
+    func getSample(selectedSampleIndex: Int) -> SCSample? {
         
         var selectedSample: SCSample?
         
-        for sample in SCSampleManager.shared.sampleBank {
-            if sample.key == selectedSampleIndex {
-                selectedSample = sample
+        guard let sampleBank = SCDataManager.shared.currentSampleBank else {
+            print("error retrieving sampleBank for playback")
+            return nil
+        }
+        if (sampleBank.samples.count) > 0 {
+            for sample in sampleBank.samples {
+                if sample.samplerID == selectedSampleIndex {
+                    selectedSample = sample
+                }
             }
         }
-        guard let url = selectedSample?.url else {
-            print("playback url not found")
-            return
-        }
-        playSound(soundFileURL: url)
+        return selectedSample
     }
 
     func playSound (soundFileURL: URL){

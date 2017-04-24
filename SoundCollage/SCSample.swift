@@ -10,11 +10,12 @@ import Foundation
 
 class SCSample {
     
-    var key: Int? = nil
-    var url: URL? = nil
+    var samplerID: Int
+    var libraryID: Int?
+    var url: URL
     
-    init(key: Int, url: URL) {
-        self.key = key
+    init(samplerID: Int, url: URL) {
+        self.samplerID = samplerID
         self.url = url
     }
 

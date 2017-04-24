@@ -46,6 +46,7 @@ class SCNoteButton: UIButton {
 //        self.translatesAutoresizingMaskIntoConstraints = false
         self.addTarget(self, action: #selector(SCNoteButton.playNote), for: .touchUpInside)
         self.imageView?.contentMode = UIViewContentMode.scaleAspectFit
-        self.setImage(UIImage.init(named: "dot"), for: .normal)
+//        self.setImage(UIImage.init(named: "dot"), for: .normal)
+        self.backgroundColor = UIColor.green
     }
 }
