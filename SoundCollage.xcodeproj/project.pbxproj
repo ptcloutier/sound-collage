@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2E5EF9B7E7484879C1DFFA62 /* Pods_SoundCollage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E591F9B7A7DA25F5E806A17 /* Pods_SoundCollage.framework */; };
 		A7054EC61EA82D7700BBC34E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7054EC51EA82D7700BBC34E /* Foundation.framework */; };
 		A71414FA1EA82B3B00BE9718 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414F91EA82B3B00BE9718 /* AVFoundation.framework */; };
 		A71414FC1EA82B4300BE9718 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */; };
@@ -39,6 +38,7 @@
 		A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */; };
 		A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823421EA81F6C0061D0A0 /* SCStackView.swift */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
+		D12EE6F44C0DB1631E344924 /* Pods_SoundCollage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,9 +72,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3E3618E489B33DA36A8DEC6A /* Pods-SoundCollage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.release.xcconfig"; sourceTree = "<group>"; };
-		4676EEC5F36E5DD61515B832 /* Pods-SoundCollage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.debug.xcconfig"; sourceTree = "<group>"; };
-		9E591F9B7A7DA25F5E806A17 /* Pods_SoundCollage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoundCollage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoundCollage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		75D104676F45F32E670413F6 /* Pods-SoundCollage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.debug.xcconfig"; sourceTree = "<group>"; };
+		9BEF22D19B1F94FC5200561F /* Pods-SoundCollage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.release.xcconfig"; sourceTree = "<group>"; };
 		A7054EC51EA82D7700BBC34E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A71414F91EA82B3B00BE9718 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -83,6 +83,7 @@
 		A7264E7C1EAE619800664EDE /* SCAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAnimator.swift; sourceTree = "<group>"; };
 		A7264E801EAEECD700664EDE /* SCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCUser.swift; sourceTree = "<group>"; };
 		A743CDB91EABE30100A9C70D /* SCNoteButtonDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCNoteButtonDelegate.swift; sourceTree = "<group>"; };
+		A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SoundCollage-Bridging-Header.h"; sourceTree = "<group>"; };
 		A78A9BCF1EABA919007117DD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A78DAFD81EABABE000384716 /* SCColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCColors.swift; sourceTree = "<group>"; };
 		A78DAFDE1EABC09800384716 /* UITabBar+Size.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITabBar+Size.swift"; sourceTree = "<group>"; };
@@ -125,7 +126,7 @@
 				A71415001EA82B5000BE9718 /* CoreAudioKit.framework in Frameworks */,
 				A71414FC1EA82B4300BE9718 /* CoreGraphics.framework in Frameworks */,
 				A71414FA1EA82B3B00BE9718 /* AVFoundation.framework in Frameworks */,
-				2E5EF9B7E7484879C1DFFA62 /* Pods_SoundCollage.framework in Frameworks */,
+				D12EE6F44C0DB1631E344924 /* Pods_SoundCollage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,18 +156,9 @@
 				A71414FE1EA82B5000BE9718 /* CoreAudioKit.framework */,
 				A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */,
 				A71414F91EA82B3B00BE9718 /* AVFoundation.framework */,
-				9E591F9B7A7DA25F5E806A17 /* Pods_SoundCollage.framework */,
+				31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		7E840F27E41CDCBFC88CDB21 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				4676EEC5F36E5DD61515B832 /* Pods-SoundCollage.debug.xcconfig */,
-				3E3618E489B33DA36A8DEC6A /* Pods-SoundCollage.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 		A7264E761EAE284600664EDE /* SampleBank */ = {
@@ -204,8 +196,8 @@
 				A7A823301EA81D300061D0A0 /* SCAudioPlayer.swift */,
 				A7A823281EA81D000061D0A0 /* SCSample.swift */,
 				A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */,
-				A7A823351EA81F500061D0A0 /* SCNoteButton.swift */,
 				A7264E801EAEECD700664EDE /* SCUser.swift */,
+				A7A823351EA81F500061D0A0 /* SCNoteButton.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -231,6 +223,7 @@
 				A7A823011EA81BEC0061D0A0 /* Assets.xcassets */,
 				A7A823031EA81BEC0061D0A0 /* LaunchScreen.storyboard */,
 				A7A823061EA81BEC0061D0A0 /* Info.plist */,
+				A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */,
 			);
 			name = Application;
 			sourceTree = "<group>";
@@ -243,7 +236,7 @@
 				A7A823191EA81BEC0061D0A0 /* SoundCollageUITests */,
 				A7A822F51EA81BEC0061D0A0 /* Products */,
 				095B8402F860F7E6A5BAF4F4 /* Frameworks */,
-				7E840F27E41CDCBFC88CDB21 /* Pods */,
+				B80249A3457B6E7E4097B6BA /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -288,6 +281,15 @@
 			path = SoundCollageUITests;
 			sourceTree = "<group>";
 		};
+		B80249A3457B6E7E4097B6BA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				75D104676F45F32E670413F6 /* Pods-SoundCollage.debug.xcconfig */,
+				9BEF22D19B1F94FC5200561F /* Pods-SoundCollage.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -295,13 +297,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A7A8231F1EA81BEC0061D0A0 /* Build configuration list for PBXNativeTarget "SoundCollage" */;
 			buildPhases = (
-				B02B35B97D380C51374F6009 /* [CP] Check Pods Manifest.lock */,
+				9C4708CC0774798D75D7BC56 /* [CP] Check Pods Manifest.lock */,
 				A7A822F01EA81BEC0061D0A0 /* Sources */,
 				A7A822F11EA81BEC0061D0A0 /* Frameworks */,
 				A7A822F21EA81BEC0061D0A0 /* Resources */,
 				A70418E51EA86B1800006871 /* Embed Frameworks */,
-				D53FDC8677C07F78A41CD543 /* [CP] Embed Pods Frameworks */,
-				111F6D96BD5A838537E8B092 /* [CP] Copy Pods Resources */,
+				75B22E88DEA8AA8C8D771BD4 /* [CP] Embed Pods Frameworks */,
+				211B499293DE1F23B6C55B33 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -426,7 +428,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		111F6D96BD5A838537E8B092 /* [CP] Copy Pods Resources */ = {
+		211B499293DE1F23B6C55B33 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -441,22 +443,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B02B35B97D380C51374F6009 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		D53FDC8677C07F78A41CD543 /* [CP] Embed Pods Frameworks */ = {
+		75B22E88DEA8AA8C8D771BD4 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -469,6 +456,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9C4708CC0774798D75D7BC56 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -596,6 +598,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -638,6 +642,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -646,7 +651,7 @@
 		};
 		A7A823201EA81BEC0061D0A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4676EEC5F36E5DD61515B832 /* Pods-SoundCollage.debug.xcconfig */;
+			baseConfigurationReference = 75D104676F45F32E670413F6 /* Pods-SoundCollage.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -662,7 +667,7 @@
 		};
 		A7A823211EA81BEC0061D0A0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3E3618E489B33DA36A8DEC6A /* Pods-SoundCollage.release.xcconfig */;
+			baseConfigurationReference = 9BEF22D19B1F94FC5200561F /* Pods-SoundCollage.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

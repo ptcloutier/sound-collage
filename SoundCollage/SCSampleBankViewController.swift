@@ -10,9 +10,16 @@ import UIKit
 
 class SCSampleBankViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
+    var user: SCUser!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let samples: [SCSample] = []
+        let name = UUID.init().uuidString
+        let sampleBank = SCSampleBank.init(name: name, id: 1, samples: samples)
+        
+        user.sampleBanks?.append(sampleBank)
         
         setupCollectionView()
 
@@ -40,27 +47,30 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return SCDataManager.shared.sampleBanks.count+1
+        return user.sampleBanks!.count+1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSampleBankCell", for: indexPath) as! SCSampleBankCell
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 10
+        cell.setupImageView(user: user)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        var sampleBank = SCSampleBank()
-        if SCDataManager.shared.sampleBanks.count > 1 {
-            sampleBank = SCDataManager.shared.sampleBanks[indexPath.row]
+        var sampleBank: SCSampleBank?
+        if (user.sampleBanks?.count)! > 0 {
+            sampleBank = user.sampleBanks?[indexPath.row]
         } else {
-            sampleBank = SCSampleBank()
-            SCDataManager.shared.sampleBanks.append(sampleBank)
+            let samples: [SCSample] = []
+            let name = UUID.init().uuidString
+            sampleBank = SCSampleBank.init(name: name, id: 1, samples: samples)
+            
         }
+        user.currentSampleBank = sampleBank
         let vc: SCSamplerViewController = SCSamplerViewController(nibName: nil, bundle: nil)
-        SCDataManager.shared.currentSampleBank = sampleBank
-        vc.sampleBank = sampleBank
+        vc.user = user
         SCAnimator.fadeIn(in: view)
         present(vc, animated: true, completion: nil)
     }

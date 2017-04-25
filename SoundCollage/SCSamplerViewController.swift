@@ -14,6 +14,7 @@ import AVFoundation
 
 class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
     
+    var user: SCUser!
     var sampleBank: SCSampleBank? 
     var collectionView: UICollectionView?
     var recordBtn = UIButton()
@@ -77,8 +78,38 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
         recordBtn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
         recordBtn.center = CGPoint(x: view.center.x, y: yPosition)
         view.addSubview(recordBtn)
+        
+        let saveBtn = UIButton.init()
+        saveBtn.setBackgroundImage(UIImage.init(named: "dot"), for: .normal)
+        saveBtn.addTarget(self, action: #selector(SCSamplerViewController.saveBtnDidPress(_:)), for: .touchUpInside)
+        
+        
+        let stabHeight = CGFloat(49.0)
+        let sbuttonHeight = view.frame.width/6
+        let syPosition = view.frame.height-stabHeight-sbuttonHeight
+        saveBtn.frame = CGRect(x: 0, y: 0, width: sbuttonHeight , height: sbuttonHeight)
+        saveBtn.center = CGPoint(x: view.center.x+70, y: syPosition)
+        view.addSubview(saveBtn)
+        
     }
     
+    func saveBtnDidPress(_ sender: Any){
+        saveObjectToJSON()
+    }
+    
+    
+    func saveObjectToJSON(){
+        
+        print(user)
+        if let jsonString = user.toJSONString(prettyPrint: true){
+            print(jsonString)
+        } else {
+            print("error serializing json")
+        }
+        
+        
+    }
+
     
     //MARK: Recording and Playback
 
@@ -262,7 +293,7 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
             if selectedSampleIndex != nil && audioFilename != nil {
                 let sample = SCSample.init(sampleBankID: selectedSampleIndex!, url: audioFilename!)
                 print(sample.url)
-                if let sampleBank = SCDataManager.shared.currentSampleBank {
+                if let sampleBank = user.currentSampleBank {
                 sampleBank.samples.append(sample)
                 }
             }

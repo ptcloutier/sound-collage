@@ -6,13 +6,13 @@
 //  Copyright © 2017 ptcloutier. All rights reserved.
 //
 
-import Foundation
+//import Foundation
 
-extension UITabBar {
-    
-    override open func sizeThatFits(_ size: CGSize) -> CGSize {
-        var sizeThatFits = super.sizeThatFits(size)
-        sizeThatFits.height = 30 // adjust your size here
-        return sizeThatFits
-    }
-}
+//extension UITabBar {
+//    
+//    override open func sizeThatFits(_ size: CGSize) -> CGSize {
+//        var sizeThatFits = super.sizeThatFits(size)
+//        sizeThatFits.height = 30 // adjust your size here
+//        return sizeThatFits
+//    }
+//}

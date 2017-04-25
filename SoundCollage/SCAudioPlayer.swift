@@ -15,6 +15,7 @@ class SCAudioPlayer: NSObject, AVAudioPlayerDelegate {
     
     private override init() {}
     
+    var user: SCUser!
     var players = [URL:AVAudioPlayer]()
     var duplicatePlayers = [AVAudioPlayer]()
     let session: AVAudioSession = AVAudioSession.sharedInstance()
@@ -33,12 +34,12 @@ class SCAudioPlayer: NSObject, AVAudioPlayerDelegate {
         
         var selectedSample: SCSample?
         
-        guard let sampleBank = SCDataManager.shared.currentSampleBank else {
+        guard let sampleBank = user.currentSampleBank else {
             print("error retrieving sampleBank for playback")
             return nil
         }
-        if (sampleBank.samples.count) > 0 {
-            for sample in sampleBank.samples {
+        if (sampleBank.samples?.count)! > 0 {
+            for sample in sampleBank.samples! {
                 if sample.sampleBankID == selectedSampleIndex {
                     selectedSample = sample
                 }

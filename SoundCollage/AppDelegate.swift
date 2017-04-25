@@ -17,6 +17,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let userName = "Perrin"
+        let sampleBanks: [SCSampleBank] = []
+        let sampleLibrary: [SCSample] = []
+
+        let user = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: nil, sampleLibrary: sampleLibrary)
+        
+        
+        
+        SCAudioPlayer.shared.user = user
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let initialViewController = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController
+        
+        
+        initialViewController?.user = user
+        
+       
+        window?.rootViewController = initialViewController
+        window?.makeKeyAndVisible()
+
+        
         return true
     }
 

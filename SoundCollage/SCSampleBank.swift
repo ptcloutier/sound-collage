@@ -7,21 +7,29 @@
 //
 
 import Foundation
+import ObjectMapper
 
-class SCSampleBank {
+class SCSampleBank: Mappable {
     
-    var samples: [SCSample] = []
+    var samples: [SCSample]!
     var name: String?
-    var id: Int { //uuid
-        guard let lastID = UserDefaults.standard.value(forKey: "id") as? Int else {
-            return 0
-        }
-        let newID = lastID+1
-        return newID
-    }
+    var id: Int?
     
-    init() {
-       
+    init(name: String?, id: Int?, samples: [SCSample]?) {
+        self.name = UUID.init().uuidString
+        self.id = 1
+        self.samples = []
+    }
+    required init?(map: Map) {
+        samples     <- map["samples"]
+        name        <- map["name"]
+        id          <- map["id"]
+
+    }
+    func mapping(map: Map) {
+        samples     <- map["samples"]
+        name        <- map["name"]
+        id          <- map["id"]
     }
 
 }
