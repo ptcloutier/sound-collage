@@ -39,7 +39,7 @@ class SCAudioPlayer: NSObject, AVAudioPlayerDelegate {
         }
         if (sampleBank.samples.count) > 0 {
             for sample in sampleBank.samples {
-                if sample.samplerID == selectedSampleIndex {
+                if sample.sampleBankID == selectedSampleIndex {
                     selectedSample = sample
                 }
             }

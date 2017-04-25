@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../../Downloads/AudioKit-3.5/AudioKit/iOS/AudioKit For iOS.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:SoundCollage.xcodeproj">
    </FileRef>
    <FileRef

@@ -1,4 +1,4 @@
 target 'SoundCollage' do
-  pod 'AudioKit', '~> 3.5'
-  pod 'Shimmer', '~> 1.0'
+  use_frameworks!
+  pod 'ObjectMapper', '~> 2.2'
 end

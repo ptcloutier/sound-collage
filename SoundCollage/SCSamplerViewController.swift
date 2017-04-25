@@ -10,12 +10,12 @@ import UIKit
 import AVFoundation
 //import AudioKit
 
+//TODO: move all the relevant code into SCAudioPlayer class and change to SCAudioManager 
 
 class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
     
     var sampleBank: SCSampleBank? 
     var collectionView: UICollectionView?
-    var shimmeringView = FBShimmeringView()
     var recordBtn = UIButton()
     var newRecordingTitle: String?
     var recordingSession: AVAudioSession!
@@ -104,14 +104,13 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
         }
     }
 
-    //MARK: Shimmer
+  
     
     func isRecordingEnabled(){
         switch recordingIsEnabled {
         case true:
             print("record enabled")
 //            startTimer()
-        //            shimmeringView.isShimmering = !shimmeringView.isShimmering
         case false:
             if recordingTimer != nil {
                 recordingTimer?.invalidate()
@@ -120,36 +119,7 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
     }
     
     
-    private func setupShimmer(){
-        
-        let vv = UIView.init()
-        shimmeringView = FBShimmeringView(frame: vv.frame)
-        shimmeringView.contentView = vv
-        view.addSubview(shimmeringView)
-        shimmeringView.isShimmering = true
-        //        shimmeringView.contentView = view
-        //        shimmeringView.isShimmering = true
-        //
-        //        //Optional ShimmeringView protocal values
-        //        //All values show are the defaults
-        //        shimmeringView.shimmeringPauseDuration = 0.4
-        //        shimmeringView.shimmeringAnimationOpacity = 0.5
-        //        shimmeringView.shimmeringOpacity = 1.0
-        //        shimmeringView.shimmeringSpeed = 230
-        //        shimmeringView.shimmeringHighlightLength = 1.0
-        //        shimmeringView.shimmeringDirection = FBShimmerDirection.right
-        //
-        //        //All possible directional values
-        //        //FBShimmerDirection.Right,  Shimmer animation goes from left to right
-        //        //FBShimmerDirection.Left,  Shimmer animation goes from right to left
-        //        //FBShimmerDirection.Up,  Shimmer animation goes from below to above
-        //        //FBShimmerDirection.Down,  Shimmer animation goes from above to below
-        //
-        //        shimmeringView.shimmeringBeginFadeDuration = 0.1
-        //        shimmeringView.shimmeringEndFadeDuration = 0.3
-        
-    }
-
+   
     func startTimer(){ // 2
         recordingTimer = Timer.scheduledTimer(withTimeInterval: 0.7,
                                               repeats: true) {
@@ -170,7 +140,7 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
     
     
     func changeColor(){  // 3
-        switch flashingOn { // Shimmer across all, one is chosen -> Shimmer on one
+        switch flashingOn { 
         case true:
             view.backgroundColor = UIColor.lightGray
             flashingOn = false
@@ -290,7 +260,7 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
             audioRecorder.stop()
             audioRecorder = nil
             if selectedSampleIndex != nil && audioFilename != nil {
-                let sample = SCSample.init(samplerID: selectedSampleIndex!, url: audioFilename!)
+                let sample = SCSample.init(sampleBankID: selectedSampleIndex!, url: audioFilename!)
                 print(sample.url)
                 if let sampleBank = SCDataManager.shared.currentSampleBank {
                 sampleBank.samples.append(sample)

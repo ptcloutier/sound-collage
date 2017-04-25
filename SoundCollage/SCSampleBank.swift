@@ -11,7 +11,8 @@ import Foundation
 class SCSampleBank {
     
     var samples: [SCSample] = []
-    var id: Int {
+    var name: String?
+    var id: Int { //uuid
         guard let lastID = UserDefaults.standard.value(forKey: "id") as? Int else {
             return 0
         }
