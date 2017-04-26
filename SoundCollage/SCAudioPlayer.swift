@@ -27,7 +27,11 @@ class SCAudioPlayer: NSObject, AVAudioPlayerDelegate {
             print("playback sample not found")
             return
         }
-        playSound(soundFileURL: sample.url)
+//        let saniAudioPathString = sample.url.replacingOccurrences(of: "\"", with: "", options: NSString.CompareOptions.literal, range:nil)
+        let audioPath = SCDataManager.shared.getFileURL(fileName: sample.title)//saniAudioPathString)
+
+        
+        playSound(soundFileURL: audioPath!)
     }
     
     func getSample(selectedSampleIndex: Int) -> SCSample? {

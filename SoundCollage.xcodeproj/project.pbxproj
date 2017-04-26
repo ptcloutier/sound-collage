@@ -15,6 +15,7 @@
 		A7264E7D1EAE619800664EDE /* SCAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E7C1EAE619800664EDE /* SCAnimator.swift */; };
 		A7264E811EAEECD700664EDE /* SCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E801EAEECD700664EDE /* SCUser.swift */; };
 		A743CDBA1EABE30100A9C70D /* SCNoteButtonDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A743CDB91EABE30100A9C70D /* SCNoteButtonDelegate.swift */; };
+		A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A886A1EB0445200FEDED0 /* SCDataManager.swift */; };
 		A78A9BD01EABA919007117DD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78A9BCF1EABA919007117DD /* QuartzCore.framework */; };
 		A78DAFD91EABABE000384716 /* SCColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78DAFD81EABABE000384716 /* SCColors.swift */; };
 		A78DAFDF1EABC09800384716 /* UITabBar+Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78DAFDE1EABC09800384716 /* UITabBar+Size.swift */; };
@@ -83,6 +84,7 @@
 		A7264E7C1EAE619800664EDE /* SCAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAnimator.swift; sourceTree = "<group>"; };
 		A7264E801EAEECD700664EDE /* SCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCUser.swift; sourceTree = "<group>"; };
 		A743CDB91EABE30100A9C70D /* SCNoteButtonDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCNoteButtonDelegate.swift; sourceTree = "<group>"; };
+		A76A886A1EB0445200FEDED0 /* SCDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCDataManager.swift; sourceTree = "<group>"; };
 		A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SoundCollage-Bridging-Header.h"; sourceTree = "<group>"; };
 		A78A9BCF1EABA919007117DD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A78DAFD81EABABE000384716 /* SCColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCColors.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */,
 				A7264E801EAEECD700664EDE /* SCUser.swift */,
 				A7A823351EA81F500061D0A0 /* SCNoteButton.swift */,
+				A76A886A1EB0445200FEDED0 /* SCDataManager.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -497,6 +500,7 @@
 				A743CDBA1EABE30100A9C70D /* SCNoteButtonDelegate.swift in Sources */,
 				A7264E811EAEECD700664EDE /* SCUser.swift in Sources */,
 				A7A823311EA81D300061D0A0 /* SCAudioPlayer.swift in Sources */,
+				A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */,
 				A78DAFDF1EABC09800384716 /* UITabBar+Size.swift in Sources */,
 				A7A8233C1EA81F500061D0A0 /* SCNoteButton.swift in Sources */,
 			);

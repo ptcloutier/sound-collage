@@ -17,14 +17,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let userName = "Perrin"
-        let sampleBanks: [SCSampleBank] = []
-        let sampleLibrary: [SCSample] = []
-
-        let user = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: nil, sampleLibrary: sampleLibrary)
         
+        // SCDataManager. get the data from file yo
+        SCDataManager.shared.readJSONFromFile()
         
-        
+        var user: SCUser?
+        if SCDataManager.shared.user != nil {
+            
+            user =  SCDataManager.shared.user
+            print(" created a new user from json")
+        } else {
+            let userName = "Perrin"
+            let sampleBanks: [SCSampleBank] = []
+            let sampleLibrary: [SCSample] = []
+            
+            user = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: nil, sampleLibrary: sampleLibrary)
+            
+            
+        }
         SCAudioPlayer.shared.user = user
         
         window = UIWindow(frame: UIScreen.main.bounds)

@@ -103,11 +103,47 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
         print(user)
         if let jsonString = user.toJSONString(prettyPrint: true){
             print(jsonString)
+            writeToFile(jsonString: jsonString)
         } else {
             print("error serializing json")
         }
         
         
+        
+    }
+    
+    func writeToFile(jsonString: String){
+        let documentsDirectoryPathString = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        let documentsDirectoryPath = NSURL(string: documentsDirectoryPathString)!
+        
+        let jsonFilePath = documentsDirectoryPath.appendingPathComponent("SoundCollageUser.json")
+        let fileManager = FileManager.default
+        var isDirectory: ObjCBool = false
+        
+        // creating a .json file in the Documents folder
+        if !fileManager.fileExists(atPath: (jsonFilePath?.absoluteString)!, isDirectory: &isDirectory) {
+            let created = fileManager.createFile(atPath: (jsonFilePath?.absoluteString)!, contents: nil, attributes: nil)
+            if created {
+                print("File created ")
+            } else {
+                print("Couldn't create file for some reason")
+            }
+        } else {
+            print("File already exists")
+            print(documentsDirectoryPathString)
+
+        }
+
+        let jsonData: Data = jsonString.data(using: .utf8)!
+        // Write that JSON to the file created earlier
+        do {
+            let file = try FileHandle(forWritingTo: jsonFilePath!)
+            file.write(jsonData)
+            print("JSON data was written to teh file successfully!")
+        } catch let error as NSError {
+            print("Couldn't write to file: \(error.localizedDescription)")
+        }
+
     }
 
     
@@ -257,9 +293,10 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
         
         //            getNewRecordingTitle()
         //            if let title = newRecordingTitle {
-        let title = UUID.init()
+        let title = UUID.init().uuidString
+        SCDataManager.shared.currentSampleTitle = title
         
-        audioFilename = getDocumentsDirectory().appendingPathComponent("\(title)")
+        audioFilename = getDocumentsDirectory().appendingPathComponent(title)
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -290,9 +327,10 @@ class SCSamplerViewController: UIViewController, AVAudioRecorderDelegate  {
             
             audioRecorder.stop()
             audioRecorder = nil
-            if selectedSampleIndex != nil && audioFilename != nil {
-                let sample = SCSample.init(sampleBankID: selectedSampleIndex!, url: audioFilename!)
-                print(sample.url)
+            if selectedSampleIndex != nil && audioFilename?.path != nil {
+                let sample = SCSample.init(sampleBankID: selectedSampleIndex!, url: audioFilename?.path, title: SCDataManager.shared.currentSampleTitle )
+                SCDataManager.shared.currentSampleTitle = nil
+                print("audioPath: \(sample.url) , audioTitle: \(sample.title)")
                 if let sampleBank = user.currentSampleBank {
                 sampleBank.samples.append(sample)
                 }

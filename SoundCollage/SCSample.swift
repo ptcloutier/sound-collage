@@ -12,21 +12,24 @@ import ObjectMapper
 class SCSample: Mappable {
     
     var sampleBankID: Int!
-    var url: URL!
+    var title: String!
+    var url: String!
     
-    init(sampleBankID: Int, url: URL) {
+    init(sampleBankID: Int!, url: String!, title: String!) {
         self.sampleBankID = sampleBankID
         self.url = url
+        self.title = title
     }
     required init?(map: Map) {
         sampleBankID    <- map["sampleBankID"]
         url             <- map["url"]
- 
+        title           <- map["title"]
     }
 //    // Mappable
     func mapping(map: Map) {
         sampleBankID    <- map["sampleBankID"]
         url             <- map["url"]
+        title           <- map["title"]
     }
 
 }
