@@ -19,23 +19,41 @@ class SCSamplerViewController: UIViewController  {
     var newRecordingTitle: String?
     var audioPlayer: SCAudioManager!
     var lastRecording: URL?
-    var recordingTimer: Timer? = nil
-    var flashingOn = false
     var selectedSampleIndex: Int?
     var gradientLayer: CAGradientLayer!
     var colorSets = [[CGColor]]()
     var currentColorSet: Int!
-
+    var speakerBtn = UIButton()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupCollectionView()
         setupControls()
-//        createColorSets()
-//        createGradientLayer()
-//        changeColor()
+        animateEntrance()
+        view.backgroundColor = UIColor.darkGray
+
+        
+        let navBar = UINavigationBar.init(frame:CGRect(x: 0, y: 0,width: UIScreen.main.bounds.width, height: 50 ))
+        navBar.tintColor = UIColor.black
+        self.view.addSubview(navBar)
+        
+        
+        let navItem = UINavigationItem()
+        
+        let speakerButton = UIButton.init(type: .custom)
+        speakerButton.setImage(UIImage.init(named: "speakerOff"), for: .normal)
+        speakerButton.addTarget(self, action: #selector(SCSamplerViewController.audioPlaybackSource), for: .touchUpInside)
+        speakerButton.frame = CGRect.init(x: 0, y: 0, width: 30, height: 30)
+        self.speakerBtn = speakerButton
+        let barButton = UIBarButtonItem(customView: self.speakerBtn)
+        navItem.rightBarButtonItem = barButton
+        navBar.items = [navItem]
     }
+    
+    
+    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -47,6 +65,8 @@ class SCSamplerViewController: UIViewController  {
         collectionView.bounds.size = collectionView.collectionViewLayout.collectionViewContentSize
         collectionView.frame.origin.y = 80
     }
+    
+    
     
     private func setupCollectionView(){
         let flowLayout = SCSamplerFlowLayout()
@@ -62,6 +82,8 @@ class SCSamplerViewController: UIViewController  {
         self.view.addSubview(collectionView)
     }
     
+    
+    
     private func setupControls(){
         
         recordBtn.setBackgroundImage(UIImage.init(named: "record"), for: .normal)
@@ -74,60 +96,110 @@ class SCSamplerViewController: UIViewController  {
         recordBtn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
         recordBtn.center = CGPoint(x: view.center.x, y: yPosition)
         view.addSubview(recordBtn)
-        
-        let testBtn = UIButton.init()
-        testBtn.setBackgroundImage(UIImage.init(named: "dot"), for: .normal)
-        testBtn.addTarget(self, action: #selector(SCSamplerViewController.testBtnDidPress(_:)), for: .touchUpInside)
-        
-        
-        let stabHeight = CGFloat(49.0)
-        let sbuttonHeight = view.frame.width/6
-        let syPosition = view.frame.height-stabHeight-sbuttonHeight
-        testBtn.frame = CGRect(x: 0, y: 0, width: sbuttonHeight , height: sbuttonHeight)
-        testBtn.center = CGPoint(x: view.center.x+70, y: syPosition)
-        view.addSubview(testBtn)
-        
     }
     
     
     
-    func testBtnDidPress(_ sender: Any){
-        let vc: SCKeyboardViewController = SCKeyboardViewController(nibName: nil, bundle: nil)
-        SCAnimator.fadeIn(in: view)
-        present(vc, animated: true, completion: nil)
+    //MARK: Animations
+    
+    
+    
+    private func animateEntrance() {
+    
+        view.alpha = 0
+        UIView.animate(withDuration: 1.0, delay: 1.5, options: [.curveEaseInOut], animations:{
+            self.view.alpha = 1
+            }, completion: nil)
+    }
+
+    
+    func audioPlaybackSource(){
+        
+        //TODO: duplicate buttons are created
+        
+        switch SCAudioManager.shared.isSpeakerEnabled {
+        case true:
+            speakerBtn.setBackgroundImage(UIImage.init(named: "speakerOn"), for: .normal)
+            
+        case false:
+            speakerBtn.setBackgroundImage(UIImage.init(named: "speakerOff"), for: .normal)
+
+        }
+        SCAudioManager.shared.playbackSource()
     }
     
     
     
     
     //MARK: Recording and Playback
-
-    func recordBtnDidPress(_ sender: Any) {
+    
+    
+    
+    
+    func recordBtnDidPress(){
         
-        switch SCAudioManager.shared.recordingIsEnabled { //TODO: wtf logic works but reads like shit 
-        case false:
-            SCAudioManager.shared.recordingIsEnabled = true // 1
+        switch SCAudioManager.shared.isRecording {
         case true:
-            SCAudioManager.shared.recordingIsEnabled = false
+            print("Audio recording stopped.")
+            SCAudioManager.shared.finishRecording(success: true)
+            reloadCV()
+        case false:
+            recordingMode()
         }
+    }
+    
+    func reloadCV() {
         guard let cv = self.collectionView else {
             print("collectionview not found.")
             return
         }
         cv.reloadData()
     }
+    
+
+    func recordingMode() {
+        
+        // toggle recording mode
+        
+        switch SCAudioManager.shared.isRecordingModeEnabled {
+        case true:
+            SCAudioManager.shared.isRecordingModeEnabled = false
+        case false:
+            SCAudioManager.shared.isRecordingModeEnabled = true
+        }
+        reloadCV()
+    }
+
+
+    func audioSessionRecordingState(in cell: SCSamplerCollectionViewCell,samplePadIndex: Int){
+        switch SCAudioManager.shared.isRecording {
+        case true:
+            print("Audio recording in session.")
+        case false:
+            print("Started recording on sampler pad \(samplePadIndex)")
+            SCAudioManager.shared.createNewSample()
+            cell.isEnabled = false
+            recordingMode()
+        }
+    }
 }
 
 
 extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
+    
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 16
     }
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
@@ -138,39 +210,39 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.layer.borderWidth = 3.0
         cell.layer.cornerRadius = 15.0
         
-        switch SCAudioManager.shared.recordingIsEnabled {
+        switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
-            cell.recordingIsEnabled = true
+            cell.isEnabled = true
+            cell.startCellsFlashing()
+          
         case false:
-            cell.recordingIsEnabled = false
-            
+            cell.isEnabled = false
+            cell.stopCellsFlashing()
         }
-        cell.tryTimer()
         return cell
     }
     
+    
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         guard let cell = collectionView.cellForItem(at: indexPath) as? SCSamplerCollectionViewCell else {
             fatalError("Wrong cell dequeued")
         }
-        //Configure the cell
-        
         SCAudioManager.shared.selectedSampleIndex = indexPath.row
         
-        switch SCAudioManager.shared.recordingIsEnabled {
+        switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
-            SCAudioManager.shared.createNewSample()
-            cell.recordingIsEnabled = false
+            audioSessionRecordingState(in: cell, samplePadIndex: indexPath.row)
         case false:
             SCAudioManager.shared.playback()
-            cell.animateCell()
+            cell.animateCellForPlayback()
         }
 
     }
+   
     
     
- 
-        
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

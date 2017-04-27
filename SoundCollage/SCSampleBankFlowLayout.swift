@@ -21,8 +21,8 @@ class SCSampleBankFlowLayout: UICollectionViewFlowLayout {
     }
     
     func setupLayout() {
-        minimumInteritemSpacing = 1
-        minimumLineSpacing = 1
+        minimumInteritemSpacing = 3
+        minimumLineSpacing = 3
         scrollDirection = .horizontal
     }
     override var itemSize: CGSize {
@@ -32,7 +32,7 @@ class SCSampleBankFlowLayout: UICollectionViewFlowLayout {
         get {
             let numberOfColumns: CGFloat = 1
             
-            let itemWidth = (self.collectionView!.frame.width - (numberOfColumns - 1)) / numberOfColumns
+            let itemWidth = (self.collectionView!.frame.width - (numberOfColumns - minimumLineSpacing)) / numberOfColumns
             return CGSize(width: itemWidth, height: itemWidth)
         }
     }

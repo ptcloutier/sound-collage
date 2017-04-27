@@ -21,11 +21,13 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var selectedSampleIndex: Int?
     var audioRecorder: AVAudioRecorder!
     var audioFilename: URL?
-    var recordingIsEnabled = false
-    var speakerEnabled: Bool = false
-    
+    var isRecordingModeEnabled = false
+    var isSpeakerEnabled: Bool = false
+    var isRecording: Bool = false
     
     private override init() {}
+    
+    
     
     //MARK: Playback
     
@@ -116,13 +118,11 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     //MARK: Recording
     
-    func createNewSample(){
+    func createNewSample() {
+        
         if audioRecorder == nil {
             setupRecordingSession()
-        } else {
-            finishRecording(success: true)
         }
-        
     }
     
     
@@ -136,6 +136,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 DispatchQueue.main.async {
                     if allowed {
                         self.startRecording()
+                        self.isRecording = true
                     } else {
                         print("Failed to record!")
                     }
@@ -168,6 +169,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             audioRecorder.record()
         } catch {
             finishRecording(success: false)
+            self.isRecording = false
         }
     }
     
@@ -190,8 +192,10 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     func finishRecording(success: Bool) {
+        
         audioRecorder?.stop()
         audioRecorder = nil
+        self.isRecording = false
         
         guard let audioFilenamePath = audioFilename?.path else {
             print("Error: audioFileName is nil")
@@ -221,29 +225,36 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             return
         }
         samples.append(audioFile)
-        SCAudioManager.shared.recordingIsEnabled = false // so that we set the keyboard buttons to play
+        SCDataManager.shared.user?.currentSampleBank?.samples = samples
+        SCAudioManager.shared.isRecordingModeEnabled = false // so that we set the keyboard buttons to play
     }
+    
+    
     
     func playbackSource(){
         
         let audioSession = AVAudioSession.sharedInstance()
         
-        switch speakerEnabled {
+        switch isSpeakerEnabled {
         case true:
             do {
+                try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+                try audioSession.setActive(true)
                 try audioSession.overrideOutputAudioPort(AVAudioSessionPortOverride.none)
             } catch let error as NSError {
                 print("AudioSession error: \(error.localizedDescription)")
             }
-            speakerEnabled = false
+            isSpeakerEnabled = false
             print("Audio source: headphone jack")
         case false:
             do {
+                try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+                try audioSession.setActive(true)
                 try audioSession.overrideOutputAudioPort(AVAudioSessionPortOverride.speaker)
             } catch let error as NSError {
                 print("AudioSession error: \(error.localizedDescription)")
             }
-            speakerEnabled = true
+            isSpeakerEnabled = true
             print("Audio source: speaker")
         }
     }

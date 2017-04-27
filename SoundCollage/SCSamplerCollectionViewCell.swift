@@ -16,10 +16,9 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
     var gradientLayer: CAGradientLayer!
     var colorSets = [[CGColor]]()
     var currentColorSet: Int = 0
-    var recordingTimer: Timer? = nil
-    var flashingOn = false
-    var recordingIsEnabled = false
-
+    var isEnabled = false
+    var timer: Timer? = nil
+    
     
     
     override init(frame: CGRect) {
@@ -36,6 +35,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     
     
     // MARK: UI Gradient Colors
@@ -71,57 +71,98 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
             currentColorSet = 0
         }
         let colorChangeAnimation = CABasicAnimation(keyPath: "colors")
-        colorChangeAnimation.duration = 0.7
+        colorChangeAnimation.duration = 0.4
         colorChangeAnimation.toValue = colorSets[currentColorSet]
         colorChangeAnimation.fillMode = kCAFillModeForwards
         colorChangeAnimation.isRemovedOnCompletion = false
         gradientLayer.add(colorChangeAnimation, forKey: "colorChange")
     }
     
-    
-    
-    func tryTimer() {
-        switch recordingIsEnabled {
-        case true:
-            print("record enabled")
-            startTimer()
-        case false:
-            if recordingTimer != nil {
-                recordingTimer?.invalidate()
-            }
-        }
-    }
-    
-    
-    
-    func startTimer(){
+
+    func animateCellForPlayback() {
         
-        recordingTimer = Timer.scheduledTimer(withTimeInterval: 0.5,
-                                              repeats: true) {
-                                                
-                                                //"[weak self]" creates a "capture group" for timer
-                                                [weak self] timer in
-                                                
-                                                //Add a guard statement to bail out of the timer code
-                                                //if the object has been freed.
-                                                guard self != nil else {
-                                                    return
-                                                }
-                                                //Put the code that be called by the timer here.
-                                                self?.animateCell()
-                                                //                                        strongSelf.someOtherProperty = someValue
-        }
-    }
-    
-    
-    func animateCell() {
-        
-        changeColor()
-        UIView.animate(withDuration: 0.05, delay: 0, usingSpringWithDamping: 0,
-                       initialSpringVelocity: 50,options: [],
+        changeColor() // call change color twice to return to original color
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0,
+                       initialSpringVelocity: 50,options: [.repeat],
                        animations:{
         self.changeColor()
         })
-
     }
+    
+    
+    
+    func startCellsFlashing() {
+        print("Recording is enabled.")
+        if timer != nil {
+            timer?.invalidate()
+        }
+        startTimer()
+    }
+    
+    
+    func stopCellsFlashing() {
+        if timer != nil {
+            timer?.invalidate()
+        }
+    }
+    
+    
+    
+    func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {
+            [weak self] timer in  // creates a capture group for the timer
+            guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
+                return
+            }
+            strongSelf.animateCellForPlayback()
+        }
+    }
+//    
+//    func tryTimer() {
+//        switch recording {
+//        case <#pattern#>:
+//            <#code#>
+//        default:
+//            <#code#>
+//        }
+//    }
+//    
+//    
+//    
+//    
+//    
+//    +    func tryTimer() {
+//        +        switch recordingIsEnabled {
+//            +        case true:
+//                +            print("record enabled")
+//                    +            startTimer()
+//            +        case false:
+//                +            if recordingTimer != nil {
+//                    +                recordingTimer?.invalidate()
+//                    +            }
+//        }
+//    }
+//    
+//    
+//    
+//    func startTimer(){
+//        
+//        recordingTimer = Timer.scheduledTimer(withTimeInterval: 0.5,
+//                                              repeats: true) {
+//                                                
+//                                                //"[weak self]" creates a "capture group" for timer
+//                                                [weak self] timer in
+//                                                
+//                                                //Add a guard statement to bail out of the timer code
+//                                                //if the object has been freed.
+//                                                guard self != nil else {
+//                                                    return
+//                                                }
+//                                                //Put the code that be called by the timer here.
+//                                                self?.animateCell()
+//                                                //                                        strongSelf.someOtherProperty = someValue
+//        }
+//    }
+//
+    
 }

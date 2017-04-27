@@ -38,6 +38,14 @@
 		A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */; };
 		A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */; };
 		A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823421EA81F6C0061D0A0 /* SCStackView.swift */; };
+		A7C23E1D1EB27191000B7614 /* speakerOn.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C23E191EB27191000B7614 /* speakerOn.png */; };
+		A7C23E1E1EB27191000B7614 /* speakerOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C23E1A1EB27191000B7614 /* speakerOn@2x.png */; };
+		A7C23E1F1EB27191000B7614 /* speakerOn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C23E1B1EB27191000B7614 /* speakerOn@3x.png */; };
+		A7C23E201EB27191000B7614 /* speakerOn@original.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C23E1C1EB27191000B7614 /* speakerOn@original.png */; };
+		A7C23E261EB272D4000B7614 /* speakerOff-original.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C23E221EB272D4000B7614 /* speakerOff-original.png */; };
+		A7C23E271EB272D4000B7614 /* speakerOff.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C23E231EB272D4000B7614 /* speakerOff.png */; };
+		A7C23E281EB272D4000B7614 /* speakerOff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C23E241EB272D4000B7614 /* speakerOff@2x.png */; };
+		A7C23E291EB272D4000B7614 /* speakerOff@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C23E251EB272D4000B7614 /* speakerOff@3x.png */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
 		D12EE6F44C0DB1631E344924 /* Pods_SoundCollage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */; };
 /* End PBXBuildFile section */
@@ -114,6 +122,14 @@
 		A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSamplerViewController.swift; sourceTree = "<group>"; };
 		A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankViewController.swift; sourceTree = "<group>"; };
 		A7A823421EA81F6C0061D0A0 /* SCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCStackView.swift; sourceTree = "<group>"; };
+		A7C23E191EB27191000B7614 /* speakerOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speakerOn.png; sourceTree = "<group>"; };
+		A7C23E1A1EB27191000B7614 /* speakerOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "speakerOn@2x.png"; sourceTree = "<group>"; };
+		A7C23E1B1EB27191000B7614 /* speakerOn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "speakerOn@3x.png"; sourceTree = "<group>"; };
+		A7C23E1C1EB27191000B7614 /* speakerOn@original.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "speakerOn@original.png"; sourceTree = "<group>"; };
+		A7C23E221EB272D4000B7614 /* speakerOff-original.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "speakerOff-original.png"; sourceTree = "<group>"; };
+		A7C23E231EB272D4000B7614 /* speakerOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speakerOff.png; sourceTree = "<group>"; };
+		A7C23E241EB272D4000B7614 /* speakerOff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "speakerOff@2x.png"; sourceTree = "<group>"; };
+		A7C23E251EB272D4000B7614 /* speakerOff@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "speakerOff@3x.png"; sourceTree = "<group>"; };
 		A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBank.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -224,6 +240,8 @@
 				A7A823031EA81BEC0061D0A0 /* LaunchScreen.storyboard */,
 				A7A823061EA81BEC0061D0A0 /* Info.plist */,
 				A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */,
+				A7C23E211EB272D4000B7614 /* speaker off images */,
+				A7C23E181EB27191000B7614 /* speakerOn images */,
 			);
 			name = Application;
 			sourceTree = "<group>";
@@ -274,8 +292,8 @@
 				A78733881EB1160F00B5A8AE /* Managers */,
 				A7264E791EAE289E00664EDE /* Classes */,
 				A7264E7A1EAE28AC00664EDE /* Utilities */,
-				A7264E761EAE284600664EDE /* SampleBankVC */,
 				A7264E771EAE285900664EDE /* SamplerVC */,
+				A7264E761EAE284600664EDE /* SampleBankVC */,
 				A7264E781EAE287B00664EDE /* KeyboardVC */,
 				A787338D1EB119E600B5A8AE /* ColorPickerVC */,
 			);
@@ -298,6 +316,28 @@
 				A7A8231C1EA81BEC0061D0A0 /* Info.plist */,
 			);
 			path = SoundCollageUITests;
+			sourceTree = "<group>";
+		};
+		A7C23E181EB27191000B7614 /* speakerOn images */ = {
+			isa = PBXGroup;
+			children = (
+				A7C23E191EB27191000B7614 /* speakerOn.png */,
+				A7C23E1A1EB27191000B7614 /* speakerOn@2x.png */,
+				A7C23E1B1EB27191000B7614 /* speakerOn@3x.png */,
+				A7C23E1C1EB27191000B7614 /* speakerOn@original.png */,
+			);
+			path = "speakerOn images";
+			sourceTree = "<group>";
+		};
+		A7C23E211EB272D4000B7614 /* speaker off images */ = {
+			isa = PBXGroup;
+			children = (
+				A7C23E221EB272D4000B7614 /* speakerOff-original.png */,
+				A7C23E231EB272D4000B7614 /* speakerOff.png */,
+				A7C23E241EB272D4000B7614 /* speakerOff@2x.png */,
+				A7C23E251EB272D4000B7614 /* speakerOff@3x.png */,
+			);
+			path = "speaker off images";
 			sourceTree = "<group>";
 		};
 		B80249A3457B6E7E4097B6BA /* Pods */ = {
@@ -423,7 +463,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7C23E1F1EB27191000B7614 /* speakerOn@3x.png in Resources */,
+				A7C23E1D1EB27191000B7614 /* speakerOn.png in Resources */,
+				A7C23E291EB272D4000B7614 /* speakerOff@3x.png in Resources */,
+				A7C23E281EB272D4000B7614 /* speakerOff@2x.png in Resources */,
+				A7C23E261EB272D4000B7614 /* speakerOff-original.png in Resources */,
+				A7C23E271EB272D4000B7614 /* speakerOff.png in Resources */,
+				A7C23E201EB27191000B7614 /* speakerOn@original.png in Resources */,
 				A7A823051EA81BEC0061D0A0 /* LaunchScreen.storyboard in Resources */,
+				A7C23E1E1EB27191000B7614 /* speakerOn@2x.png in Resources */,
 				A7A823021EA81BEC0061D0A0 /* Assets.xcassets in Resources */,
 				A7A822FD1EA81BEC0061D0A0 /* Main.storyboard in Resources */,
 			);
