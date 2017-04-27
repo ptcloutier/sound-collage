@@ -11,7 +11,7 @@ import UIKit
 class SCKeyboardViewController: UIViewController {
 
 
-    var colorManager: SCColors?
+    var colorManager: SCGradientColors?
     var colorSets = [[CGColor]]()
     
     
@@ -20,12 +20,16 @@ class SCKeyboardViewController: UIViewController {
         super.viewDidLoad()
         
         createColorSets()
-        colorManager = SCColors.init(colors: colorSets)
+        let gradientColors = SCGradientColors.init(colors: colorSets)
         let startPoint = CGPoint(x: 0.0, y: 0.0)
         let endPoint = CGPoint(x: 1.0, y: 1.0)
-        colorManager?.configureGradientLayer(in: self.view, from: startPoint, to: endPoint)
+        gradientColors.configureGradientLayer(in: self.view, from: startPoint, to: endPoint)
         
         
+    }
+    func createColorSets() {
+        colorSets.append([UIColor.darkGray.cgColor, UIColor.lightGray.cgColor, UIColor.white.cgColor,UIColor.darkGray.cgColor, UIColor.blue.cgColor, UIColor.purple.cgColor])
+        colorSets.append([UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor, UIColor.lightGray.cgColor,UIColor.blue.cgColor, UIColor.yellow.cgColor])
     }
     
     override func didReceiveMemoryWarning() {
@@ -34,18 +38,14 @@ class SCKeyboardViewController: UIViewController {
     }
     
     
-    func createColorSets() {
-        colorSets.append([UIColor.darkGray.cgColor, UIColor.lightGray.cgColor, UIColor.white.cgColor,UIColor.darkGray.cgColor, UIColor.blue.cgColor, UIColor.purple.cgColor])
-        colorSets.append([UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor, UIColor.lightGray.cgColor,UIColor.blue.cgColor, UIColor.yellow.cgColor])
-    }
-    
+        
 }
 
 
 extension SCKeyboardViewController: SCNoteButtonDelegate  {
     
     func noteButtonDidPress(sender: SCNoteButton){
-        colorManager?.morphColors()
+        colorManager?.morphColors(in: self.view)   // for each button in buttons,  flash colors
     }
 
 }

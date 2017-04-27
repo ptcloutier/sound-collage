@@ -18,38 +18,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        // SCDataManager. get the data from file yo
-        SCDataManager.shared.readJSONFromFile()
+        SCAudioManager.shared.audioSession.requestRecordPermission({ allowed in
+            DispatchQueue.main.async {
+                if allowed {
+                    print("Good to go!")
+                } else {
+                    print("Request to use microphone denied.")
+                }
+            }
+        })
         
-        var user: SCUser?
-        if SCDataManager.shared.user != nil {
-            
-            user =  SCDataManager.shared.user
-            print(" created a new user from json")
-        } else {
-            let userName = "Perrin"
-            let sampleBanks: [SCSampleBank] = []
-            let sampleLibrary: [SCSample] = []
-            
-            user = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: nil, sampleLibrary: sampleLibrary)
-            
-            
-        }
-        SCAudioPlayer.shared.user = user
-        
+        SCDataManager.shared.fetchCurrentUserData()
         window = UIWindow(frame: UIScreen.main.bounds)
-        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        
         let initialViewController = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController
-        
-        
-        initialViewController?.user = user
-        
-       
         window?.rootViewController = initialViewController
         window?.makeKeyAndVisible()
-
         
         return true
     }
@@ -57,11 +41,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        SCAudioManager.shared.finishRecording(success: true)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        // if recording, stop
+        SCDataManager.shared.saveObjectToJSON()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -75,7 +62,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        self.saveContext()
+//        self.saveContext()
+        //if recording, stop
+        SCDataManager.shared.saveObjectToJSON()
     }
 
     // MARK: - Core Data stack

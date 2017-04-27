@@ -9,6 +9,8 @@
 import Foundation
 import ObjectMapper
 
+
+
 class SCDataManager {
     
     static let shared = SCDataManager.init()
@@ -16,37 +18,20 @@ class SCDataManager {
     var user: SCUser?
     var currentSampleTitle: String?
     
+   
+    
     func readJSONFromFile(){
-//        let documentsPath = NSURL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
-//        let filePath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-//      let documentsDirectoryPath = NSURL(string: documentsDirectoryPathString)!
-  //    let jsonFilePath = documentsDirectoryPath.appendingPathComponent("user.json")
 
-//        let textFileURL = documentsPath.appendingPathComponent("resource/data/introduction")
-//        let fileURLString = textFileURL?.path
-//        
-//        let filePath = getFileURL(fileName: "user.json")
-//
-//        print(filePath!)
-        // /Users/perrincloutier/Library/Developer/CoreSimulator/Devices/F515D532-D5E5-4707-9BB2-257557B4F484/data/Containers/Data/Application/765E55FE-3059-4C8E-8CA6-82920EC2A0DA/Documents
-        // /Users/perrincloutier/Library/Developer/CoreSimulator/Devices/F515D532-D5E5-4707-9BB2-257557B4F484/data/Containers/Data/Application/B5A0F063-1534-4D92-8A8B-F63762F88EAA/Documents
-        // /Users/perrincloutier/Library/Developer/CoreSimulator/Devices/F515D532-D5E5-4707-9BB2-257557B4F484/data/Containers/Data/Application/25983913-4A07-416D-96B1-B0FCC29F60E9/Documents
-        // /Users/perrincloutier/Library/Developer/CoreSimulator/Devices/F515D532-D5E5-4707-9BB2-257557B4F484/data/Containers/Data/Application/708F54FD-1188-4C27-9F6B-A25D8A951526/Documents
-        
-        
-//        if let path = Bundle.main.path(forResource: "user" , ofType: "json") {
         if let filePath = getFileURL(fileName: "SoundCollageUser.json") {
         print(filePath)
             if FileManager.default.fileExists(atPath: filePath.path){
-                print("success")
+                print("Read filepath with success ")
             }
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: .alwaysMapped)
                 let jsonString = String(data: data, encoding: .utf8)
                 print(jsonString!)
                 let user = SCUser(JSONString: jsonString!)
-//                let user = Mapper<SCUser>().map(JSONString: jsonString!)
-                //let jsonObj = JSONSerializer.toJson(data)
                 print(user!)
                 self.user = user 
             } catch let error {
@@ -54,10 +39,11 @@ class SCDataManager {
             }
         } else {
             print("Invalid filename/path.")
-        
         }
-        
     }
+    
+    
+    
     func getFileURL(fileName:String) -> URL? {
         let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         do {
@@ -68,20 +54,71 @@ class SCDataManager {
         }
         return nil
     }
+    
+    
+    
+    func fetchCurrentUserData() {
+        
+        readJSONFromFile()
+        
+        guard let user = SCDataManager.shared.user else {
+            print("Created new user")
+            let userName = "Perrin"
+            let sampleBanks: [SCSampleBank] = []
+            let sampleLibrary: [SCAudioFile] = []
+            let samples: [SCAudioFile] = []
+            let currentSampleBank = SCSampleBank.init(name: UUID.init().uuidString, id: 1, samples: samples)
+            let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: currentSampleBank, sampleLibrary: sampleLibrary)
+            self.user = newUser
+            return
+        }
+        print("Fetched user data from file with success")
+        self.user = user
+    }
+    
 
-//    let fileManager = FileManager.default
-//    var isDirectory: ObjCBool = false
-//    
-//    // creating a .json file in the Documents folder
-//    if !fileManager.fileExists(atPath: (jsonFilePath?.absoluteString)!, isDirectory: &isDirectory) {
-//    let created = fileManager.createFile(atPath: (jsonFilePath?.absoluteString)!, contents: nil, attributes: nil)
-//    if created {
-//    print("File created ")
-//    } else {
-//    print("Couldn't create file for some reason")
-//    }
-//    } else {
-//    print("File already exists")
-//    }
+    func saveObjectToJSON(){
+        
+        if let jsonString = SCDataManager.shared.user?.toJSONString(prettyPrint: true){
+            print(jsonString)
+            writeToFile(jsonString: jsonString)
+        } else {
+            print("Error serializing json")
+        }
+    }
+    
+    
+    
+    func writeToFile(jsonString: String){
+        let documentsDirectoryPathString = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        let documentsDirectoryPath = NSURL(string: documentsDirectoryPathString)!
+        
+        let jsonFilePath = documentsDirectoryPath.appendingPathComponent("SoundCollageUser.json")
+        let fileManager = FileManager.default
+        var isDirectory: ObjCBool = false
+        
+        // creating a .json file in the Documents folder
+        if !fileManager.fileExists(atPath: (jsonFilePath?.absoluteString)!, isDirectory: &isDirectory) {
+            let created = fileManager.createFile(atPath: (jsonFilePath?.absoluteString)!, contents: nil, attributes: nil)
+            if created {
+                print("File created successfully")
+            } else {
+                print("Error creating SoundCollageUser.json")
+            }
+        } else {
+            print("File already exists at path: \(documentsDirectoryPathString)")
+        }
+        
+        let jsonData: Data = jsonString.data(using: .utf8)!
+        // Write that JSON to the file created earlier
+        do {
+            let file = try FileHandle(forWritingTo: jsonFilePath!)
+            file.write(jsonData)
+            print("JSON data was written to the file successfully!")
+        } catch let error as NSError {
+            print("Couldn't write to file: \(error.localizedDescription)")
+        }
+        
+    }
 
 }

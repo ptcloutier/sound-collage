@@ -11,7 +11,9 @@ import UIKit
 class SCNoteButton: UIButton {
     
     var note: Int = 0
-    let delegate: SCNoteButtonDelegate
+    // this delegate now refers to a reference type only (UIViewController)
+    // and that class will be weakly retained
+    weak var delegate: SCNoteButtonDelegate?
     
     required init(note: Int, delegate: SCNoteButtonDelegate ) {
         // set myValue before super.init is called
@@ -35,18 +37,16 @@ class SCNoteButton: UIButton {
             self.alpha = 1
         }, completion: nil)
         print(note)
-        SCAudioPlayer.shared.playBack(selectedSampleIndex: 0)
-        delegate.noteButtonDidPress(sender: self)
+        SCAudioManager.shared.selectedSampleIndex = 0 // TODO: selectedNoteButton!!!
+        SCAudioManager.shared.playback()
+        delegate?.noteButtonDidPress(sender: self)
     }
     
     func setupButton(){
         
-//        self.contentMode = .scaleToFill
         self.isUserInteractionEnabled = true
-//        self.translatesAutoresizingMaskIntoConstraints = false
         self.addTarget(self, action: #selector(SCNoteButton.playNote), for: .touchUpInside)
         self.imageView?.contentMode = UIViewContentMode.scaleAspectFit
-//        self.setImage(UIImage.init(named: "dot"), for: .normal)
         self.backgroundColor = UIColor.green
     }
 }

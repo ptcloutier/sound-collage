@@ -9,27 +9,26 @@
 import Foundation
 import ObjectMapper
 
-class SCSample: Mappable {
+class SCAudioFile: Mappable {
     
-    var sampleBankID: Int!
-    var title: String!
-    var url: String!
+    var sampleBankID: Int?
+    var title: String?
+    var audioPath: String?
     
-    init(sampleBankID: Int!, url: String!, title: String!) {
+    init(sampleBankID: Int?, audioPath: String?, title: String?) {
         self.sampleBankID = sampleBankID
-        self.url = url
+        self.audioPath = audioPath
         self.title = title
     }
     required init?(map: Map) {
         sampleBankID    <- map["sampleBankID"]
-        url             <- map["url"]
+        audioPath       <- map["audioPath"]
         title           <- map["title"]
     }
-//    // Mappable
+    // Mappable
     func mapping(map: Map) {
         sampleBankID    <- map["sampleBankID"]
-        url             <- map["url"]
+        audioPath       <- map["audioPath"]
         title           <- map["title"]
     }
-
 }

@@ -1,17 +1,18 @@
 //
-//  SCColors.swift
+//  SCGradientColors.swift
 //  SoundCollage
 //
-//  Created by perrin cloutier on 4/22/17.
+//  Created by perrin cloutier on 4/26/17.
 //  Copyright © 2017 ptcloutier. All rights reserved.
 //
 
-
 import Foundation
 import QuartzCore
-import UIKit 
+import UIKit
 
-class SCColors {
+
+
+class SCGradientColors {
     
     var colors = [[CGColor]]()
     var currentColors: Int = 0
@@ -22,20 +23,20 @@ class SCColors {
     }
     
     //MARK: Gradient color
-    func configureGradientLayer(in view: UIView, from startPoint: CGPoint, to endPoint: CGPoint) { 
+    func configureGradientLayer(in view: UIView, from startPoint: CGPoint, to endPoint: CGPoint) {
         
         gradientLayer.frame = view.bounds
         gradientLayer.colors = colors
         gradientLayer.locations = [0.0, 0.35]
         gradientLayer.startPoint = startPoint
         gradientLayer.endPoint = endPoint
-//        view.layer.addSublayer(gradientLayer)
-        view.layer.insertSublayer(gradientLayer, at: 0)
+        view.layer.addSublayer(gradientLayer)
+//        view.layer.insertSublayer(gradientLayer, at: 0)
         
     }
     
     
-    func morphColors() {
+    func morphColors(in view: UIView) {
         if currentColors < colors.count - 1 {
             currentColors+=1
         } else {
@@ -48,5 +49,4 @@ class SCColors {
         colorChangeAnimation.isRemovedOnCompletion = false
         gradientLayer.add(colorChangeAnimation, forKey: "colorChange")
     }
-    
 }
