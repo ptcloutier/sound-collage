@@ -18,6 +18,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
     var currentColorSet: Int = 0
     var isEnabled = false
     var timer: Timer? = nil
+//    var audioFile: SCAudioFile?
     
     
     
@@ -91,8 +92,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
     
     
     
-    func startCellsFlashing() {
-        print("Recording is enabled.")
+    func startCellFlashing() {
         if timer != nil {
             timer?.invalidate()
         }
@@ -117,52 +117,14 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
             strongSelf.animateCellForPlayback()
         }
     }
-//    
-//    func tryTimer() {
-//        switch recording {
-//        case <#pattern#>:
-//            <#code#>
-//        default:
-//            <#code#>
-//        }
-//    }
-//    
-//    
-//    
-//    
-//    
-//    +    func tryTimer() {
-//        +        switch recordingIsEnabled {
-//            +        case true:
-//                +            print("record enabled")
-//                    +            startTimer()
-//            +        case false:
-//                +            if recordingTimer != nil {
-//                    +                recordingTimer?.invalidate()
-//                    +            }
-//        }
-//    }
-//    
-//    
-//    
-//    func startTimer(){
-//        
-//        recordingTimer = Timer.scheduledTimer(withTimeInterval: 0.5,
-//                                              repeats: true) {
-//                                                
-//                                                //"[weak self]" creates a "capture group" for timer
-//                                                [weak self] timer in
-//                                                
-//                                                //Add a guard statement to bail out of the timer code
-//                                                //if the object has been freed.
-//                                                guard self != nil else {
-//                                                    return
-//                                                }
-//                                                //Put the code that be called by the timer here.
-//                                                self?.animateCell()
-//                                                //                                        strongSelf.someOtherProperty = someValue
-//        }
-//    }
-//
     
+    func playbackSample() {
+        SCAudioManager.shared.playback() 
+    }
+    
+    func recordNewSample() {
+        SCAudioManager.shared.recordNew()
+ 
+    }
+ 
 }

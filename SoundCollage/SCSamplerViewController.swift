@@ -17,7 +17,6 @@ class SCSamplerViewController: UIViewController  {
     var collectionView: UICollectionView?
     var recordBtn = UIButton()
     var newRecordingTitle: String?
-    var audioPlayer: SCAudioManager!
     var lastRecording: URL?
     var selectedSampleIndex: Int?
     var gradientLayer: CAGradientLayer!
@@ -35,22 +34,7 @@ class SCSamplerViewController: UIViewController  {
         view.backgroundColor = UIColor.darkGray
 
         
-        let navBar = UINavigationBar.init(frame:CGRect(x: 0, y: 0,width: UIScreen.main.bounds.width, height: 50 ))
-        navBar.tintColor = UIColor.black
-        self.view.addSubview(navBar)
-        
-        
-        let navItem = UINavigationItem()
-        
-        let speakerButton = UIButton.init(type: .custom)
-        speakerButton.setImage(UIImage.init(named: "speakerOff"), for: .normal)
-        speakerButton.addTarget(self, action: #selector(SCSamplerViewController.audioPlaybackSource), for: .touchUpInside)
-        speakerButton.frame = CGRect.init(x: 0, y: 0, width: 30, height: 30)
-        self.speakerBtn = speakerButton
-        let barButton = UIBarButtonItem(customView: self.speakerBtn)
-        navItem.rightBarButtonItem = barButton
-        navBar.items = [navItem]
-    }
+            }
     
     
     
@@ -96,6 +80,24 @@ class SCSamplerViewController: UIViewController  {
         recordBtn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
         recordBtn.center = CGPoint(x: view.center.x, y: yPosition)
         view.addSubview(recordBtn)
+        
+        
+        let navBar = UINavigationBar.init(frame:CGRect(x: 0, y: 0,width: UIScreen.main.bounds.width, height: 50 ))
+        navBar.tintColor = UIColor.black
+        self.view.addSubview(navBar)
+        
+        
+        let navItem = UINavigationItem()
+        
+        let speakerButton = UIButton.init(type: .custom)
+        speakerButton.setImage(UIImage.init(named: "speakerOff"), for: .normal)
+        speakerButton.addTarget(self, action: #selector(SCSamplerViewController.audioPlaybackSource), for: .touchUpInside)
+        speakerButton.frame = CGRect.init(x: 0, y: 0, width: 30, height: 30)
+        self.speakerBtn = speakerButton
+        let barButton = UIBarButtonItem(customView: self.speakerBtn)
+        navItem.rightBarButtonItem = barButton
+        navBar.items = [navItem]
+
     }
     
     
@@ -140,7 +142,6 @@ class SCSamplerViewController: UIViewController  {
         
         switch SCAudioManager.shared.isRecording {
         case true:
-            print("Audio recording stopped.")
             SCAudioManager.shared.finishRecording(success: true)
             reloadCV()
         case false:
@@ -171,13 +172,13 @@ class SCSamplerViewController: UIViewController  {
     }
 
 
-    func audioSessionRecordingState(in cell: SCSamplerCollectionViewCell,samplePadIndex: Int){
+    func startRecording(in cell: SCSamplerCollectionViewCell,samplePadIndex: Int){
         switch SCAudioManager.shared.isRecording {
         case true:
             print("Audio recording in session.")
         case false:
-            print("Started recording on sampler pad \(samplePadIndex)")
-            SCAudioManager.shared.createNewSample()
+            print("Recording in progress on sampler pad \(samplePadIndex)")
+            cell.recordNewSample()
             cell.isEnabled = false
             recordingMode()
         }
@@ -213,7 +214,8 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
             cell.isEnabled = true
-            cell.startCellsFlashing()
+            cell.startCellFlashing()
+            print("Recording is enabled in cell \(indexPath.row)")
           
         case false:
             cell.isEnabled = false
@@ -233,9 +235,9 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
-            audioSessionRecordingState(in: cell, samplePadIndex: indexPath.row)
+            startRecording(in: cell, samplePadIndex: indexPath.row)
         case false:
-            SCAudioManager.shared.playback()
+            cell.playbackSample()
             cell.animateCellForPlayback()
         }
 

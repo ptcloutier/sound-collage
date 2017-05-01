@@ -23,7 +23,7 @@ class SCDataManager {
     func readJSONFromFile(){
 
         if let filePath = getFileURL(fileName: "SoundCollageUser.json") {
-        print(filePath)
+            print("SoundCollage.user json file exists at path: \(filePath)")
             if FileManager.default.fileExists(atPath: filePath.path){
                 print("Read filepath with success ")
             }
@@ -32,13 +32,13 @@ class SCDataManager {
                 let jsonString = String(data: data, encoding: .utf8)
                 print(jsonString!)
                 let user = SCUser(JSONString: jsonString!)
-                print(user!)
-                self.user = user 
+                print(user!) 
+                self.user = user // TODO: current sample bank is a different instance than the one loaded from JSON
             } catch let error {
                 print(error.localizedDescription)
             }
         } else {
-            print("Invalid filename/path.")
+            print("Invalid filename/path or first run, no file to read until first save.")
         }
     }
     
@@ -62,14 +62,30 @@ class SCDataManager {
         readJSONFromFile()
         
         guard let user = SCDataManager.shared.user else {
-            print("Created new user")
             let userName = "Perrin"
-            let sampleBanks: [SCSampleBank] = []
-            let sampleLibrary: [SCAudioFile] = []
-            let samples: [SCAudioFile] = []
-            let currentSampleBank = SCSampleBank.init(name: UUID.init().uuidString, id: 1, samples: samples)
-            let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: currentSampleBank, sampleLibrary: sampleLibrary)
+            var sampleBanks: [SCSampleBank] = []
+            let samples: [String: AnyObject] = ["0": "" as AnyObject,
+                                                "1": "" as AnyObject,
+                                                "2": "" as AnyObject,
+                                                "3": "" as AnyObject,
+                                                "4": "" as AnyObject,
+                                                "5": "" as AnyObject,
+                                                "6": "" as AnyObject,
+                                                "7": "" as AnyObject,
+                                                "8": "" as AnyObject,
+                                                "9": "" as AnyObject,
+                                                "10": "" as AnyObject,
+                                                "11": "" as AnyObject,
+                                                "12": "" as AnyObject,
+                                                "13": "" as AnyObject,
+                                                "14": "" as AnyObject,
+                                                "15": "" as AnyObject]
+            let currentSampleBank = SCSampleBank.init(name: "", id: 1, samples: samples)
+            
+            sampleBanks.append(currentSampleBank)
+            let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: currentSampleBank)
             self.user = newUser
+            print("Created new user")
             return
         }
         print("Fetched user data from file with success")

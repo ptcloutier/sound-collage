@@ -20,7 +20,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     let audioSession: AVAudioSession = AVAudioSession.sharedInstance()  
     var selectedSampleIndex: Int?
     var audioRecorder: AVAudioRecorder!
-    var audioFilename: URL?
+    var audioFilePath: URL?
     var isRecordingModeEnabled = false
     var isSpeakerEnabled: Bool = false
     var isRecording: Bool = false
@@ -33,23 +33,23 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func playback() {
                 
-        guard let sample = getSample(selectedSampleIndex: selectedSampleIndex!) else {
+        guard let path = getSample(selectedSampleIndex: selectedSampleIndex!) else {
             print("Playback sample not found")
             return
         }
-        guard let title = sample.title else {
-            print("Error: audio file has no title.")
+        guard let audioPath = SCDataManager.shared.getFileURL(fileName: path) else {
+            print("audioPath not found.")
             return
         }
-        let audioPath = SCDataManager.shared.getFileURL(fileName: title)
-        playSound(soundFileURL: audioPath!)
+        playSound(soundFileURL: audioPath)
+        print("Playing audiofile at \(audioPath)")
     }
     
     
     
-    func getSample(selectedSampleIndex: Int) -> SCAudioFile? {
+    func getSample(selectedSampleIndex: Int) -> String? {
         
-        var selectedSample: SCAudioFile?
+        var selectedSample: String?
         
         guard let user = SCDataManager.shared.user else {
             print("Error: user doesn't exist")
@@ -59,13 +59,15 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("Error retrieving sampleBank for playback")
             return nil
         }
-        if (sampleBank.samples?.count)! > 0 { // TODO: all samples need to live in library not samplebank. old samples should be deleted 
-            for sample in sampleBank.samples! {
-                if sample.sampleBankID == selectedSampleIndex {
-                    selectedSample = sample
-                }
+        
+        
+        
+        for key in sampleBank.samples.keys {
+            if key == selectedSampleIndex.description {
+                selectedSample = sampleBank.samples[key] as! String?
             }
         }
+        
         return selectedSample
     }
     
@@ -78,7 +80,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             if player.isPlaying == false { //player is not in use, so use that one
                 player.prepareToPlay()
                 player.play()
-                
+                print("Played sample with success!")
+
             } else { // player is in use, create a new, duplicate player
                 
                 let duplicatePlayer = try! AVAudioPlayer(contentsOf: soundFileURL)
@@ -93,7 +96,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 duplicatePlayer.prepareToPlay()
                 duplicatePlayer.play()
                 print("Played sample with success!")
-                
+
             }
         } else { //player has not been found, create a new player with the URL if possible
             do{
@@ -101,6 +104,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 players[soundFileURL] = player
                 player.prepareToPlay()
                 player.play()
+                print("Played sample with success!")
             } catch {
                 print("Could not play sound file!")
             }
@@ -118,7 +122,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     //MARK: Recording
     
-    func createNewSample() {
+    func recordNew() {
         
         if audioRecorder == nil {
             setupRecordingSession()
@@ -149,12 +153,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     
-    func startRecording() {
+    func startRecording() { // TODO: there are many different names for the same thing throughout the app, audioFilepath, sampleURl, titleURL, just need to pick the most descriptive name
         
-        let title = UUID.init().uuidString
-        SCDataManager.shared.currentSampleTitle = title
+        let titleURL = UUID.init().uuidString
+        SCDataManager.shared.currentSampleTitle = titleURL
         
-        audioFilename = getDocumentsDirectory().appendingPathComponent(title)
+        audioFilePath = getDocumentsDirectory().appendingPathComponent(titleURL)
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -164,7 +168,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         ]
         
         do {
-            audioRecorder = try AVAudioRecorder(url: audioFilename!, settings: settings)
+            audioRecorder = try AVAudioRecorder(url: audioFilePath!, settings: settings)
             audioRecorder.delegate = self
             audioRecorder.record()
         } catch {
@@ -196,22 +200,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         audioRecorder?.stop()
         audioRecorder = nil
         self.isRecording = false
-        
-        guard let audioFilenamePath = audioFilename?.path else {
-            print("Error: audioFileName is nil")
+        print("Audio recording stopped.")
+
+        guard let url = audioFilePath?.path else {
+            print("Error: audioFilePath is nil")
             return
         }
-        guard let index = selectedSampleIndex else {
-            print("Error: selectedSampleIndex is nil")
-            return
-        }
-        guard let title = SCDataManager.shared.currentSampleTitle else {
-            print("Error: currentSampleTitle is nil")
-            return
-        }
-        let audioFile = SCAudioFile.init(sampleBankID: index, audioPath: audioFilenamePath, title: title )
-        print("Recording successful.\naudioPath: \(audioFile.audioPath) , audioTitle: \(audioFile.title)")
-        
         guard let user = SCDataManager.shared.user else {
             print("Error: user doesn't exist.")
             return
@@ -220,12 +214,14 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("Error: sampleBank doesn't exist.")
             return
         }
-        guard var samples = sampleBank.samples  else {
-            print("Error: samples array not found in sampleBank")
-            return
+        for key in sampleBank.samples.keys{
+            if key == selectedSampleIndex?.description {
+                sampleBank.samples[key] = url as AnyObject?
+            }
+            
         }
-        samples.append(audioFile)
-        SCDataManager.shared.user?.currentSampleBank?.samples = samples
+        
+        SCDataManager.shared.user?.currentSampleBank? = sampleBank
         SCAudioManager.shared.isRecordingModeEnabled = false // so that we set the keyboard buttons to play
     }
     
