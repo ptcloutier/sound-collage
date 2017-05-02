@@ -17,7 +17,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     var players = [URL:AVAudioPlayer]()
     var duplicatePlayers = [AVAudioPlayer]()
-    let audioSession: AVAudioSession = AVAudioSession.sharedInstance()  
+    let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
     var selectedSampleIndex: Int?
     var audioRecorder: AVAudioRecorder!
     var audioFilePath: URL?
@@ -32,17 +32,17 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     //MARK: Playback
     
     func playback() {
-                
+        
         guard let path = getSample(selectedSampleIndex: selectedSampleIndex!) else {
             print("Playback sample not found")
             return
         }
-        guard let audioPath = SCDataManager.shared.getFileURL(fileName: path) else {
-            print("audioPath not found.")
-            return
-        }
+        let docsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! as String
+        
+        let filepath = docsDirectory.appending("/\(path)")
+        let audioPath = URL.init(fileURLWithPath: filepath )
+        
         playSound(soundFileURL: audioPath)
-        print("Playing audiofile at \(audioPath)")
     }
     
     
@@ -59,9 +59,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("Error retrieving sampleBank for playback")
             return nil
         }
-        
-        
-        
         for key in sampleBank.samples.keys {
             if key == selectedSampleIndex.description {
                 selectedSample = sampleBank.samples[key] as! String?
@@ -71,17 +68,42 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         return selectedSample
     }
     
+    func createFileAtPath(soundFileURL: URL) -> URL? {
+        
+        // Get a file for AVAudioPlayer
+        do {
+            let soundData = try Data.init(contentsOf: soundFileURL)
+            let docsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first?.appending(soundFileURL.description)
+            
+            guard let filePath = docsPath else {
+                print("Docs path not found.")
+                return nil
+            }
+            do {
+                try soundData.write(to: URL(fileURLWithPath:filePath), options: .atomic)
+                return URL(fileURLWithPath:filePath)
+            } catch {
+                print(error)
+            }
+        }
+        catch {
+            print(error)
+        }
+        return nil
+    }
     
-    
-    func playSound (soundFileURL: URL){
+    func playSound(soundFileURL: URL){
+        
+        print("Attempting playback with path: \(soundFileURL)")
+        
         
         if let player = players[soundFileURL] { //player for sound has been found
             
             if player.isPlaying == false { //player is not in use, so use that one
                 player.prepareToPlay()
                 player.play()
-                print("Played sample with success!")
-
+                print("Playing audiofile at \(soundFileURL)")
+                
             } else { // player is in use, create a new, duplicate player
                 
                 let duplicatePlayer = try! AVAudioPlayer(contentsOf: soundFileURL)
@@ -95,16 +117,18 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 
                 duplicatePlayer.prepareToPlay()
                 duplicatePlayer.play()
-                print("Played sample with success!")
-
+                print("Playing audiofile at \(soundFileURL)")
+                
             }
         } else { //player has not been found, create a new player with the URL if possible
             do{
-                let player = try AVAudioPlayer(contentsOf: soundFileURL)
+                
+                let player = try AVAudioPlayer(contentsOf: soundFileURL, fileTypeHint: "m4a")
+                
                 players[soundFileURL] = player
                 player.prepareToPlay()
                 player.play()
-                print("Played sample with success!")
+                print("Playing audiofile at \(soundFileURL)")
             } catch {
                 print("Could not play sound file!")
             }
@@ -153,12 +177,14 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     
-    func startRecording() { // TODO: there are many different names for the same thing throughout the app, audioFilepath, sampleURl, titleURL, just need to pick the most descriptive name
+    func startRecording() {
+        // TODO: there are many different names for the same thing throughout the app, audioFilepath, sampleURl, titleURL, just need to pick the most descriptive name
         
-        let titleURL = UUID.init().uuidString
-        SCDataManager.shared.currentSampleTitle = titleURL
+        let audioFileUniqueID = UUID.init().uuidString
+        let url = audioFileUniqueID.appending(".m4a")
+        SCDataManager.shared.currentSampleTitle = url
         
-        audioFilePath = getDocumentsDirectory().appendingPathComponent(titleURL)
+        audioFilePath = getDocumentsDirectory().appendingPathComponent(url)
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -192,7 +218,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             finishRecording(success: false)
         }
     }
-
+    
     
     
     func finishRecording(success: Bool) {
@@ -201,8 +227,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         audioRecorder = nil
         self.isRecording = false
         print("Audio recording stopped.")
-
-        guard let url = audioFilePath?.path else {
+        
+        guard let audioURL = audioFilePath?.lastPathComponent else {
             print("Error: audioFilePath is nil")
             return
         }
@@ -216,7 +242,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         }
         for key in sampleBank.samples.keys{
             if key == selectedSampleIndex?.description {
-                sampleBank.samples[key] = url as AnyObject?
+                sampleBank.samples[key] = audioURL as AnyObject?
+                print("Audio file recorded and saved at \(audioURL.description)")
             }
             
         }

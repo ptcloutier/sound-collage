@@ -22,7 +22,7 @@ class SCDataManager {
     
     func readJSONFromFile(){
 
-        if let filePath = getFileURL(fileName: "SoundCollageUser.json") {
+        if let filePath = getFileURL(filePath: "SoundCollageUser.json") {
             print("SoundCollage.user json file exists at path: \(filePath)")
             if FileManager.default.fileExists(atPath: filePath.path){
                 print("Read filepath with success ")
@@ -33,7 +33,8 @@ class SCDataManager {
                 print(jsonString!)
                 let user = SCUser(JSONString: jsonString!)
                 print(user!) 
-                self.user = user // TODO: current sample bank is a different instance than the one loaded from JSON
+                self.user = user
+                printAudioFilePaths()
             } catch let error {
                 print(error.localizedDescription)
             }
@@ -44,15 +45,50 @@ class SCDataManager {
     
     
     
-    func getFileURL(fileName:String) -> URL? {
-        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        do {
-            let directoryContents = try FileManager.default.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: [])
-            return directoryContents.first{$0.absoluteString.contains(fileName)}
-        } catch let error as NSError {
-            print(error.localizedDescription)
+    func getFileURL(filePath: String) -> URL? {
+        
+        let url = getFinishedFilePath(filePath: filePath)
+        return url
+    }
+
+
+
+    func getAudioFileURL(filePath: String) -> URL? {
+        
+//        let filePath = prefixHandler(fileName: filePath)
+        let url = getFinishedFilePath(filePath: filePath)
+        return url
+    }
+
+
+
+    private func prefixHandler(fileName: String) -> String {
+        
+        let prefix = "///private"
+        if fileName.hasPrefix(prefix) {
+            return fileName
+        } else {
+            let result = prefix.appending(fileName)
+        return result
         }
-        return nil
+    }
+
+
+
+    private func getFinishedFilePath(filePath: String) -> URL? {
+        
+        let fileManager = FileManager.default
+        let docsurl = try! fileManager.url(for:.documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        let myurl = docsurl.appendingPathComponent(filePath)
+        return myurl
+//        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+//        do {
+//            let directoryContents = try FileManager.default.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: [])
+//            return directoryContents.first{$0.absoluteString.contains(filePath)}
+//        } catch let error as NSError {
+//            print(error.localizedDescription)
+//        }
+//        return nil
     }
     
     
@@ -80,11 +116,12 @@ class SCDataManager {
                                                 "13": "" as AnyObject,
                                                 "14": "" as AnyObject,
                                                 "15": "" as AnyObject]
-            let currentSampleBank = SCSampleBank.init(name: "", id: 1, samples: samples)
-            
-            sampleBanks.append(currentSampleBank)
-            let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: currentSampleBank)
+            let sampleBank = SCSampleBank.init(name: nil, id: nil, samples: samples)
+
+            sampleBanks.append(sampleBank)
+            let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: nil)
             self.user = newUser
+            printAudioFilePaths()
             print("Created new user")
             return
         }
@@ -134,7 +171,18 @@ class SCDataManager {
         } catch let error as NSError {
             print("Couldn't write to file: \(error.localizedDescription)")
         }
-        
     }
-
+    
+    func printAudioFilePaths(){
+        
+        guard let sampleBanks = self.user?.sampleBanks else {
+            print("No sampleBanks found in user.")
+            return
+        }
+        for sampleBank in sampleBanks {
+            for value in sampleBank.samples.values {
+                print(value)
+            }
+        }
+    }
 }

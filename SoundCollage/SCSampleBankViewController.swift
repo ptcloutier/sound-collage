@@ -56,9 +56,11 @@ class SCSampleBankViewController: UIViewController {
 
 extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
+    
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -75,15 +77,22 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
     }
     
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSampleBankCell", for: indexPath) as! SCSampleBankCell
         return cell
     }
     
     
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        
+        guard let sampleBanks = SCDataManager.shared.user?.sampleBanks else {
+            print("Error: could not load sampler, sample bank not found")
+            return
+        }
+
+        SCDataManager.shared.user?.currentSampleBank = sampleBanks[indexPath.row]
         collectionView.transform = CGAffineTransform(scaleX: 1, y: 1)
         
            UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations:{
@@ -97,8 +106,6 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
             self.view.window!.layer.add(transition, forKey: kCATransition)
             self.present(vc, animated: true, completion: nil)
            }, completion: nil
-            
-
-    )
+        )
     }
 }
