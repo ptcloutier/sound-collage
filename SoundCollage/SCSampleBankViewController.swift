@@ -73,7 +73,7 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
             print("Error: could not load sampler, sample bank not found")
             return 1
         }
-        return sampleBanks.count+1
+        return sampleBanks.count
     }
     
     

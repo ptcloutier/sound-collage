@@ -29,7 +29,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         super.init(frame: frame)
         
         createColorSets()
-//        self.contentView.applyGradient(withColors: colorSets[currentColorSet], gradientOrientation: .topLeftBottomRight)
         setupGradientLayer()
     }
     
@@ -39,7 +38,23 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupGradientLayer(){
+    
+    
+    //MARK: Gradient colors/animations
+    
+    
+    
+    private func createColorSets() {
+        
+        colorSets.append([UIColor.clear, UIColor.clear, UIColor.clear])
+        colorSets.append([UIColor.red, UIColor.magenta, UIColor.orange])
+        fromColors = colorSets[currentColorSet].map {$0.cgColor}
+        currentColorSet = 0
+    }
+    
+    
+    
+    private func setupGradientLayer() {
         
         self.gradient.colors = toColors
         self.gradient.frame = self.bounds
@@ -65,11 +80,63 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         self.gradient.add(animation, forKey:"animateGradient")
     }
     
+    
+    
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         
         self.toColors = self.fromColors;
         self.fromColors = self.gradient.colors as! [CGColor]
     }
+    
+    
+    
+    //MARK: UI record enabled/cell flashing
+    
+    func startCellFlashing() {
+        if flashTimer != nil {
+            flashTimer?.invalidate()
+        }
+        startTimer()
+    }
+    
+    
+    
+    func startTimer() {
+        flashTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {
+            [weak self] flashTimer in  // creates a capture group for the timer
+            guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
+                return
+            }
+            strongSelf.animateLayer()
+        }
+    }
+
+    
+    
+    func stopCellsFlashing() {
+        if flashTimer != nil {
+            flashTimer?.invalidate()
+        }
+    }
+
+    
+    
+    //MARK: Playback 
+    
+    
+    func playbackSample() {
+        SCAudioManager.shared.playback()
+        touchDelay()
+    }
+    
+    func recordNewSample() {
+        SCAudioManager.shared.recordNew()
+        touchDelay()
+    }
+ 
+    
+    //MARK: Touch response 
+    
     
     private func touchDelay(){
         
@@ -84,100 +151,11 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     
-    func enableTouch(){
+    func enableTouch() {
         self.isUserInteractionEnabled = true
-        isTouchDelayed = false 
+        isTouchDelayed = false
         print("cell interaction enabled.")
     }
     
 
-    
-    
-    private func createColorSets() {
-        
-        colorSets.append([UIColor.clear, UIColor.clear, UIColor.clear])
-        colorSets.append([UIColor.red, UIColor.magenta, UIColor.orange])
-        fromColors = colorSets[currentColorSet].map {$0.cgColor}
-        currentColorSet = 0
-    }
-    
-    
-    
-    func changeColor() {
-        animateLayer()
-//        
-//        if currentColorSet < colorSets.count - 1 {
-//            currentColorSet += 1
-//        } else {
-//            currentColorSet = 0
-//        }
-    }
-    
-
-    func animateCellForPlayback() {
-        
-        changeColor() // call change color twice to return to original color
-//        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0,
-//                       initialSpringVelocity: 50,options: [.repeat],
-//                       animations:{
-//        self.changeColor()
-//        })
-    }
-    
-    
-    
-    func startCellFlashing() {
-//        self.contentView.alpha = 1.0
-        if flashTimer != nil {
-            flashTimer?.invalidate()
-        }
-        startTimer()
-//        changeColor()
-    }
-    
-    
-    func stopCellsFlashing() {
-//        self.contentView.alpha = 0.5
-        if flashTimer != nil {
-            flashTimer?.invalidate()
-        }
-//        changeColor()
-    }
-//    
-//    func highlightRecordingCell(){
-//        changeColor()
-//    }
-//    
-    
-    func startTimer() {
-        flashTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {
-            [weak self] flashTimer in  // creates a capture group for the timer
-            guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
-                return
-            }
-            strongSelf.changeColor()//animateCellForPlayback()
-        }
-    }
-    
-    func playbackSample() {
-        SCAudioManager.shared.playback()
-        touchDelay()
-    }
-    
-    func recordNewSample() {
-        SCAudioManager.shared.recordNew()
-        touchDelay()
-    }
-    
-    override var isSelected: Bool {
-        didSet {
-           
-//            self.layer.borderWidth = 0.9
-//            self.layer.borderColor = isSelected ? UIColor.red.cgColor : UIColor.lightGray
-//                .cgColor
-            
-        }
-    }
-
- 
 }

@@ -68,29 +68,33 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         return selectedSample
     }
     
-    func createFileAtPath(soundFileURL: URL) -> URL? {
-        
-        // Get a file for AVAudioPlayer
-        do {
-            let soundData = try Data.init(contentsOf: soundFileURL)
-            let docsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first?.appending(soundFileURL.description)
-            
-            guard let filePath = docsPath else {
-                print("Docs path not found.")
-                return nil
-            }
-            do {
-                try soundData.write(to: URL(fileURLWithPath:filePath), options: .atomic)
-                return URL(fileURLWithPath:filePath)
-            } catch {
-                print(error)
-            }
-        }
-        catch {
-            print(error)
-        }
-        return nil
-    }
+    
+//    
+//    func createFileAtPath(soundFileURL: URL) -> URL? {
+//        
+//        // Get a file for AVAudioPlayer
+//        do {
+//            let soundData = try Data.init(contentsOf: soundFileURL)
+//            let docsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first?.appending(soundFileURL.description)
+//            
+//            guard let filePath = docsPath else {
+//                print("Docs path not found.")
+//                return nil
+//            }
+//            do {
+//                try soundData.write(to: URL(fileURLWithPath:filePath), options: .atomic)
+//                return URL(fileURLWithPath:filePath)
+//            } catch {
+//                print(error)
+//            }
+//        }
+//        catch {
+//            print(error)
+//        }
+//        return nil
+//    }
+//    
+//    
     
     func playSound(soundFileURL: URL){
         
@@ -179,12 +183,21 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func startRecording() {
         // TODO: there are many different names for the same thing throughout the app, audioFilepath, sampleURl, titleURL, just need to pick the most descriptive name
+        guard let currentSampleBankID = SCDataManager.shared.user?.currentSampleBank?.id else {
+            print("current sample bank id not found.")
+            return
+        }
+        guard let samplePadIndex = selectedSampleIndex else {
+            print("selectedSample index not found.")
+            return
+        }
+        let audioFileName = "sampleBank_\(currentSampleBankID)_samplePadIndex_\(samplePadIndex)"
+        let audioFileFullPath = audioFileName.appending(".m4a")
+        SCDataManager.shared.currentSampleTitle = audioFileFullPath
         
-        let audioFileUniqueID = UUID.init().uuidString
-        let url = audioFileUniqueID.appending(".m4a")
-        SCDataManager.shared.currentSampleTitle = url
+        self.audioFilePath  = getDocumentsDirectory().appendingPathComponent(audioFileFullPath)
         
-        audioFilePath = getDocumentsDirectory().appendingPathComponent(url)
+//        SCDataManager.shared.replaceAudioFileAtPath(filePath: self.audioFilePath!)
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -194,7 +207,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         ]
         
         do {
-            audioRecorder = try AVAudioRecorder(url: audioFilePath!, settings: settings)
+            audioRecorder = try AVAudioRecorder(url: self.audioFilePath!, settings: settings)
             audioRecorder.delegate = self
             audioRecorder.record()
         } catch {

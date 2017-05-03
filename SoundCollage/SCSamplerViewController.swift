@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-//import AudioKit
 
 
 
@@ -45,7 +44,7 @@ class SCSamplerViewController: UIViewController  {
         collectionView.frame.origin.y = 80
     }
     
-    // MARK: UI Gradient Colors
+    
     
     private func setupCollectionView(){
         let flowLayout = SCSamplerFlowLayout()
@@ -65,10 +64,11 @@ class SCSamplerViewController: UIViewController  {
     }
     
     
+    //MARK: Setup UI
+    
     
     private func setupControls(){
         
-
         recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress), for: .touchUpInside)
         
         let tabHeight = CGFloat(49.0)
@@ -105,6 +105,7 @@ class SCSamplerViewController: UIViewController  {
         speakerButton.setImage(UIImage.init(named: "speakerOn"), for: .selected)
         speakerButton.addTarget(self, action: #selector(SCSamplerViewController.audioPlaybackSource), for: .touchUpInside)
         speakerButton.frame = CGRect.init(x: 0, y: 0, width: 30, height: 30)
+
         self.speakerBtn = speakerButton
         let barButton = UIBarButtonItem(customView: self.speakerBtn)
         navItem.rightBarButtonItem = barButton
@@ -166,6 +167,8 @@ class SCSamplerViewController: UIViewController  {
         }
     }
     
+    
+    
     func reloadCV() {
         guard let cv = self.collectionView else {
             print("collectionview not found.")
@@ -173,6 +176,7 @@ class SCSamplerViewController: UIViewController  {
         }
         cv.reloadData()
     }
+    
     
 
     func recordingMode() {
@@ -188,6 +192,7 @@ class SCSamplerViewController: UIViewController  {
         reloadCV()
     }
 
+    
 
     func startRecording(in cell: SCSamplerCollectionViewCell,samplePadIndex: Int){
         switch SCAudioManager.shared.isRecording {
@@ -201,6 +206,8 @@ class SCSamplerViewController: UIViewController  {
         }
     }
 }
+
+
 
 
 extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -234,9 +241,9 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.layer.shadowOpacity = 0.7
         cell.layer.shadowRadius = 3.0
         
-        let tapGR = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
-        tapGR.delegate = self
-        cell.addGestureRecognizer(tapGR)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
+        tapGestureRecognizer.delegate = self
+        cell.addGestureRecognizer(tapGestureRecognizer)
         
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
@@ -270,13 +277,14 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         case false:
             if cell.isTouchDelayed == false {
                 cell.playbackSample()
-                cell.animateCellForPlayback()
+                cell.animateLayer()
             } else {
                 print("extraneous cell touch was delayed.")
             }
         }
 
     }
+    
     
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
@@ -295,9 +303,9 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
 }
+
+
 
 extension SCSamplerViewController: UIGestureRecognizerDelegate {
     

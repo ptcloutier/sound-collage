@@ -55,7 +55,6 @@ class SCDataManager {
 
     func getAudioFileURL(filePath: String) -> URL? {
         
-//        let filePath = prefixHandler(fileName: filePath)
         let url = getFinishedFilePath(filePath: filePath)
         return url
     }
@@ -81,14 +80,6 @@ class SCDataManager {
         let docsurl = try! fileManager.url(for:.documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         let myurl = docsurl.appendingPathComponent(filePath)
         return myurl
-//        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-//        do {
-//            let directoryContents = try FileManager.default.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: [])
-//            return directoryContents.first{$0.absoluteString.contains(filePath)}
-//        } catch let error as NSError {
-//            print(error.localizedDescription)
-//        }
-//        return nil
     }
     
     
@@ -116,10 +107,12 @@ class SCDataManager {
                                                 "13": "" as AnyObject,
                                                 "14": "" as AnyObject,
                                                 "15": "" as AnyObject]
-            let sampleBank = SCSampleBank.init(name: nil, id: nil, samples: samples)
+            
+            let sampleBankID = getSampleBankID()
+            let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples)
 
             sampleBanks.append(sampleBank)
-            let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: nil)
+            let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: sampleBank)
             self.user = newUser
             printAudioFilePaths()
             print("Created new user")
@@ -129,7 +122,20 @@ class SCDataManager {
         self.user = user
     }
     
+    
+    private func getSampleBankID() -> Int {
+        
+        let userDefaults = UserDefaults.standard
+        
+        guard let sampleBankID: Int = userDefaults.value(forKey: "sampleBankID") as! Int?  else {
+            print("sampleBankID not found in user defaults, set to zero.")
+            userDefaults.set(0, forKey: "sampleBankID")
+            return 0
+        }
+        return sampleBankID+1   // increment the sampleBankID when a new one is created
+    }
 
+    
     func saveObjectToJSON(){
         
         if let jsonString = SCDataManager.shared.user?.toJSONString(prettyPrint: true){
@@ -185,4 +191,24 @@ class SCDataManager {
             }
         }
     }
+    
+//    func replaceAudioFileAtPath(filePath: URL) {
+//
+//        let documentsDirectoryPathString = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+//        let documentsDirectoryPath = NSURL(string: documentsDirectoryPathString)!
+//        
+//        guard let audioFilePath = documentsDirectoryPath.appendingPathComponent(filePath.absoluteString) else {
+//            print("audio file path not found.")
+//            return
+//        }
+//        let fileManager = FileManager.default
+//        var isDirectory: ObjCBool = false
+    
+        // creating an audio file in the Documents folder
+//        if fileManager.fileExists(atPath: filePath.absoluteString, isDirectory: &isDirectory) {
+//            print("already an audio file at this path, let's overwrite it.")
+//        } else {
+//            print("first audio file at this path." )
+//        }
+//    }
 }
