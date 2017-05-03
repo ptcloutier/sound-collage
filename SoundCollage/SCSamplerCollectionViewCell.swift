@@ -11,25 +11,26 @@ import AVFoundation
 
 
 
-class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
+class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, CAAnimationDelegate {
     
-    var gradientLayer: CAGradientLayer!
-    var colorSets = [[CGColor]]()
+    var colorSets = [[UIColor]]()
     var currentColorSet: Int = 0
     var isEnabled = false
     var flashTimer: Timer? = nil
     var touchTimer: Timer? = nil
     var isTouchDelayed: Bool = false
-    
-    
+    var fromColors: [CGColor] = []
+    var toColors: [CGColor] = []
+    var animation : CABasicAnimation = CABasicAnimation(keyPath: "colors")
+    var gradient = CAGradientLayer()
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         createColorSets()
-        createGradientLayer()
-        changeColor()
-        
+//        self.contentView.applyGradient(withColors: colorSets[currentColorSet], gradientOrientation: .topLeftBottomRight)
+        setupGradientLayer()
     }
     
     
@@ -38,7 +39,37 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setupGradientLayer(){
+        
+        self.gradient.colors = toColors
+        self.gradient.frame = self.bounds
+        self.gradient.colors = self.colorSets[currentColorSet].map { $0.cgColor }
+        self.layer.insertSublayer(self.gradient, at: 0)
+        
+        animateLayer()
+    }
     
+    func animateLayer(){
+        
+        fromColors = self.gradient.colors as! [CGColor]
+        toColors = self.colorSets[currentColorSet+1].map {$0.cgColor}
+        
+        animation.fromValue = fromColors
+        animation.toValue = toColors
+        animation.duration = 0.3
+        animation.isRemovedOnCompletion = true
+        animation.fillMode = kCAFilterLinear
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        animation.delegate = self
+        
+        self.gradient.add(animation, forKey:"animateGradient")
+    }
+    
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        
+        self.toColors = self.fromColors;
+        self.fromColors = self.gradient.colors as! [CGColor]
+    }
     
     private func touchDelay(){
         
@@ -59,82 +90,64 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
         print("cell interaction enabled.")
     }
     
-    
-    
-    // MARK: UI Gradient Colors
-    
-    private func createGradientLayer() { //TODO: make an extension for these gradient color methods
-        gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.bounds
-        gradientLayer.colors = colorSets[currentColorSet]
-        gradientLayer.locations = [0.0, 0.35]
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
-        self.contentView.layer.insertSublayer(gradientLayer, at: 0)
-        self.contentView.alpha = 0
-        
-    }
-    
+
     
     
     private func createColorSets() {
         
-        colorSets.append([UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor, UIColor.lightGray.cgColor,UIColor.blue.cgColor, UIColor.yellow.cgColor])
-        colorSets.append([UIColor.lightGray.cgColor, UIColor.clear.cgColor, UIColor.clear.cgColor,UIColor.clear.cgColor, UIColor.white.cgColor, UIColor.lightGray.cgColor])
-        
+        colorSets.append([UIColor.clear, UIColor.clear, UIColor.clear])
+        colorSets.append([UIColor.red, UIColor.magenta, UIColor.orange])
+        fromColors = colorSets[currentColorSet].map {$0.cgColor}
         currentColorSet = 0
     }
     
     
     
     func changeColor() {
-        
-        if currentColorSet < colorSets.count - 1 {
-            currentColorSet += 1
-        } else {
-            currentColorSet = 0
-        }
-        let colorChangeAnimation = CABasicAnimation(keyPath: "colors")
-        colorChangeAnimation.duration = 0.4
-        colorChangeAnimation.toValue = colorSets[currentColorSet]
-        colorChangeAnimation.fillMode = kCAFillModeForwards
-        colorChangeAnimation.isRemovedOnCompletion = false
-        gradientLayer.add(colorChangeAnimation, forKey: "colorChange")
+        animateLayer()
+//        
+//        if currentColorSet < colorSets.count - 1 {
+//            currentColorSet += 1
+//        } else {
+//            currentColorSet = 0
+//        }
     }
     
 
     func animateCellForPlayback() {
         
         changeColor() // call change color twice to return to original color
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0,
-                       initialSpringVelocity: 50,options: [.repeat],
-                       animations:{
-        self.changeColor()
-        })
+//        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0,
+//                       initialSpringVelocity: 50,options: [.repeat],
+//                       animations:{
+//        self.changeColor()
+//        })
     }
     
     
     
     func startCellFlashing() {
-        self.contentView.alpha = 1.0
+//        self.contentView.alpha = 1.0
         if flashTimer != nil {
             flashTimer?.invalidate()
         }
         startTimer()
+//        changeColor()
     }
     
     
     func stopCellsFlashing() {
-        self.contentView.alpha = 0.5
+//        self.contentView.alpha = 0.5
         if flashTimer != nil {
             flashTimer?.invalidate()
         }
+//        changeColor()
     }
-    
-    func highlightRecordingCell(){
-        changeColor()
-    }
-    
+//    
+//    func highlightRecordingCell(){
+//        changeColor()
+//    }
+//    
     
     func startTimer() {
         flashTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {
@@ -142,7 +155,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
             guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
                 return
             }
-            strongSelf.animateCellForPlayback()
+            strongSelf.changeColor()//animateCellForPlayback()
         }
     }
     

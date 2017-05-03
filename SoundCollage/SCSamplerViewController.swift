@@ -19,10 +19,6 @@ class SCSamplerViewController: UIViewController  {
     var newRecordingTitle: String?
     var lastRecording: URL?
     var selectedSampleIndex: Int?
-    var gradientLayer: CAGradientLayer!
-    var colorSets = [[CGColor]]()
-    var uicolorSets: [[UIColor]] = [[]]
-    var currentColorSet: Int = 0
     var speakerBtn = UIButton()
     
     
@@ -31,10 +27,6 @@ class SCSamplerViewController: UIViewController  {
         
         setupCollectionView()
         setupControls()
-        
-//        createColorSets()
-//        createGradientLayer(in: self.view)
-//        changeColor()
         animateEntrance()
         
     }
@@ -54,46 +46,6 @@ class SCSamplerViewController: UIViewController  {
     }
     
     // MARK: UI Gradient Colors
-    
-    private func createGradientLayer(in view: UIView) { //TODO: make an extension for these gradient color methods
-        gradientLayer = CAGradientLayer()
-        gradientLayer.frame = view.frame
-        gradientLayer.colors = colorSets[currentColorSet]
-        gradientLayer.locations = [0.0, 0.35]
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
-        view.layer.insertSublayer(gradientLayer, at: 0)
-        
-    }
-    
-    
-    
-    private func createColorSets() {
-        
-        colorSets.append([UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor, UIColor.lightGray.cgColor,UIColor.blue.cgColor, UIColor.yellow.cgColor])
-        colorSets.append([UIColor.darkGray.cgColor, UIColor.lightGray.cgColor, UIColor.white.cgColor,UIColor.white.cgColor, UIColor.lightGray.cgColor, UIColor.darkGray.cgColor])
-        
-        currentColorSet = 0
-    }
-    
-    
-    
-    func changeColor() {
-        
-        if currentColorSet < colorSets.count - 1 {
-            currentColorSet += 1
-        } else {
-            currentColorSet = 0
-        }
-        let colorChangeAnimation = CABasicAnimation(keyPath: "colors")
-        colorChangeAnimation.duration = 0.4
-        colorChangeAnimation.toValue = colorSets[currentColorSet]
-        colorChangeAnimation.fillMode = kCAFillModeForwards
-        colorChangeAnimation.isRemovedOnCompletion = false
-        gradientLayer.add(colorChangeAnimation, forKey: "colorChange")
-    }
-    
-    
     
     private func setupCollectionView(){
         let flowLayout = SCSamplerFlowLayout()
@@ -116,7 +68,7 @@ class SCSamplerViewController: UIViewController  {
     
     private func setupControls(){
         
-//        uicolorSets.append([UIColor.red, UIColor.magenta, UIColor.orange, UIColor.lightGray,UIColor.blue, UIColor.yellow])
+
         recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress), for: .touchUpInside)
         
         let tabHeight = CGFloat(49.0)
@@ -126,7 +78,7 @@ class SCSamplerViewController: UIViewController  {
         
         let backgroundView = UIView.init(frame: recordBtn.frame)
         backgroundView.isUserInteractionEnabled = false
-        backgroundView.applyGradient(withColours: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topRightBottomLeft)
+        backgroundView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
         backgroundView.layer.cornerRadius = buttonHeight/2
         backgroundView.layer.masksToBounds = true
         backgroundView.layer.borderWidth = 2.0
@@ -138,8 +90,11 @@ class SCSamplerViewController: UIViewController  {
         view.addSubview(recordBtn)
         
         
+        let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
         let navBar = UINavigationBar.init(frame:CGRect(x: 0, y: 0,width: UIScreen.main.bounds.width, height: 50 ))
-        navBar.tintColor = UIColor.black
+        navBar.setBackgroundImage(transparentPixel, for: UIBarMetrics.default)
+        navBar.shadowImage = transparentPixel
+        navBar.isTranslucent = true
         self.view.addSubview(navBar)
         
         
@@ -147,6 +102,7 @@ class SCSamplerViewController: UIViewController  {
         
         let speakerButton = UIButton.init(type: .custom)
         speakerButton.setImage(UIImage.init(named: "speakerOff"), for: .normal)
+        speakerButton.setImage(UIImage.init(named: "speakerOn"), for: .selected)
         speakerButton.addTarget(self, action: #selector(SCSamplerViewController.audioPlaybackSource), for: .touchUpInside)
         speakerButton.frame = CGRect.init(x: 0, y: 0, width: 30, height: 30)
         self.speakerBtn = speakerButton
@@ -173,17 +129,14 @@ class SCSamplerViewController: UIViewController  {
     
     func audioPlaybackSource(){
         
-        //TODO: duplicate buttons are created
-        
+        SCAudioManager.shared.playbackSource()
+
         switch SCAudioManager.shared.isSpeakerEnabled {
         case true:
-            speakerBtn.setBackgroundImage(UIImage.init(named: "speakerOn"), for: .normal)
-            
+            speakerBtn.isSelected = true
         case false:
-            speakerBtn.setBackgroundImage(UIImage.init(named: "speakerOff"), for: .normal)
-
+            speakerBtn.isSelected = false
         }
-        SCAudioManager.shared.playbackSource()
     }
     
     
