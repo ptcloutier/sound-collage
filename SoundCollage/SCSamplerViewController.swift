@@ -21,7 +21,8 @@ class SCSamplerViewController: UIViewController  {
     var selectedSampleIndex: Int?
     var gradientLayer: CAGradientLayer!
     var colorSets = [[CGColor]]()
-    var currentColorSet: Int!
+    var uicolorSets: [[UIColor]] = [[]]
+    var currentColorSet: Int = 0
     var speakerBtn = UIButton()
     
     
@@ -30,11 +31,13 @@ class SCSamplerViewController: UIViewController  {
         
         setupCollectionView()
         setupControls()
-        animateEntrance()
-        view.backgroundColor = UIColor.darkGray
-
         
-            }
+//        createColorSets()
+//        createGradientLayer(in: self.view)
+//        changeColor()
+        animateEntrance()
+        
+    }
     
     
     
@@ -50,6 +53,46 @@ class SCSamplerViewController: UIViewController  {
         collectionView.frame.origin.y = 80
     }
     
+    // MARK: UI Gradient Colors
+    
+    private func createGradientLayer(in view: UIView) { //TODO: make an extension for these gradient color methods
+        gradientLayer = CAGradientLayer()
+        gradientLayer.frame = view.frame
+        gradientLayer.colors = colorSets[currentColorSet]
+        gradientLayer.locations = [0.0, 0.35]
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
+        view.layer.insertSublayer(gradientLayer, at: 0)
+        
+    }
+    
+    
+    
+    private func createColorSets() {
+        
+        colorSets.append([UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor, UIColor.lightGray.cgColor,UIColor.blue.cgColor, UIColor.yellow.cgColor])
+        colorSets.append([UIColor.darkGray.cgColor, UIColor.lightGray.cgColor, UIColor.white.cgColor,UIColor.white.cgColor, UIColor.lightGray.cgColor, UIColor.darkGray.cgColor])
+        
+        currentColorSet = 0
+    }
+    
+    
+    
+    func changeColor() {
+        
+        if currentColorSet < colorSets.count - 1 {
+            currentColorSet += 1
+        } else {
+            currentColorSet = 0
+        }
+        let colorChangeAnimation = CABasicAnimation(keyPath: "colors")
+        colorChangeAnimation.duration = 0.4
+        colorChangeAnimation.toValue = colorSets[currentColorSet]
+        colorChangeAnimation.fillMode = kCAFillModeForwards
+        colorChangeAnimation.isRemovedOnCompletion = false
+        gradientLayer.add(colorChangeAnimation, forKey: "colorChange")
+    }
+    
     
     
     private func setupCollectionView(){
@@ -60,6 +103,9 @@ class SCSamplerViewController: UIViewController  {
             print("Error: collectionview is nil")
             return
         }
+        
+        collectionView.backgroundColor = UIColor.clear
+        collectionView.allowsMultipleSelection = true
         collectionView.register(SCSamplerCollectionViewCell.self, forCellWithReuseIdentifier: "SCSamplerCollectionViewCell")
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -70,15 +116,25 @@ class SCSamplerViewController: UIViewController  {
     
     private func setupControls(){
         
-        recordBtn.setBackgroundImage(UIImage.init(named: "record"), for: .normal)
+//        uicolorSets.append([UIColor.red, UIColor.magenta, UIColor.orange, UIColor.lightGray,UIColor.blue, UIColor.yellow])
         recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress), for: .touchUpInside)
         
-        
         let tabHeight = CGFloat(49.0)
-        let buttonHeight = view.frame.width/6
+        let buttonHeight = view.frame.width/4
         let yPosition = view.frame.height-tabHeight-buttonHeight
         recordBtn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
+        
+        let backgroundView = UIView.init(frame: recordBtn.frame)
+        backgroundView.isUserInteractionEnabled = false
+        backgroundView.applyGradient(withColours: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topRightBottomLeft)
+        backgroundView.layer.cornerRadius = buttonHeight/2
+        backgroundView.layer.masksToBounds = true
+        backgroundView.layer.borderWidth = 2.0
+        backgroundView.layer.borderColor = UIColor.white.cgColor
+        
+        recordBtn.addSubview(backgroundView)
         recordBtn.center = CGPoint(x: view.center.x, y: yPosition)
+        
         view.addSubview(recordBtn)
         
         
@@ -144,8 +200,16 @@ class SCSamplerViewController: UIViewController  {
         case true:
             SCAudioManager.shared.finishRecording(success: true)
             reloadCV()
+            recordBtn.alpha = 0
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
+                self.recordBtn.alpha = 1
+            }, completion: nil)
         case false:
             recordingMode()
+            recordBtn.alpha = 0
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
+                self.recordBtn.alpha = 1
+            }, completion: nil)
         }
     }
     
@@ -204,12 +268,22 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
+        
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 15.0
         // add a border
-        cell.layer.borderColor = UIColor.cyan.cgColor
-        cell.layer.borderWidth = 3.0
+        cell.layer.borderColor = UIColor.white.cgColor
+        cell.layer.borderWidth = 2.0
         cell.layer.cornerRadius = 15.0
+        //shadow
+        cell.layer.shadowColor = UIColor.darkGray.cgColor
+        cell.layer.shadowOffset = CGSize(width: 3, height: 3)
+        cell.layer.shadowOpacity = 0.7
+        cell.layer.shadowRadius = 3.0
+        
+        let tapGR = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
+        tapGR.delegate = self
+        cell.addGestureRecognizer(tapGR)
         
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
@@ -235,12 +309,31 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
-            startRecording(in: cell, samplePadIndex: indexPath.row)
+            if cell.isTouchDelayed == false {
+                startRecording(in: cell, samplePadIndex: indexPath.row)
+            } else {
+                print("extraneous cell touch was delayed.")
+            }
         case false:
-            cell.playbackSample()
-            cell.animateCellForPlayback()
+            if cell.isTouchDelayed == false {
+                cell.playbackSample()
+                cell.animateCellForPlayback()
+            } else {
+                print("extraneous cell touch was delayed.")
+            }
         }
 
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        if let selectedItems = collectionView.indexPathsForSelectedItems {
+            if selectedItems.contains(indexPath) {
+                collectionView.deselectItem(at: indexPath, animated: true)
+                return false
+            }
+        }
+        return true
     }
    
     
@@ -251,4 +344,40 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     }
     
     
+}
+
+extension SCSamplerViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func tap(gestureRecognizer: UITapGestureRecognizer) {
+        let tapLocation = gestureRecognizer.location(in: self.collectionView)
+        
+        //using the tapLocation to get the indexPath
+        guard let collectionView = self.collectionView else {
+            print("CollectionView not found.")
+            return
+        }
+        guard let indexPath = collectionView.indexPathForItem(at: tapLocation) else {
+            print("indexPath not found.")
+            return
+        }
+        
+        //now we can get the cell for item at indexPath
+        guard let cell = collectionView.cellForItem(at: indexPath) else {
+            print("cell not found.")
+            return
+        }
+        
+        selectCell(cell: cell, indexPath: indexPath)
+    }
+    
+    func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
+        //here we do whatever like play the desired sounds of the cells.
+        print("selected cell at \(indexPath.row)")
+        self.collectionView(collectionView!, didSelectItemAt: indexPath)
+
+    }
 }

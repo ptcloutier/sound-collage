@@ -17,8 +17,9 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
     var colorSets = [[CGColor]]()
     var currentColorSet: Int = 0
     var isEnabled = false
-    var timer: Timer? = nil
-//    var audioFile: SCAudioFile?
+    var flashTimer: Timer? = nil
+    var touchTimer: Timer? = nil
+    var isTouchDelayed: Bool = false
     
     
     
@@ -39,6 +40,27 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
     
     
     
+    private func touchDelay(){
+        
+        self.isUserInteractionEnabled = false
+        isTouchDelayed = true
+        print("cell interaction delayed.")
+        let delayInSeconds = 0.05
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delayInSeconds) {
+            self.enableTouch()
+        }
+    }
+    
+    
+    
+    func enableTouch(){
+        self.isUserInteractionEnabled = true
+        isTouchDelayed = false 
+        print("cell interaction enabled.")
+    }
+    
+    
+    
     // MARK: UI Gradient Colors
     
     private func createGradientLayer() { //TODO: make an extension for these gradient color methods
@@ -49,6 +71,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
         self.contentView.layer.insertSublayer(gradientLayer, at: 0)
+        self.contentView.alpha = 0
         
     }
     
@@ -57,7 +80,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
     private func createColorSets() {
         
         colorSets.append([UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor, UIColor.lightGray.cgColor,UIColor.blue.cgColor, UIColor.yellow.cgColor])
-        colorSets.append([UIColor.darkGray.cgColor, UIColor.lightGray.cgColor, UIColor.white.cgColor,UIColor.cyan.cgColor, UIColor.blue.cgColor, UIColor.purple.cgColor])
+        colorSets.append([UIColor.lightGray.cgColor, UIColor.clear.cgColor, UIColor.clear.cgColor,UIColor.clear.cgColor, UIColor.white.cgColor, UIColor.lightGray.cgColor])
         
         currentColorSet = 0
     }
@@ -93,24 +116,29 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
     
     
     func startCellFlashing() {
-        if timer != nil {
-            timer?.invalidate()
+        self.contentView.alpha = 1.0
+        if flashTimer != nil {
+            flashTimer?.invalidate()
         }
         startTimer()
     }
     
     
     func stopCellsFlashing() {
-        if timer != nil {
-            timer?.invalidate()
+        self.contentView.alpha = 0.5
+        if flashTimer != nil {
+            flashTimer?.invalidate()
         }
     }
     
+    func highlightRecordingCell(){
+        changeColor()
+    }
     
     
     func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {
-            [weak self] timer in  // creates a capture group for the timer
+        flashTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {
+            [weak self] flashTimer in  // creates a capture group for the timer
             guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
                 return
             }
@@ -119,12 +147,24 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate {
     }
     
     func playbackSample() {
-        SCAudioManager.shared.playback() 
+        SCAudioManager.shared.playback()
+        touchDelay()
     }
     
     func recordNewSample() {
         SCAudioManager.shared.recordNew()
- 
+        touchDelay()
     }
+    
+    override var isSelected: Bool {
+        didSet {
+           
+//            self.layer.borderWidth = 0.9
+//            self.layer.borderColor = isSelected ? UIColor.red.cgColor : UIColor.lightGray
+//                .cgColor
+            
+        }
+    }
+
  
 }
