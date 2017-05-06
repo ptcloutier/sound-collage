@@ -103,9 +103,9 @@ class SCSamplerViewController: UIViewController  {
         let speakerButton = UIButton.init(type: .custom)
         speakerButton.setImage(UIImage.init(named: "speakerOff"), for: .normal)
         speakerButton.setImage(UIImage.init(named: "speakerOn"), for: .selected)
-        speakerButton.addTarget(self, action: #selector(SCSamplerViewController.audioPlaybackSource), for: .touchUpInside)
+        speakerButton.addTarget(self, action: #selector(SCSamplerViewController.changeAudioPlaybackSource), for: .touchUpInside)
         speakerButton.frame = CGRect.init(x: 0, y: 0, width: 30, height: 30)
-
+        setAudioPlaybackSourceButton()
         self.speakerBtn = speakerButton
         let barButton = UIBarButtonItem(customView: self.speakerBtn)
         navItem.rightBarButtonItem = barButton
@@ -128,10 +128,23 @@ class SCSamplerViewController: UIViewController  {
     }
 
     
-    func audioPlaybackSource(){
+    
+    func changeAudioPlaybackSource(){
         
-        SCAudioManager.shared.playbackSource()
-
+        switch SCAudioManager.shared.isSpeakerEnabled {
+        case true:
+            SCAudioManager.shared.isSpeakerEnabled = false
+        case false:
+            SCAudioManager.shared.isSpeakerEnabled = true
+        }
+        SCAudioManager.shared.setAudioPlaybackSource()
+        setAudioPlaybackSourceButton()
+    }
+    
+    
+    
+    func setAudioPlaybackSourceButton(){
+        
         switch SCAudioManager.shared.isSpeakerEnabled {
         case true:
             speakerBtn.isSelected = true

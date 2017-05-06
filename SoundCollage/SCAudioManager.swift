@@ -267,7 +267,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     
-    func playbackSource(){
+    func setAudioPlaybackSource(){
         
         let audioSession = AVAudioSession.sharedInstance()
         
@@ -276,22 +276,20 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             do {
                 try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
                 try audioSession.setActive(true)
-                try audioSession.overrideOutputAudioPort(AVAudioSessionPortOverride.none)
-            } catch let error as NSError {
-                print("AudioSession error: \(error.localizedDescription)")
-            }
-            isSpeakerEnabled = false
-            print("Audio source: headphone jack")
-        case false:
-            do {
-                try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-                try audioSession.setActive(true)
                 try audioSession.overrideOutputAudioPort(AVAudioSessionPortOverride.speaker)
             } catch let error as NSError {
                 print("AudioSession error: \(error.localizedDescription)")
             }
-            isSpeakerEnabled = true
             print("Audio source: speaker")
+        case false:
+            do {
+                try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+                try audioSession.setActive(true)
+                try audioSession.overrideOutputAudioPort(AVAudioSessionPortOverride.none)
+            } catch let error as NSError {
+                print("AudioSession error: \(error.localizedDescription)")
+            }
+            print("Audio source: headphone output")
         }
     }
 }

@@ -41,7 +41,7 @@ class SCSampleBankCell: UICollectionViewCell {
         self.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage.init(named: "sample")
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         self.addSubview(self.imageView)
         
         self.addConstraint(NSLayoutConstraint(item: imageView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0))
