@@ -322,9 +322,13 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
 
 extension SCSamplerViewController: UIGestureRecognizerDelegate {
     
+    
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
+    
+    
     
     func tap(gestureRecognizer: UITapGestureRecognizer) {
         let tapLocation = gestureRecognizer.location(in: self.collectionView)
@@ -335,23 +339,24 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
             return
         }
         guard let indexPath = collectionView.indexPathForItem(at: tapLocation) else {
-            print("indexPath not found.")
+            print("IndexPath not found.")
             return
         }
         
         //now we can get the cell for item at indexPath
         guard let cell = collectionView.cellForItem(at: indexPath) else {
-            print("cell not found.")
+            print("Cell not found.")
             return
         }
         
         selectCell(cell: cell, indexPath: indexPath)
     }
     
+    
+    
     func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
-        //here we do whatever like play the desired sounds of the cells.
+        
         print("selected cell at \(indexPath.row)")
         self.collectionView(collectionView!, didSelectItemAt: indexPath)
-
     }
 }

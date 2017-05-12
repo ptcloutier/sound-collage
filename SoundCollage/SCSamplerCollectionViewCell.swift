@@ -129,11 +129,14 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         touchDelay()
     }
     
+    
+    
     func recordNewSample() {
         SCAudioManager.shared.recordNew()
         touchDelay()
     }
  
+    
     
     //MARK: Touch response 
     
@@ -143,7 +146,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         self.isUserInteractionEnabled = false
         isTouchDelayed = true
         print("cell interaction delayed.")
-        let delayInSeconds = 0.05
+        let delayInSeconds = 0.005
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delayInSeconds) {
             self.enableTouch()
         }

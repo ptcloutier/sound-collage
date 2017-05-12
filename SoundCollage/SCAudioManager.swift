@@ -24,7 +24,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isRecordingModeEnabled = false
     var isSpeakerEnabled: Bool = false
     var isRecording: Bool = false
-    
+    var replaceableFilePath: String?
     private override init() {}
     
     
@@ -33,16 +33,16 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func playback() {
         
-        guard let path = getSample(selectedSampleIndex: selectedSampleIndex!) else {
+        guard let partialPath = getSample(selectedSampleIndex: selectedSampleIndex!) else {
             print("Playback sample not found")
             return
         }
         let docsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! as String
         
-        let filepath = docsDirectory.appending("/\(path)")
-        let audioPath = URL.init(fileURLWithPath: filepath )
+        let fullPath = docsDirectory.appending("/\(partialPath)")
+        let fullURL = URL.init(fileURLWithPath: fullPath )
         
-        playSound(soundFileURL: audioPath)
+        playSound(soundFileURL: fullURL)
     }
     
     
@@ -55,10 +55,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("Error: user doesn't exist")
             return nil
         }
+        
         guard let sampleBank = user.currentSampleBank else {
             print("Error retrieving sampleBank for playback")
             return nil
         }
+        
         for key in sampleBank.samples.keys {
             if key == selectedSampleIndex.description {
                 selectedSample = sampleBank.samples[key] as! String?
@@ -68,37 +70,10 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         return selectedSample
     }
     
-    
-//    
-//    func createFileAtPath(soundFileURL: URL) -> URL? {
-//        
-//        // Get a file for AVAudioPlayer
-//        do {
-//            let soundData = try Data.init(contentsOf: soundFileURL)
-//            let docsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first?.appending(soundFileURL.description)
-//            
-//            guard let filePath = docsPath else {
-//                print("Docs path not found.")
-//                return nil
-//            }
-//            do {
-//                try soundData.write(to: URL(fileURLWithPath:filePath), options: .atomic)
-//                return URL(fileURLWithPath:filePath)
-//            } catch {
-//                print(error)
-//            }
-//        }
-//        catch {
-//            print(error)
-//        }
-//        return nil
-//    }
-//    
-//    
+  
     
     func playSound(soundFileURL: URL){
         
-        print("Attempting playback with path: \(soundFileURL)")
         
         
         if let player = players[soundFileURL] { //player for sound has been found
@@ -187,17 +162,19 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("current sample bank id not found.")
             return
         }
+        
         guard let samplePadIndex = selectedSampleIndex else {
             print("selectedSample index not found.")
             return
         }
-        let audioFileName = "sampleBank_\(currentSampleBankID)_samplePadIndex_\(samplePadIndex)"
-        let audioFileFullPath = audioFileName.appending(".m4a")
-        SCDataManager.shared.currentSampleTitle = audioFileFullPath
         
-        self.audioFilePath  = getDocumentsDirectory().appendingPathComponent(audioFileFullPath)
-        
-//        SCDataManager.shared.replaceAudioFileAtPath(filePath: self.audioFilePath!)
+        let sampleID = getSampleID(samplePadIndex: samplePadIndex)
+        let audioType = ".m4a"
+        let newPath = "sampleBank_\(currentSampleBankID)_pad_\(samplePadIndex)_id_\(sampleID)\(audioType)"
+        let newFullURL = getDocumentsDirectory().appendingPathComponent(newPath)
+        SCDataManager.shared.currentSampleTitle = newFullURL.absoluteString
+        self.replaceableFilePath = "sampleBank_\(currentSampleBankID)_pad_\(samplePadIndex)_id_\(sampleID-1)\(audioType)"
+        self.audioFilePath  = newFullURL
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -218,11 +195,45 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     
-    func getDocumentsDirectory() -> URL {
+    private func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
         return documentsDirectory
     }
+    
+    
+    
+    private func getSampleID(samplePadIndex: Int) ->Int {
+        
+        let userDefaults = UserDefaults.standard
+        
+        guard let id = userDefaults.value(forKey: "samplePad_\(samplePadIndex)_sampleID") else {
+            userDefaults.set(0, forKey: "samplePad_\(samplePadIndex)_sampleID")
+            return 0
+        }
+        let sampleID = id as! Int
+        userDefaults.set(sampleID+1, forKey: "samplePad_\(samplePadIndex)_sampleID")
+        return sampleID+1
+    }
+    
+    
+    
+    private func removeAudioFile(at path: String?) {
+        
+        guard let filePath = path else {
+            print("Path not found.")
+            return
+        }
+        let fullURL = getDocumentsDirectory().appendingPathComponent( filePath)
+
+        let fileManager = FileManager.default
+        do {
+            try fileManager.removeItem(at: fullURL)
+        } catch {
+            print("Could not remove file at path.")
+        }
+    }
+    
     
     
     
@@ -261,6 +272,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
         }
         
+        removeAudioFile(at: self.replaceableFilePath)
         SCDataManager.shared.user?.currentSampleBank? = sampleBank
         SCAudioManager.shared.isRecordingModeEnabled = false // so that we set the keyboard buttons to play
     }
