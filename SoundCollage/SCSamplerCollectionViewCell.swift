@@ -64,6 +64,8 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         animateLayer()
     }
     
+    
+    
     func animateLayer(){
         
         fromColors = self.gradient.colors as! [CGColor]

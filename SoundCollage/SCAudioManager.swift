@@ -15,6 +15,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     static let shared = SCAudioManager()
     
+    var player: AVAudioPlayer!
+    var audioEngine: AVAudioEngine!
+    var audioFile: AVAudioFile!
     var players = [URL:AVAudioPlayer]()
     var duplicatePlayers = [AVAudioPlayer]()
     let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
@@ -78,9 +81,13 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         
         if let player = players[soundFileURL] { //player for sound has been found
             
-            if player.isPlaying == false { //player is not in use, so use that one
-                player.prepareToPlay()
-                player.play()
+            self.player = player
+            if self.player.isPlaying == false { //player is not in use, so use that one
+                self.player.prepareToPlay()
+//                self.player.play()
+                playAudioWithVariablePitch(pitch: 1000, url: soundFileURL)
+
+
                 print("Playing audiofile at \(soundFileURL)")
                 
             } else { // player is in use, create a new, duplicate player
@@ -95,18 +102,22 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 //add duplicate to array so it doesn't get removed from memory before finishing
                 
                 duplicatePlayer.prepareToPlay()
-                duplicatePlayer.play()
+//                duplicatePlayer.play()
+                playAudioWithVariablePitch(pitch: 1000, url: soundFileURL)
+
                 print("Playing audiofile at \(soundFileURL)")
                 
             }
         } else { //player has not been found, create a new player with the URL if possible
             do{
                 
-                let player = try AVAudioPlayer(contentsOf: soundFileURL, fileTypeHint: "m4a")
+                self.player = try AVAudioPlayer(contentsOf: soundFileURL, fileTypeHint: "m4a")
                 
-                players[soundFileURL] = player
+                players[soundFileURL] = self.player
                 player.prepareToPlay()
-                player.play()
+//                player.play()
+                playAudioWithVariablePitch(pitch: 1000, url: soundFileURL)
+
                 print("Playing audiofile at \(soundFileURL)")
             } catch {
                 print("Could not play sound file!")
@@ -269,9 +280,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 sampleBank.samples[key] = audioURL as AnyObject?
                 print("Audio file recorded and saved at \(audioURL.description)")
             }
-            
         }
-        
         removeAudioFile(at: self.replaceableFilePath)
         SCDataManager.shared.user?.currentSampleBank? = sampleBank
         SCAudioManager.shared.isRecordingModeEnabled = false // so that we set the keyboard buttons to play
@@ -303,5 +312,38 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             }
             print("Audio source: headphone output")
         }
+    }
+    
+    func playAudioWithVariablePitch(pitch: Float, url: URL){
+        
+        audioEngine = AVAudioEngine()
+        do {
+            audioFile = try AVAudioFile(forReading: url)
+            
+            player.stop()
+            audioEngine.stop()
+            audioEngine.reset()
+            
+            let audioPlayerNode = AVAudioPlayerNode()
+            audioEngine.attach(audioPlayerNode)
+            
+            let changePitchEffect = AVAudioUnitTimePitch()
+            changePitchEffect.pitch = pitch
+            
+            audioEngine.attach(changePitchEffect)
+            
+            audioEngine.connect(audioPlayerNode, to: changePitchEffect, format: nil)
+            
+            audioEngine.connect(changePitchEffect, to: audioEngine.outputNode, format: nil)
+            
+            audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: nil)
+            
+            try! audioEngine.start()
+            
+            audioPlayerNode.play()
+        }catch {
+            print("No variable pitch playback.")
+        }
+        
     }
 }
