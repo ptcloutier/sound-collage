@@ -15,7 +15,8 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     var colorSets = [[UIColor]]()
     var currentColorSet: Int = 0
-    var isEnabled = false
+    var isRecordingEnabled = false
+    var isEditingEnabled = false
     var flashTimer: Timer? = nil
     var touchTimer: Timer? = nil
     var isTouchDelayed: Bool = false
@@ -28,7 +29,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        createColorSets()
+        setRecordingColorSets()
         setupGradientLayer()
     }
     
@@ -44,17 +45,33 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     
-    private func createColorSets() {
+    func setRecordingColorSets() {
+        
+        colorSets.removeAll()
+        let colors = [UIColor.red, UIColor.magenta, UIColor.orange]
+        setColorSets(colors: colors)
+    }
+    
+    
+    func setEditingColorSets() {
+        
+        colorSets.removeAll()
+        let colors = [UIColor.blue, UIColor.cyan, UIColor.magenta]
+        setColorSets(colors: colors)
+    }
+    
+    
+    func setColorSets(colors: [UIColor]){
         
         colorSets.append([UIColor.clear, UIColor.clear, UIColor.clear])
-        colorSets.append([UIColor.red, UIColor.magenta, UIColor.orange])
+        colorSets.append(colors)
         fromColors = colorSets[currentColorSet].map {$0.cgColor}
         currentColorSet = 0
     }
     
     
-    
     private func setupGradientLayer() {
+        
         
         self.gradient.colors = toColors
         self.gradient.frame = self.bounds
@@ -128,14 +145,13 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     func playbackSample() {
         SCAudioManager.shared.playback()
-        touchDelay()
+        playbackTouchDelay()
     }
     
     
     
     func recordNewSample() {
         SCAudioManager.shared.recordNew()
-        touchDelay()
     }
  
     
@@ -143,16 +159,28 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     //MARK: Touch response 
     
     
-    private func touchDelay(){
+    private func playbackTouchDelay(){
         
+        if SCAudioManager.shared.isRecording == false {
+            self.isUserInteractionEnabled = false
+            isTouchDelayed = true
+            print("cell interaction delayed.")
+            let delayInSeconds = 0.001
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delayInSeconds) {
+                self.enableTouch()
+            }
+        }
+    }
+    
+    
+    
+    
+    func isRecordingTouchDelay() {
         self.isUserInteractionEnabled = false
         isTouchDelayed = true
         print("cell interaction delayed.")
-        let delayInSeconds = 0.005
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delayInSeconds) {
-            self.enableTouch()
-        }
     }
+    
     
     
     

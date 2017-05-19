@@ -14,16 +14,19 @@ import AVFoundation
 class SCSamplerViewController: UIViewController  {
     
     var collectionView: UICollectionView?
-    var recordBtn = UIButton()
+    let recordBtn = UIButton()
+    var speakerBtn = UIButton()
     var newRecordingTitle: String?
     var lastRecording: URL?
     var selectedSampleIndex: Int?
-    var speakerBtn = UIButton()
+    let navBarBtnFrameSize = CGRect.init(x: 0, y: 0, width: 30, height: 30)
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let recordingDidFinishNotification = Notification.Name.init("recordingDidFinish")
+        NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
         setupCollectionView()
         setupControls()
         animateEntrance()
@@ -100,17 +103,23 @@ class SCSamplerViewController: UIViewController  {
         
         let navItem = UINavigationItem()
         
-        let speakerButton = UIButton.init(type: .custom)
-        speakerButton.setImage(UIImage.init(named: "speakerOff"), for: .normal)
-        speakerButton.setImage(UIImage.init(named: "speakerOn"), for: .selected)
-        speakerButton.addTarget(self, action: #selector(SCSamplerViewController.changeAudioPlaybackSource), for: .touchUpInside)
-        speakerButton.frame = CGRect.init(x: 0, y: 0, width: 30, height: 30)
+        self.speakerBtn = UIButton.init(type: .custom)
+        speakerBtn.setImage(UIImage.init(named: "speakerOff"), for: .normal)
+        speakerBtn.setImage(UIImage.init(named: "speakerOn"), for: .selected)
+        speakerBtn.addTarget(self, action: #selector(SCSamplerViewController.changeAudioPlaybackSource), for: .touchUpInside)
+        speakerBtn.frame = navBarBtnFrameSize
         setAudioPlaybackSourceButton()
-        self.speakerBtn = speakerButton
-        let barButton = UIBarButtonItem(customView: self.speakerBtn)
-        navItem.rightBarButtonItem = barButton
-        navBar.items = [navItem]
+        let speakerBarBtn = UIBarButtonItem(customView: speakerBtn)
+        
 
+        let editorBtn = UIButton.init(type: .custom)
+        editorBtn.setImage(UIImage.init(named: "wf"), for: .normal)
+        editorBtn.frame = navBarBtnFrameSize
+        editorBtn.addTarget(self, action: #selector(SCSamplerViewController.toggleEditingMode), for: .touchUpInside)
+        let editorBarBtn = UIBarButtonItem(customView: editorBtn)
+        
+        navItem.rightBarButtonItems = [speakerBarBtn, editorBarBtn]
+        navBar.items = [navItem]
     }
     
     
@@ -165,6 +174,7 @@ class SCSamplerViewController: UIViewController  {
         
         switch SCAudioManager.shared.isRecording {
         case true:
+            
             SCAudioManager.shared.finishRecording(success: true)
             reloadCV()
             recordBtn.alpha = 0
@@ -172,7 +182,7 @@ class SCSamplerViewController: UIViewController  {
                 self.recordBtn.alpha = 1
             }, completion: nil)
         case false:
-            recordingMode()
+            toggleRecordingMode()
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 self.recordBtn.alpha = 1
@@ -192,15 +202,20 @@ class SCSamplerViewController: UIViewController  {
     
     
 
-    func recordingMode() {
+    func toggleRecordingMode() {
         
-        // toggle recording mode
-        
-        switch SCAudioManager.shared.isRecordingModeEnabled {
+        let audioManager = SCAudioManager.shared
+        switch audioManager.isRecordingModeEnabled {
         case true:
-            SCAudioManager.shared.isRecordingModeEnabled = false
+            audioManager.isRecordingModeEnabled = false
+            print("Recording mode disabled.")
         case false:
-            SCAudioManager.shared.isRecordingModeEnabled = true
+            audioManager.isRecordingModeEnabled = true
+            if audioManager.isEditingModeEnabled == true {
+                audioManager.isEditingModeEnabled = false
+                print("Editing mode disabled.")
+            }
+            print("Recording mode enabled.")
         }
         reloadCV()
     }
@@ -214,9 +229,38 @@ class SCSamplerViewController: UIViewController  {
         case false:
             print("Recording in progress on sampler pad \(samplePadIndex)")
             cell.recordNewSample()
-            cell.isEnabled = false
-            recordingMode()
+            cell.isRecordingEnabled = false
+            toggleRecordingMode()
         }
+    }
+
+    
+    
+    func finishedRecording() {
+       print("Recording finished.")
+    }
+    
+    
+    
+    //MARK: Editing 
+    
+    func toggleEditingMode() {
+        
+        let audioManager = SCAudioManager.shared
+
+        switch audioManager.isEditingModeEnabled {
+        case true:
+            audioManager.isEditingModeEnabled = false
+            print("Editing mode disabled.")
+        case false:
+            audioManager.isEditingModeEnabled = true
+            if audioManager.isRecordingModeEnabled == true {
+                audioManager.isRecordingModeEnabled = false
+                print("Recording mode disabled.")
+            }
+            print("Editing mode enabled.")
+        }
+        reloadCV()
     }
 }
 
@@ -257,17 +301,44 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
         tapGestureRecognizer.delegate = self
         cell.addGestureRecognizer(tapGestureRecognizer)
+
         
+        // Recording Mode
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
-            cell.isEnabled = true
-            cell.startCellFlashing()
-            print("Recording is enabled in cell \(indexPath.row)")
-          
+            cell.isRecordingEnabled = true
         case false:
-            cell.isEnabled = false
+            cell.isRecordingEnabled = false
+        }
+        
+        // Editing Mode
+        switch SCAudioManager.shared.isEditingModeEnabled {
+        case true:
+            cell.isEditingEnabled = true
+        case false:
+            cell.isEditingEnabled = false
+        }
+        
+        // Set colors for recording mode
+        if SCAudioManager.shared.isEditingModeEnabled {
+            cell.setEditingColorSets()
+        } else {
+            cell.setRecordingColorSets()
+        }
+        
+        // Flashing Mode
+        if SCAudioManager.shared.isEditingModeEnabled || SCAudioManager.shared.isRecordingModeEnabled == true {
+            cell.startCellFlashing()
+        } else {
             cell.stopCellsFlashing()
         }
+        // Touch delay
+        if SCAudioManager.shared.isRecording == true {
+            cell.isRecordingTouchDelay()
+        } else {
+            cell.enableTouch()
+        }
+        
         return cell
     }
     
@@ -280,6 +351,11 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         }
         SCAudioManager.shared.selectedSampleIndex = indexPath.row
         
+        if SCAudioManager.shared.isRecording == true {
+            print("Recording in progress")
+            return
+        }
+        
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
             if cell.isTouchDelayed == false {
@@ -288,14 +364,17 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 print("extraneous cell touch was delayed.")
             }
         case false:
-            if cell.isTouchDelayed == false {
-                cell.playbackSample()
-                cell.animateLayer()
+            if SCAudioManager.shared.isEditingModeEnabled == true {
+                print("Present wave form editor for sample at pad #\(indexPath.row)")
             } else {
-                print("extraneous cell touch was delayed.")
+                if cell.isTouchDelayed == false {
+                    cell.playbackSample()
+                    cell.animateLayer()
+                } else {
+                    print("extraneous cell touch was delayed.")
+                }
             }
         }
-
     }
     
     

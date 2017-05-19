@@ -1,12 +1,15 @@
 PODS:
   - ObjectMapper (2.2.5)
+  - SCWaveformView (2.0.6)
 
 DEPENDENCIES:
   - ObjectMapper (~> 2.2)
+  - SCWaveformView
 
 SPEC CHECKSUMS:
   ObjectMapper: fb30f71e08470d1e5a20b199fafe1246281db898
+  SCWaveformView: 78b3503675aafcdaf9c283d68cb45c9fc735af87
 
-PODFILE CHECKSUM: a8dc6e1567082f04ea9be7372db53d191824c9d6
+PODFILE CHECKSUM: 5e85a21b16f7d62ed874c58d63855155c5a2b68a
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.2.1

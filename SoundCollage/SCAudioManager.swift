@@ -25,6 +25,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var audioRecorder: AVAudioRecorder!
     var audioFilePath: URL?
     var isRecordingModeEnabled = false
+    var isEditingModeEnabled = false 
     var isSpeakerEnabled: Bool = false
     var isRecording: Bool = false
     var replaceableFilePath: String?
@@ -84,9 +85,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             self.player = player
             if self.player.isPlaying == false { //player is not in use, so use that one
                 self.player.prepareToPlay()
-//                self.player.play()
-                playAudioWithVariablePitch(pitch: 1000, url: soundFileURL)
-
+                self.player.play()
+ 
 
                 print("Playing audiofile at \(soundFileURL)")
                 
@@ -102,9 +102,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 //add duplicate to array so it doesn't get removed from memory before finishing
                 
                 duplicatePlayer.prepareToPlay()
-//                duplicatePlayer.play()
-                playAudioWithVariablePitch(pitch: 1000, url: soundFileURL)
-
+                duplicatePlayer.play()
+ 
                 print("Playing audiofile at \(soundFileURL)")
                 
             }
@@ -115,9 +114,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 
                 players[soundFileURL] = self.player
                 player.prepareToPlay()
-//                player.play()
-                playAudioWithVariablePitch(pitch: 1000, url: soundFileURL)
-
+                player.play()
+ 
                 print("Playing audiofile at \(soundFileURL)")
             } catch {
                 print("Could not play sound file!")
@@ -130,6 +128,39 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         duplicatePlayers.remove(at: duplicatePlayers.index(of: player)!)
         //Remove the duplicate player once it is done
+    }
+    
+    
+    func playAudioWithVariablePitch(pitch: Float, url: URL){
+        
+        audioEngine = AVAudioEngine()
+        do {
+            audioFile = try AVAudioFile(forReading: url)
+            
+            player.stop()
+            audioEngine.stop()
+            audioEngine.reset()
+            
+            let audioPlayerNode = AVAudioPlayerNode()
+            audioEngine.attach(audioPlayerNode)
+            
+            let changePitchEffect = AVAudioUnitTimePitch()
+            changePitchEffect.pitch = pitch
+            
+            audioEngine.attach(changePitchEffect)
+            
+            audioEngine.connect(audioPlayerNode, to: changePitchEffect, format: nil)
+            
+            audioEngine.connect(changePitchEffect, to: audioEngine.outputNode, format: nil)
+            
+            audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: nil)
+            
+            try! audioEngine.start()
+            
+            audioPlayerNode.play()
+        } catch {
+            print("No variable pitch playback.")
+        }
     }
     
     
@@ -260,6 +291,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         
         audioRecorder?.stop()
         audioRecorder = nil
+        self.postRecordingFinishedNotification()
         self.isRecording = false
         print("Audio recording stopped.")
         
@@ -267,11 +299,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("Error: audioFilePath is nil")
             return
         }
-        guard let user = SCDataManager.shared.user else {
-            print("Error: user doesn't exist.")
-            return
-        }
-        guard let sampleBank = user.currentSampleBank else{
+        guard let sampleBank = SCDataManager.shared.user?.currentSampleBank else{
             print("Error: sampleBank doesn't exist.")
             return
         }
@@ -284,6 +312,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         removeAudioFile(at: self.replaceableFilePath)
         SCDataManager.shared.user?.currentSampleBank? = sampleBank
         SCAudioManager.shared.isRecordingModeEnabled = false // so that we set the keyboard buttons to play
+    }
+    
+    
+    private func postRecordingFinishedNotification(){
+        let notification = Notification.Name.init("recordingDidFinish")
+        NotificationCenter.default.post(name: notification, object: nil)
     }
     
     
@@ -314,36 +348,5 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         }
     }
     
-    func playAudioWithVariablePitch(pitch: Float, url: URL){
-        
-        audioEngine = AVAudioEngine()
-        do {
-            audioFile = try AVAudioFile(forReading: url)
-            
-            player.stop()
-            audioEngine.stop()
-            audioEngine.reset()
-            
-            let audioPlayerNode = AVAudioPlayerNode()
-            audioEngine.attach(audioPlayerNode)
-            
-            let changePitchEffect = AVAudioUnitTimePitch()
-            changePitchEffect.pitch = pitch
-            
-            audioEngine.attach(changePitchEffect)
-            
-            audioEngine.connect(audioPlayerNode, to: changePitchEffect, format: nil)
-            
-            audioEngine.connect(changePitchEffect, to: audioEngine.outputNode, format: nil)
-            
-            audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: nil)
-            
-            try! audioEngine.start()
-            
-            audioPlayerNode.play()
-        }catch {
-            print("No variable pitch playback.")
-        }
-        
-    }
+  
 }
