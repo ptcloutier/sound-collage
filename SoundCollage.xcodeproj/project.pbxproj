@@ -17,7 +17,6 @@
 		A743CDBA1EABE30100A9C70D /* SCNoteButtonDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A743CDB91EABE30100A9C70D /* SCNoteButtonDelegate.swift */; };
 		A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A886A1EB0445200FEDED0 /* SCDataManager.swift */; };
 		A787338A1EB1177A00B5A8AE /* SCGradientColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78733891EB1177A00B5A8AE /* SCGradientColors.swift */; };
-		A787338C1EB119BF00B5A8AE /* SCColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A787338B1EB119BF00B5A8AE /* SCColorPickerViewController.swift */; };
 		A78A9BD01EABA919007117DD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78A9BCF1EABA919007117DD /* QuartzCore.framework */; };
 		A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */; };
 		A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */; };
@@ -87,7 +86,6 @@
 		A76A886A1EB0445200FEDED0 /* SCDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCDataManager.swift; sourceTree = "<group>"; };
 		A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SoundCollage-Bridging-Header.h"; sourceTree = "<group>"; };
 		A78733891EB1177A00B5A8AE /* SCGradientColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCGradientColors.swift; sourceTree = "<group>"; };
-		A787338B1EB119BF00B5A8AE /* SCColorPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCColorPickerViewController.swift; sourceTree = "<group>"; };
 		A78A9BCF1EABA919007117DD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankFlowLayout.swift; sourceTree = "<group>"; };
 		A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankCell.swift; sourceTree = "<group>"; };
@@ -237,14 +235,6 @@
 			name = Managers;
 			sourceTree = "<group>";
 		};
-		A787338D1EB119E600B5A8AE /* ColorPickerVC */ = {
-			isa = PBXGroup;
-			children = (
-				A787338B1EB119BF00B5A8AE /* SCColorPickerViewController.swift */,
-			);
-			name = ColorPickerVC;
-			sourceTree = "<group>";
-		};
 		A7A822EB1EA81BEC0061D0A0 = {
 			isa = PBXGroup;
 			children = (
@@ -277,7 +267,6 @@
 				A7264E771EAE285900664EDE /* SamplerVC */,
 				A7264E761EAE284600664EDE /* SampleBankVC */,
 				A7264E781EAE287B00664EDE /* KeyboardVC */,
-				A787338D1EB119E600B5A8AE /* ColorPickerVC */,
 			);
 			path = SoundCollage;
 			sourceTree = "<group>";
@@ -505,7 +494,6 @@
 				A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */,
 				A7BFEE2D1EBA444A00C718E7 /* UIImage+Color.swift in Sources */,
 				A787338A1EB1177A00B5A8AE /* SCGradientColors.swift in Sources */,
-				A787338C1EB119BF00B5A8AE /* SCColorPickerViewController.swift in Sources */,
 				A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */,
 				A7A8232F1EA81D280061D0A0 /* AlertManager.swift in Sources */,
 				A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */,

@@ -15,11 +15,14 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     static let shared = SCAudioManager()
     
-    var player: AVAudioPlayer!
+    var player: AVAudioPlayerNode!
     var audioEngine: AVAudioEngine!
     var audioFile: AVAudioFile!
-    var players = [URL:AVAudioPlayer]()
-    var duplicatePlayers = [AVAudioPlayer]()
+    var aplayers = [URL:AVAudioPlayer]() //TODO: remove
+    var aduplicatePlayers = [AVAudioPlayer]()
+    
+    var players = [URL:AVAudioPlayerNode]()
+    var duplicatePlayers = [AVAudioPlayerNode]()
     let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
     var selectedSampleIndex: Int?
     var audioRecorder: AVAudioRecorder!
@@ -46,7 +49,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         let fullPath = docsDirectory.appending("/\(partialPath)")
         let fullURL = URL.init(fileURLWithPath: fullPath )
         
-        playSound(soundFileURL: fullURL)
+        playAudio(soundFileURL: fullURL)
     }
     
     
@@ -76,59 +79,59 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
   
     
-    func playSound(soundFileURL: URL){
-        
-        
-        
-        if let player = players[soundFileURL] { //player for sound has been found
-            
-            self.player = player
-            if self.player.isPlaying == false { //player is not in use, so use that one
-                self.player.prepareToPlay()
-                self.player.play()
- 
-
-                print("Playing audiofile at \(soundFileURL)")
-                
-            } else { // player is in use, create a new, duplicate player
-                
-                let duplicatePlayer = try! AVAudioPlayer(contentsOf: soundFileURL)
-                //use 'try!' because we know the URL worked before.
-                
-                duplicatePlayer.delegate = self
-                //assign delegate for duplicatePlayer so delegate can remove the duplicate once it's stopped playing
-                
-                duplicatePlayers.append(duplicatePlayer)
-                //add duplicate to array so it doesn't get removed from memory before finishing
-                
-                duplicatePlayer.prepareToPlay()
-                duplicatePlayer.play()
- 
-                print("Playing audiofile at \(soundFileURL)")
-                
-            }
-        } else { //player has not been found, create a new player with the URL if possible
-            do{
-                
-                self.player = try AVAudioPlayer(contentsOf: soundFileURL, fileTypeHint: "m4a")
-                
-                players[soundFileURL] = self.player
-                player.prepareToPlay()
-                player.play()
- 
-                print("Playing audiofile at \(soundFileURL)")
-            } catch {
-                print("Could not play sound file!")
-            }
-        }
-    }
+//    func playSound(soundFileURL: URL){
+//
+//        
+//        if let player = players[soundFileURL] { //player for sound has been found
+//            
+//            self.player = player
+//            
+//            if self.player.isPlaying == false { //player is not in use, so use that one
+//                self.player.prepareToPlay()
+//                self.player.play()
+//                print("Playing audiofile at \(soundFileURL)")
+//                
+//            } else { // player is in use, create a new, duplicate player
+//                
+//                let duplicatePlayer = try! AVAudioPlayer(contentsOf: soundFileURL)
+//                //use 'try!' because we know the URL worked before.
+//                
+//                duplicatePlayer.delegate = self
+//                //assign delegate for duplicatePlayer so delegate can remove the duplicate once it's stopped playing
+//                
+//                duplicatePlayers.append(duplicatePlayer)
+//                //add duplicate to array so it doesn't get removed from memory before finishing
+//                
+//                duplicatePlayer.prepareToPlay()
+//                duplicatePlayer.play()
+// 
+//                print("Playing audiofile at \(soundFileURL)")
+//                
+//            }
+//        } else { //player has not been found, create a new player with the URL if possible
+//            do{
+////                playAudioWithVariablePitch(pitch: 1000.0, url: soundFileURL)
+//                self.player = try AVAudioPlayer(contentsOf: soundFileURL, fileTypeHint: "m4a")
+//                
+//                players[soundFileURL] = self.player
+//                player.prepareToPlay()
+//                player.play()
+// 
+//                print("Playing audiofile at \(soundFileURL)")
+//            } catch {
+//                print("Could not play sound file!")
+//            }
+//        }
+//    }
     
     
     
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        duplicatePlayers.remove(at: duplicatePlayers.index(of: player)!)
-        //Remove the duplicate player once it is done
-    }
+//    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+//        duplicatePlayers.remove(at: duplicatePlayers.index(of: player)!)
+//        //Remove the duplicate player once it is done
+//    }
+    
+    //MARK: AVAudioEngine 
     
     
     func playAudioWithVariablePitch(pitch: Float, url: URL){
@@ -137,7 +140,10 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         do {
             audioFile = try AVAudioFile(forReading: url)
             
-            player.stop()
+            if let player = self.player {
+                  player.stop()
+            }
+          
             audioEngine.stop()
             audioEngine.reset()
             
@@ -164,6 +170,91 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
+    func playAudio(soundFileURL: URL){
+        audioEngine = AVAudioEngine()
+        do {
+        let file = try AVAudioFile(forReading: soundFileURL)
+        let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length))
+        do {
+            print("read")
+            try file.read(into: buffer)
+        } catch _ {
+        }
+
+        if let player = players[soundFileURL] { //player for sound has been found
+            self.player = player
+           
+            if self.player.isPlaying == false { //player is not in use, so use that one
+                
+                audioEngine.attach(self.player)
+                audioEngine.connect(self.player, to: audioEngine.mainMixerNode, format: nil)
+                self.player.scheduleBuffer(buffer, completionHandler: {
+                    print("Complete")
+                })
+                audioEngine.prepare()
+                do {
+                    try audioEngine.start()
+                } catch _ {
+                    print("Play session Error")
+                }
+                self.player.play()
+                print("Playing audiofile at \(soundFileURL)")
+            }
+            else { // player is in use, create a new, duplicate player
+                let duplicatePlayer = AVAudioPlayerNode()
+//                let file = try! AVAudioFile(forReading: soundFileURL)
+//                let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length))
+                duplicatePlayers.append(duplicatePlayer)
+                //add duplicate to array so it doesn't get removed from memory before finishing
+//                do {
+//                    print("read")
+//                    try file.read(into: buffer)
+//                } catch _ {
+//                }
+                audioEngine.attach(duplicatePlayer)
+                audioEngine.connect(duplicatePlayer, to: audioEngine.mainMixerNode, format: nil)
+                self.player.scheduleBuffer(buffer, completionHandler: {
+                    print("Complete")
+                })
+                audioEngine.prepare()
+                do {
+                    try audioEngine.start()
+                } catch _ {
+                    print("Play session Error")
+                }
+                duplicatePlayer.play()
+                print("Playing audiofile at \(soundFileURL)")
+            }
+        }
+        else { //player has not been found, create a new player with the URL if possible
+            //            do{
+                //                playAudioWithVariablePitch(pitch: 1000.0, url: soundFileURL)
+//                self.player = try AVAudioPlayer(contentsOf: soundFileURL, fileTypeHint: "m4a")
+//                
+//                players[soundFileURL] = self.player
+//                player.prepareToPlay()
+//                player.play()
+//                
+                let player = AVAudioPlayerNode()
+                self.player = player
+                audioEngine.attach(self.player)
+                audioEngine.connect(self.player, to: audioEngine.mainMixerNode, format: nil)
+                audioEngine.prepare()
+                do {
+                    try audioEngine.start()
+                } catch _ {
+                    print("Play session Error")
+                }
+                
+                self.player.play()
+                
+                print("Playing audiofile at \(soundFileURL)")
+            }
+        } catch {
+                print("Could not play sound file!")
+        }
+    }
+
     
     //MARK: Recording
     
@@ -211,7 +302,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         }
         
         let sampleID = getSampleID(samplePadIndex: samplePadIndex)
-        let audioType = ".m4a"
+        let audioType = ".aac"
         let newPath = "sampleBank_\(currentSampleBankID)_pad_\(samplePadIndex)_id_\(sampleID)\(audioType)"
         let newFullURL = getDocumentsDirectory().appendingPathComponent(newPath)
         SCDataManager.shared.currentSampleTitle = newFullURL.absoluteString
