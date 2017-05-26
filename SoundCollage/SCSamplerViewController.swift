@@ -14,13 +14,15 @@ import AVFoundation
 class SCSamplerViewController: UIViewController  {
     
     var collectionView: UICollectionView?
+    var effectsContainerCV: UICollectionView?
     let recordBtn = UIButton()
     var speakerBtn = UIButton()
     var newRecordingTitle: String?
     var lastRecording: URL?
     var selectedSampleIndex: Int?
     let navBarBtnFrameSize = CGRect.init(x: 0, y: 0, width: 30, height: 30)
-    
+    let toolbarHeight = CGFloat(49.0)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +31,7 @@ class SCSamplerViewController: UIViewController  {
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
         setupCollectionView()
         setupControls()
+        setupEffectsContainer()
         animateEntrance()
         
     }
@@ -72,11 +75,19 @@ class SCSamplerViewController: UIViewController  {
     
     private func setupControls(){
         
+        let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
+        
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: self.view.frame.height - toolbarHeight, width: self.view.bounds.size.width, height: toolbarHeight))
+        toolbar.layer.position = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height-20.0)
+        toolbar.setBackgroundImage(transparentPixel, forToolbarPosition: .any, barMetrics: .default)
+        toolbar.setShadowImage(transparentPixel, forToolbarPosition: .any)
+        toolbar.isTranslucent = true
+        
+        
         recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress), for: .touchUpInside)
         
-        let tabHeight = CGFloat(49.0)
-        let buttonHeight = view.frame.width/4
-        let yPosition = view.frame.height-tabHeight-buttonHeight
+        let buttonHeight = toolbarHeight/2
+        let yPosition = view.frame.height-20-buttonHeight
         recordBtn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
         
         let backgroundView = UIView.init(frame: recordBtn.frame)
@@ -90,12 +101,14 @@ class SCSamplerViewController: UIViewController  {
         recordBtn.addSubview(backgroundView)
         recordBtn.center = CGPoint(x: view.center.x, y: yPosition)
         
-        view.addSubview(recordBtn)
+        let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
         
+        let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+       
+
         
-        let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
-        let navBar = UINavigationBar.init(frame:CGRect(x: 0, y: 0,width: UIScreen.main.bounds.width, height: 50 ))
-        navBar.setBackgroundImage(transparentPixel, for: UIBarMetrics.default)
+        let navBar = UINavigationBar.init(frame:CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50 ))
+        navBar.setBackgroundImage(transparentPixel, for: .default)
         navBar.shadowImage = transparentPixel
         navBar.isTranslucent = true
         self.view.addSubview(navBar)
@@ -118,11 +131,29 @@ class SCSamplerViewController: UIViewController  {
         editorBtn.addTarget(self, action: #selector(SCSamplerViewController.toggleEditingMode), for: .touchUpInside)
         let editorBarBtn = UIBarButtonItem(customView: editorBtn)
         
-        navItem.rightBarButtonItems = [speakerBarBtn, editorBarBtn]
+        navItem.rightBarButtonItems = [speakerBarBtn]
         navBar.items = [navItem]
+
+        toolbar.items = [flexibleSpace, recordBarBtn, flexibleSpace, editorBarBtn]
+        self.view.addSubview(toolbar)
+        
+        
     }
     
-    
+    func setupEffectsContainer(){
+        let flowLayout = UICollectionViewLayout()
+        let effectsContainerHeight = CGFloat(100)
+        let effectsContainerYPosition = view.frame.height-toolbarHeight-effectsContainerHeight
+        let effectsContainerframe = CGRect(x: 0, y: effectsContainerYPosition, width: view.frame.width-60, height: effectsContainerHeight)
+        self.effectsContainerCV = UICollectionView.init(frame: effectsContainerframe, collectionViewLayout: flowLayout)
+        guard let effectsContainerCV = self.effectsContainerCV else {
+            print("No effects container.")
+            return
+        }
+        effectsContainerCV.center = CGPoint(x: view.center.x, y: effectsContainerYPosition)
+        effectsContainerCV.backgroundColor = UIColor.init(red: 255.0, green: 0, blue: 128.0, alpha: 1.0)
+        self.view.addSubview(effectsContainerCV)
+    }
     
     //MARK: Animations
     
