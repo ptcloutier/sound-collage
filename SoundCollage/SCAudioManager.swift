@@ -15,14 +15,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     static let shared = SCAudioManager()
     
-    var player: AVAudioPlayerNode!
     var audioEngine: AVAudioEngine!
     var audioFile: AVAudioFile!
-    var aplayers = [URL:AVAudioPlayer]() //TODO: remove
-    var aduplicatePlayers = [AVAudioPlayer]()
-    
-    var players = [AVAudioFile: AVAudioPlayerNode]()
-    var duplicatePlayers = [AVAudioPlayerNode]()
     let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
     var selectedSampleIndex: Int?
     var audioRecorder: AVAudioRecorder!
@@ -77,96 +71,44 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         return selectedSample
     }
     
-  
-    
-//    func playSound(soundFileURL: URL){
-//
-//        
-//        if let player = players[soundFileURL] { //player for sound has been found
-//            
-//            self.player = player
-//            
-//            if self.player.isPlaying == false { //player is not in use, so use that one
-//                self.player.prepareToPlay()
-//                self.player.play()
-//                print("Playing audiofile at \(soundFileURL)")
-//                
-//            } else { // player is in use, create a new, duplicate player
-//                
-//                let duplicatePlayer = try! AVAudioPlayer(contentsOf: soundFileURL)
-//                //use 'try!' because we know the URL worked before.
-//                
-//                duplicatePlayer.delegate = self
-//                //assign delegate for duplicatePlayer so delegate can remove the duplicate once it's stopped playing
-//                
-//                duplicatePlayers.append(duplicatePlayer)
-//                //add duplicate to array so it doesn't get removed from memory before finishing
-//                
-//                duplicatePlayer.prepareToPlay()
-//                duplicatePlayer.play()
-// 
-//                print("Playing audiofile at \(soundFileURL)")
-//                
-//            }
-//        } else { //player has not been found, create a new player with the URL if possible
-//            do{
-////                playAudioWithVariablePitch(pitch: 1000.0, url: soundFileURL)
-//                self.player = try AVAudioPlayer(contentsOf: soundFileURL, fileTypeHint: "m4a")
-//                
-//                players[soundFileURL] = self.player
-//                player.prepareToPlay()
-//                player.play()
-// 
-//                print("Playing audiofile at \(soundFileURL)")
-//            } catch {
-//                print("Could not play sound file!")
-//            }
-//        }
-//    }
-    
-    
-    
-//    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-//        duplicatePlayers.remove(at: duplicatePlayers.index(of: player)!)
-//        //Remove the duplicate player once it is done
-//    }
+
     
     //MARK: AVAudioEngine 
     
     
     func playAudioWithVariablePitch(pitch: Float, url: URL){
         
-        audioEngine = AVAudioEngine()
-        do {
-            audioFile = try AVAudioFile(forReading: url)
-            
-            if let player = self.player {
-                  player.stop()
-            }
-          
-            audioEngine.stop()
-            audioEngine.reset()
-            
-            let audioPlayerNode = AVAudioPlayerNode()
-            audioEngine.attach(audioPlayerNode)
-            
-            let changePitchEffect = AVAudioUnitTimePitch()
-            changePitchEffect.pitch = pitch
-            
-            audioEngine.attach(changePitchEffect)
-            
-            audioEngine.connect(audioPlayerNode, to: changePitchEffect, format: nil)
-            
-            audioEngine.connect(changePitchEffect, to: audioEngine.outputNode, format: nil)
-            
-            audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: nil)
-            
-            try! audioEngine.start()
-            
-            audioPlayerNode.play()
-        } catch {
-            print("No variable pitch playback.")
-        }
+//        audioEngine = AVAudioEngine()
+//        do {
+//            audioFile = try AVAudioFile(forReading: url)
+//            
+//            if let player = self.player {
+//                  player.stop()
+//            }
+//          
+//            audioEngine.stop()
+//            audioEngine.reset()
+//            
+//            let audioPlayerNode = AVAudioPlayerNode()
+//            audioEngine.attach(audioPlayerNode)
+//            
+//            let changePitchEffect = AVAudioUnitTimePitch()
+//            changePitchEffect.pitch = pitch
+//            
+//            audioEngine.attach(changePitchEffect)
+//            
+//            audioEngine.connect(audioPlayerNode, to: changePitchEffect, format: nil)
+//            
+//            audioEngine.connect(changePitchEffect, to: audioEngine.outputNode, format: nil)
+//            
+//            audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: nil)
+//            
+//            try! audioEngine.start()
+//            
+//            audioPlayerNode.play()
+//        } catch {
+//            print("No variable pitch playback.")
+//        }
     }
     
     
@@ -176,57 +118,22 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             self.audioEngine = AVAudioEngine()
         }
         do {
-        let audioFile = try AVAudioFile(forReading: soundFileURL)
-        if let player = players[audioFile] { //player for sound has been found
-            self.player = player
-            if self.player.isPlaying == false {   //player is not in use, so use that one
-                audioEngine.attach(self.player)
-                audioEngine.connect(self.player, to: audioEngine.mainMixerNode, format: audioFile.processingFormat)
-                self.player.scheduleFile(audioFile, at: nil, completionHandler: {print("Complete!")})
-                audioEngine.prepare()
-                do {
-                    try audioEngine.start()
-                } catch _ {
-                    print("Play session Error")
-                }
-                self.player.play()
-                print("Playing audiofile at \(soundFileURL)")
-            } else {     // player is in use, create a new, duplicate player
-                let duplicatePlayer = AVAudioPlayerNode()     //add duplicate to array so it doesn't get removed from memory before finishing
-                duplicatePlayers.append(duplicatePlayer)
-                guard let lastPlayer = duplicatePlayers.last else {
-                    print("Could not find last player.")
-                    return
-                }
-                audioEngine.attach(lastPlayer)
-                audioEngine.connect(lastPlayer, to: audioEngine.mainMixerNode, format: audioFile.processingFormat)
-                lastPlayer.scheduleFile(audioFile, at: nil, completionHandler: {print("Complete!")})
-                audioEngine.prepare()
-                do {
-                    try audioEngine.start()
-                } catch _ {
-                    print("Play session Error")
-                }
-                lastPlayer.play()
-                print("Playing audiofile at \(soundFileURL)")
-            }
-        } else { //player has not been found, create a new player with the URL if possible
+            let audioFile = try AVAudioFile(forReading: soundFileURL)
+            
             let player = AVAudioPlayerNode()
-            self.player = player
-            audioEngine.attach(self.player)
-            audioEngine.connect(self.player, to: audioEngine.mainMixerNode, format: audioFile.processingFormat)
-            self.player.scheduleFile(audioFile, at: nil, completionHandler: {print("Complete!")})
+            audioEngine.attach(player)
+            audioEngine.connect(player, to: audioEngine.mainMixerNode, format: audioFile.processingFormat)
+            player.scheduleFile(audioFile, at: nil, completionHandler: {print("Complete!")})
             audioEngine.prepare()
             do {
                 try audioEngine.start()
             } catch _ {
                 print("Play session Error")
-                }
-                self.player.play()
-                print("Playing audiofile at \(soundFileURL)")
             }
+            player.play()
+            print("Playing audiofile at \(soundFileURL)")
         } catch {
-                print("Could not play sound file!")
+            print("Could not play sound file!")
         }
     }
 
