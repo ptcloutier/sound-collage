@@ -46,7 +46,6 @@ class SCSamplerViewController: UIViewController  {
             return
         }
         samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
-//        samplerCV.frame.origin.y = 40.0
         
         guard let effectsCCV = self.effectsContainerCV else {
             print("No effectsCCV.")
@@ -60,7 +59,7 @@ class SCSamplerViewController: UIViewController  {
     
     private func setupContainerViews() {
         
-        let flowLayout = SCSamplerFlowLayout()
+        let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 3)
         self.samplerCV = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         
         guard let samplerCV = self.samplerCV else {
@@ -85,7 +84,7 @@ class SCSamplerViewController: UIViewController  {
         
         
         
-        let effectsFlowLayout = SCSamplerFlowLayout()
+        let effectsFlowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 3)
         self.effectsContainerCV = UICollectionView.init(frame: .zero, collectionViewLayout: effectsFlowLayout)
         guard let effectsContainerCV = self.effectsContainerCV else {
             print("No effects container.")
@@ -106,8 +105,8 @@ class SCSamplerViewController: UIViewController  {
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: -30.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: samplerCV, attribute: .bottom, multiplier: 1.0, constant: 40.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.17, constant: 0))
-        
-        
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .width, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .width, multiplier: 1.0, constant: -60))
+        print("width of effects\(effectsContainerCV.frame.width)")
     }
     
     

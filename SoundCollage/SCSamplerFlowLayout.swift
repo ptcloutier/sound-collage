@@ -10,27 +10,35 @@ import UIKit
 
 class SCSamplerFlowLayout: UICollectionViewFlowLayout {
 
-    override init() {
+    var direction: UICollectionViewScrollDirection
+    var numOfCol: CGFloat
+    
+
+    init(direction: UICollectionViewScrollDirection, numberOfColumns: CGFloat) {
+        self.direction = direction
+        self.numOfCol = numberOfColumns
         super.init()
+
         setupLayout()
+
     }
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setupLayout()
+        fatalError("init(coder:) has not been implemented")
     }
+
     
     func setupLayout() {
         minimumInteritemSpacing = 1
         minimumLineSpacing = 1
-        scrollDirection = .vertical
+        scrollDirection = self.direction
     }
     override var itemSize: CGSize {
         set {
             
         }
         get {
-            let numberOfColumns: CGFloat = 3
+            let numberOfColumns = self.numOfCol
             
             let itemWidth = (self.collectionView!.frame.width - (numberOfColumns - 1)) / numberOfColumns
             return CGSize(width: itemWidth, height: itemWidth)
