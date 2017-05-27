@@ -15,6 +15,9 @@
 		A7264E7D1EAE619800664EDE /* SCAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E7C1EAE619800664EDE /* SCAnimator.swift */; };
 		A7264E811EAEECD700664EDE /* SCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E801EAEECD700664EDE /* SCUser.swift */; };
 		A743CDBA1EABE30100A9C70D /* SCNoteButtonDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A743CDB91EABE30100A9C70D /* SCNoteButtonDelegate.swift */; };
+		A74BAECE1ED9EDC100FABEF5 /* SCEffectPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74BAECD1ED9EDC100FABEF5 /* SCEffectPickerCell.swift */; };
+		A74BAED01ED9EDD600FABEF5 /* SCEffectParameterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74BAECF1ED9EDD600FABEF5 /* SCEffectParameterCell.swift */; };
+		A74BAED41EDA048300FABEF5 /* SCSequencerControlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74BAED31EDA048300FABEF5 /* SCSequencerControlCell.swift */; };
 		A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A886A1EB0445200FEDED0 /* SCDataManager.swift */; };
 		A787338A1EB1177A00B5A8AE /* SCGradientColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78733891EB1177A00B5A8AE /* SCGradientColors.swift */; };
 		A78A9BD01EABA919007117DD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78A9BCF1EABA919007117DD /* QuartzCore.framework */; };
@@ -83,6 +86,9 @@
 		A7264E7C1EAE619800664EDE /* SCAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAnimator.swift; sourceTree = "<group>"; };
 		A7264E801EAEECD700664EDE /* SCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCUser.swift; sourceTree = "<group>"; };
 		A743CDB91EABE30100A9C70D /* SCNoteButtonDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCNoteButtonDelegate.swift; sourceTree = "<group>"; };
+		A74BAECD1ED9EDC100FABEF5 /* SCEffectPickerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCEffectPickerCell.swift; sourceTree = "<group>"; };
+		A74BAECF1ED9EDD600FABEF5 /* SCEffectParameterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCEffectParameterCell.swift; sourceTree = "<group>"; };
+		A74BAED31EDA048300FABEF5 /* SCSequencerControlCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerControlCell.swift; sourceTree = "<group>"; };
 		A76A886A1EB0445200FEDED0 /* SCDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCDataManager.swift; sourceTree = "<group>"; };
 		A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SoundCollage-Bridging-Header.h"; sourceTree = "<group>"; };
 		A78733891EB1177A00B5A8AE /* SCGradientColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCGradientColors.swift; sourceTree = "<group>"; };
@@ -177,6 +183,9 @@
 				A7A823381EA81F500061D0A0 /* SCSamplerFlowLayout.swift */,
 				A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */,
 				A7A823371EA81F500061D0A0 /* SCSamplerCollectionViewCell.swift */,
+				A74BAECD1ED9EDC100FABEF5 /* SCEffectPickerCell.swift */,
+				A74BAECF1ED9EDD600FABEF5 /* SCEffectParameterCell.swift */,
+				A74BAED31EDA048300FABEF5 /* SCSequencerControlCell.swift */,
 			);
 			name = SamplerVC;
 			sourceTree = "<group>";
@@ -488,8 +497,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7A8233E1EA81F500061D0A0 /* SCSamplerCollectionViewCell.swift in Sources */,
+				A74BAED41EDA048300FABEF5 /* SCSequencerControlCell.swift in Sources */,
 				A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */,
 				A7A8233F1EA81F500061D0A0 /* SCSamplerFlowLayout.swift in Sources */,
+				A74BAECE1ED9EDC100FABEF5 /* SCEffectPickerCell.swift in Sources */,
+				A74BAED01ED9EDD600FABEF5 /* SCEffectParameterCell.swift in Sources */,
 				A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */,
 				A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */,
 				A7BFEE2D1EBA444A00C718E7 /* UIImage+Color.swift in Sources */,

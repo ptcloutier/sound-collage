@@ -13,7 +13,7 @@ import AVFoundation
 
 class SCSamplerViewController: UIViewController  {
     
-    var collectionView: UICollectionView?
+    var samplerCV: UICollectionView?
     var effectsContainerCV: UICollectionView?
     let recordBtn = UIButton()
     var speakerBtn = UIButton()
@@ -29,48 +29,86 @@ class SCSamplerViewController: UIViewController  {
         
         let recordingDidFinishNotification = Notification.Name.init("recordingDidFinish")
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
-        setupCollectionView()
         setupControls()
-        setupEffectsContainer()
+        setupContainerViews()
         animateEntrance()
         
     }
     
-    
+    //MARK: Setup UI
     
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
- 
-        guard let collectionView = self.collectionView else {
+        
+        guard let samplerCV = self.samplerCV else {
             print("collectionview is nil")
             return
         }
-        collectionView.bounds.size = collectionView.collectionViewLayout.collectionViewContentSize
-        collectionView.frame.origin.y = 80
+        samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
+//        samplerCV.frame.origin.y = 40.0
+        
+        guard let effectsCCV = self.effectsContainerCV else {
+            print("No effectsCCV.")
+            return
+        }
+        effectsCCV.bounds.size = effectsCCV.collectionViewLayout.collectionViewContentSize
     }
     
     
     
-    private func setupCollectionView(){
-        let flowLayout = SCSamplerFlowLayout()
+    
+    private func setupContainerViews() {
         
-        self.collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: flowLayout)
-        guard let collectionView = self.collectionView else{
-            print("Error: collectionview is nil")
+        let flowLayout = SCSamplerFlowLayout()
+        self.samplerCV = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        
+        guard let samplerCV = self.samplerCV else {
+            print("No sampler collection view.")
             return
         }
         
-        collectionView.backgroundColor = UIColor.clear
-        collectionView.allowsMultipleSelection = true
-        collectionView.register(SCSamplerCollectionViewCell.self, forCellWithReuseIdentifier: "SCSamplerCollectionViewCell")
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        self.view.addSubview(collectionView)
+        samplerCV.backgroundColor = UIColor.clear
+        samplerCV.allowsMultipleSelection = true
+        samplerCV.isScrollEnabled = false
+        samplerCV.register(SCSamplerCollectionViewCell.self, forCellWithReuseIdentifier: "SCSamplerCollectionViewCell")
+        samplerCV.delegate = self
+        samplerCV.dataSource = self
+        
+        self.view.addSubview(samplerCV)
+        
+        samplerCV.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 30.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: -30.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 60.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.57, constant: 0))
+        
+        
+        
+        let effectsFlowLayout = SCSamplerFlowLayout()
+        self.effectsContainerCV = UICollectionView.init(frame: .zero, collectionViewLayout: effectsFlowLayout)
+        guard let effectsContainerCV = self.effectsContainerCV else {
+            print("No effects container.")
+            return
+        }
+        effectsContainerCV.allowsMultipleSelection = false
+        effectsContainerCV.delegate = self
+        effectsContainerCV.dataSource = self
+        effectsContainerCV.register(SCEffectPickerCell.self, forCellWithReuseIdentifier: "SCEffectPickerCell")
+        effectsContainerCV.register(SCEffectParameterCell.self, forCellWithReuseIdentifier: "SCEffectParameterCell")
+        effectsContainerCV.register(SCSequencerControlCell.self, forCellWithReuseIdentifier:  "SCSequencerControlCell")
+        
+        effectsContainerCV.backgroundColor = UIColor.clear
+        self.view.addSubview(effectsContainerCV)
+        
+        effectsContainerCV.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 30.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: -30.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: samplerCV, attribute: .bottom, multiplier: 1.0, constant: 40.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.17, constant: 0))
+        
+        
     }
-    
-    
-    //MARK: Setup UI
     
     
     private func setupControls(){
@@ -140,20 +178,6 @@ class SCSamplerViewController: UIViewController  {
         
     }
     
-    func setupEffectsContainer(){
-        let flowLayout = UICollectionViewLayout()
-        let effectsContainerHeight = CGFloat(100)
-        let effectsContainerYPosition = view.frame.height-toolbarHeight-effectsContainerHeight
-        let effectsContainerframe = CGRect(x: 0, y: effectsContainerYPosition, width: view.frame.width-60, height: effectsContainerHeight)
-        self.effectsContainerCV = UICollectionView.init(frame: effectsContainerframe, collectionViewLayout: flowLayout)
-        guard let effectsContainerCV = self.effectsContainerCV else {
-            print("No effects container.")
-            return
-        }
-        effectsContainerCV.center = CGPoint(x: view.center.x, y: effectsContainerYPosition)
-        effectsContainerCV.backgroundColor = UIColor.init(red: 255.0, green: 0, blue: 128.0, alpha: 1.0)
-        self.view.addSubview(effectsContainerCV)
-    }
     
     //MARK: Animations
     
@@ -207,7 +231,7 @@ class SCSamplerViewController: UIViewController  {
         case true:
             
             SCAudioManager.shared.finishRecording(success: true)
-            reloadCV()
+            reloadSamplerCV()
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 self.recordBtn.alpha = 1
@@ -223,8 +247,8 @@ class SCSamplerViewController: UIViewController  {
     
     
     
-    func reloadCV() {
-        guard let cv = self.collectionView else {
+    func reloadSamplerCV() {
+        guard let cv = self.samplerCV else {
             print("collectionview not found.")
             return
         }
@@ -248,7 +272,7 @@ class SCSamplerViewController: UIViewController  {
             }
             print("Recording mode enabled.")
         }
-        reloadCV()
+        reloadSamplerCV()
     }
 
     
@@ -291,7 +315,7 @@ class SCSamplerViewController: UIViewController  {
             }
             print("Editing mode enabled.")
         }
-        reloadCV()
+        reloadSamplerCV()
     }
 }
 
@@ -302,108 +326,132 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 16
+        if collectionView == samplerCV {
+            return 12
+        } else {
+            return 3
+        }
     }
     
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
         
-        cell.layer.masksToBounds = true
-        cell.layer.cornerRadius = 15.0
-        // add a border
-        cell.layer.borderColor = UIColor.white.cgColor
-        cell.layer.borderWidth = 2.0
-        cell.layer.cornerRadius = 15.0
-        //shadow
-        cell.layer.shadowColor = UIColor.darkGray.cgColor
-        cell.layer.shadowOffset = CGSize(width: 3, height: 3)
-        cell.layer.shadowOpacity = 0.7
-        cell.layer.shadowRadius = 3.0
-        
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
-        tapGestureRecognizer.delegate = self
-        cell.addGestureRecognizer(tapGestureRecognizer)
-
-        
-        // Recording Mode
-        switch SCAudioManager.shared.isRecordingModeEnabled {
-        case true:
-            cell.isRecordingEnabled = true
-        case false:
-            cell.isRecordingEnabled = false
+        if collectionView == samplerCV {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
+            
+            cell.layer.masksToBounds = true
+            cell.layer.cornerRadius = 15.0
+            // add a border
+            cell.layer.borderColor = UIColor.white.cgColor
+            cell.layer.borderWidth = 2.0
+            cell.layer.cornerRadius = 15.0
+            //shadow
+            cell.layer.shadowColor = UIColor.darkGray.cgColor
+            cell.layer.shadowOffset = CGSize(width: 3, height: 3)
+            cell.layer.shadowOpacity = 0.7
+            cell.layer.shadowRadius = 3.0
+            
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
+            tapGestureRecognizer.delegate = self
+            cell.addGestureRecognizer(tapGestureRecognizer)
+            
+            
+            // Recording Mode
+            switch SCAudioManager.shared.isRecordingModeEnabled {
+            case true:
+                cell.isRecordingEnabled = true
+            case false:
+                cell.isRecordingEnabled = false
+            }
+            
+            // Editing Mode
+            switch SCAudioManager.shared.isEditingModeEnabled {
+            case true:
+                cell.isEditingEnabled = true
+            case false:
+                cell.isEditingEnabled = false
+            }
+            
+            // Set colors for recording mode
+            if SCAudioManager.shared.isEditingModeEnabled {
+                cell.setEditingColorSets()
+            } else {
+                cell.setRecordingColorSets()
+            }
+            
+            // Flashing Mode
+            if SCAudioManager.shared.isEditingModeEnabled || SCAudioManager.shared.isRecordingModeEnabled == true {
+                cell.startCellFlashing()
+            } else {
+                cell.stopCellsFlashing()
+            }
+            // Touch delay
+            if SCAudioManager.shared.isRecording == true {
+                cell.isRecordingTouchDelay()
+            } else {
+                cell.enableTouch()
+            }
+            return cell
+        } else  {
+            switch indexPath.row {
+            case 0:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCEffectPickerCell", for: indexPath) as! SCEffectPickerCell
+                return cell
+            case 1:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCEffectParameterCell", for: indexPath) as! SCEffectParameterCell
+                return cell
+            default:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSequencerControlCell", for: indexPath) as! SCSequencerControlCell
+                return cell
+            }
         }
-        
-        // Editing Mode
-        switch SCAudioManager.shared.isEditingModeEnabled {
-        case true:
-            cell.isEditingEnabled = true
-        case false:
-            cell.isEditingEnabled = false
-        }
-        
-        // Set colors for recording mode
-        if SCAudioManager.shared.isEditingModeEnabled {
-            cell.setEditingColorSets()
-        } else {
-            cell.setRecordingColorSets()
-        }
-        
-        // Flashing Mode
-        if SCAudioManager.shared.isEditingModeEnabled || SCAudioManager.shared.isRecordingModeEnabled == true {
-            cell.startCellFlashing()
-        } else {
-            cell.stopCellsFlashing()
-        }
-        // Touch delay
-        if SCAudioManager.shared.isRecording == true {
-            cell.isRecordingTouchDelay()
-        } else {
-            cell.enableTouch()
-        }
-        
-        return cell
     }
     
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        guard let cell = collectionView.cellForItem(at: indexPath) as? SCSamplerCollectionViewCell else {
-            fatalError("Wrong cell dequeued")
-        }
-        SCAudioManager.shared.selectedSampleIndex = indexPath.row
-        
-        if SCAudioManager.shared.isRecording == true {
-            print("Recording in progress")
-            return
-        }
-        
-        switch SCAudioManager.shared.isRecordingModeEnabled {
-        case true:
-            if cell.isTouchDelayed == false {
-                startRecording(in: cell, samplePadIndex: indexPath.row)
-            } else {
-                print("extraneous cell touch was delayed.")
+        if collectionView == samplerCV {
+            
+            guard let cell = collectionView.cellForItem(at: indexPath) as? SCSamplerCollectionViewCell else {
+                fatalError("Wrong cell dequeued")
             }
-        case false:
-            if SCAudioManager.shared.isEditingModeEnabled == true {
-                print("Present wave form editor for sample at pad #\(indexPath.row)")
-            } else {
+            SCAudioManager.shared.selectedSampleIndex = indexPath.row
+            
+            if SCAudioManager.shared.isRecording == true {
+                print("Recording in progress")
+                return
+            }
+            
+            switch SCAudioManager.shared.isRecordingModeEnabled {
+            case true:
                 if cell.isTouchDelayed == false {
-                    cell.playbackSample()
-                    cell.animateLayer()
+                    startRecording(in: cell, samplePadIndex: indexPath.row)
                 } else {
                     print("extraneous cell touch was delayed.")
                 }
+            case false:
+                if SCAudioManager.shared.isEditingModeEnabled == true {
+                    print("Present wave form editor for sample at pad #\(indexPath.row)")
+                } else {
+                    if cell.isTouchDelayed == false {
+                        cell.playbackSample()
+                        cell.animateLayer()
+                    } else {
+                        print("extraneous cell touch was delayed.")
+                    }
+                }
+            }
+        } else {
+            switch indexPath.row {
+            case 0:
+                print("Effects picker tapped.")
+            case 1:
+                print("Effects parameter tapped.")
+            default:
+                print("Sequencer control tapped.")
             }
         }
     }
@@ -411,22 +459,20 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        if let selectedItems = collectionView.indexPathsForSelectedItems {
-            if selectedItems.contains(indexPath) {
-                collectionView.deselectItem(at: indexPath, animated: true)
-                return false
+        
+        if collectionView == samplerCV {
+            if let selectedItems = collectionView.indexPathsForSelectedItems {
+                if selectedItems.contains(indexPath) {
+                    collectionView.deselectItem(at: indexPath, animated: true)
+                    return false
+                }
             }
+            return true
         }
-        return true
-    }
-   
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        return true // default
     }
 }
+
 
 
 
@@ -441,20 +487,15 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
     
     
     func tap(gestureRecognizer: UITapGestureRecognizer) {
-        let tapLocation = gestureRecognizer.location(in: self.collectionView)
+        let tapLocation = gestureRecognizer.location(in: self.samplerCV)
         
-        //using the tapLocation to get the indexPath
-        guard let collectionView = self.collectionView else {
-            print("CollectionView not found.")
-            return
-        }
-        guard let indexPath = collectionView.indexPathForItem(at: tapLocation) else {
+        guard let indexPath = self.samplerCV?.indexPathForItem(at: tapLocation) else {
             print("IndexPath not found.")
             return
         }
         
         //now we can get the cell for item at indexPath
-        guard let cell = collectionView.cellForItem(at: indexPath) else {
+        guard let cell = self.samplerCV?.cellForItem(at: indexPath) else {
             print("Cell not found.")
             return
         }
@@ -467,6 +508,6 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
     func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
         
         print("selected cell at \(indexPath.row)")
-        self.collectionView(collectionView!, didSelectItemAt: indexPath)
+        self.collectionView(samplerCV!, didSelectItemAt: indexPath)
     }
 }

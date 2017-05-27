@@ -30,7 +30,7 @@ class SCSamplerFlowLayout: UICollectionViewFlowLayout {
             
         }
         get {
-            let numberOfColumns: CGFloat = 4
+            let numberOfColumns: CGFloat = 3
             
             let itemWidth = (self.collectionView!.frame.width - (numberOfColumns - 1)) / numberOfColumns
             return CGSize(width: itemWidth, height: itemWidth)
