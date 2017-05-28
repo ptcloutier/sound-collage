@@ -415,7 +415,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         if collectionView == samplerCV {
             
             guard let cell = collectionView.cellForItem(at: indexPath) as? SCSamplerCollectionViewCell else {
-                fatalError("Wrong cell dequeued")
+                fatalError("Wrong cell or no cell at indexpath.")
             }
             SCAudioManager.shared.selectedSampleIndex = indexPath.row
             

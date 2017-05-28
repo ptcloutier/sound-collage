@@ -18,8 +18,7 @@ class SCEffectPickerCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.contentView.backgroundColor = UIColor.purple
-        effects = ["reverb", "delay", "distortion"]
+        effects = ["pitch up"]
         setupCollectionView()
         
     }
@@ -33,13 +32,14 @@ class SCEffectPickerCell: UICollectionViewCell {
     
     private func setupCollectionView(){
         
-        let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 3)
+        let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
         self.collectionView = UICollectionView.init(frame: CGRect.init(x: 0, y: 0, width: self.frame.width, height: self.frame.height), collectionViewLayout: flowLayout)
         guard let cv = self.collectionView else {
             print("No collectionview.")
             return
         }
         self.contentView.addSubview(cv)
+        cv.showsHorizontalScrollIndicator = false
         cv.register(SCEffectCell.self, forCellWithReuseIdentifier: "EffectCell")
         cv.delegate = self
         cv.dataSource = self
@@ -63,6 +63,12 @@ extension SCEffectPickerCell: UICollectionViewDelegate, UICollectionViewDataSour
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Effect picker cell override")
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? SCEffectCell else {
+            print("Wrong cell or no cell at indexPath.")
+            return
+        }
+        cell.toggleEffect()
+        print("\(effects[indexPath.row]) effect chosen.")
     }
 }

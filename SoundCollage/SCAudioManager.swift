@@ -26,6 +26,10 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isSpeakerEnabled: Bool = false
     var isRecording: Bool = false
     var replaceableFilePath: String?
+    var effectIsSelected: Bool = false 
+    
+    
+    
     private override init() {}
     
     
@@ -76,39 +80,17 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     //MARK: AVAudioEngine 
     
     
-    func playAudioWithVariablePitch(pitch: Float, url: URL){
+    func variablePitchEffect(pitch: Float, audioPlayerNode: AVAudioPlayerNode){
         
-//        audioEngine = AVAudioEngine()
-//        do {
-//            audioFile = try AVAudioFile(forReading: url)
-//            
-//            if let player = self.player {
-//                  player.stop()
-//            }
-//          
-//            audioEngine.stop()
-//            audioEngine.reset()
-//            
-//            let audioPlayerNode = AVAudioPlayerNode()
-//            audioEngine.attach(audioPlayerNode)
-//            
-//            let changePitchEffect = AVAudioUnitTimePitch()
-//            changePitchEffect.pitch = pitch
-//            
-//            audioEngine.attach(changePitchEffect)
-//            
-//            audioEngine.connect(audioPlayerNode, to: changePitchEffect, format: nil)
-//            
-//            audioEngine.connect(changePitchEffect, to: audioEngine.outputNode, format: nil)
-//            
-//            audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: nil)
-//            
-//            try! audioEngine.start()
-//            
-//            audioPlayerNode.play()
-//        } catch {
-//            print("No variable pitch playback.")
-//        }
+            let changePitchEffect = AVAudioUnitTimePitch()
+            changePitchEffect.pitch = pitch
+            
+            self.audioEngine.attach(changePitchEffect)
+            
+            self.audioEngine.connect(audioPlayerNode, to: changePitchEffect, format: nil)
+            
+            self.audioEngine.connect(changePitchEffect, to: self.audioEngine.mainMixerNode, format: nil)
+        
     }
     
     
@@ -120,23 +102,45 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         do {
             let audioFile = try AVAudioFile(forReading: soundFileURL)
             
-            let player = AVAudioPlayerNode()
-            audioEngine.attach(player)
-            audioEngine.connect(player, to: audioEngine.mainMixerNode, format: audioFile.processingFormat)
-            player.scheduleFile(audioFile, at: nil, completionHandler: {print("Complete!")})
+            let audioPlayerNode = AVAudioPlayerNode()
+            audioEngine.attach(audioPlayerNode)
+            
+            if self.effectIsSelected == true {
+                variablePitchEffect(pitch: 1000, audioPlayerNode: audioPlayerNode)
+            } else {
+                audioEngine.connect(audioPlayerNode, to: audioEngine.mainMixerNode, format: nil)
+            }
+            
+            audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
+                [weak self] in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.audioEngineDidFinishPlaying()
+            })
             audioEngine.prepare()
             do {
                 try audioEngine.start()
             } catch _ {
                 print("Play session Error")
             }
-            player.play()
+            audioPlayerNode.play()
             print("Playing audiofile at \(soundFileURL)")
         } catch {
             print("Could not play sound file!")
         }
     }
+    
 
+    
+    func audioEngineDidFinishPlaying(){
+        
+        self.audioEngine.stop()
+        print("Complete!")
+
+    }
+    
+    
     
     //MARK: Recording
     
