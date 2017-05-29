@@ -27,7 +27,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isRecording: Bool = false
     var replaceableFilePath: String?
     var effectIsSelected: Bool = false 
-    
+    var players: [SCAudioPlayerNode] = []
     
     
     private override init() {}
@@ -96,13 +96,14 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func playAudio(soundFileURL: URL){
         
+        
         if self.audioEngine == nil {
             self.audioEngine = AVAudioEngine()
         }
         do {
             let audioFile = try AVAudioFile(forReading: soundFileURL)
             
-            let audioPlayerNode = AVAudioPlayerNode()
+            let audioPlayerNode = SCAudioPlayerNode()
             audioEngine.attach(audioPlayerNode)
             
             if self.effectIsSelected == true {
@@ -116,8 +117,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 guard let strongSelf = self else {
                     return
                 }
-                strongSelf.audioEngineDidFinishPlaying()
+                let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
+                delayQueue.asyncAfter(deadline: .now() + 2.0) {
+                    strongSelf.detachNode(audioPlayerNode: audioPlayerNode)
+                }
             })
+            
             audioEngine.prepare()
             do {
                 try audioEngine.start()
@@ -131,14 +136,13 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         }
     }
     
-
     
-    func audioEngineDidFinishPlaying(){
-        
-        self.audioEngine.stop()
-        print("Complete!")
-
+    func detachNode(audioPlayerNode: AVAudioPlayerNode){
+        self.audioEngine.detach(audioPlayerNode)
     }
+    
+    
+    
     
     
     

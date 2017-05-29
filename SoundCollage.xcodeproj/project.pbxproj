@@ -41,6 +41,7 @@
 		A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823421EA81F6C0061D0A0 /* SCStackView.swift */; };
 		A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */; };
 		A7BFEE2D1EBA444A00C718E7 /* UIImage+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFEE2C1EBA444A00C718E7 /* UIImage+Color.swift */; };
+		A7D7C4A11EDCC20D0083093D /* SCAudioPlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7C4A01EDCC20D0083093D /* SCAudioPlayerNode.swift */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
 		D12EE6F44C0DB1631E344924 /* Pods_SoundCollage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */; };
 /* End PBXBuildFile section */
@@ -120,6 +121,7 @@
 		A7A823421EA81F6C0061D0A0 /* SCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCStackView.swift; sourceTree = "<group>"; };
 		A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+GradientColor.swift"; sourceTree = "<group>"; };
 		A7BFEE2C1EBA444A00C718E7 /* UIImage+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Color.swift"; sourceTree = "<group>"; };
+		A7D7C4A01EDCC20D0083093D /* SCAudioPlayerNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAudioPlayerNode.swift; sourceTree = "<group>"; };
 		A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBank.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -189,6 +191,7 @@
 				A74BAED51EDA0F0900FABEF5 /* SCEffectCell.swift */,
 				A74BAECF1ED9EDD600FABEF5 /* SCEffectParameterCell.swift */,
 				A74BAED31EDA048300FABEF5 /* SCSequencerControlCell.swift */,
+				A7D7C4A01EDCC20D0083093D /* SCAudioPlayerNode.swift */,
 			);
 			name = SamplerVC;
 			sourceTree = "<group>";
@@ -511,6 +514,7 @@
 				A7BFEE2D1EBA444A00C718E7 /* UIImage+Color.swift in Sources */,
 				A787338A1EB1177A00B5A8AE /* SCGradientColors.swift in Sources */,
 				A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */,
+				A7D7C4A11EDCC20D0083093D /* SCAudioPlayerNode.swift in Sources */,
 				A7A8232F1EA81D280061D0A0 /* AlertManager.swift in Sources */,
 				A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */,
 				A7A8233B1EA81F500061D0A0 /* SCKeyboardViewController.swift in Sources */,
