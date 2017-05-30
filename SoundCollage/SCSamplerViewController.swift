@@ -21,12 +21,14 @@ class SCSamplerViewController: UIViewController  {
     var lastRecording: URL?
     var selectedSampleIndex: Int?
     let navBarBtnFrameSize = CGRect.init(x: 0, y: 0, width: 30, height: 30)
-    let toolbarHeight = CGFloat(49.0)
-
+    let toolbarHeight = CGFloat(98.0)
+    var effects: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        effects = ["pitch", "reverb", "distortion", "delay"]
+
         let recordingDidFinishNotification = Notification.Name.init("recordingDidFinish")
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
         setupControls()
@@ -57,9 +59,10 @@ class SCSamplerViewController: UIViewController  {
     
     
     
+    
     private func setupContainerViews() {
         
-        let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 3)
+        let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 4)
         self.samplerCV = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         
         guard let samplerCV = self.samplerCV else {
@@ -77,36 +80,42 @@ class SCSamplerViewController: UIViewController  {
         self.view.addSubview(samplerCV)
         
         samplerCV.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 30.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: -30.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 60.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.57, constant: 0))
         
         
         
-        let effectsFlowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 3)
+        let effectsFlowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 4)
         self.effectsContainerCV = UICollectionView.init(frame: .zero, collectionViewLayout: effectsFlowLayout)
         guard let effectsContainerCV = self.effectsContainerCV else {
             print("No effects container.")
             return
         }
-        effectsContainerCV.allowsMultipleSelection = false
+        effectsContainerCV.alwaysBounceHorizontal = true
+        effectsContainerCV.isPagingEnabled = true
+        effectsContainerCV.allowsMultipleSelection = true
         effectsContainerCV.delegate = self
         effectsContainerCV.dataSource = self
-        effectsContainerCV.register(SCEffectPickerCell.self, forCellWithReuseIdentifier: "SCEffectPickerCell")
-        effectsContainerCV.register(SCEffectParameterCell.self, forCellWithReuseIdentifier: "SCEffectParameterCell")
-        effectsContainerCV.register(SCSequencerControlCell.self, forCellWithReuseIdentifier:  "SCSequencerControlCell")
+        effectsContainerCV.isScrollEnabled = true
+//        effectsContainerCV.showsHorizontalScrollIndicator = false
+        effectsContainerCV.register(SCEffectCell.self, forCellWithReuseIdentifier: "EffectCell")
+
+//        effectsContainerCV.register(SCEffectPickerCell.self, forCellWithReuseIdentifier: "SCEffectPickerCell")
+//        effectsContainerCV.register(SCEffectParameterCell.self, forCellWithReuseIdentifier: "SCEffectParameterCell")
+//        effectsContainerCV.register(SCSequencerControlCell.self, forCellWithReuseIdentifier:  "SCSequencerControlCell")
         
         effectsContainerCV.backgroundColor = UIColor.clear
         self.view.addSubview(effectsContainerCV)
         
         effectsContainerCV.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 30.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: -30.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: samplerCV, attribute: .bottom, multiplier: 1.0, constant: 40.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: samplerCV, attribute: .bottom, multiplier: 1.0, constant: 20.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.17, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .width, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .width, multiplier: 1.0, constant: -60))
-        print("width of effects\(effectsContainerCV.frame.width)")
+//        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .width, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .width, multiplier: 1.0, constant: 0))
+//        print("width of effects\(effectsContainerCV.frame.width)")
     }
     
     
@@ -114,17 +123,17 @@ class SCSamplerViewController: UIViewController  {
         
         let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
         
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: self.view.frame.height - toolbarHeight, width: self.view.bounds.size.width, height: toolbarHeight))
-        toolbar.layer.position = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height-20.0)
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: self.view.frame.height-toolbarHeight, width: self.view.frame.width, height: toolbarHeight))
+//        toolbar.layer.position = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height-20.0)
         toolbar.setBackgroundImage(transparentPixel, forToolbarPosition: .any, barMetrics: .default)
         toolbar.setShadowImage(transparentPixel, forToolbarPosition: .any)
         toolbar.isTranslucent = true
         
         
-        recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress), for: .touchUpInside)
         
-        let buttonHeight = toolbarHeight/2
-        let yPosition = view.frame.height-20-buttonHeight
+        recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress), for: .touchUpInside)
+        let buttonHeight = (toolbarHeight/3)*2
+        let yPosition = toolbar.center.y-buttonHeight/2
         recordBtn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
         
         let backgroundView = UIView.init(frame: recordBtn.frame)
@@ -134,9 +143,8 @@ class SCSamplerViewController: UIViewController  {
         backgroundView.layer.masksToBounds = true
         backgroundView.layer.borderWidth = 2.0
         backgroundView.layer.borderColor = UIColor.white.cgColor
-        
         recordBtn.addSubview(backgroundView)
-        recordBtn.center = CGPoint(x: view.center.x, y: yPosition)
+        recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
         
@@ -162,16 +170,16 @@ class SCSamplerViewController: UIViewController  {
         let speakerBarBtn = UIBarButtonItem(customView: speakerBtn)
         
 
-        let editorBtn = UIButton.init(type: .custom)
-        editorBtn.setImage(UIImage.init(named: "wf"), for: .normal)
-        editorBtn.frame = navBarBtnFrameSize
-        editorBtn.addTarget(self, action: #selector(SCSamplerViewController.toggleEditingMode), for: .touchUpInside)
-        let editorBarBtn = UIBarButtonItem(customView: editorBtn)
+//        let editorBtn = UIButton.init(type: .custom)
+//        editorBtn.setImage(UIImage.init(named: "wf"), for: .normal)
+//        editorBtn.frame = navBarBtnFrameSize
+//        editorBtn.addTarget(self, action: #selector(SCSamplerViewController.toggleEditingMode), for: .touchUpInside)
+//        let editorBarBtn = UIBarButtonItem(customView: editorBtn)
         
         navItem.rightBarButtonItems = [speakerBarBtn]
         navBar.items = [navItem]
 
-        toolbar.items = [flexibleSpace, recordBarBtn, flexibleSpace, editorBarBtn]
+        toolbar.items = [flexibleSpace, recordBarBtn, flexibleSpace]
         self.view.addSubview(toolbar)
         
         
@@ -327,9 +335,11 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == samplerCV {
-            return 12
+            return 16
         } else {
-            return 3
+            print("\(effects.count)")
+            return effects.count
+
         }
     }
     
@@ -394,17 +404,22 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             }
             return cell
         } else  {
-            switch indexPath.row {
-            case 0:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCEffectPickerCell", for: indexPath) as! SCEffectPickerCell
-                return cell
-            case 1:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCEffectParameterCell", for: indexPath) as! SCEffectParameterCell
-                return cell
-            default:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSequencerControlCell", for: indexPath) as! SCSequencerControlCell
-                return cell
-            }
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EffectCell", for: indexPath) as! SCEffectCell
+            cell.effect = effects[indexPath.row]
+            cell.setupLabel()
+            return cell 
+//            switch indexPath.row {
+//            case 0:
+//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCEffectPickerCell", for: indexPath) as! SCEffectPickerCell
+//                return cell
+//            case 1:
+//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCEffectParameterCell", for: indexPath) as! SCEffectParameterCell
+//                return cell
+//            default:
+//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSequencerControlCell", for: indexPath) as! SCSequencerControlCell
+//                return cell
+//            }
         }
     }
     
@@ -444,14 +459,20 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 }
             }
         } else {
-            switch indexPath.row {
-            case 0:
-                print("Effects picker tapped.")
-            case 1:
-                print("Effects parameter tapped.")
-            default:
-                print("Sequencer control tapped.")
+            guard let cell = collectionView.cellForItem(at: indexPath) as? SCEffectCell else {
+                print("Wrong cell or no cell at indexPath.")
+                return
             }
+            cell.toggleEffectIsSelected()
+        
+//            switch indexPath.row {
+//            case 0:
+//                print("Effects picker tapped.")
+//            case 1:
+//                print("Effects parameter tapped.")
+//            default:
+//                print("Sequencer control tapped.")
+//            }
         }
     }
     
@@ -471,6 +492,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         return true // default
     }
 }
+
 
 
 

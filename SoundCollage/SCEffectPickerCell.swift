@@ -57,7 +57,7 @@ extension SCEffectPickerCell: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EffectCell", for: indexPath) as! SCEffectCell
-        cell.setupLabel(title: effects[indexPath.row])
+//        cell.setupLabel(title: effects[indexPath.row])
         return cell
     }
     
@@ -68,7 +68,7 @@ extension SCEffectPickerCell: UICollectionViewDelegate, UICollectionViewDataSour
             print("Wrong cell or no cell at indexPath.")
             return
         }
-        cell.toggleEffect()
+        cell.toggleEffectIsSelected()
         print("\(effects[indexPath.row]) effect chosen.")
     }
 }

@@ -26,7 +26,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isSpeakerEnabled: Bool = false
     var isRecording: Bool = false
     var replaceableFilePath: String?
-    var effectIsSelected: Bool = false 
+    var effectIsSelected: Bool = false
+    var pitchEffectIsSelected: Bool = false
+    var distortionEffectIsSelected: Bool = false
     var players: [SCAudioPlayerNode] = []
     
     
@@ -94,6 +96,21 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
+    
+    func distortionEffect(audioPlayerNode: AVAudioPlayerNode){
+        
+        let distortionEffect = AVAudioUnitDistortion()
+        distortionEffect.loadFactoryPreset(.speechRadioTower)
+        self.audioEngine.attach(distortionEffect)
+        self.audioEngine.connect(audioPlayerNode, to: distortionEffect, format: nil)
+        self.audioEngine.connect(distortionEffect, to: self.audioEngine.mainMixerNode, format: nil)
+        
+    }
+    
+    
+    
+    
+    
     func playAudio(soundFileURL: URL){
         
         
@@ -106,10 +123,17 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             let audioPlayerNode = SCAudioPlayerNode()
             audioEngine.attach(audioPlayerNode)
             
-            if self.effectIsSelected == true {
-                variablePitchEffect(pitch: 1000, audioPlayerNode: audioPlayerNode)
-            } else {
+           
+            if self.effectIsSelected == false {
                 audioEngine.connect(audioPlayerNode, to: audioEngine.mainMixerNode, format: nil)
+            } else {
+                
+                if self.distortionEffectIsSelected == true {
+                    distortionEffect(audioPlayerNode: audioPlayerNode)
+                }
+                if self.pitchEffectIsSelected == true {
+                    variablePitchEffect(pitch: 1000, audioPlayerNode: audioPlayerNode)
+                }
             }
             
             audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
@@ -137,8 +161,11 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
+    
+    
+    
     func detachNode(audioPlayerNode: AVAudioPlayerNode){
-        self.audioEngine.detach(audioPlayerNode)
+        self.audioEngine.disconnectNodeInput(audioPlayerNode)
     }
     
     

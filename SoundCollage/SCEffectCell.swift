@@ -11,6 +11,7 @@ import UIKit
 class SCEffectCell: UICollectionViewCell {
     
     var effectLabel = UILabel()
+    var effect = String()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,12 +27,12 @@ class SCEffectCell: UICollectionViewCell {
     
     
     
-    func setupLabel(title: String){
+    func setupLabel(){
         
         self.contentView.backgroundColor = UIColor.purple
 
         self.effectLabel = UILabel.init(frame:CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height/3))
-                effectLabel.text = title
+        effectLabel.text = effect 
         effectLabel.font = UIFont.init(name: "Futura", size: 15)
         effectLabel.textColor = UIColor.white
         effectLabel.textAlignment = NSTextAlignment.center
@@ -42,17 +43,56 @@ class SCEffectCell: UICollectionViewCell {
         
     }
     
-    func toggleEffect(){
+    func toggleEffectIsSelected(){
+        
         
         switch  SCAudioManager.shared.effectIsSelected {
         case true:
              SCAudioManager.shared.effectIsSelected = false
+             // disable observe cell touch parameters
+             switch effect {
+             case "pitch":
+                SCAudioManager.shared.pitchEffectIsSelected = false
+             case "distortion":
+                SCAudioManager.shared.distortionEffectIsSelected = false
+             default:
+                print("effect not found.")
+             }
              self.contentView.backgroundColor = UIColor.purple
         case false:
              SCAudioManager.shared.effectIsSelected = true
+             //  when selected, activate observe effect cell touch parameters
+             switch effect {
+             case "pitch":
+                SCAudioManager.shared.pitchEffectIsSelected = true
+             case "distortion":
+                SCAudioManager.shared.distortionEffectIsSelected = true
+             default:
+                print("effect not found.")
+             }
              self.contentView.backgroundColor = UIColor.init(red: 230.0/255.0, green: 230.0/255.0, blue: 230.0/255.0, alpha: 1.0)
         }
-        
-        
     }
+    
+    
+    
+   /*  
+     
+     func activateTouchEffectParameters(){
+     
+     }
+     
+     func deactivateTouchEffectParameters(){
+     
+     }
+     
+     
+     func effectParameters(){
+     
+        print("tuoch point x : \() , y: \()")
+     
+     }
+     
+ 
+ */
 }
