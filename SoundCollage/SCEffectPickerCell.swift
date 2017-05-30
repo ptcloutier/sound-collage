@@ -68,7 +68,7 @@ extension SCEffectPickerCell: UICollectionViewDelegate, UICollectionViewDataSour
             print("Wrong cell or no cell at indexPath.")
             return
         }
-        cell.toggleEffectIsSelected()
+//        cell.toggleEffectIsSelected()
         print("\(effects[indexPath.row]) effect chosen.")
     }
 }

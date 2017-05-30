@@ -13,6 +13,9 @@ import UIKit
 
 class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
+    
+    override private init() {}
+    
     static let shared = SCAudioManager()
     
     var audioEngine: AVAudioEngine!
@@ -27,16 +30,16 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isRecording: Bool = false
     var replaceableFilePath: String?
     var effectIsSelected: Bool = false
-    var pitchEffectIsSelected: Bool = false
-    var distortionEffectIsSelected: Bool = false
     var players: [SCAudioPlayerNode] = []
+    var activeEffects: [AVAudioUnit] = []
+    var effects: [AVAudioUnit] = []
     
     
-    private override init() {}
     
     
     
     //MARK: Playback
+    
     
     func playback() {
         
@@ -79,7 +82,18 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
 
     
-    //MARK: AVAudioEngine 
+    //MARK: Effects 
+    
+    
+    func setupEffects(){
+        
+        let pitchEffect = AVAudioUnitTimePitch()
+        let distortionEffect = AVAudioUnitDistortion()
+        let delayEffect = AVAudioUnitDelay()
+        let reverbEffect = AVAudioUnitReverb()
+        effects = [pitchEffect, distortionEffect, delayEffect, reverbEffect]
+    }
+    
     
     
     func variablePitchEffect(pitch: Float, audioPlayerNode: AVAudioPlayerNode){
@@ -100,13 +114,63 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     func distortionEffect(audioPlayerNode: AVAudioPlayerNode){
         
         let distortionEffect = AVAudioUnitDistortion()
-        distortionEffect.loadFactoryPreset(.speechRadioTower)
+        distortionEffect.loadFactoryPreset(.multiDistortedFunk)
         self.audioEngine.attach(distortionEffect)
         self.audioEngine.connect(audioPlayerNode, to: distortionEffect, format: nil)
         self.audioEngine.connect(distortionEffect, to: self.audioEngine.mainMixerNode, format: nil)
         
     }
     
+    
+    func delayEffect(audioPlayerNode: AVAudioPlayerNode){
+        
+        let delayEffect = AVAudioUnitDelay()
+        delayEffect.delayTime = 0.5
+        delayEffect.feedback = 0.1
+        self.audioEngine.attach(delayEffect)
+        self.audioEngine.connect(audioPlayerNode, to: delayEffect, format: nil)
+        self.audioEngine.connect(delayEffect, to: self.audioEngine.mainMixerNode, format: nil)
+        
+    }
+    
+    
+    /*if self.distortionEffectIsSelected == true {
+     distortionEffect(audioPlayerNode: audioPlayerNode)
+     }
+     if self.pitchEffectIsSelected == true {
+     variablePitchEffect(pitch: 1000, audioPlayerNode: audioPlayerNode)
+     }
+     if self.delayEffectIsSelected == true {
+     delayEffect(audioPlayerNode: audioPlayerNode)
+     }
+     if self.reverbEffectIsSelected == true {
+     let reverbEffect = AVAudioUnitReverb()
+     reverbEffect.loadFactoryPreset(.cathedral)
+     let format = reverbEffect.inputFormat(forBus: 0)
+     
+     reverbEffect.wetDryMix = 0.75
+     self.audioEngine.attach(reverbEffect)
+     self.audioEngine.connect(audioPlayerNode, to: reverbEffect, format: format)
+     self.audioEngine.connect(reverbEffect, to: self.audioEngine.mainMixerNode, format: format)
+    */
+    
+    func activateEffect(index: Int){
+        
+        // activate effect by adding it to activeEffects array
+        let selection = effects[index]
+        print("\(selection.name)")
+        
+        
+    }
+    
+    
+    func deactivateEffect(index: Int){
+        
+        // deactivate effect by removing it 
+        
+        
+        
+    }
     
     
     
@@ -123,17 +187,13 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             let audioPlayerNode = SCAudioPlayerNode()
             audioEngine.attach(audioPlayerNode)
             
-           
             if self.effectIsSelected == false {
                 audioEngine.connect(audioPlayerNode, to: audioEngine.mainMixerNode, format: nil)
             } else {
+                let audioMixer = AVAudioMixerNode()
+                audioEngine.connect(audioMixer, to: audioEngine.mainMixerNode, format: nil)
                 
-                if self.distortionEffectIsSelected == true {
-                    distortionEffect(audioPlayerNode: audioPlayerNode)
-                }
-                if self.pitchEffectIsSelected == true {
-                    variablePitchEffect(pitch: 1000, audioPlayerNode: audioPlayerNode)
-                }
+                
             }
             
             audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
@@ -185,6 +245,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     func setupRecordingSession(){
+    
         
         do {
             try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)

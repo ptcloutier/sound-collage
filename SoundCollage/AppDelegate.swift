@@ -33,6 +33,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // set playback output source
         SCAudioManager.shared.isSpeakerEnabled = false
         SCAudioManager.shared.setAudioPlaybackSource()
+    
+        // effects
+        SCAudioManager.shared.setupEffects()
         
         window = UIWindow(frame: UIScreen.main.bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

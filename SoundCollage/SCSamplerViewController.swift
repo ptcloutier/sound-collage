@@ -409,17 +409,6 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.effect = effects[indexPath.row]
             cell.setupLabel()
             return cell 
-//            switch indexPath.row {
-//            case 0:
-//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCEffectPickerCell", for: indexPath) as! SCEffectPickerCell
-//                return cell
-//            case 1:
-//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCEffectParameterCell", for: indexPath) as! SCEffectParameterCell
-//                return cell
-//            default:
-//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSequencerControlCell", for: indexPath) as! SCSequencerControlCell
-//                return cell
-//            }
         }
     }
     
@@ -463,16 +452,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 print("Wrong cell or no cell at indexPath.")
                 return
             }
-            cell.toggleEffectIsSelected()
-        
-//            switch indexPath.row {
-//            case 0:
-//                print("Effects picker tapped.")
-//            case 1:
-//                print("Effects parameter tapped.")
-//            default:
-//                print("Sequencer control tapped.")
-//            }
+            cell.toggleEffectIsSelected(index: indexPath.row)
         }
     }
     

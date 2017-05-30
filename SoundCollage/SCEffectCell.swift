@@ -43,34 +43,21 @@ class SCEffectCell: UICollectionViewCell {
         
     }
     
-    func toggleEffectIsSelected(){
+    func toggleEffectIsSelected(index: Int){
         
         
         switch  SCAudioManager.shared.effectIsSelected {
         case true:
-             SCAudioManager.shared.effectIsSelected = false
-             // disable observe cell touch parameters
-             switch effect {
-             case "pitch":
-                SCAudioManager.shared.pitchEffectIsSelected = false
-             case "distortion":
-                SCAudioManager.shared.distortionEffectIsSelected = false
-             default:
-                print("effect not found.")
-             }
-             self.contentView.backgroundColor = UIColor.purple
+            SCAudioManager.shared.effectIsSelected = false
+            // disable observe cell touch parameters
+            
+            self.contentView.backgroundColor = UIColor.purple
         case false:
-             SCAudioManager.shared.effectIsSelected = true
-             //  when selected, activate observe effect cell touch parameters
-             switch effect {
-             case "pitch":
-                SCAudioManager.shared.pitchEffectIsSelected = true
-             case "distortion":
-                SCAudioManager.shared.distortionEffectIsSelected = true
-             default:
-                print("effect not found.")
-             }
-             self.contentView.backgroundColor = UIColor.init(red: 230.0/255.0, green: 230.0/255.0, blue: 230.0/255.0, alpha: 1.0)
+            SCAudioManager.shared.effectIsSelected = true
+            //  when selected, activate observe effect cell touch parameters
+            SCAudioManager.shared.activateEffect(index: index)
+
+            self.contentView.backgroundColor = UIColor.init(red: 230.0/255.0, green: 230.0/255.0, blue: 230.0/255.0, alpha: 1.0)
         }
     }
     
