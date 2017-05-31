@@ -16,13 +16,17 @@ class SCSamplerViewController: UIViewController  {
     var samplerCV: UICollectionView?
     var effectsContainerCV: UICollectionView?
     let recordBtn = UIButton()
-    var speakerBtn = UIButton()
+//    var speakerBtn = UIButton()
     var newRecordingTitle: String?
     var lastRecording: URL?
     var selectedSampleIndex: Int?
     let navBarBtnFrameSize = CGRect.init(x: 0, y: 0, width: 30, height: 30)
     let toolbarHeight = CGFloat(98.0)
     var effects: [String] = []
+    var toolbar = UIToolbar()
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,7 +86,7 @@ class SCSamplerViewController: UIViewController  {
         samplerCV.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 60.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.57, constant: 0))
         
         
@@ -99,23 +103,15 @@ class SCSamplerViewController: UIViewController  {
         effectsContainerCV.delegate = self
         effectsContainerCV.dataSource = self
         effectsContainerCV.isScrollEnabled = true
-//        effectsContainerCV.showsHorizontalScrollIndicator = false
         effectsContainerCV.register(SCEffectCell.self, forCellWithReuseIdentifier: "EffectCell")
-
-//        effectsContainerCV.register(SCEffectPickerCell.self, forCellWithReuseIdentifier: "SCEffectPickerCell")
-//        effectsContainerCV.register(SCEffectParameterCell.self, forCellWithReuseIdentifier: "SCEffectParameterCell")
-//        effectsContainerCV.register(SCSequencerControlCell.self, forCellWithReuseIdentifier:  "SCSequencerControlCell")
-        
         effectsContainerCV.backgroundColor = UIColor.clear
         self.view.addSubview(effectsContainerCV)
         
         effectsContainerCV.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: samplerCV, attribute: .bottom, multiplier: 1.0, constant: 20.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.17, constant: 0))
-//        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .width, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .width, multiplier: 1.0, constant: 0))
-//        print("width of effects\(effectsContainerCV.frame.width)")
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: samplerCV, attribute: .bottom, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .height, relatedBy: .equal, toItem: toolbar, attribute: .height, multiplier: 0.5, constant: 0))
     }
     
     
@@ -123,12 +119,10 @@ class SCSamplerViewController: UIViewController  {
         
         let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
         
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: self.view.frame.height-toolbarHeight, width: self.view.frame.width, height: toolbarHeight))
-//        toolbar.layer.position = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height-20.0)
+        toolbar.frame = CGRect(x: 0, y: self.view.frame.height-toolbarHeight, width: self.view.frame.width, height: toolbarHeight)
         toolbar.setBackgroundImage(transparentPixel, forToolbarPosition: .any, barMetrics: .default)
         toolbar.setShadowImage(transparentPixel, forToolbarPosition: .any)
         toolbar.isTranslucent = true
-        
         
         
         recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress), for: .touchUpInside)
@@ -152,23 +146,23 @@ class SCSamplerViewController: UIViewController  {
        
 
         
-        let navBar = UINavigationBar.init(frame:CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50 ))
-        navBar.setBackgroundImage(transparentPixel, for: .default)
-        navBar.shadowImage = transparentPixel
-        navBar.isTranslucent = true
-        self.view.addSubview(navBar)
-        
-        
-        let navItem = UINavigationItem()
-        
-        self.speakerBtn = UIButton.init(type: .custom)
-        speakerBtn.setImage(UIImage.init(named: "speakerOff"), for: .normal)
-        speakerBtn.setImage(UIImage.init(named: "speakerOn"), for: .selected)
-        speakerBtn.addTarget(self, action: #selector(SCSamplerViewController.changeAudioPlaybackSource), for: .touchUpInside)
-        speakerBtn.frame = navBarBtnFrameSize
-        setAudioPlaybackSourceButton()
-        let speakerBarBtn = UIBarButtonItem(customView: speakerBtn)
-        
+//        let navBar = UINavigationBar.init(frame:CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50 ))
+//        navBar.setBackgroundImage(transparentPixel, for: .default)
+//        navBar.shadowImage = transparentPixel
+//        navBar.isTranslucent = true
+//        self.view.addSubview(navBar)
+//        
+//        
+//        let navItem = UINavigationItem()
+//        
+//        self.speakerBtn = UIButton.init(type: .custom)
+//        speakerBtn.setImage(UIImage.init(named: "speakerOff"), for: .normal)
+//        speakerBtn.setImage(UIImage.init(named: "speakerOn"), for: .selected)
+//        speakerBtn.addTarget(self, action: #selector(SCSamplerViewController.changeAudioPlaybackSource), for: .touchUpInside)
+//        speakerBtn.frame = navBarBtnFrameSize
+//        setAudioPlaybackSourceButton()
+//        let speakerBarBtn = UIBarButtonItem(customView: speakerBtn)
+//        
 
 //        let editorBtn = UIButton.init(type: .custom)
 //        editorBtn.setImage(UIImage.init(named: "wf"), for: .normal)
@@ -176,8 +170,8 @@ class SCSamplerViewController: UIViewController  {
 //        editorBtn.addTarget(self, action: #selector(SCSamplerViewController.toggleEditingMode), for: .touchUpInside)
 //        let editorBarBtn = UIBarButtonItem(customView: editorBtn)
         
-        navItem.rightBarButtonItems = [speakerBarBtn]
-        navBar.items = [navItem]
+//        navItem.rightBarButtonItems = [speakerBarBtn]
+//        navBar.items = [navItem]
 
         toolbar.items = [flexibleSpace, recordBarBtn, flexibleSpace]
         self.view.addSubview(toolbar)
@@ -200,30 +194,30 @@ class SCSamplerViewController: UIViewController  {
 
     
     
-    func changeAudioPlaybackSource(){
-        
-        switch SCAudioManager.shared.isSpeakerEnabled {
-        case true:
-            SCAudioManager.shared.isSpeakerEnabled = false
-        case false:
-            SCAudioManager.shared.isSpeakerEnabled = true
-        }
-        SCAudioManager.shared.setAudioPlaybackSource()
-        setAudioPlaybackSourceButton()
-    }
+//    func changeAudioPlaybackSource(){
+//        
+//        switch SCAudioManager.shared.isSpeakerEnabled {
+//        case true:
+//            SCAudioManager.shared.isSpeakerEnabled = false
+//        case false:
+//            SCAudioManager.shared.isSpeakerEnabled = true
+//        }
+//        SCAudioManager.shared.setAudioPlaybackSource()
+//        setAudioPlaybackSourceButton()
+//    }
     
     
     
-    func setAudioPlaybackSourceButton(){
-        
-        switch SCAudioManager.shared.isSpeakerEnabled {
-        case true:
-            speakerBtn.isSelected = true
-        case false:
-            speakerBtn.isSelected = false
-        }
-    }
-    
+//    func setAudioPlaybackSourceButton(){
+//        
+//        switch SCAudioManager.shared.isSpeakerEnabled {
+//        case true:
+//            speakerBtn.isSelected = true
+//        case false:
+//            speakerBtn.isSelected = false
+//        }
+//    }
+//    
     
     
     

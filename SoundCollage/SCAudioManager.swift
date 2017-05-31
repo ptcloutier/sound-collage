@@ -36,6 +36,27 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     
+    //MARK: Basic setup 
+    
+    
+    func setupAudioManager(){
+        let nc = NotificationCenter.default
+        nc.addObserver( self, selector: #selector(routeChanged), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
+        
+        
+        audioSession.requestRecordPermission({ allowed in
+            DispatchQueue.main.async {
+                if allowed {
+                    print("Good to go!")
+                } else {
+                    print("Request to use microphone denied.")
+                }
+            }
+        })
+        setupEffects()
+        observeAudioIO()
+    }
+    
     
     
     //MARK: Playback
@@ -390,6 +411,52 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
+    //MARK: Audio i/o
+    
+    func observeAudioIO(){
+        
+        if SCAudioManager.shared.isHeadsetPluggedIn() == true {
+            SCAudioManager.shared.isSpeakerEnabled = false
+        } else {
+            SCAudioManager.shared.isSpeakerEnabled = true
+        }
+        SCAudioManager.shared.setAudioPlaybackSource()
+    }
+    
+    
+    
+    
+    func routeChanged(notification: Notification){
+        
+        guard let userInfo = notification.userInfo else {
+            print("No notification userInfo.")
+            return
+        }
+        let routeChangedReason = userInfo[AVAudioSessionRouteChangeReasonKey] as! Int
+        if routeChangedReason == 1 || routeChangedReason == 2 {
+            
+        }
+        print("reason : \(routeChangedReason)")
+    }
+    
+    
+    
+    func isHeadsetPluggedIn() -> Bool {
+        
+        let route = audioSession.currentRoute
+        var result = true
+        for description in route.outputs {
+            if description.portType == AVAudioSessionPortHeadphones {
+                result = true
+            } else {
+                result = false
+            }
+        }
+        return result
+    }
+    
+    
+    
     
     func setAudioPlaybackSource(){
         
@@ -417,5 +484,5 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         }
     }
     
-  
+    
 }
