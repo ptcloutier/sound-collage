@@ -1,3 +1,4 @@
+
 //
 //  SamplerCollectionViewCell.swift
 //  AudioRecorder
@@ -14,6 +15,8 @@ import AVFoundation
 class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, CAAnimationDelegate {
     
     var colorSets = [[UIColor]]()
+    var cellColor: UIColor?
+    
     var currentColorSet: Int = 0
     var isRecordingEnabled = false
     var isEditingEnabled = false
@@ -29,8 +32,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setRecordingColorSets()
-        setupGradientLayer()
+        
     }
     
     
@@ -63,14 +65,18 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     func setColorSets(colors: [UIColor]){
         
-        colorSets.append([UIColor.clear, UIColor.clear, UIColor.clear])
+        guard let color = cellColor else {
+            print("Color not found.")
+            return
+        }
+        colorSets.append([color, color, color])
         colorSets.append(colors)
         fromColors = colorSets[currentColorSet].map {$0.cgColor}
         currentColorSet = 0
     }
     
     
-    private func setupGradientLayer() {
+    func setupGradientLayer() {
         
         
         self.gradient.colors = toColors

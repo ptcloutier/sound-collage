@@ -14,9 +14,9 @@ import AVFoundation
 class SCSamplerViewController: UIViewController  {
     
     var samplerCV: UICollectionView?
+    var samplerFlowLayout: SCSamplerFlowLayout?
     var effectsContainerCV: UICollectionView?
     let recordBtn = UIButton()
-//    var speakerBtn = UIButton()
     var newRecordingTitle: String?
     var lastRecording: URL?
     var selectedSampleIndex: Int?
@@ -24,15 +24,21 @@ class SCSamplerViewController: UIViewController  {
     let toolbarHeight = CGFloat(98.0)
     var effects: [String] = []
     var toolbar = UIToolbar()
+    var vintageColors: [UIColor] = []
+    var iceCreamColors: [UIColor] = []
     
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
         
         effects = ["pitch", "reverb", "distortion", "delay"]
 
+        vintageColors = SCGradientColors.getVintageColors()
+        iceCreamColors = SCGradientColors.getPsychedelicIceCreamShopColors()
+        self.view.backgroundColor = iceCreamColors[7]
         let recordingDidFinishNotification = Notification.Name.init("recordingDidFinish")
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
         setupControls()
@@ -53,11 +59,11 @@ class SCSamplerViewController: UIViewController  {
         }
         samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
         
-        guard let effectsCCV = self.effectsContainerCV else {
-            print("No effectsCCV.")
-            return
-        }
-        effectsCCV.bounds.size = effectsCCV.collectionViewLayout.collectionViewContentSize
+//        guard let effectsCCV = self.effectsContainerCV else {
+//            print("No effectsCCV.")
+//            return
+//        }
+//        effectsCCV.bounds.size = effectsCCV.collectionViewLayout.collectionViewContentSize
     }
     
     
@@ -66,8 +72,12 @@ class SCSamplerViewController: UIViewController  {
     
     private func setupContainerViews() {
         
-        let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 4)
-        self.samplerCV = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        samplerFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 4)
+        guard let samplerFlowLayout = self.samplerFlowLayout else {
+            print("No sampler flow layout.")
+            return
+        }
+        self.samplerCV = UICollectionView(frame: .zero, collectionViewLayout: samplerFlowLayout)
         
         guard let samplerCV = self.samplerCV else {
             print("No sampler collection view.")
@@ -110,7 +120,7 @@ class SCSamplerViewController: UIViewController  {
         effectsContainerCV.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: samplerCV, attribute: .bottom, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: samplerCV, attribute: .bottom, multiplier: 1.0, constant: 20))
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .height, relatedBy: .equal, toItem: toolbar, attribute: .height, multiplier: 0.5, constant: 0))
     }
     
@@ -135,8 +145,8 @@ class SCSamplerViewController: UIViewController  {
         backgroundView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
         backgroundView.layer.cornerRadius = buttonHeight/2
         backgroundView.layer.masksToBounds = true
-        backgroundView.layer.borderWidth = 2.0
-        backgroundView.layer.borderColor = UIColor.white.cgColor
+        backgroundView.layer.borderWidth = 3.0
+        backgroundView.layer.borderColor = UIColor.purple.cgColor
         recordBtn.addSubview(backgroundView)
         recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
@@ -324,6 +334,21 @@ class SCSamplerViewController: UIViewController  {
 
 
 extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+  
+   
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        if collectionView == samplerCV {
+            guard let itemSize = samplerFlowLayout?.itemSize else {
+                print("No sampler flowLayout.")
+                return collectionView.frame.size
+            }
+            return itemSize
+        } else {
+            let effectsCellSize = CGSize.init(width: collectionView.frame.size.width/4, height: collectionView.frame.size.height)
+            return effectsCellSize
+        }
+    }
     
     
     
@@ -344,11 +369,14 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         if collectionView == samplerCV {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
             
+            cell.cellColor = vintageColors[indexPath.row]
+            cell.setRecordingColorSets()
+            cell.setupGradientLayer()
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 15.0
-            // add a border
-            cell.layer.borderColor = UIColor.white.cgColor
-            cell.layer.borderWidth = 2.0
+            // border
+            cell.layer.borderColor = UIColor.purple.cgColor
+            cell.layer.borderWidth = 3.0
             cell.layer.cornerRadius = 15.0
             //shadow
             cell.layer.shadowColor = UIColor.darkGray.cgColor
@@ -400,7 +428,21 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         } else  {
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EffectCell", for: indexPath) as! SCEffectCell
+            cell.colors = SCGradientColors.getPsychedelicIceCreamShopColors()
             cell.effect = effects[indexPath.row]
+            cell.layer.masksToBounds = true
+            cell.layer.cornerRadius = 10.0
+            // border
+            cell.layer.borderColor = UIColor.purple.cgColor
+            cell.layer.borderWidth = 3.0
+            cell.layer.cornerRadius = 10.0
+            //shadow
+            cell.layer.shadowColor = UIColor.darkGray.cgColor
+            cell.layer.shadowOffset = CGSize(width: 3, height: 3)
+            cell.layer.shadowOpacity = 0.7
+            cell.layer.shadowRadius = 3.0
+
+            cell.contentView.backgroundColor = iceCreamColors[indexPath.row]
             cell.setupLabel()
             return cell 
         }
