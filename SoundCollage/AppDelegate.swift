@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       
         // get user and sample banks
         SCDataManager.shared.fetchCurrentUserData()
-        
+        SCAudioManager.shared.setupAudioManager()
         
         window = UIWindow(frame: UIScreen.main.bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

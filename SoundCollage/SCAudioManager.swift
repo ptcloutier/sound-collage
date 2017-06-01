@@ -18,7 +18,10 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     static let shared = SCAudioManager()
     
+    var recordedOutputFile: AVAudioFile?
     var audioEngine: AVAudioEngine!
+    var plays: Int = 0
+    let maxPlays = 30
     var audioFile: AVAudioFile!
     let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
     var selectedSampleIndex: Int?
@@ -30,11 +33,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isRecording: Bool = false
     var replaceableFilePath: String?
     var effectIsSelected: Bool = false
-    var players: [SCAudioPlayerNode] = []
     var activeEffects: [AVAudioUnit] = []
+    var doCreateNewEngine: Bool = false
+    var effectParameters: [Float] = [0.0, 0.0, 0.0]
+    
     var effects: [AVAudioUnit] = []
-    
-    
+    var engines: [AVAudioEngine] = []
     
     //MARK: Basic setup 
     
@@ -55,7 +59,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         })
         setupEffects()
         observeAudioIO()
+        setupEngines()
     }
+    
     
     
     
@@ -106,81 +112,30 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     //MARK: Effects 
     
     
-    func setupEffects(){
+    func setupEngines(){
+       
+        audioEngine = AVAudioEngine()
+        engines.append(audioEngine)
         
+    }
+    
+    func setupEffects(){
         let pitchEffect = AVAudioUnitTimePitch()
         let distortionEffect = AVAudioUnitDistortion()
         let delayEffect = AVAudioUnitDelay()
         let reverbEffect = AVAudioUnitReverb()
-        effects = [pitchEffect, distortionEffect, delayEffect, reverbEffect]
+        effects = [reverbEffect,  delayEffect, pitchEffect, distortionEffect]
     }
     
+
     
-    
-    func variablePitchEffect(pitch: Float, audioPlayerNode: AVAudioPlayerNode){
-        
-            let changePitchEffect = AVAudioUnitTimePitch()
-            changePitchEffect.pitch = pitch
-            
-            self.audioEngine.attach(changePitchEffect)
-            
-            self.audioEngine.connect(audioPlayerNode, to: changePitchEffect, format: nil)
-            
-            self.audioEngine.connect(changePitchEffect, to: self.audioEngine.mainMixerNode, format: nil)
-        
-    }
-    
-    
-    
-    func distortionEffect(audioPlayerNode: AVAudioPlayerNode){
-        
-        let distortionEffect = AVAudioUnitDistortion()
-        distortionEffect.loadFactoryPreset(.multiDistortedFunk)
-        self.audioEngine.attach(distortionEffect)
-        self.audioEngine.connect(audioPlayerNode, to: distortionEffect, format: nil)
-        self.audioEngine.connect(distortionEffect, to: self.audioEngine.mainMixerNode, format: nil)
-        
-    }
-    
-    
-    func delayEffect(audioPlayerNode: AVAudioPlayerNode){
-        
-        let delayEffect = AVAudioUnitDelay()
-        delayEffect.delayTime = 0.5
-        delayEffect.feedback = 0.1
-        self.audioEngine.attach(delayEffect)
-        self.audioEngine.connect(audioPlayerNode, to: delayEffect, format: nil)
-        self.audioEngine.connect(delayEffect, to: self.audioEngine.mainMixerNode, format: nil)
-        
-    }
-    
-    
-    /*if self.distortionEffectIsSelected == true {
-     distortionEffect(audioPlayerNode: audioPlayerNode)
-     }
-     if self.pitchEffectIsSelected == true {
-     variablePitchEffect(pitch: 1000, audioPlayerNode: audioPlayerNode)
-     }
-     if self.delayEffectIsSelected == true {
-     delayEffect(audioPlayerNode: audioPlayerNode)
-     }
-     if self.reverbEffectIsSelected == true {
-     let reverbEffect = AVAudioUnitReverb()
-     reverbEffect.loadFactoryPreset(.cathedral)
-     let format = reverbEffect.inputFormat(forBus: 0)
-     
-     reverbEffect.wetDryMix = 0.75
-     self.audioEngine.attach(reverbEffect)
-     self.audioEngine.connect(audioPlayerNode, to: reverbEffect, format: format)
-     self.audioEngine.connect(reverbEffect, to: self.audioEngine.mainMixerNode, format: format)
-    */
     
     func activateEffect(index: Int){
         
         // activate effect by adding it to activeEffects array
         let selection = effects[index]
         print("\(selection.name)")
-        
+        activeEffects.append(selection)
         
     }
     
@@ -198,36 +153,99 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func playAudio(soundFileURL: URL){
         
+
         
-        if self.audioEngine == nil {
-            self.audioEngine = AVAudioEngine()
+        for engine in self.engines {
+            if engine.isRunning == false {
+            self.audioEngine = engine
+            } else {
+                self.audioEngine = AVAudioEngine()
+                engines.append(self.audioEngine)
+            }
         }
+        
+        
+        
         do {
             let audioFile = try AVAudioFile(forReading: soundFileURL)
-            
-            let audioPlayerNode = SCAudioPlayerNode()
-            audioEngine.attach(audioPlayerNode)
+            let audioFormat = audioFile.processingFormat
+            let audioPlayerNode = AVAudioPlayerNode()
             
             if self.effectIsSelected == false {
-                audioEngine.connect(audioPlayerNode, to: audioEngine.mainMixerNode, format: nil)
+                audioEngine.attach(audioPlayerNode)
+                audioEngine.connect(audioPlayerNode, to: audioEngine.mainMixerNode, format: audioFormat)
+                audioEngine.connect(audioEngine.mainMixerNode, to: audioEngine.outputNode, format: audioFormat)
+
             } else {
-                let audioMixer = AVAudioMixerNode()
-                audioEngine.connect(audioMixer, to: audioEngine.mainMixerNode, format: nil)
+
+                let pitchEffect = AVAudioUnitTimePitch()
+//                let distortionEffect = AVAudioUnitDistortion()
+                let delayEffect = AVAudioUnitDelay()
+                let reverbEffect = AVAudioUnitReverb()
+                
+                audioEngine.attach(audioPlayerNode)
+                let pitch = Float(effectParameters[2])
+                pitchEffect.pitch = pitch
+                audioEngine.attach(pitchEffect)
+                
+                
+                reverbEffect.loadFactoryPreset(.mediumChamber)
+                let x = Float(effectParameters[0])/2
+                let y = 100.0 - Float(effectParameters[1])
+                let xy = x+y
+                let wetDryParam = xy 
+                reverbEffect.wetDryMix = wetDryParam
+                audioEngine.attach(reverbEffect)
+                
+                
+                let delayTime = effectParameters[0]
+                let format = Float(50.0)
+                delayEffect.delayTime = TimeInterval(delayTime/format)
+                delayEffect.feedback = effectParameters[1]
+                audioEngine.attach(delayEffect)
+                
+                
+                
+
+                
+                
+                
+                // Sound effect connections
+
+                audioEngine.connect(audioPlayerNode, to: pitchEffect, format: audioFormat)
+                audioEngine.connect(pitchEffect, to: reverbEffect, format: audioFormat)
+                audioEngine.connect(reverbEffect, to: delayEffect, format: audioFormat)
+                
+                audioEngine.connect(delayEffect, to: audioEngine.mainMixerNode, format: audioFormat)
+
                 
                 
             }
-            
-            audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
-                [weak self] in
-                guard let strongSelf = self else {
-                    return
-                }
-                let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-                delayQueue.asyncAfter(deadline: .now() + 2.0) {
-                    strongSelf.detachNode(audioPlayerNode: audioPlayerNode)
-                }
-            })
-            
+            switch doCreateNewEngine {
+            case true:
+                audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
+//                    [weak self] in
+//                    guard let strongSelf = self else {
+//                        return
+//                    }
+//                    let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
+//                    delayQueue.asyncAfter(deadline: .now() + 6.0) {
+//                        strongSelf.detachNode(audioEngine: audioEngine,  audioPlayerNode: audioPlayerNode)
+//                        strongSelf.resetEngine()
+//                    }
+                })
+            case false:
+                audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
+//                    [weak self] in
+//                    guard let strongSelf = self else {
+//                        return
+//                    }
+//                    let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
+//                    delayQueue.asyncAfter(deadline: .now() + 6.0) {
+//                        strongSelf.detachNode(audioEngine: audioEngine,  audioPlayerNode: audioPlayerNode)
+//                    }
+                })
+            }
             audioEngine.prepare()
             do {
                 try audioEngine.start()
@@ -235,23 +253,50 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 print("Play session Error")
             }
             audioPlayerNode.play()
+            plays += 1
+            print("Engine plays: \(plays)")
             print("Playing audiofile at \(soundFileURL)")
-        } catch {
-            print("Could not play sound file!")
+        } catch let error {
+            print("Could not play sound file! \(error.localizedDescription)")
+        }
+    }
+    
+    
+
+    
+    
+    func detachNode(audioEngine: AVAudioEngine, audioPlayerNode: AVAudioPlayerNode){
+        
+
+        audioEngine.disconnectNodeInput(audioPlayerNode)
+        plays-=1
+        print("Detached node, plays: \(plays)")
+        
+        resetEngine()
+
+        if plays == 0 {
+            doCreateNewEngine = true
+            resetEngine()
         }
     }
     
     
     
-    
-    
-    func detachNode(audioPlayerNode: AVAudioPlayerNode){
-        self.audioEngine.disconnectNodeInput(audioPlayerNode)
+    func resetEngine(){
+        let resetQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
+        resetQueue.asyncAfter(deadline: .now() + 2.0) {
+            
+            guard let audioEngine = self.audioEngine else {
+                print("No audio engine.")
+                return
+            }
+            audioEngine.stop()
+            audioEngine.reset()
+            self.doCreateNewEngine = false
+            print("Engine stopped and reset.")
+        }
     }
-    
-    
-    
-    
+
     
     
     //MARK: Recording
@@ -312,8 +357,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,
             AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-        ]
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
+            AVLinearPCMIsNonInterleaved: true
+        ] as [String : Any]
         
         do {
             audioRecorder = try AVAudioRecorder(url: self.audioFilePath!, settings: settings)

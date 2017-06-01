@@ -19,7 +19,8 @@ class SCGradientColors {
     var psychedelicIceCreamShopColors = [UIColor]()
     var currentColors: Int = 0
     var gradientLayer = CAGradientLayer()
-    
+   
+
     
     init(colors: [[CGColor]]){
         self.colors = colors
@@ -48,7 +49,7 @@ class SCGradientColors {
         let darkGreen = UIColor.init(red: 85.0/255.0, green: 110.0/255.0, blue: 45.0/255.0, alpha: 1.0)
 
         
-        let vintUIColors = [brightVintageRed, lightVintageRed, cream, lightCreamsicle, darkCreamsicle, lightAlgae, medAlgae, darkAlgae, darkAqua, vintageBlue, mint, darkNavyBlue, emeraldGreen, lemon, limestone, lime, darkGreen]
+        let vintUIColors = [brightVintageRed, lightVintageRed, cream, lightCreamsicle, darkCreamsicle, lightAlgae, medAlgae, darkAlgae, darkAqua,  mint, darkNavyBlue, emeraldGreen, lemon, limestone, lime, darkGreen, vintageBlue,]
         return vintUIColors
     }
     
@@ -77,7 +78,7 @@ class SCGradientColors {
         let neonAqua = UIColor.init(red: 0/255.0, green: 205.0/255.0, blue: 210.0/255.0, alpha: 1.0)
         
     
-        let psyUIColors = [neonAqua, medViolet, lightViolet, lightRose, rose, medRose, darkRose, lightCoral, brightCoral, ice, darkViolet, lightestBlueSky, lighterBlueSky, lighterBlue, lightBlueSky, deepBlue, deepBlueShade, deepBlueDark]
+        let psyUIColors = [neonAqua, brightCoral, deepBlue, medRose, medViolet, lightViolet, lightRose, rose, medRose, darkRose, lightCoral,  ice, darkViolet, lightestBlueSky, lighterBlueSky, lighterBlue, lightBlueSky,  deepBlueShade, deepBlueDark]
         
         return psyUIColors
     }

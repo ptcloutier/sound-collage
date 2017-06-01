@@ -12,6 +12,7 @@
 		A71414FC1EA82B4300BE9718 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */; };
 		A71414FF1EA82B5000BE9718 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FD1EA82B5000BE9718 /* CoreAudio.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		A71415001EA82B5000BE9718 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FE1EA82B5000BE9718 /* CoreAudioKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		A7176C9B1EE090A300D27CFB /* UIColor+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7176C9A1EE090A300D27CFB /* UIColor+Custom.swift */; };
 		A71F71691EDF1605008B9E3B /* the-ocean-the-sea-the-wave-prints.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A71F71661EDF1605008B9E3B /* the-ocean-the-sea-the-wave-prints.jpg */; };
 		A71F716A1EDF1605008B9E3B /* Screen Shot 2017-05-27 at 12.25.06 PM.png in Resources */ = {isa = PBXBuildFile; fileRef = A71F71671EDF1605008B9E3B /* Screen Shot 2017-05-27 at 12.25.06 PM.png */; };
 		A71F716B1EDF1605008B9E3B /* whimsical-bloom-prints.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A71F71681EDF1605008B9E3B /* whimsical-bloom-prints.jpg */; };
@@ -41,7 +42,6 @@
 		A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823421EA81F6C0061D0A0 /* SCStackView.swift */; };
 		A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */; };
 		A7BFEE2D1EBA444A00C718E7 /* UIImage+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFEE2C1EBA444A00C718E7 /* UIImage+Color.swift */; };
-		A7D7C4A11EDCC20D0083093D /* SCAudioPlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7C4A01EDCC20D0083093D /* SCAudioPlayerNode.swift */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
 		D12EE6F44C0DB1631E344924 /* Pods_SoundCollage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */; };
 /* End PBXBuildFile section */
@@ -85,6 +85,7 @@
 		A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A71414FD1EA82B5000BE9718 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		A71414FE1EA82B5000BE9718 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
+		A7176C9A1EE090A300D27CFB /* UIColor+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Custom.swift"; sourceTree = "<group>"; };
 		A71F71661EDF1605008B9E3B /* the-ocean-the-sea-the-wave-prints.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "the-ocean-the-sea-the-wave-prints.jpg"; sourceTree = "<group>"; };
 		A71F71671EDF1605008B9E3B /* Screen Shot 2017-05-27 at 12.25.06 PM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Screen Shot 2017-05-27 at 12.25.06 PM.png"; sourceTree = "<group>"; };
 		A71F71681EDF1605008B9E3B /* whimsical-bloom-prints.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "whimsical-bloom-prints.jpg"; sourceTree = "<group>"; };
@@ -121,7 +122,6 @@
 		A7A823421EA81F6C0061D0A0 /* SCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCStackView.swift; sourceTree = "<group>"; };
 		A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+GradientColor.swift"; sourceTree = "<group>"; };
 		A7BFEE2C1EBA444A00C718E7 /* UIImage+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Color.swift"; sourceTree = "<group>"; };
-		A7D7C4A01EDCC20D0083093D /* SCAudioPlayerNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAudioPlayerNode.swift; sourceTree = "<group>"; };
 		A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBank.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -188,7 +188,6 @@
 				A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */,
 				A7A823371EA81F500061D0A0 /* SCSamplerCollectionViewCell.swift */,
 				A74BAED51EDA0F0900FABEF5 /* SCEffectCell.swift */,
-				A7D7C4A01EDCC20D0083093D /* SCAudioPlayerNode.swift */,
 			);
 			name = SamplerVC;
 			sourceTree = "<group>";
@@ -221,6 +220,7 @@
 				A78733891EB1177A00B5A8AE /* SCGradientColors.swift */,
 				A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */,
 				A7BFEE2C1EBA444A00C718E7 /* UIImage+Color.swift */,
+				A7176C9A1EE090A300D27CFB /* UIColor+Custom.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -514,7 +514,6 @@
 				A7BFEE2D1EBA444A00C718E7 /* UIImage+Color.swift in Sources */,
 				A787338A1EB1177A00B5A8AE /* SCGradientColors.swift in Sources */,
 				A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */,
-				A7D7C4A11EDCC20D0083093D /* SCAudioPlayerNode.swift in Sources */,
 				A7A8232F1EA81D280061D0A0 /* AlertManager.swift in Sources */,
 				A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */,
 				A7A8233B1EA81F500061D0A0 /* SCKeyboardViewController.swift in Sources */,
@@ -524,6 +523,7 @@
 				A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */,
 				A743CDBA1EABE30100A9C70D /* SCNoteButtonDelegate.swift in Sources */,
 				A7264E811EAEECD700664EDE /* SCUser.swift in Sources */,
+				A7176C9B1EE090A300D27CFB /* UIColor+Custom.swift in Sources */,
 				A7A823311EA81D300061D0A0 /* SCAudioManager.swift in Sources */,
 				A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */,
 				A7A8233C1EA81F500061D0A0 /* SCNoteButton.swift in Sources */,

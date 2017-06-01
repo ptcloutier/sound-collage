@@ -13,6 +13,7 @@ import AVFoundation
 
 class SCSamplerViewController: UIViewController  {
     
+    var parameterView: UIView?
     var samplerCV: UICollectionView?
     var samplerFlowLayout: SCSamplerFlowLayout?
     var effectsContainerCV: UICollectionView?
@@ -26,6 +27,8 @@ class SCSamplerViewController: UIViewController  {
     var toolbar = UIToolbar()
     var vintageColors: [UIColor] = []
     var iceCreamColors: [UIColor] = []
+    let parameterViewColors: [UIColor] = [UIColor.Custom.PsychedelicIceCreamShoppe.darkViolet, UIColor.Custom.PsychedelicIceCreamShoppe.medViolet, UIColor.Custom.PsychedelicIceCreamShoppe.darkViolet]
+    let backGroundColors: [UIColor] = [UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue, UIColor.Custom.PsychedelicIceCreamShoppe.neonAqua, UIColor.Custom.PsychedelicIceCreamShoppe.deepBlueDark]
     
     
     
@@ -34,11 +37,11 @@ class SCSamplerViewController: UIViewController  {
         super.viewDidLoad()
     
         
-        effects = ["pitch", "reverb", "distortion", "delay"]
+        effects = ["reverb", "delay", "pitch", "distortion"]
 
         vintageColors = SCGradientColors.getVintageColors()
         iceCreamColors = SCGradientColors.getPsychedelicIceCreamShopColors()
-        self.view.backgroundColor = iceCreamColors[7]
+        self.view.applyGradient(withColors: backGroundColors, gradientOrientation: .horizontal)
         let recordingDidFinishNotification = Notification.Name.init("recordingDidFinish")
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
         setupControls()
@@ -52,18 +55,18 @@ class SCSamplerViewController: UIViewController  {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        guard let parameterView = self.parameterView else {
+            print("No parameter view.")
+            return
+        }
+        parameterView.applyGradient(withColors: parameterViewColors, gradientOrientation: .horizontal)
         
         guard let samplerCV = self.samplerCV else {
             print("collectionview is nil")
             return
         }
         samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
-        
-//        guard let effectsCCV = self.effectsContainerCV else {
-//            print("No effectsCCV.")
-//            return
-//        }
-//        effectsCCV.bounds.size = effectsCCV.collectionViewLayout.collectionViewContentSize
+
     }
     
     
@@ -101,13 +104,12 @@ class SCSamplerViewController: UIViewController  {
         
         
         
-        let effectsFlowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 4)
+        let effectsFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 1)
         self.effectsContainerCV = UICollectionView.init(frame: .zero, collectionViewLayout: effectsFlowLayout)
         guard let effectsContainerCV = self.effectsContainerCV else {
             print("No effects container.")
             return
         }
-        effectsContainerCV.alwaysBounceHorizontal = true
         effectsContainerCV.isPagingEnabled = true
         effectsContainerCV.allowsMultipleSelection = true
         effectsContainerCV.delegate = self
@@ -119,10 +121,74 @@ class SCSamplerViewController: UIViewController  {
         
         effectsContainerCV.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 0.20, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: samplerCV, attribute: .bottom, multiplier: 1.0, constant: 20))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .height, relatedBy: .equal, toItem: toolbar, attribute: .height, multiplier: 0.5, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .height, relatedBy: .equal, toItem: toolbar, attribute: .height, multiplier: 2, constant: 0))
+        
+        parameterView = UIView.init(frame: .zero)
+        guard let parameterView = self.parameterView else {
+            print("No parameter view.")
+            return
+        }
+        
+        parameterView.isUserInteractionEnabled = true
+        parameterView.isMultipleTouchEnabled = false
+        parameterView.layer.masksToBounds = true
+        parameterView.layer.cornerRadius = 15.0
+        parameterView.layer.borderWidth = 3
+        parameterView.layer.borderColor = UIColor.purple.cgColor
+        
+        
+        self.view.addSubview(parameterView)
+        parameterView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .leading, relatedBy: .equal, toItem: effectsContainerCV, attribute: .trailing, multiplier: 1.0, constant: 5.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: -self.view.frame.width/5-5))
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .top, relatedBy: .equal, toItem: samplerCV, attribute: .bottom, multiplier: 1.0, constant: 10.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .bottom, relatedBy: .equal, toItem: toolbar, attribute: .top, multiplier: 1.0, constant: 0))
+        
+        
+
+        
+        let pan = UIPanGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
+        parameterView.addGestureRecognizer(pan)
+        let tap = UITapGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
+        parameterView.addGestureRecognizer(tap)
     }
+    
+    
+    //MARK: Effects parameter gesture recognizer
+    
+    func handleParameterGesture(gestureRecognizer: UIGestureRecognizer){
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed || gestureRecognizer.state == .ended {
+            let location =  gestureRecognizer.location(in: parameterView)
+            SCAudioManager.shared.effectParameters.removeAll()
+            
+            var x = Float(location.x)/2
+            if x>100{
+                x=100
+            }
+            if x<0 {
+                x=0
+            }
+            var y = (200.0-Float(location.y))/2
+            if y>100{
+                y=100
+            }
+            if y<0{
+                y=0
+            }
+            
+            let xy = (x+y)/2
+            
+            SCAudioManager.shared.effectParameters.append(x)
+            SCAudioManager.shared.effectParameters.append(y)
+            SCAudioManager.shared.effectParameters.append(xy)
+            
+            print("Parameters: \(x), \(y), \(xy), originally: \(SCAudioManager.shared.effectParameters[0], SCAudioManager.shared.effectParameters[1])")
+
+        }
+    }
+    
     
     
     private func setupControls(){
@@ -153,35 +219,7 @@ class SCSamplerViewController: UIViewController  {
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-       
-
-        
-//        let navBar = UINavigationBar.init(frame:CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50 ))
-//        navBar.setBackgroundImage(transparentPixel, for: .default)
-//        navBar.shadowImage = transparentPixel
-//        navBar.isTranslucent = true
-//        self.view.addSubview(navBar)
-//        
-//        
-//        let navItem = UINavigationItem()
-//        
-//        self.speakerBtn = UIButton.init(type: .custom)
-//        speakerBtn.setImage(UIImage.init(named: "speakerOff"), for: .normal)
-//        speakerBtn.setImage(UIImage.init(named: "speakerOn"), for: .selected)
-//        speakerBtn.addTarget(self, action: #selector(SCSamplerViewController.changeAudioPlaybackSource), for: .touchUpInside)
-//        speakerBtn.frame = navBarBtnFrameSize
-//        setAudioPlaybackSourceButton()
-//        let speakerBarBtn = UIBarButtonItem(customView: speakerBtn)
-//        
-
-//        let editorBtn = UIButton.init(type: .custom)
-//        editorBtn.setImage(UIImage.init(named: "wf"), for: .normal)
-//        editorBtn.frame = navBarBtnFrameSize
-//        editorBtn.addTarget(self, action: #selector(SCSamplerViewController.toggleEditingMode), for: .touchUpInside)
-//        let editorBarBtn = UIBarButtonItem(customView: editorBtn)
-        
-//        navItem.rightBarButtonItems = [speakerBarBtn]
-//        navBar.items = [navItem]
+    
 
         toolbar.items = [flexibleSpace, recordBarBtn, flexibleSpace]
         self.view.addSubview(toolbar)
@@ -202,33 +240,6 @@ class SCSamplerViewController: UIViewController  {
             }, completion: nil)
     }
 
-    
-    
-//    func changeAudioPlaybackSource(){
-//        
-//        switch SCAudioManager.shared.isSpeakerEnabled {
-//        case true:
-//            SCAudioManager.shared.isSpeakerEnabled = false
-//        case false:
-//            SCAudioManager.shared.isSpeakerEnabled = true
-//        }
-//        SCAudioManager.shared.setAudioPlaybackSource()
-//        setAudioPlaybackSourceButton()
-//    }
-    
-    
-    
-//    func setAudioPlaybackSourceButton(){
-//        
-//        switch SCAudioManager.shared.isSpeakerEnabled {
-//        case true:
-//            speakerBtn.isSelected = true
-//        case false:
-//            speakerBtn.isSelected = false
-//        }
-//    }
-//    
-    
     
     
     //MARK: Recording and Playback
@@ -345,7 +356,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             }
             return itemSize
         } else {
-            let effectsCellSize = CGSize.init(width: collectionView.frame.size.width/4, height: collectionView.frame.size.height)
+            let effectsCellSize = CGSize.init(width: collectionView.frame.size.width, height: collectionView.frame.size.height/5)
             return effectsCellSize
         }
     }
@@ -369,7 +380,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         if collectionView == samplerCV {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
             
-            cell.cellColor = vintageColors[indexPath.row]
+            cell.cellColor = iceCreamColors[indexPath.row]
             cell.setRecordingColorSets()
             cell.setupGradientLayer()
             cell.layer.masksToBounds = true
@@ -450,6 +461,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if collectionView == samplerCV {
@@ -524,6 +536,7 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
     
     
     func tap(gestureRecognizer: UITapGestureRecognizer) {
+        
         let tapLocation = gestureRecognizer.location(in: self.samplerCV)
         
         guard let indexPath = self.samplerCV?.indexPathForItem(at: tapLocation) else {
