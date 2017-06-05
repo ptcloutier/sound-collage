@@ -13,14 +13,12 @@
 		A71414FF1EA82B5000BE9718 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FD1EA82B5000BE9718 /* CoreAudio.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		A71415001EA82B5000BE9718 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FE1EA82B5000BE9718 /* CoreAudioKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		A7176C9B1EE090A300D27CFB /* UIColor+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7176C9A1EE090A300D27CFB /* UIColor+Custom.swift */; };
-		A71F71691EDF1605008B9E3B /* the-ocean-the-sea-the-wave-prints.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A71F71661EDF1605008B9E3B /* the-ocean-the-sea-the-wave-prints.jpg */; };
-		A71F716A1EDF1605008B9E3B /* Screen Shot 2017-05-27 at 12.25.06 PM.png in Resources */ = {isa = PBXBuildFile; fileRef = A71F71671EDF1605008B9E3B /* Screen Shot 2017-05-27 at 12.25.06 PM.png */; };
-		A71F716B1EDF1605008B9E3B /* whimsical-bloom-prints.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A71F71681EDF1605008B9E3B /* whimsical-bloom-prints.jpg */; };
 		A7264E7D1EAE619800664EDE /* SCAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E7C1EAE619800664EDE /* SCAnimator.swift */; };
 		A7264E811EAEECD700664EDE /* SCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E801EAEECD700664EDE /* SCUser.swift */; };
 		A743CDBA1EABE30100A9C70D /* SCNoteButtonDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A743CDB91EABE30100A9C70D /* SCNoteButtonDelegate.swift */; };
 		A74BAED61EDA0F0900FABEF5 /* SCEffectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74BAED51EDA0F0900FABEF5 /* SCEffectCell.swift */; };
 		A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A886A1EB0445200FEDED0 /* SCDataManager.swift */; };
+		A78250E11EE13B7E00350768 /* SCAudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78250E01EE13B7E00350768 /* SCAudioEngine.swift */; };
 		A787338A1EB1177A00B5A8AE /* SCGradientColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78733891EB1177A00B5A8AE /* SCGradientColors.swift */; };
 		A78A9BD01EABA919007117DD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78A9BCF1EABA919007117DD /* QuartzCore.framework */; };
 		A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */; };
@@ -86,15 +84,13 @@
 		A71414FD1EA82B5000BE9718 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		A71414FE1EA82B5000BE9718 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
 		A7176C9A1EE090A300D27CFB /* UIColor+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Custom.swift"; sourceTree = "<group>"; };
-		A71F71661EDF1605008B9E3B /* the-ocean-the-sea-the-wave-prints.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "the-ocean-the-sea-the-wave-prints.jpg"; sourceTree = "<group>"; };
-		A71F71671EDF1605008B9E3B /* Screen Shot 2017-05-27 at 12.25.06 PM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Screen Shot 2017-05-27 at 12.25.06 PM.png"; sourceTree = "<group>"; };
-		A71F71681EDF1605008B9E3B /* whimsical-bloom-prints.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "whimsical-bloom-prints.jpg"; sourceTree = "<group>"; };
 		A7264E7C1EAE619800664EDE /* SCAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAnimator.swift; sourceTree = "<group>"; };
 		A7264E801EAEECD700664EDE /* SCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCUser.swift; sourceTree = "<group>"; };
 		A743CDB91EABE30100A9C70D /* SCNoteButtonDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCNoteButtonDelegate.swift; sourceTree = "<group>"; };
 		A74BAED51EDA0F0900FABEF5 /* SCEffectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCEffectCell.swift; sourceTree = "<group>"; };
 		A76A886A1EB0445200FEDED0 /* SCDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCDataManager.swift; sourceTree = "<group>"; };
 		A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SoundCollage-Bridging-Header.h"; sourceTree = "<group>"; };
+		A78250E01EE13B7E00350768 /* SCAudioEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAudioEngine.swift; sourceTree = "<group>"; };
 		A78733891EB1177A00B5A8AE /* SCGradientColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCGradientColors.swift; sourceTree = "<group>"; };
 		A78A9BCF1EABA919007117DD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankFlowLayout.swift; sourceTree = "<group>"; };
@@ -221,6 +217,7 @@
 				A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */,
 				A7BFEE2C1EBA444A00C718E7 /* UIImage+Color.swift */,
 				A7176C9A1EE090A300D27CFB /* UIColor+Custom.swift */,
+				A78250E01EE13B7E00350768 /* SCAudioEngine.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -234,9 +231,6 @@
 				A7A823031EA81BEC0061D0A0 /* LaunchScreen.storyboard */,
 				A7A823061EA81BEC0061D0A0 /* Info.plist */,
 				A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */,
-				A71F71661EDF1605008B9E3B /* the-ocean-the-sea-the-wave-prints.jpg */,
-				A71F71671EDF1605008B9E3B /* Screen Shot 2017-05-27 at 12.25.06 PM.png */,
-				A71F71681EDF1605008B9E3B /* whimsical-bloom-prints.jpg */,
 			);
 			name = Application;
 			sourceTree = "<group>";
@@ -428,11 +422,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7A823051EA81BEC0061D0A0 /* LaunchScreen.storyboard in Resources */,
-				A71F716B1EDF1605008B9E3B /* whimsical-bloom-prints.jpg in Resources */,
 				A7A823021EA81BEC0061D0A0 /* Assets.xcassets in Resources */,
-				A71F716A1EDF1605008B9E3B /* Screen Shot 2017-05-27 at 12.25.06 PM.png in Resources */,
 				A7A822FD1EA81BEC0061D0A0 /* Main.storyboard in Resources */,
-				A71F71691EDF1605008B9E3B /* the-ocean-the-sea-the-wave-prints.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -515,6 +506,7 @@
 				A787338A1EB1177A00B5A8AE /* SCGradientColors.swift in Sources */,
 				A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */,
 				A7A8232F1EA81D280061D0A0 /* AlertManager.swift in Sources */,
+				A78250E11EE13B7E00350768 /* SCAudioEngine.swift in Sources */,
 				A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */,
 				A7A8233B1EA81F500061D0A0 /* SCKeyboardViewController.swift in Sources */,
 				A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */,

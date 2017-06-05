@@ -37,11 +37,11 @@ class SCSamplerViewController: UIViewController  {
         super.viewDidLoad()
     
         
-        effects = ["reverb", "delay", "pitch", "distortion"]
+        effects = ["reverb", "delay", "pitch"]
 
         vintageColors = SCGradientColors.getVintageColors()
         iceCreamColors = SCGradientColors.getPsychedelicIceCreamShopColors()
-        self.view.applyGradient(withColors: backGroundColors, gradientOrientation: .horizontal)
+//        self.view.applyGradient(withColors: backGroundColors, gradientOrientation: .horizontal)
         let recordingDidFinishNotification = Notification.Name.init("recordingDidFinish")
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
         setupControls()
@@ -55,11 +55,11 @@ class SCSamplerViewController: UIViewController  {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard let parameterView = self.parameterView else {
-            print("No parameter view.")
-            return
-        }
-        parameterView.applyGradient(withColors: parameterViewColors, gradientOrientation: .horizontal)
+//        guard let parameterView = self.parameterView else {
+//            print("No parameter view.")
+//            return
+//        }
+//        parameterView.applyGradient(withColors: parameterViewColors, gradientOrientation: .horizontal)
         
         guard let samplerCV = self.samplerCV else {
             print("collectionview is nil")
@@ -70,7 +70,7 @@ class SCSamplerViewController: UIViewController  {
     }
     
     
-    
+    //MARK: Collection views
     
     
     private func setupContainerViews() {
@@ -137,6 +137,7 @@ class SCSamplerViewController: UIViewController  {
         parameterView.layer.cornerRadius = 15.0
         parameterView.layer.borderWidth = 3
         parameterView.layer.borderColor = UIColor.purple.cgColor
+        parameterView.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.ice
         
         
         self.view.addSubview(parameterView)
@@ -156,38 +157,23 @@ class SCSamplerViewController: UIViewController  {
     }
     
     
-    //MARK: Effects parameter gesture recognizer
+    
+    
+    //MARK: Effects Parameter
     
     func handleParameterGesture(gestureRecognizer: UIGestureRecognizer){
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed || gestureRecognizer.state == .ended {
             let location =  gestureRecognizer.location(in: parameterView)
-            SCAudioManager.shared.effectParameters.removeAll()
             
-            var x = Float(location.x)/2
-            if x>100{
-                x=100
+            guard let  sampleIndex = self.selectedSampleIndex else {
+                print("No selected sample index.")
+                return
             }
-            if x<0 {
-                x=0
-            }
-            var y = (200.0-Float(location.y))/2
-            if y>100{
-                y=100
-            }
-            if y<0{
-                y=0
-            }
-            
-            let xy = (x+y)/2
-            
-            SCAudioManager.shared.effectParameters.append(x)
-            SCAudioManager.shared.effectParameters.append(y)
-            SCAudioManager.shared.effectParameters.append(xy)
-            
-            print("Parameters: \(x), \(y), \(xy), originally: \(SCAudioManager.shared.effectParameters[0], SCAudioManager.shared.effectParameters[1])")
-
+            SCAudioManager.shared.handleEffectsParameters(point: location, sampleIndex: sampleIndex)
         }
     }
+    
+    
     
     
     
@@ -383,17 +369,17 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.cellColor = iceCreamColors[indexPath.row]
             cell.setRecordingColorSets()
             cell.setupGradientLayer()
-            cell.layer.masksToBounds = true
-            cell.layer.cornerRadius = 15.0
+//            cell.layer.masksToBounds = true
+//            cell.layer.cornerRadius = 15.0
             // border
             cell.layer.borderColor = UIColor.purple.cgColor
             cell.layer.borderWidth = 3.0
-            cell.layer.cornerRadius = 15.0
+//            cell.layer.cornerRadius = 15.0
             //shadow
-            cell.layer.shadowColor = UIColor.darkGray.cgColor
-            cell.layer.shadowOffset = CGSize(width: 3, height: 3)
-            cell.layer.shadowOpacity = 0.7
-            cell.layer.shadowRadius = 3.0
+//            cell.layer.shadowColor = UIColor.darkGray.cgColor
+//            cell.layer.shadowOffset = CGSize(width: 3, height: 3)
+//            cell.layer.shadowOpacity = 0.7
+//            cell.layer.shadowRadius = 3.0
             
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
             tapGestureRecognizer.delegate = self
@@ -501,6 +487,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 return
             }
             cell.toggleEffectIsSelected(index: indexPath.row)
+            collectionView.deselectItem(at: indexPath, animated: true)
         }
     }
     

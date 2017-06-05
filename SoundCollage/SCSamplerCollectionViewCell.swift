@@ -16,7 +16,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     var colorSets = [[UIColor]]()
     var cellColor: UIColor?
-    
     var currentColorSet: Int = 0
     var isRecordingEnabled = false
     var isEditingEnabled = false

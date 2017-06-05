@@ -31,7 +31,6 @@ class SCEffectCell: UICollectionViewCell {
     
     func setupLabel(){
         
-
         self.effectLabel = UILabel.init(frame:CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height/2))
         effectLabel.text = effect 
         effectLabel.font = UIFont.init(name: "Futura", size: 15)
@@ -39,30 +38,24 @@ class SCEffectCell: UICollectionViewCell {
         effectLabel.lineBreakMode = .byCharWrapping
         effectLabel.textAlignment = NSTextAlignment.center
         effectLabel.frame.origin.x = self.contentView.center.x-(effectLabel.frame.width/2)
-        effectLabel.frame.origin.y = self.contentView.center.y - effectLabel.frame.height/2
+        effectLabel.frame.origin.y = self.contentView.center.y-effectLabel.frame.height/2
         self.addSubview(effectLabel)
         
     }
     
     func toggleEffectIsSelected(index: Int){
         
-        
         switch  SCAudioManager.shared.effectIsSelected {
         case true:
             SCAudioManager.shared.effectIsSelected = false
             self.effectLabel.textColor = UIColor.purple
-
-            // disable observe cell touch parameters
-            
             self.contentView.backgroundColor = colors[index]
         case false:
             SCAudioManager.shared.effectIsSelected = true
-            //  when selected, activate observe effect cell touch parameters
-            SCAudioManager.shared.activateEffect(index: index)
-            
             self.contentView.backgroundColor = UIColor.purple
             self.effectLabel.textColor = UIColor.white
         }
+        SCAudioManager.shared.toggleEffect(index: index)
     }
     
     

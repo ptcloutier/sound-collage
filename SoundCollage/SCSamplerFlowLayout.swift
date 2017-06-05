@@ -29,8 +29,8 @@ class SCSamplerFlowLayout: UICollectionViewFlowLayout {
 
     
     func setupLayout() {
-        minimumInteritemSpacing = 1
-        minimumLineSpacing = 1
+        minimumInteritemSpacing = 0
+        minimumLineSpacing = 0
         scrollDirection = self.direction
     }
     override var itemSize: CGSize {
@@ -40,7 +40,7 @@ class SCSamplerFlowLayout: UICollectionViewFlowLayout {
         get {
             let numberOfColumns = self.numOfCol
             
-            let itemWidth = (self.collectionView!.frame.width - (numberOfColumns - 1)) / numberOfColumns
+            let itemWidth = (self.collectionView!.frame.width - (numberOfColumns - minimumLineSpacing)) / numberOfColumns
             return CGSize(width: itemWidth, height: itemWidth)
         }
     }
