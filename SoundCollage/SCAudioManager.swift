@@ -34,7 +34,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var effectsSettings: [[[Float]]] = [[[]]] // time to make a struct
     var effectParameterSettings: [[Float]] = [[]]
     var audioEngine: SCAudioEngine!
-    var effects: [AVAudioUnit] = []
+    var effects: [SCEffect] = []
     var engineChain: [[SCAudioEngine]] = []
     var pitchIsActive: Bool = false
     var reverbIsActive: Bool = false
@@ -131,21 +131,15 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func setupEffects(){
         
-        let reverb = AVAudioUnitReverb()
-        let delay = AVAudioUnitDelay()
-        let pitch = AVAudioUnitTimePitch()
+        let reverb = SCEffect.init(effect: AVAudioUnitReverb)
+        let delay = SCEffect.init(effect: AVAudioUnitDelay)
+        let pitch = SCEffect.init(effect: AVAudioUnitTimePitch)
         effects = [reverb, delay, pitch]
         
-        for effect in effects {
+        for x in effects {
             
-            print("\(effect.name)")
+            print("\(x.effect.name)")
             
-            while effectParameterSettings.count<16 {
-                let effectParameters: [Float] = [0.0, 0.0, 0.0]
-                effectParameterSettings.append(effectParameters)
-            }
-            
-            effectsSettings.append(effectParameterSettings)
         }
     }
     
@@ -157,35 +151,35 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         // activate effect by adding it to activeEffects array
         let selection = effects[index]
         
-        if selection.name == "AUNewTimePitch" {
+        if selection.effect.name == "AUNewTimePitch" {
         switch pitchIsActive {
         case true:
             pitchIsActive = false
-            print("\(selection.name) turned off.")
+            print("\(selection.effect.name) turned off.")
         case false:
             pitchIsActive = true
-            print("\(selection.name) turned on.")
+            print("\(selection.effect.name) turned on.")
         }
         }
         if selection.name == "AUDelay" {
             switch delayIsActive {
             case true:
                 delayIsActive = false
-                print("\(selection.name) turned off.")
+                print("\(selection.effect.name) turned off.")
             case false:
                 delayIsActive = true
-                print("\(selection.name) turned on.")
+                print("\(selection.effect.name) turned on.")
             }
         }
         if selection.name == "AUReverb2" {
             switch reverbIsActive {
             case true:
                 reverbIsActive = false
-                print("\(selection.name) turned off.")
+                print("\(selection.effect.name) turned off.")
 
             case false:
                 reverbIsActive = true
-                print("\(selection.name) turned on.")
+                print("\(selection.effect.name) turned on.")
             }
         }
     }
@@ -229,12 +223,13 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             } else {
                 
                 
-                let effectParameters = effectParameterSettings[sampleIndex]
+                let effectParameters = self.effects[sampleIndex].parameters
                 
                 
-                let pitchEffect = AVAudioUnitTimePitch()
-                let delayEffect = AVAudioUnitDelay()
                 let reverbEffect = AVAudioUnitReverb()
+                let delayEffect = AVAudioUnitDelay()
+                let pitchEffect = AVAudioUnitTimePitch()
+
                 
                 audioEngine.attach(audioPlayerNode)
                 
@@ -315,7 +310,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func handleEffectsParameters(point: CGPoint, sampleIndex: Int) {
         
-        var effectParameters = SCAudioManager.shared.effectParameterSettings[sampleIndex]
+        let effectParameters = self.effects[sampleIndex].parameters
         
         effectParameters.removeAll()
         
