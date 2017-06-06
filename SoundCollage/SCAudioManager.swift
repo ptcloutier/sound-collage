@@ -182,19 +182,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("No selected sample index.")
             return
         }
-        
-        for (key, engines) in self.engineChain {
-            for (index, engine) in engines.enumerated().reversed() {
-                if engine.isFinished == true {
-                    var engineChains = engines
-                    engineChains.remove(at: index)
-                    self.engineChain[key] = engineChains
-                }
-            }
-        }
-        
-        
-        
+
         self.audioEngine = SCAudioEngine()
         guard var engines = self.engineChain[sampleIndex] else {
             print("Engines not found.")
@@ -277,18 +265,16 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
 //                    }
 //                })
 //            case false:
-                audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
+         
+            
+            audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
                     [weak self] in
                     guard let strongSelf = self else {
                         return
                     }
-//                    strongSelf.audioEngine.plays+=1
                     let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
                     delayQueue.asyncAfter(deadline: .now() + 10.0) {
-                        strongSelf.audioEngine.stop()
-                        strongSelf.audioEngine.reset()
-                        strongSelf.audioEngine.isFinished = true
-
+                        strongSelf.destroyEngine(audioEngine: strongSelf.audioEngine)
                     }
                 })
 //            }
@@ -339,7 +325,21 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         
     }
     
-    
+    func destroyEngine(audioEngine: SCAudioEngine){
+        audioEngine.isFinished = true
+        audioEngine.stop()
+        audioEngine.reset()
+        for (key, engines) in self.engineChain {
+            print("Key: \(key)")
+            for (index, engine) in engines.enumerated().reversed() {
+                if engine.isFinished == true {
+                    var engineChains = engines
+                    engineChains.remove(at: index)
+                    self.engineChain[key] = engineChains
+                }
+            }
+        }
+    }
     
     
     
