@@ -165,7 +165,7 @@ class SCSamplerViewController: UIViewController  {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed || gestureRecognizer.state == .ended {
             let location =  gestureRecognizer.location(in: parameterView)
             
-            guard let  sampleIndex = self.selectedSampleIndex else {
+            guard let sampleIndex = SCAudioManager.shared.selectedSampleIndex else {
                 print("No selected sample index.")
                 return
             }

@@ -12,13 +12,14 @@ import AVFoundation
 
 
 
-class SCEffect {
+class SCEffectControl {
 
-    let effect: AVAudioUnit
+    var isActive: Bool = false 
+    let effectName: String
     var parameters: [[Float]] = []
     
-    init(effect: AVAudioUnit) {
-        self.effect = effect
+    init(effectName: String) {
+        self.effectName = effectName
         self.parameters = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
     }
 }

@@ -30,16 +30,10 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isRecording: Bool = false
     var replaceableFilePath: String?
     var effectIsSelected: Bool = false
-    var activeEffects: [AVAudioUnit] = []
-    var effectsSettings: [[[Float]]] = [[[]]] // time to make a struct
-    var effectParameterSettings: [[Float]] = [[]]
     var audioEngine: SCAudioEngine!
-    var effects: [SCEffect] = []
-    var engineChain: [[SCAudioEngine]] = []
-    var pitchIsActive: Bool = false
-    var reverbIsActive: Bool = false
-    var delayIsActive: Bool = false
-
+    var effectControls: [SCEffectControl] = []
+    var engineChain: [Int:[SCAudioEngine]] = [:]
+    
     
     
     
@@ -60,10 +54,22 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 }
             }
         })
-        setupEffects()
+        setupEffectControls()
         observeAudioIO()
         setupEngines()
     }
+    
+    
+    func setupEngines(){
+        
+        var index = 0
+        while engineChain.values.count<16{
+            let engines: [SCAudioEngine] = []
+            engineChain[index] = engines
+            index+=1
+        }
+    }
+
     
     
     
@@ -115,71 +121,52 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     //MARK: Effects 
     
     
-    func setupEngines(){
-       
-       
-        while engineChain.count<16 {
-        var engines: [SCAudioEngine] = []
-        let audioEngine = SCAudioEngine()
-        engines.append(audioEngine)
-        engineChain.append(engines)
-        }
+    
+    func setupEffectControls(){
         
+        let reverb = SCEffectControl.init(effectName: "reverb")
+        let delay = SCEffectControl.init(effectName: "delay")
+        let pitch = SCEffectControl.init(effectName: "pitch")
+        self.effectControls = [reverb, delay, pitch]
+
     }
-    
-    
-    
-    func setupEffects(){
-        
-        let reverb = SCEffect.init(effect: AVAudioUnitReverb)
-        let delay = SCEffect.init(effect: AVAudioUnitDelay)
-        let pitch = SCEffect.init(effect: AVAudioUnitTimePitch)
-        effects = [reverb, delay, pitch]
-        
-        for x in effects {
-            
-            print("\(x.effect.name)")
-            
-        }
-    }
-    
 
     
     
     func toggleEffect(index: Int){
         
-        // activate effect by adding it to activeEffects array
-        let selection = effects[index]
+        let selected = effectControls[index]
         
-        if selection.effect.name == "AUNewTimePitch" {
-        switch pitchIsActive {
+        
+        if selected.effectName == "pitch" {
+        switch selected.isActive {
         case true:
-            pitchIsActive = false
-            print("\(selection.effect.name) turned off.")
+            selected.isActive = false
+            print("\(selected.effectName) turned off.")
         case false:
-            pitchIsActive = true
-            print("\(selection.effect.name) turned on.")
-        }
-        }
-        if selection.name == "AUDelay" {
-            switch delayIsActive {
-            case true:
-                delayIsActive = false
-                print("\(selection.effect.name) turned off.")
-            case false:
-                delayIsActive = true
-                print("\(selection.effect.name) turned on.")
+            selected.isActive = true 
+            print("\(selected.effectName) turned on.")
             }
         }
-        if selection.name == "AUReverb2" {
-            switch reverbIsActive {
+        if selected.effectName == "delay" {
+            switch  selected.isActive  {
             case true:
-                reverbIsActive = false
-                print("\(selection.effect.name) turned off.")
+                selected.isActive = false
+                print("\(selected.effectName) turned off.")
+            case false:
+                selected.isActive  = true
+                print("\(selected.effectName) turned on.")
+            }
+        }
+        if selected.effectName == "reverb" {
+            switch selected.isActive  {
+            case true:
+                selected.isActive  = false
+                print("\(selected.effectName) turned off.")
 
             case false:
-                reverbIsActive = true
-                print("\(selection.effect.name) turned on.")
+                selected.isActive  = true
+                print("\(selected.effectName) turned on.")
             }
         }
     }
@@ -195,20 +182,26 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("No selected sample index.")
             return
         }
-        var engines = engineChain[sampleIndex]
-        for engine in engines {
-            if engine.isRunning == false {
-            self.audioEngine = engine
-            } else {
-                self.audioEngine = SCAudioEngine()
-                engines.append(self.audioEngine)
+        
+        for (key, engines) in self.engineChain {
+            for (index, engine) in engines.enumerated().reversed() {
+                if engine.isFinished == true {
+                    var engineChains = engines
+                    engineChains.remove(at: index)
+                    self.engineChain[key] = engineChains
+                }
             }
         }
         
-        guard let audioEngine = self.audioEngine else {
-            print("Audio engine not found.")
+        
+        
+        self.audioEngine = SCAudioEngine()
+        guard var engines = self.engineChain[sampleIndex] else {
+            print("Engines not found.")
             return
         }
+        engines.append(self.audioEngine)
+        self.engineChain[sampleIndex] = engines
         
         do {
             let audioFile = try AVAudioFile(forReading: soundFileURL)
@@ -222,75 +215,83 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
 
             } else {
                 
+                let reverb = AVAudioUnitReverb()
+                let delay = AVAudioUnitDelay()
+                let pitch = AVAudioUnitTimePitch()
                 
-                let effectParameters = self.effects[sampleIndex].parameters
+                let reverbParameters = self.effectControls[0].parameters[sampleIndex]
+                let delayParameters = self.effectControls[1].parameters[sampleIndex]
+                let pitchParameters = self.effectControls[2].parameters[sampleIndex]
+
                 
                 
-                let reverbEffect = AVAudioUnitReverb()
-                let delayEffect = AVAudioUnitDelay()
-                let pitchEffect = AVAudioUnitTimePitch()
 
                 
                 audioEngine.attach(audioPlayerNode)
                 
-                let pitchZero = -1200
-                let pitchParam = Float(effectParameters[2])*24
-                let pitch = pitchZero + Int(pitchParam)
-                pitchEffect.pitch = Float(pitch)
-                audioEngine.attach(pitchEffect)
-                print("Pitch: \(pitch)")
                 
-                reverbEffect.loadFactoryPreset(.mediumChamber)
-                let x = Float(effectParameters[0])/2
-                let y = 100.0 - Float(effectParameters[1])
+
+                reverb.loadFactoryPreset(.mediumChamber)
+                let x = Float(reverbParameters[0])/2
+                let y = 100.0 - Float(reverbParameters[1])
                 let xy = x+y
                 let wetDryParam = xy 
-                reverbEffect.wetDryMix = wetDryParam
-                audioEngine.attach(reverbEffect)
+                reverb.wetDryMix = wetDryParam
+                audioEngine.attach(reverb)
                 
                 
-                let delayTime = effectParameters[0]
+                let delayTime = delayParameters[0]
                 let format = Float(50.0)
-                delayEffect.delayTime = TimeInterval(delayTime/format)
-                delayEffect.feedback = effectParameters[1]
-                audioEngine.attach(delayEffect)
+                delay.delayTime = TimeInterval(delayTime/format)
+                delay.feedback = delayParameters[1]
+                audioEngine.attach(delay)
+                
+                let pitchZero = -1200
+                let pitchParam = Float(pitchParameters[2])*24
+                let sum = pitchZero + Int(pitchParam)
+                pitch.pitch = Float(sum)
+                audioEngine.attach(pitch)
+                print("Pitch: \(pitch)")
       
                 // Sound effect connections
 
-                audioEngine.connect(audioPlayerNode, to: pitchEffect, format: audioFormat)
-                audioEngine.connect(pitchEffect, to: reverbEffect, format: audioFormat)
-                audioEngine.connect(reverbEffect, to: delayEffect, format: audioFormat)
-                audioEngine.connect(delayEffect, to: audioEngine.mainMixerNode, format: audioFormat)
+                audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
+                audioEngine.connect(pitch, to: reverb, format: audioFormat)
+                audioEngine.connect(reverb, to: delay, format: audioFormat)
+                audioEngine.connect(delay, to: audioEngine.mainMixerNode, format: audioFormat)
                 
             }
             
-            switch audioEngine.doCreateNewEngine {
-            case true:
-                audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
-//                    [weak self] in
-//                    guard let strongSelf = self else {
-//                        return
+//            switch audioEngine.doCreateNewEngine {
+//            case true:
+//                audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
+//                    let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
+//                    delayQueue.asyncAfter(deadline: .now() + 10.0) {
+//                        [weak self] in
+//                        guard let strongSelf = self else {
+//                            return
+//                        }
+//                        print("detaching node...")
+//                        strongSelf.audioEngine.detachNode(audioPlayerNode: audioPlayerNode)
+//                        strongSelf.audioEngine.resetEngine()
 //                    }
-                    
+//                })
+//            case false:
+                audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
+                    [weak self] in
+                    guard let strongSelf = self else {
+                        return
+                    }
+//                    strongSelf.audioEngine.plays+=1
                     let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
                     delayQueue.asyncAfter(deadline: .now() + 10.0) {
-                        audioEngine.detachNode(audioPlayerNode: audioPlayerNode)
-                        audioEngine.resetEngine()
+                        strongSelf.audioEngine.stop()
+                        strongSelf.audioEngine.reset()
+                        strongSelf.audioEngine.isFinished = true
+
                     }
                 })
-            case false:
-                audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
-//                    [weak self] in
-//                    guard let strongSelf = self else {
-//                        return
-//                    }
-                    audioEngine.plays+=1
-                    let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-                    delayQueue.asyncAfter(deadline: .now() + 10.0) {
-                        audioEngine.detachNode(audioPlayerNode: audioPlayerNode)
-                    }
-                })
-            }
+//            }
             audioEngine.prepare()
             do {
                 try audioEngine.start()
@@ -298,8 +299,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 print("Play session Error")
             }
             audioPlayerNode.play()
-            audioEngine.plays += 1
-            print("Engine plays: \(audioEngine.plays)")
             print("Playing audiofile at \(soundFileURL)")
         } catch let error {
             print("Could not play sound file! \(error.localizedDescription)")
@@ -310,32 +309,33 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func handleEffectsParameters(point: CGPoint, sampleIndex: Int) {
         
-        let effectParameters = self.effects[sampleIndex].parameters
+       
         
-        effectParameters.removeAll()
         
-        var x = Float(point.x)/2
-        if x>100{
-            x=100
+        var xValue = Float(point.x)/2
+        if xValue>100{
+            xValue=100
         }
-        if x<0 {
-            x=0
+        if xValue<0 {
+            xValue=0
         }
-        var y = (200.0-Float(point.y))/2
-        if y>100{
-            y=100
+        var yValue = (200.0-Float(point.y))/2
+        if yValue>100{
+            yValue=100
         }
-        if y<0{
-            y=0
+        if yValue<0{
+            yValue=0
         }
         
-        let xy = (x+y)/2
+        let xySum = xValue+yValue
         
-        effectParameters[0] = x
-        effectParameters[1] = y
-        effectParameters[2] = xy
+        for effect in self.effectControls {
+            effect.parameters[sampleIndex][0] = xValue
+            effect.parameters[sampleIndex][1] = yValue
+            effect.parameters[sampleIndex][2] = xySum/2
+        }
         
-        print("Parameters: \(x), \(y), \(xy)")
+        print("Parameters: \(xValue), \(yValue), \(xySum/2)")
         
     }
     
