@@ -188,6 +188,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("Engines not found.")
             return
         }
+        self.audioEngine.samplePadID = sampleIndex
         engines.append(self.audioEngine)
         self.engineChain[sampleIndex] = engines
         
@@ -210,9 +211,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 let reverbParameters = self.effectControls[0].parameters[sampleIndex]
                 let delayParameters = self.effectControls[1].parameters[sampleIndex]
                 let pitchParameters = self.effectControls[2].parameters[sampleIndex]
-
-                
-                
 
                 
                 audioEngine.attach(audioPlayerNode)
@@ -250,23 +248,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 
             }
             
-//            switch audioEngine.doCreateNewEngine {
-//            case true:
-//                audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
-//                    let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-//                    delayQueue.asyncAfter(deadline: .now() + 10.0) {
-//                        [weak self] in
-//                        guard let strongSelf = self else {
-//                            return
-//                        }
-//                        print("detaching node...")
-//                        strongSelf.audioEngine.detachNode(audioPlayerNode: audioPlayerNode)
-//                        strongSelf.audioEngine.resetEngine()
-//                    }
-//                })
-//            case false:
-         
-            
             audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
                     [weak self] in
                     guard let strongSelf = self else {
@@ -274,13 +255,31 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                     }
                     let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
                     delayQueue.asyncAfter(deadline: .now() + 10.0) {
-                        strongSelf.destroyEngine(audioEngine: strongSelf.audioEngine)
+                        
+                        guard let id = strongSelf.audioEngine.samplePadID else {
+                            print("no sample id.")
+                            return
+                        }
+                        guard let engines = strongSelf.engineChain[id] else {
+                            print("No engines.")
+                            return
+                        }
+                        for (index, engine) in engines.enumerated(){
+                            if engine.isFinished == true{
+                                var enginesCopy = engines
+                                enginesCopy.remove(at: index)
+                                strongSelf.engineChain[id] = enginesCopy
+                              
+                            }
+                        }
+                        
                     }
                 })
 //            }
             audioEngine.prepare()
             do {
                 try audioEngine.start()
+                audioEngine.isFinished = true
             } catch _ {
                 print("Play session Error")
             }
@@ -325,21 +324,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         
     }
     
-    func destroyEngine(audioEngine: SCAudioEngine){
-        audioEngine.isFinished = true
-        audioEngine.stop()
-        audioEngine.reset()
-        for (key, engines) in self.engineChain {
-            print("Key: \(key)")
-            for (index, engine) in engines.enumerated().reversed() {
-                if engine.isFinished == true {
-                    var engineChains = engines
-                    engineChains.remove(at: index)
-                    self.engineChain[key] = engineChains
-                }
-            }
-        }
-    }
+    
     
     
     
