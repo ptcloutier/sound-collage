@@ -196,8 +196,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             let audioFile = try AVAudioFile(forReading: soundFileURL)
             let audioFormat = audioFile.processingFormat
             let audioPlayerNode = AVAudioPlayerNode()
-            let buffer = AVAudioPCMBuffer.init(pcmFormat: audioFormat, frameCapacity: AVAudioFrameCount(audioFile.length))
-            audioPlayerNode.prepare(withFrameCount:  AVAudioFrameCount(audioFile.length))
+//            let buffer = AVAudioPCMBuffer.init(pcmFormat: audioFormat, frameCapacity: AVAudioFrameCount(audioFile.length))
+//            audioPlayerNode.prepare(withFrameCount:  AVAudioFrameCount(audioFile.length))
             
             if self.effectIsSelected == false {
                 audioEngine.attach(audioPlayerNode)
@@ -254,7 +254,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 
                 let duration = DispatchTimeInterval.seconds(Int(round(Double(audioFile.length)/44100)))
                 let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-                delayQueue.asyncAfter(deadline: .now()+duration){
+                delayQueue.asyncAfter(deadline: .now()+duration+5.0){
                     
                     [weak self] in
                     guard let strongSelf = self else {
