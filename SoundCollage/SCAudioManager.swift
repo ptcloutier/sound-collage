@@ -196,6 +196,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             let audioFile = try AVAudioFile(forReading: soundFileURL)
             let audioFormat = audioFile.processingFormat
             let audioPlayerNode = AVAudioPlayerNode()
+            let buffer = AVAudioPCMBuffer.init(pcmFormat: audioFormat, frameCapacity: AVAudioFrameCount(audioFile.length))
+            audioPlayerNode.prepare(withFrameCount:  AVAudioFrameCount(audioFile.length))
             
             if self.effectIsSelected == false {
                 audioEngine.attach(audioPlayerNode)
@@ -240,48 +242,51 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 print("Pitch: \(pitch)")
       
                 // Sound effect connections
-
+                
                 audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
                 audioEngine.connect(pitch, to: reverb, format: audioFormat)
                 audioEngine.connect(reverb, to: delay, format: audioFormat)
                 audioEngine.connect(delay, to: audioEngine.mainMixerNode, format: audioFormat)
-                
             }
-            
             audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
+                
+                
+                
+                let duration = DispatchTimeInterval.seconds(Int(round(Double(audioFile.length)/44100)))
+                let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
+                delayQueue.asyncAfter(deadline: .now()+duration){
+                    
                     [weak self] in
                     guard let strongSelf = self else {
                         return
                     }
-                    let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-                    delayQueue.asyncAfter(deadline: .now() + 10.0) {
+                    
+                    strongSelf.audioEngine.isFinished = true
+                    
+                    
+                    for (i, var engines) in strongSelf.engineChain {
                         
-                        guard let id = strongSelf.audioEngine.samplePadID else {
-                            print("no sample id.")
-                            return
-                        }
-                        guard let engines = strongSelf.engineChain[id] else {
-                            print("No engines.")
-                            return
-                        }
-                        var enginesCopy = engines
                         
-                        for (index, engine) in engines.enumerated(){
-                            if engine.isFinished == true{
-                                
-                                enginesCopy.remove(at: index)
-                                strongSelf.engineChain[id] = enginesCopy
-                              
+                        
+                        for (j, engine) in engines.enumerated().reversed() {
+                            if engine.isFinished == true {
+                                engine.stop()
+                                engine.reset()
+                                print("remove engine no \(j) in engineChain:\(i)\n\n")
+                                engines.remove(at: j)
+                                strongSelf.engineChain[i] = engines
                             }
                         }
-                        
                     }
-                })
-//            }
+                }
+            })
+            
+            
+            
+
             audioEngine.prepare()
             do {
                 try audioEngine.start()
-                audioEngine.isFinished = true
             } catch _ {
                 print("Play session Error")
             }

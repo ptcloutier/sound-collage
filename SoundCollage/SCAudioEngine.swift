@@ -16,6 +16,7 @@ class SCAudioEngine: AVAudioEngine {
     var plays: Int = 0
     let maxPlays = 30
     var doCreateNewEngine: Bool = false
+    let uniqueID: String = UUID().uuidString
     
     override init(){
         super.init()
