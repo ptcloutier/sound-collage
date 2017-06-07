@@ -264,9 +264,11 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                             print("No engines.")
                             return
                         }
+                        var enginesCopy = engines
+                        
                         for (index, engine) in engines.enumerated(){
                             if engine.isFinished == true{
-                                var enginesCopy = engines
+                                
                                 enginesCopy.remove(at: index)
                                 strongSelf.engineChain[id] = enginesCopy
                               
