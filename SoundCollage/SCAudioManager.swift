@@ -32,9 +32,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var effectIsSelected: Bool = false
     var audioEngine: SCAudioEngine!
     var effectControls: [SCEffectControl] = []
-    var engineChain: [Int:[SCAudioEngine]] = [:]
-    
-    
+    var audioEngineChain: [SCAudioEngine] = []
+    var finishedEngines: [SCAudioEngine] = []
     
     
     //MARK: Basic setup 
@@ -56,19 +55,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         })
         setupEffectControls()
         observeAudioIO()
-        setupEngines()
     }
     
     
-    func setupEngines(){
-        
-        var index = 0
-        while engineChain.values.count<16{
-            let engines: [SCAudioEngine] = []
-            engineChain[index] = engines
-            index+=1
-        }
-    }
 
     
     
@@ -172,32 +161,40 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
-        
+    
+    func removeUsedEngines(){
+       
+        for (i, finEngine) in self.finishedEngines.enumerated().reversed() {
+            for (j, engine) in self.audioEngineChain.enumerated().reversed() {
+                if engine.uniqueID == finEngine.uniqueID {
+                   self.audioEngineChain.remove(at: j)
+                   self.finishedEngines.remove(at: i)
+                   print("removed at index:\(j), bye felicia")
+                    
+                }
+            }
+        }
+    }
+    
     
     
     func playAudio(soundFileURL: URL){
         
-
+        removeUsedEngines()
+        
         guard let sampleIndex = self.selectedSampleIndex else {
             print("No selected sample index.")
             return
         }
 
         self.audioEngine = SCAudioEngine()
-        guard var engines = self.engineChain[sampleIndex] else {
-            print("Engines not found.")
-            return
-        }
-        self.audioEngine.samplePadID = sampleIndex
-        engines.append(self.audioEngine)
-        self.engineChain[sampleIndex] = engines
+        self.audioEngineChain.append(self.audioEngine)
+        
         
         do {
             let audioFile = try AVAudioFile(forReading: soundFileURL)
             let audioFormat = audioFile.processingFormat
             let audioPlayerNode = AVAudioPlayerNode()
-//            let buffer = AVAudioPCMBuffer.init(pcmFormat: audioFormat, frameCapacity: AVAudioFrameCount(audioFile.length))
-//            audioPlayerNode.prepare(withFrameCount:  AVAudioFrameCount(audioFile.length))
             
             if self.effectIsSelected == false {
                 audioEngine.attach(audioPlayerNode)
@@ -248,36 +245,27 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 audioEngine.connect(reverb, to: delay, format: audioFormat)
                 audioEngine.connect(delay, to: audioEngine.mainMixerNode, format: audioFormat)
             }
+            guard let fin = self.audioEngine else {
+                print("no engine.")
+                return
+            }
+            
             audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
                 
                 
                 
                 let duration = DispatchTimeInterval.seconds(Int(round(Double(audioFile.length)/44100)))
                 let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-                delayQueue.asyncAfter(deadline: .now()+duration+5.0){
+                delayQueue.asyncAfter(deadline: .now()+duration){
                     
                     [weak self] in
                     guard let strongSelf = self else {
                         return
                     }
-                    
-                    strongSelf.audioEngine.isFinished = true
-                    
-                    
-                    for (i, var engines) in strongSelf.engineChain {
-                        
-                        
-                        
-                        for (j, engine) in engines.enumerated().reversed() {
-                            if engine.isFinished == true {
-                                engine.stop()
-                                engine.reset()
-                                print("remove engine no \(j) in engineChain:\(i)\n\n")
-                                engines.remove(at: j)
-                                strongSelf.engineChain[i] = engines
-                            }
-                        }
-                    }
+                    fin.stop()
+                    fin.reset()
+                    strongSelf.finishedEngines.append(fin)
+
                 }
             })
             
