@@ -12,11 +12,9 @@ import AVFoundation
 class SCAudioEngine: AVAudioEngine {
     
     var samplePadID: Int?
-    var isFinished: Bool = false
     var plays: Int = 0
     let maxPlays = 30
     var doCreateNewEngine: Bool = false
-    let uniqueID: String = UUID().uuidString
     
     override init(){
         super.init()
@@ -47,6 +45,10 @@ class SCAudioEngine: AVAudioEngine {
             self.doCreateNewEngine = false
             print("Engine stopped and reset.")
         }
+    }
+    
+    static func ==(lhs: SCAudioEngine, rhs: SCAudioEngine) -> Bool {
+        return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
     }
     
     
