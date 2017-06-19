@@ -91,25 +91,9 @@ class SCDataManager {
         guard let user = SCDataManager.shared.user else {
             let userName = "Perrin"
             var sampleBanks: [SCSampleBank] = []
-            let samples: [String: AnyObject] = ["0": "" as AnyObject,
-                                                "1": "" as AnyObject,
-                                                "2": "" as AnyObject,
-                                                "3": "" as AnyObject,
-                                                "4": "" as AnyObject,
-                                                "5": "" as AnyObject,
-                                                "6": "" as AnyObject,
-                                                "7": "" as AnyObject,
-                                                "8": "" as AnyObject,
-                                                "9": "" as AnyObject,
-                                                "10": "" as AnyObject,
-                                                "11": "" as AnyObject,
-                                                "12": "" as AnyObject,
-                                                "13": "" as AnyObject,
-                                                "14": "" as AnyObject,
-                                                "15": "" as AnyObject]
-            
+            let samples = newStandardSampleBank()
             let sampleBankID = getSampleBankID()
-            let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples)
+            let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: .standard)
 
             sampleBanks.append(sampleBank)
             let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: sampleBank)
@@ -123,7 +107,8 @@ class SCDataManager {
     }
     
     
-    private func getSampleBankID() -> Int {
+    
+    func getSampleBankID() -> Int {
         
         let userDefaults = UserDefaults.standard
         
@@ -136,6 +121,8 @@ class SCDataManager {
     }
 
     
+    
+    
     func saveObjectToJSON(){
         
         if let jsonString = SCDataManager.shared.user?.toJSONString(prettyPrint: true){
@@ -145,6 +132,7 @@ class SCDataManager {
             print("Error serializing json")
         }
     }
+    
     
     
     
@@ -179,6 +167,8 @@ class SCDataManager {
         }
     }
     
+    
+    
     func printAudioFilePaths(){
         
         guard let sampleBanks = self.user?.sampleBanks else {
@@ -192,23 +182,65 @@ class SCDataManager {
         }
     }
     
-//    func replaceAudioFileAtPath(filePath: URL) {
-//
-//        let documentsDirectoryPathString = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-//        let documentsDirectoryPath = NSURL(string: documentsDirectoryPathString)!
-//        
-//        guard let audioFilePath = documentsDirectoryPath.appendingPathComponent(filePath.absoluteString) else {
-//            print("audio file path not found.")
-//            return
-//        }
-//        let fileManager = FileManager.default
-//        var isDirectory: ObjCBool = false
     
-        // creating an audio file in the Documents folder
-//        if fileManager.fileExists(atPath: filePath.absoluteString, isDirectory: &isDirectory) {
-//            print("already an audio file at this path, let's overwrite it.")
-//        } else {
-//            print("first audio file at this path." )
-//        }
-//    }
+    func newStandardSampleBank() -> [String: AnyObject]{
+        let samples: [String: AnyObject] = ["0": "" as AnyObject,
+                                            "1": "" as AnyObject,
+                                            "2": "" as AnyObject,
+                                            "3": "" as AnyObject,
+                                            "4": "" as AnyObject,
+                                            "5": "" as AnyObject,
+                                            "6": "" as AnyObject,
+                                            "7": "" as AnyObject,
+                                            "8": "" as AnyObject,
+                                            "9": "" as AnyObject,
+                                            "10": "" as AnyObject,
+                                            "11": "" as AnyObject,
+                                            "12": "" as AnyObject,
+                                            "13": "" as AnyObject,
+                                            "14": "" as AnyObject,
+                                            "15": "" as AnyObject]
+        
+        return samples
+    }
+    
+    
+    
+    
+    func newDoubleSampleBank()-> [String: AnyObject] {
+        
+        let samples: [String: AnyObject] = ["0": "" as AnyObject,
+                                            "1": "" as AnyObject,
+                                            "2": "" as AnyObject,
+                                            "3": "" as AnyObject,
+                                            "4": "" as AnyObject,
+                                            "5": "" as AnyObject,
+                                            "6": "" as AnyObject,
+                                            "7": "" as AnyObject,
+                                            "8": "" as AnyObject,
+                                            "9": "" as AnyObject,
+                                            "10": "" as AnyObject,
+                                            "11": "" as AnyObject,
+                                            "12": "" as AnyObject,
+                                            "13": "" as AnyObject,
+                                            "14": "" as AnyObject,
+                                            "15": "" as AnyObject,
+                                            "16": "" as AnyObject,
+                                            "17": "" as AnyObject,
+                                            "18": "" as AnyObject,
+                                            "19": "" as AnyObject,
+                                            "20": "" as AnyObject,
+                                            "21": "" as AnyObject,
+                                            "22": "" as AnyObject,
+                                            "23": "" as AnyObject,
+                                            "24": "" as AnyObject,
+                                            "25": "" as AnyObject,
+                                            "26": "" as AnyObject,
+                                            "28": "" as AnyObject,
+                                            "29": "" as AnyObject,
+                                            "30": "" as AnyObject,
+                                            "31": "" as AnyObject,
+                                            "32": "" as AnyObject]
+        return samples
+    }
 }

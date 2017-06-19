@@ -13,23 +13,19 @@ import UIKit
 class SCSampleBankViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
-    
+    let toolbarHeight: CGFloat = 98.0
+    var toolbar = UIToolbar()
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupControls()
         setupCollectionView()
         animateEntrance()
     }
     
-    
-    
-    override open var shouldAutorotate: Bool {
-        return false
-    }
-    
-    
+   
     
     private func setupCollectionView(){
         
@@ -39,6 +35,7 @@ class SCSampleBankViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
     }
+    
     
     
     private func animateEntrance() {
@@ -51,25 +48,111 @@ class SCSampleBankViewController: UIViewController {
             self.collectionView.transform = CGAffineTransform(scaleX: 1, y: 1)
             }, completion: nil)
     }
-}
-
-
-extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+    
+    
+    private func setupControls(){
+        
+        let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
+        
+        toolbar.frame = CGRect(x: 0, y: self.view.frame.height-toolbarHeight, width: self.view.frame.width, height: toolbarHeight)
+        toolbar.setBackgroundImage(transparentPixel, forToolbarPosition: .any, barMetrics: .default)
+        toolbar.setShadowImage(transparentPixel, forToolbarPosition: .any)
+        toolbar.isTranslucent = true
+        
+        let newStandardSamplerBtn = UIButton()
+        let newDoubleSamplerBtn = UIButton()
+        
+        let standardBarBtn = setupToolbarButton(btn: newStandardSamplerBtn)
+        let doubleBarBtn = setupToolbarButton(btn: newDoubleSamplerBtn)
+        
+        let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        
+        toolbar.items = [flexibleSpace, standardBarBtn, flexibleSpace, doubleBarBtn, flexibleSpace]
+        self.view.addSubview(toolbar)
+        
+        
+    }
+    
+    
+    func setupToolbarButton(btn: UIButton)-> UIBarButtonItem {
+        
+        btn.addTarget(self, action: #selector(SCSampleBankViewController.newSamplerDidPress), for: .touchUpInside)
+        let buttonHeight = (toolbarHeight/3)*2
+        let yPosition = toolbar.center.y-buttonHeight/2
+        btn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
+        let backgroundView = UIView.init(frame: btn.frame)
+        backgroundView.isUserInteractionEnabled = false
+        backgroundView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
+        backgroundView.layer.cornerRadius = buttonHeight/2
+        backgroundView.layer.masksToBounds = true
+        backgroundView.layer.borderWidth = 3.0
+        backgroundView.layer.borderColor = UIColor.purple.cgColor
+        btn.addSubview(backgroundView)
+        btn.center = CGPoint(x: toolbar.center.x, y: yPosition)
+        let barBtn = UIBarButtonItem.init(customView: btn)
+
+       return barBtn
+        
     }
     
     
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func newSamplerDidPress(sender: Any){
+      
+        print("\(sender)")
+        let samples = SCDataManager.shared.newStandardSampleBank()
+        let sampleBankID = SCDataManager.shared.getSampleBankID()
         
-        guard let user = SCDataManager.shared.user else {
-            print("Error: could not load sampler, user not found")
-            return 1
-        }
-        guard let sampleBanks = user.sampleBanks else {
+        let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: .standard)
+        
+        SCDataManager.shared.user?.sampleBanks?.append(sampleBank)
+        
+       
+        SCDataManager.shared.user?.currentSampleBank = SCDataManager.shared.user?.sampleBanks?.last
+        presentSampler()
+    }
+    
+    
+
+    func newDoubleSamplerDidPress(){
+        
+        
+    }
+    
+    
+    
+    func presentSampler(){
+        
+        self.collectionView.transform = CGAffineTransform(scaleX: 1, y: 1)
+        UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations:{
+            self.collectionView.transform = CGAffineTransform(scaleX: 5, y: 5)
+            
+            let vc: SCSamplerViewController = SCSamplerViewController(nibName: nil, bundle: nil)
+            let transition = CATransition()
+            transition.duration = 1.0
+            transition.type = kCATransitionPush
+            transition.subtype = kCATransitionFade
+            self.view.window!.layer.add(transition, forKey: kCATransition)
+            self.present(vc, animated: true, completion: nil)
+        }, completion: nil
+        )
+    }
+    
+}
+
+
+
+
+
+extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+     
+        guard let sampleBanks = SCDataManager.shared.user?.sampleBanks else {
             print("Error: could not load sampler, sample bank not found")
             return 1
         }
@@ -91,21 +174,8 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
             print("Error: could not load sampler, sample bank not found")
             return
         }
-
-        SCDataManager.shared.user?.currentSampleBank = sampleBanks[indexPath.row]
-        collectionView.transform = CGAffineTransform(scaleX: 1, y: 1)
         
-           UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations:{
-            collectionView.transform = CGAffineTransform(scaleX: 5, y: 5)
-            
-            let vc: SCSamplerViewController = SCSamplerViewController(nibName: nil, bundle: nil)
-            let transition = CATransition()
-            transition.duration = 1.0
-            transition.type = kCATransitionPush
-            transition.subtype = kCATransitionFade
-            self.view.window!.layer.add(transition, forKey: kCATransition)
-            self.present(vc, animated: true, completion: nil)
-           }, completion: nil
-        )
+        SCDataManager.shared.user?.currentSampleBank = sampleBanks[indexPath.row]
+        presentSampler()
     }
 }

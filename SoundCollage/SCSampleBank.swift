@@ -11,26 +11,35 @@ import ObjectMapper
 
 class SCSampleBank: Mappable {
     
-    var samples: [String: AnyObject] = [:] // object mapper not retrieving dict values
-    var name: String? // for the user to identify the sample bank
+    var samples: [String: AnyObject] = [:]
+    var name: String? 
     var id: Int?
+    var type: SamplerType?
     
-    init(name: String?, id: Int?, samples: [String: AnyObject]) {
+    init(name: String?, id: Int?, samples: [String: AnyObject], type: SamplerType) {
         self.name = name
         self.id = id
         self.samples = samples
+        self.type = type
     }
     
     required init?(map: Map) {
         samples     <- map["samples"]
         name        <- map["name"]
         id          <- map["id"]
+        type        <- map["type"]
     }
     
     func mapping(map: Map) {
         samples     <- map["samples"]
         name        <- map["name"]
         id          <- map["id"]
+        type        <- map["type"]
+    }
+    
+    enum SamplerType {
+        case standard
+        case double
     }
 
 }
