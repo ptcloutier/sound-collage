@@ -21,7 +21,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var recordedOutputFile: AVAudioFile?
     var audioFile: AVAudioFile!
     let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
-    var selectedSampleIndex: Int?
+    var selectedSampleIndex: Int = 0
     var audioRecorder: AVAudioRecorder!
     var audioFilePath: URL?
     var isRecordingModeEnabled = false
@@ -68,7 +68,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func playback() {
         
-        guard let partialPath = getSample(selectedSampleIndex: selectedSampleIndex!) else {
+        guard let partialPath = getSample(selectedSampleIndex: selectedSampleIndex) else {
             print("Playback sample not found")
             return
         }
@@ -150,11 +150,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         
         removeUsedEngines()
         
-        guard let sampleIndex = self.selectedSampleIndex else {
-            print("No selected sample index.")
-            return
-        }
-
+        let sampleIndex = self.selectedSampleIndex
         self.audioEngine = SCAudioEngine()
         self.audioEngineChain.append(self.audioEngine)
         
@@ -403,11 +399,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             return
         }
         
-        guard let samplePadIndex = selectedSampleIndex else {
-            print("selectedSample index not found.")
-            return
-        }
-        
+        let samplePadIndex = selectedSampleIndex         
         let sampleID = getSampleID(samplePadIndex: samplePadIndex)
         let audioType = ".aac"
         let newPath = "sampleBank_\(currentSampleBankID)_pad_\(samplePadIndex)_id_\(sampleID)\(audioType)"
@@ -503,7 +495,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             return
         }
         for key in sampleBank.samples.keys{
-            if key == selectedSampleIndex?.description {
+            if key == selectedSampleIndex.description {
                 sampleBank.samples[key] = audioURL as AnyObject?
                 print("Audio file recorded and saved at \(audioURL.description)")
             }

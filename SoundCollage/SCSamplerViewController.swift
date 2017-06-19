@@ -65,8 +65,9 @@ class SCSamplerViewController: UIViewController  {
             print("collectionview is nil")
             return
         }
-        samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
-
+        if SCDataManager.shared.user?.currentSampleBank?.type == SCSampleBank.SamplerType.standard {
+            samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
+        }
     }
     
     
@@ -75,7 +76,13 @@ class SCSamplerViewController: UIViewController  {
     
     private func setupContainerViews() {
         
-        samplerFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 4)
+        var numberOfColumns: CGFloat
+        if SCDataManager.shared.user?.currentSampleBank?.type == SCSampleBank.SamplerType.standard {
+           numberOfColumns = 4
+        } else {
+            numberOfColumns = 6
+        }
+        samplerFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: numberOfColumns)
         guard let samplerFlowLayout = self.samplerFlowLayout else {
             print("No sampler flow layout.")
             return
@@ -97,11 +104,13 @@ class SCSamplerViewController: UIViewController  {
         self.view.addSubview(samplerCV)
         
         samplerCV.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.57, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .leading, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
+//        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0))
         
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .height, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .height, multiplier: 0.57, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .width, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .width, multiplier: 1.0, constant: 0.0))
         
         
         let effectsFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 1)
@@ -165,10 +174,7 @@ class SCSamplerViewController: UIViewController  {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed || gestureRecognizer.state == .ended {
             let location =  gestureRecognizer.location(in: parameterView)
             
-            guard let sampleIndex = SCAudioManager.shared.selectedSampleIndex else {
-                print("No selected sample index.")
-                return
-            }
+            let sampleIndex = SCAudioManager.shared.selectedSampleIndex
             SCAudioManager.shared.handleEffectsParameters(point: location, sampleIndex: sampleIndex)
         }
     }
@@ -202,17 +208,37 @@ class SCSamplerViewController: UIViewController  {
         recordBtn.addSubview(backgroundView)
         recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
+        let bankBtn = UIButton()
+        bankBtn.addTarget(self, action: #selector(SCSamplerViewController.bankBtnDidPress), for: .touchUpInside)
+        bankBtn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
+        let bankBack = UIView.init(frame: bankBtn.frame)
+        bankBack.isUserInteractionEnabled = false
+        bankBack.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral
+        bankBack.layer.cornerRadius = buttonHeight/2
+        bankBack.layer.masksToBounds = true
+        bankBack.layer.borderWidth = 3.0
+        bankBack.layer.borderColor = UIColor.purple.cgColor
+        bankBtn.addSubview(bankBack)
+        let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
-        
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
     
 
-        toolbar.items = [flexibleSpace, recordBarBtn, flexibleSpace]
+        toolbar.items = [bankBarBtn, flexibleSpace, recordBarBtn, flexibleSpace, flexibleSpace]
         self.view.addSubview(toolbar)
-        
-        
     }
     
+    
+    
+    
+    func bankBtnDidPress(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController else {
+            print("No sample bank vc.")
+            return
+        }
+        present(vc, animated: true, completion: nil)
+    }
     
     //MARK: Animations
     
@@ -351,7 +377,11 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == samplerCV {
-            return 16
+            guard let numberOfItems = SCDataManager.shared.user?.currentSampleBank?.samples.count else {
+                print("No samples found.")
+                return 0
+            }
+            return numberOfItems
         } else {
             print("\(effects.count)")
             return effects.count
@@ -365,8 +395,18 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         
         if collectionView == samplerCV {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
+           
+            var colorIndex: Int
+            if indexPath.row > iceCreamColors.count-1 {
+                colorIndex = indexPath.row-iceCreamColors.count
+                if colorIndex > iceCreamColors.count-1 {
+                    colorIndex -= iceCreamColors.count
+                }
+            } else {
+                colorIndex = indexPath.row
+            }
             
-            cell.cellColor = iceCreamColors[indexPath.row]
+            cell.cellColor = iceCreamColors[colorIndex]
             cell.setRecordingColorSets()
             cell.setupGradientLayer()
 //            cell.layer.masksToBounds = true

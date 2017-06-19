@@ -62,8 +62,9 @@ class SCSampleBankViewController: UIViewController {
         toolbar.isTranslucent = true
         
         let newStandardSamplerBtn = UIButton()
+        newStandardSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newStandardSamplerDidPress), for: .touchUpInside)
         let newDoubleSamplerBtn = UIButton()
-        
+        newDoubleSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newDoubleSamplerDidPress), for: .touchUpInside)
         let standardBarBtn = setupToolbarButton(btn: newStandardSamplerBtn)
         let doubleBarBtn = setupToolbarButton(btn: newDoubleSamplerBtn)
         
@@ -79,7 +80,7 @@ class SCSampleBankViewController: UIViewController {
     
     func setupToolbarButton(btn: UIButton)-> UIBarButtonItem {
         
-        btn.addTarget(self, action: #selector(SCSampleBankViewController.newSamplerDidPress), for: .touchUpInside)
+       
         let buttonHeight = (toolbarHeight/3)*2
         let yPosition = toolbar.center.y-buttonHeight/2
         btn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
@@ -100,26 +101,35 @@ class SCSampleBankViewController: UIViewController {
     
     
     
-    func newSamplerDidPress(sender: Any){
+    func newStandardSamplerDidPress(){
       
-        print("\(sender)")
-        let samples = SCDataManager.shared.newStandardSampleBank()
-        let sampleBankID = SCDataManager.shared.getSampleBankID()
-        
-        let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: .standard)
-        
-        SCDataManager.shared.user?.sampleBanks?.append(sampleBank)
-        
-       
-        SCDataManager.shared.user?.currentSampleBank = SCDataManager.shared.user?.sampleBanks?.last
-        presentSampler()
+        let samplerType = SCSampleBank.SamplerType.standard
+        newSampler(samplerType: samplerType)
     }
     
     
 
     func newDoubleSamplerDidPress(){
+        let samplerType = SCSampleBank.SamplerType.double
+        newSampler(samplerType: samplerType)
+    }
+    
+    
+    private func newSampler(samplerType: SCSampleBank.SamplerType){
+        var samples: [String: AnyObject]
         
+        switch samplerType {
+        case .standard:
+            samples = SCDataManager.shared.newStandardSampleBank()
+        case .double:
+            samples = SCDataManager.shared.newDoubleSampleBank()
+        }
         
+        let sampleBankID = SCDataManager.shared.getSampleBankID()
+        let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: samplerType)
+        SCDataManager.shared.user?.sampleBanks?.append(sampleBank)
+        SCDataManager.shared.user?.currentSampleBank = SCDataManager.shared.user?.sampleBanks?.last
+        presentSampler()
     }
     
     

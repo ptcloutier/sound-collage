@@ -236,11 +236,16 @@ class SCDataManager {
                                             "24": "" as AnyObject,
                                             "25": "" as AnyObject,
                                             "26": "" as AnyObject,
+                                            "27": "" as AnyObject,
                                             "28": "" as AnyObject,
                                             "29": "" as AnyObject,
                                             "30": "" as AnyObject,
                                             "31": "" as AnyObject,
-                                            "32": "" as AnyObject]
+                                            "32": "" as AnyObject,
+                                            "33": "" as AnyObject,
+                                            "34": "" as AnyObject,
+                                            "35": "" as AnyObject,
+                                            ]
         return samples
     }
 }
