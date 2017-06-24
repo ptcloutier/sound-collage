@@ -13,11 +13,11 @@ import AVFoundation
 
 class SCSamplerViewController: UIViewController  {
     
+    var recordBtn: UIButton?
     var parameterView: UIView?
     var samplerCV: UICollectionView?
     var samplerFlowLayout: SCSamplerFlowLayout?
     var effectsContainerCV: UICollectionView?
-    let recordBtn = UIButton()
     var newRecordingTitle: String?
     var lastRecording: URL?
     var selectedSampleIndex: Int?
@@ -36,17 +36,17 @@ class SCSamplerViewController: UIViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        
+        view.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.ice
         effects = ["reverb", "delay", "pitch"]
 
         vintageColors = SCGradientColors.getVintageColors()
         iceCreamColors = SCGradientColors.getPsychedelicIceCreamShopColors()
-//        self.view.applyGradient(withColors: backGroundColors, gradientOrientation: .horizontal)
         let recordingDidFinishNotification = Notification.Name.init("recordingDidFinish")
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
         setupControls()
         setupContainerViews()
         animateEntrance()
+
         
     }
     
@@ -55,21 +55,30 @@ class SCSamplerViewController: UIViewController  {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-//        guard let parameterView = self.parameterView else {
-//            print("No parameter view.")
-//            return
-//        }
-//        parameterView.applyGradient(withColors: parameterViewColors, gradientOrientation: .horizontal)
         
         guard let samplerCV = self.samplerCV else {
             print("collectionview is nil")
             return
         }
+        while calibrateSize(samplerCVWidth: samplerCV.frame.size.width) == false {
+            samplerCV.frame.size.width = samplerCV.frame.size.width-1.0
+        }
         if SCDataManager.shared.user?.currentSampleBank?.type == SCSampleBank.SamplerType.standard {
             samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
         }
+        print(" Hi, i'm \(samplerCV.frame.size.width)")
+
     }
     
+    func calibrateSize(samplerCVWidth: CGFloat)-> Bool{
+        var result: Bool = false
+        
+        if samplerCVWidth.truncatingRemainder(dividingBy: 4.0) == 0 && samplerCVWidth.truncatingRemainder(dividingBy: 6.0) == 0 {
+          result = true
+        }
+
+        return result
+    }
     
     //MARK: Collection views
     
@@ -105,13 +114,11 @@ class SCSamplerViewController: UIViewController  {
         
         samplerCV.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .leading, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
-//        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0))
-        
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .height, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .height, multiplier: 0.57, constant: 0))
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .width, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .width, multiplier: 1.0, constant: 0.0))
-        
         
         let effectsFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 1)
         self.effectsContainerCV = UICollectionView.init(frame: .zero, collectionViewLayout: effectsFlowLayout)
@@ -192,42 +199,39 @@ class SCSamplerViewController: UIViewController  {
         toolbar.setShadowImage(transparentPixel, forToolbarPosition: .any)
         toolbar.isTranslucent = true
         
-        
-        recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress), for: .touchUpInside)
         let buttonHeight = (toolbarHeight/3)*2
         let yPosition = toolbar.center.y-buttonHeight/2
-        recordBtn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
         
-        let backgroundView = UIView.init(frame: recordBtn.frame)
-        backgroundView.isUserInteractionEnabled = false
-        backgroundView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
-        backgroundView.layer.cornerRadius = buttonHeight/2
-        backgroundView.layer.masksToBounds = true
-        backgroundView.layer.borderWidth = 3.0
-        backgroundView.layer.borderColor = UIColor.purple.cgColor
-        recordBtn.addSubview(backgroundView)
+        self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.purple)
+        guard let recordBtn = self.recordBtn else {
+            print("No record btn.")
+            return
+        }
+        recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress), for: .touchUpInside)
         recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
-        let bankBtn = UIButton()
+        let bankBtn = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.purple)
         bankBtn.addTarget(self, action: #selector(SCSamplerViewController.bankBtnDidPress), for: .touchUpInside)
-        bankBtn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
-        let bankBack = UIView.init(frame: bankBtn.frame)
-        bankBack.isUserInteractionEnabled = false
-        bankBack.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral
-        bankBack.layer.cornerRadius = buttonHeight/2
-        bankBack.layer.masksToBounds = true
-        bankBack.layer.borderWidth = 3.0
-        bankBack.layer.borderColor = UIColor.purple.cgColor
-        bankBtn.addSubview(bankBack)
+        
+        
+        let tempBtn1 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.purple)
+        
+        let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.purple)
+        
+        let tempBtn3 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue, secondaryColor: UIColor.purple)
+        
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
+        let tempBarBtn1 = UIBarButtonItem.init(customView: tempBtn1)
+        let tempBarBtn2 = UIBarButtonItem.init(customView: tempBtn2)
+        let tempBarBtn3 = UIBarButtonItem.init(customView: tempBtn3)
+        
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
     
 
-        toolbar.items = [bankBarBtn, flexibleSpace, recordBarBtn, flexibleSpace, flexibleSpace]
+        toolbar.items = [flexibleSpace, bankBarBtn, flexibleSpace, tempBarBtn1, flexibleSpace,  recordBarBtn, flexibleSpace, tempBarBtn2, flexibleSpace, tempBarBtn3, flexibleSpace]
         self.view.addSubview(toolbar)
     }
-    
     
     
     
@@ -261,20 +265,23 @@ class SCSamplerViewController: UIViewController  {
     
     func recordBtnDidPress(){
         
+        guard let recordBtn = self.recordBtn else {
+            print("No record btn.")
+            return
+        }
         switch SCAudioManager.shared.isRecording {
         case true:
-            
             SCAudioManager.shared.finishRecording(success: true)
             reloadSamplerCV()
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
-                self.recordBtn.alpha = 1
+                recordBtn.alpha = 1
             }, completion: nil)
         case false:
             toggleRecordingMode()
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
-                self.recordBtn.alpha = 1
+                recordBtn.alpha = 1
             }, completion: nil)
         }
     }
@@ -413,7 +420,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
 //            cell.layer.cornerRadius = 15.0
             // border
             cell.layer.borderColor = UIColor.purple.cgColor
-            cell.layer.borderWidth = 3.0
+            cell.layer.borderWidth = 2.0
 //            cell.layer.cornerRadius = 15.0
             //shadow
 //            cell.layer.shadowColor = UIColor.darkGray.cgColor
@@ -470,14 +477,14 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 10.0
             // border
-            cell.layer.borderColor = UIColor.purple.cgColor
-            cell.layer.borderWidth = 3.0
-            cell.layer.cornerRadius = 10.0
+//            cell.layer.borderColor = UIColor.purple.cgColor
+//            cell.layer.borderWidth = 3.0
+//            cell.layer.cornerRadius = 10.0
             //shadow
-            cell.layer.shadowColor = UIColor.darkGray.cgColor
-            cell.layer.shadowOffset = CGSize(width: 3, height: 3)
-            cell.layer.shadowOpacity = 0.7
-            cell.layer.shadowRadius = 3.0
+//            cell.layer.shadowColor = UIColor.darkGray.cgColor
+//            cell.layer.shadowOffset = CGSize(width: 3, height: 3)
+//            cell.layer.shadowOpacity = 0.7
+//            cell.layer.shadowRadius = 3.0
 
             cell.contentView.backgroundColor = iceCreamColors[indexPath.row]
             cell.setupLabel()

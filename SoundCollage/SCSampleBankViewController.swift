@@ -19,13 +19,11 @@ class SCSampleBankViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupControls()
         setupCollectionView()
         animateEntrance()
     }
-    
-   
     
     private func setupCollectionView(){
         
@@ -34,6 +32,12 @@ class SCSampleBankViewController: UIViewController {
         collectionView.register(SCSampleBankCell.self, forCellWithReuseIdentifier: "SCSampleBankCell")
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.ice
+        view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0))
+
     }
     
     
@@ -65,13 +69,13 @@ class SCSampleBankViewController: UIViewController {
         newStandardSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newStandardSamplerDidPress), for: .touchUpInside)
         let newDoubleSamplerBtn = UIButton()
         newDoubleSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newDoubleSamplerDidPress), for: .touchUpInside)
-        let standardBarBtn = setupToolbarButton(btn: newStandardSamplerBtn)
-        let doubleBarBtn = setupToolbarButton(btn: newDoubleSamplerBtn)
+        let standardSamplerBarBtn = setupToolbarButton(btn: newStandardSamplerBtn)
+        let doubleSamplerBtnBtn = setupToolbarButton(btn: newDoubleSamplerBtn)
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
         
-        toolbar.items = [flexibleSpace, standardBarBtn, flexibleSpace, doubleBarBtn, flexibleSpace]
+        toolbar.items = [flexibleSpace, standardSamplerBarBtn, flexibleSpace, doubleSamplerBtnBtn, flexibleSpace]
         self.view.addSubview(toolbar)
         
         
@@ -173,6 +177,18 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSampleBankCell", for: indexPath) as! SCSampleBankCell
+        let iceCreamColors: [UIColor] = SCGradientColors.getPsychedelicIceCreamShopColors()
+        var colorIndex: Int
+        if indexPath.row > iceCreamColors.count-1 {
+            colorIndex = indexPath.row-iceCreamColors.count
+            if colorIndex > iceCreamColors.count-1 {
+                colorIndex -= iceCreamColors.count
+            }
+        } else {
+            colorIndex = indexPath.row
+        }
+        
+        cell.imageView.backgroundColor = iceCreamColors[colorIndex]
         return cell
     }
     

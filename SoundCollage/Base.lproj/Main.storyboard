@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,7 +13,6 @@
         <!--SAMPLER-->
         <scene sceneID="crF-tI-oZu">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Gzs-hE-Rib" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="ZBM-cs-oHd" customClass="SCSamplerViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gOj-HM-pS1"/>
@@ -26,13 +25,13 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="SAMPLER" id="vsd-8B-wCM"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Gzs-hE-Rib" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3890.4000000000001" y="35.532233883058474"/>
         </scene>
         <!--KEYS-->
         <scene sceneID="sR1-Bh-aMP">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="58T-Kg-Xmi" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="p5R-qm-pcu" customClass="SCKeyboardViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NRh-bo-vMP"/>
@@ -126,6 +125,7 @@
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="58T-Kg-Xmi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4677.6000000000004" y="49.925037481259373"/>
         </scene>
@@ -147,13 +147,13 @@
                                 <collectionViewLayout key="collectionViewLayout" id="lpU-Yt-J8U"/>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SCSampleBankCell" id="OSE-Hg-jA8">
-                                        <rect key="frame" x="42.5" y="0.0" width="290" height="309"/>
+                                        <rect key="frame" x="43" y="0.0" width="323" height="658"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="290" height="309"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="323" height="658"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </view>
-                                        <size key="customSize" width="290" height="309"/>
+                                        <size key="customSize" width="323" height="658"/>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>

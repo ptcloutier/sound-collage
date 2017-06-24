@@ -19,7 +19,7 @@ class SCSampleBankCell: UICollectionViewCell {
         super.init(frame: frame)
         
         setupImageView()
-        setupLabels()
+        setupTextField()
     }
     
     
@@ -39,15 +39,17 @@ class SCSampleBankCell: UICollectionViewCell {
     private func setupImageView(){
         
         self.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage.init(named: "sample")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        self.addSubview(self.imageView)
         
-        self.addConstraint(NSLayoutConstraint(item: imageView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0))
-        self.addConstraint(NSLayoutConstraint(item: imageView, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 0))
-        self.addConstraint(NSLayoutConstraint(item: imageView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 0))
-        self.addConstraint(NSLayoutConstraint(item: imageView, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: 0))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        self.addSubview(imageView)
+        
+        self.addConstraint(NSLayoutConstraint(item: imageView, attribute: .centerX, relatedBy: .equal, toItem: self.contentView, attribute: .centerX, multiplier: 1, constant: 0))
+//        self.addConstraint(NSLayoutConstraint(item: imageView, attribute: .bottom, relatedBy: .equal, toItem: self.contentView, attribute: .bottom, multiplier: 1, constant: -20))
+        self.addConstraint(NSLayoutConstraint(item: imageView, attribute: .centerY, relatedBy: .equal, toItem: self.contentView, attribute: .centerY, multiplier: 1, constant: 0))
+//        self.addConstraint(NSLayoutConstraint(item: imageView, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 1, constant: -20))
+        self.addConstraint(NSLayoutConstraint(item: imageView, attribute: .width, relatedBy: .equal, toItem: self.contentView, attribute: .width, multiplier: 0.75, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: self.contentView, attribute: .height, multiplier: 0.75, constant: 0))
     }
     
     
@@ -59,34 +61,17 @@ class SCSampleBankCell: UICollectionViewCell {
     
     
     
-    private func setupLabels(){
+    private func setupTextField(){
     
-        titleTextField.text = "s o u n d   c o l l a g e"
-        titleTextField.font = UIFont.init(name: "Futura", size: 20)
+        titleTextField.font = UIFont.init(name: "Futura", size: 30)
         titleTextField.textColor = UIColor.white
         titleTextField.textAlignment = NSTextAlignment.center
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(titleTextField)
         
-        self.addConstraint(NSLayoutConstraint(item: titleTextField, attribute: .centerX, relatedBy: .equal, toItem: imageView, attribute: .centerX, multiplier: 1, constant: 0))
-        self.addConstraint(NSLayoutConstraint(item: titleTextField, attribute: .centerY, relatedBy: .equal, toItem: imageView, attribute: .bottom, multiplier: 1, constant: 8))
-    }
-    
-    
-    
-    private func setupInterpolatingMotionEffect(){
-        let horizontalMotionEffect = UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis)
-        horizontalMotionEffect.minimumRelativeValue = -50
-        horizontalMotionEffect.maximumRelativeValue = 50
-        
-        let verticalMotionEffect = UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis)
-        verticalMotionEffect.minimumRelativeValue = -50
-        verticalMotionEffect.maximumRelativeValue = 50
-        
-        let motionEffectGroup = UIMotionEffectGroup()
-        motionEffectGroup.motionEffects = [horizontalMotionEffect, verticalMotionEffect]
-        
-        imageView.addMotionEffect(motionEffectGroup)
+        self.addConstraint(NSLayoutConstraint(item: titleTextField, attribute: .centerX, relatedBy: .equal, toItem: self.contentView, attribute: .centerX, multiplier: 1, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: titleTextField, attribute: .centerY, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1, constant: 20))
+        self.addConstraint(NSLayoutConstraint(item: titleTextField, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 16.0))
     }
 }
    
