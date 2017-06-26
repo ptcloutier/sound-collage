@@ -31,6 +31,7 @@ class SCSampleBankCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        
         makeImageCircular()
     }
     
@@ -39,7 +40,7 @@ class SCSampleBankCell: UICollectionViewCell {
     private func setupImageView(){
         
         self.translatesAutoresizingMaskIntoConstraints = false
-        
+        imageView.alpha = 0.6
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         self.addSubview(imageView)
@@ -63,15 +64,15 @@ class SCSampleBankCell: UICollectionViewCell {
     
     private func setupTextField(){
     
-        titleTextField.font = UIFont.init(name: "Futura", size: 30)
-        titleTextField.textColor = UIColor.white
+        titleTextField.text = "Untitled"
+        titleTextField.font = UIFont.init(name: "A DAY WITHOUT SUN", size: 40)
+        titleTextField.textColor = UIColor.Custom.VintageSeaStyle.darkAqua
         titleTextField.textAlignment = NSTextAlignment.center
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(titleTextField)
         
         self.addConstraint(NSLayoutConstraint(item: titleTextField, attribute: .centerX, relatedBy: .equal, toItem: self.contentView, attribute: .centerX, multiplier: 1, constant: 0))
-        self.addConstraint(NSLayoutConstraint(item: titleTextField, attribute: .centerY, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1, constant: 20))
-        self.addConstraint(NSLayoutConstraint(item: titleTextField, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 16.0))
+        self.addConstraint(NSLayoutConstraint(item: titleTextField, attribute: .top, relatedBy: .equal, toItem: imageView, attribute: .bottom, multiplier: 1.0, constant: 16.0))
     }
 }
    

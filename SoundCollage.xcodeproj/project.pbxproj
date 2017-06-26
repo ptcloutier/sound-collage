@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A7054EC61EA82D7700BBC34E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7054EC51EA82D7700BBC34E /* Foundation.framework */; };
+		A70814351F01B54600A8AE92 /* A DAY WITHOUT SUN.otf in Resources */ = {isa = PBXBuildFile; fileRef = A70814321F01B54600A8AE92 /* A DAY WITHOUT SUN.otf */; };
+		A70814391F01C46400A8AE92 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = A70814381F01C46400A8AE92 /* plus.png */; };
 		A71414FA1EA82B3B00BE9718 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414F91EA82B3B00BE9718 /* AVFoundation.framework */; };
 		A71414FC1EA82B4300BE9718 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */; };
 		A71414FF1EA82B5000BE9718 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FD1EA82B5000BE9718 /* CoreAudio.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -81,6 +83,8 @@
 		75D104676F45F32E670413F6 /* Pods-SoundCollage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.debug.xcconfig"; sourceTree = "<group>"; };
 		9BEF22D19B1F94FC5200561F /* Pods-SoundCollage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.release.xcconfig"; sourceTree = "<group>"; };
 		A7054EC51EA82D7700BBC34E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A70814321F01B54600A8AE92 /* A DAY WITHOUT SUN.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "A DAY WITHOUT SUN.otf"; sourceTree = "<group>"; };
+		A70814381F01C46400A8AE92 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		A71414F91EA82B3B00BE9718 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A71414FD1EA82B5000BE9718 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -171,6 +175,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A70814301F01B54600A8AE92 /* zetafonts_a-day-without-sun */ = {
+			isa = PBXGroup;
+			children = (
+				A70814321F01B54600A8AE92 /* A DAY WITHOUT SUN.otf */,
+			);
+			path = "zetafonts_a-day-without-sun";
+			sourceTree = "<group>";
+		};
+		A70814371F01B5A100A8AE92 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A70814381F01C46400A8AE92 /* plus.png */,
+				A70814301F01B54600A8AE92 /* zetafonts_a-day-without-sun */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		A7264E761EAE284600664EDE /* SampleBankVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -230,6 +251,7 @@
 				A7A823031EA81BEC0061D0A0 /* LaunchScreen.storyboard */,
 				A7A823061EA81BEC0061D0A0 /* Info.plist */,
 				A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */,
+				A70814371F01B5A100A8AE92 /* Resources */,
 			);
 			name = Application;
 			sourceTree = "<group>";
@@ -419,6 +441,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A70814351F01B54600A8AE92 /* A DAY WITHOUT SUN.otf in Resources */,
+				A70814391F01C46400A8AE92 /* plus.png in Resources */,
 				A7A823051EA81BEC0061D0A0 /* LaunchScreen.storyboard in Resources */,
 				A7A823021EA81BEC0061D0A0 /* Assets.xcassets in Resources */,
 				A7A822FD1EA81BEC0061D0A0 /* Main.storyboard in Resources */,
