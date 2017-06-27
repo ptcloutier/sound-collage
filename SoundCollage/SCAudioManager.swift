@@ -188,7 +188,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                  Default:    1
                  Unit:       Seconds
                  */
-//                open var delayTime: TimeInterval
+                //                open var delayTime: TimeInterval
                 
                 
                 /*! @property feedback
@@ -198,31 +198,36 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                  Default:    50
                  Unit:       Percent
                  */
-//                open var feedback: Float
-                    let delay = AVAudioUnitDelay()
-                    let delayParameters = self.effectControls[1].parameters[sampleIndex]
+                //                open var feedback: Float
+                let delay = AVAudioUnitDelay()
+                let delayParameters = self.effectControls[1].parameters[sampleIndex]
                 
-                    let time = delayParameters[0]/2
-                    let feedback = delayParameters[1]
-                    let delayTime = time/Float(100.0)
-                    delay.delayTime = TimeInterval(delayTime)
-                    delay.feedback = feedback
+                let time = delayParameters[0]/2
+                var feedback: Float
+                if delayParameters[1]<=75.0 {
+                    feedback = delayParameters[1]
+                } else {
+                    feedback = 75.0
+                }
+                let delayTime = time/Float(100.0)
+                delay.delayTime = TimeInterval(delayTime)
+                delay.feedback = feedback
                 
                 if self.effectControls[1].isActive == true {
                     audioEngine.attach(delay)
                 }
                 
-                    let pitch = AVAudioUnitTimePitch()
-                    let pitchParameters = self.effectControls[2].parameters[sampleIndex]
-                    let pitchZero = -1200
-                    let pitchParam = Float(pitchParameters[2])*24
-                    let sum = pitchZero + Int(pitchParam)
-                    pitch.pitch = Float(sum)
-               
+                let pitch = AVAudioUnitTimePitch()
+                let pitchParameters = self.effectControls[2].parameters[sampleIndex]
+                let pitchZero = -1200
+                let pitchParam = Float(pitchParameters[2])*24
+                let sum = pitchZero + Int(pitchParam)
+                pitch.pitch = Float(sum)
+                
                 if self.effectControls[2].isActive == true {
                     audioEngine.attach(pitch)
                     print("Pitch: \(pitch)")
-                   
+                    
                 }
                 
                 // Sound effect connection permutations TODO: make this DRY
