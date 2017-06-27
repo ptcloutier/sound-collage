@@ -259,6 +259,11 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                     audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
                     audioEngine.connect(pitch, to: audioEngine.mainMixerNode, format: audioFormat)
                 }
+                if reverbIsActive == true && delayIsActive == false && pitchIsActive == true {
+                    audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
+                    audioEngine.connect(pitch, to: reverb, format: audioFormat)
+                    audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: audioFormat)
+                }
             }
             guard let fin = self.audioEngine else {
                 print("no engine.")
@@ -320,9 +325,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     func handleEffectsParameters(point: CGPoint, sampleIndex: Int) {
-        
-       
-        
         
         var xValue = Float(point.x)/2
         if xValue>100{

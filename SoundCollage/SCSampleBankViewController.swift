@@ -28,12 +28,10 @@ class SCSampleBankViewController: UIViewController {
         let img6 = UIImage.init(named: "l8")
         images = [img1!, img2!, img3!, img4!, img5!, img6!]
         
-        setupTitle(xConstant: -5.0, yConstant: 0, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral )
-        setupTitle(xConstant: -3.0, yConstant: 2.0, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue)
-        setupTitle(xConstant: -1.0, yConstant: 4.0, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.neonAqua)
-//        setupTitle(xConstant: 1.0, yConstant: 6.0, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.darkRose)
-//        setupTitle(xConstant: 3.0, yConstant: 8.0, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.lightestBlueSky)
-//        setupTitle(xConstant: 5.0, yConstant: 10.0, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.medViolet)
+        setupTitle(xConstant: 2, yConstant: 2, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral )
+        setupTitle(xConstant: 6, yConstant: 6, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue)
+        setupTitle(xConstant: 10, yConstant: 10, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.neonAqua)
+        
 
         setupControls()
         setupCollectionView()
@@ -44,7 +42,7 @@ class SCSampleBankViewController: UIViewController {
     
         let margin: CGFloat = 20.0
         let titleLabel = UILabel.init(frame: .zero)
-        titleLabel.text = "C  O  N  C  R  E  A  T  E"
+        titleLabel.text = "S O U N D   C O L L A G E"
         titleLabel.font = UIFont.init(name: "A DAY WITHOUT SUN", size: 60.0)
         titleLabel.textColor = textColor
         titleLabel.textAlignment = NSTextAlignment.center
@@ -103,10 +101,9 @@ class SCSampleBankViewController: UIViewController {
         let newDoubleSamplerBtn = UIButton()
         newDoubleSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newDoubleSamplerDidPress), for: .touchUpInside)
         let standardSamplerBarBtn = setupToolbarButton(btn: newStandardSamplerBtn)
-//        let doubleSamplerBtnBtn = setupToolbarButton(btn: newDoubleSamplerBtn)
+//        let doubleSamplerBtnBtn = setupToolbarButton(btn: newDoubleSamplerBtn) // TODO: double sampler feature 
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        
         
         toolbar.items = [flexibleSpace, standardSamplerBarBtn, flexibleSpace]
         self.view.addSubview(toolbar)
@@ -120,20 +117,22 @@ class SCSampleBankViewController: UIViewController {
        
         let buttonHeight = (toolbarHeight/3)*2
         let yPosition = toolbar.center.y-buttonHeight/2
+        
         btn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
-        btn.setImage(UIImage.init(named: "plus.png"), for: .normal)
+        btn.setImage(UIImage.init(named: "plus-1"), for: .normal)
+        
         let backgroundView = UIView.init(frame: btn.frame)
         backgroundView.isUserInteractionEnabled = false
         backgroundView.layer.cornerRadius = buttonHeight/2
         backgroundView.layer.masksToBounds = true
-        backgroundView.layer.borderWidth = 1.0
-        backgroundView.layer.borderColor = UIColor.purple.cgColor
+//        backgroundView.layer.borderWidth = 1.0
+//        backgroundView.layer.borderColor = UIColor.lightGray.cgColor
+        
         btn.addSubview(backgroundView)
         btn.center = CGPoint(x: toolbar.center.x, y: yPosition)
-        let barBtn = UIBarButtonItem.init(customView: btn)
-
-       return barBtn
         
+        let barBtn = UIBarButtonItem.init(customView: btn)
+        return barBtn
     }
     
     

@@ -47,9 +47,10 @@ class SCGradientColors {
         let limestone = UIColor.init(red: 174.0/255.0, green: 196.0/255.0, blue: 191.0/255.0, alpha: 1.0)
         let lime = UIColor.init(red: 183.0/255.0, green: 181.0/255.0, blue: 61.0/255.0, alpha: 1.0)
         let darkGreen = UIColor.init(red: 85.0/255.0, green: 110.0/255.0, blue: 45.0/255.0, alpha: 1.0)
+        let ice = UIColor.init(red: 216.0/255.0, green: 225.0/255.0, blue: 234.0/255.0, alpha: 1.0)
 
         
-        let vintUIColors = [brightVintageRed, lightVintageRed, cream, lightCreamsicle, darkCreamsicle, lightAlgae, medAlgae, darkAlgae, darkAqua,  mint, darkNavyBlue, emeraldGreen, lemon, limestone, lime, darkGreen, vintageBlue,]
+        let vintUIColors = [brightVintageRed, lightVintageRed, cream, lightCreamsicle, darkCreamsicle, lightAlgae, medAlgae, darkAlgae, darkAqua,  mint, darkNavyBlue, emeraldGreen, lemon, limestone, lime, darkGreen, vintageBlue, ice]
         return vintUIColors
     }
     
@@ -66,7 +67,6 @@ class SCGradientColors {
         let medRose = UIColor.init(red: 255.0/255.0, green: 124.0/255.0, blue: 134.0/255.0, alpha: 1.0)
         let darkRose = UIColor.init(red: 219.0/255.0, green: 107.0/255.0, blue: 96.0/255.0, alpha: 1.0)
         let brightCoral = UIColor.init(red: 255.0/255.0, green: 89.0/255.0, blue: 97.0/255.0, alpha: 1.0)
-        let ice = UIColor.init(red: 216.0/255.0, green: 225.0/255.0, blue: 234.0/255.0, alpha: 1.0)
         let darkViolet = UIColor.init(red: 156.0/255.0, green: 90.0/255.0, blue: 205.0/255.0, alpha: 1.0)
         let lightestBlueSky = UIColor.init(red: 154.0/255.0, green: 216.0/255.0, blue: 234.0/255.0, alpha: 1.0)
         let lighterBlueSky = UIColor.init(red: 110.0/255.0, green: 200.0/255.0, blue: 219.0/255.0, alpha: 1.0)
@@ -78,7 +78,7 @@ class SCGradientColors {
         let neonAqua = UIColor.init(red: 0/255.0, green: 205.0/255.0, blue: 210.0/255.0, alpha: 1.0)
         
     
-        let psyUIColors = [neonAqua, brightCoral, deepBlue, medRose, medViolet, lightViolet, lightRose, rose, medRose, darkRose, lightCoral,  ice, darkViolet, lightestBlueSky, lighterBlueSky, lighterBlue, lightBlueSky,  deepBlueShade, deepBlueDark]
+        let psyUIColors = [neonAqua, brightCoral, deepBlue, medRose, medViolet, lightViolet, lightRose, rose, medRose, darkRose, lightCoral, darkViolet, lightestBlueSky, lighterBlueSky, lighterBlue, lightBlueSky,  deepBlueShade, deepBlueDark]
         
         return psyUIColors
     }

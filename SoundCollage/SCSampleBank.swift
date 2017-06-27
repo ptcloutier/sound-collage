@@ -16,7 +16,7 @@ class SCSampleBank: Mappable {
     var id: Int?
     var type: SamplerType?
     
-    init(name: String?, id: Int?, samples: [String: AnyObject], type: SamplerType) {
+    init(name: String?, id: Int?, samples: [String: AnyObject], type: SamplerType?) {
         self.name = name
         self.id = id
         self.samples = samples

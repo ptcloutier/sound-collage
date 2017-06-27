@@ -64,7 +64,7 @@ class SCSampleBankCell: UICollectionViewCell {
     
     private func setupTextField(){
     
-        titleTextField.text = "Untitled"
+//        titleTextField.text = "Untitled"
         titleTextField.font = UIFont.init(name: "A DAY WITHOUT SUN", size: 40)
         titleTextField.textColor = UIColor.Custom.VintageSeaStyle.darkAqua
         titleTextField.textAlignment = NSTextAlignment.center

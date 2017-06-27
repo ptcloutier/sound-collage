@@ -66,9 +66,9 @@ class SCSamplerViewController: UIViewController  {
         if SCDataManager.shared.user?.currentSampleBank?.type == SCSampleBank.SamplerType.standard {
             samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
         }
-        print(" Hi, i'm \(samplerCV.frame.size.width)")
-
     }
+    
+    
     
     func calibrateSize(samplerCVWidth: CGFloat)-> Bool{
         var result: Bool = false
@@ -85,11 +85,14 @@ class SCSamplerViewController: UIViewController  {
     
     private func setupContainerViews() {
         
+        // main sampler
+        
         var numberOfColumns: CGFloat
-        if SCDataManager.shared.user?.currentSampleBank?.type == SCSampleBank.SamplerType.standard {
-           numberOfColumns = 4
-        } else {
+        
+        if SCDataManager.shared.user?.currentSampleBank?.type == SCSampleBank.SamplerType.double {
             numberOfColumns = 6
+        } else {
+            numberOfColumns = 4
         }
         samplerFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: numberOfColumns)
         guard let samplerFlowLayout = self.samplerFlowLayout else {
@@ -109,7 +112,6 @@ class SCSamplerViewController: UIViewController  {
         samplerCV.register(SCSamplerCollectionViewCell.self, forCellWithReuseIdentifier: "SCSamplerCollectionViewCell")
         samplerCV.delegate = self
         samplerCV.dataSource = self
-        
         self.view.addSubview(samplerCV)
         
         samplerCV.translatesAutoresizingMaskIntoConstraints = false
@@ -120,6 +122,7 @@ class SCSamplerViewController: UIViewController  {
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .height, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .height, multiplier: 0.57, constant: 0))
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .width, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .width, multiplier: 1.0, constant: 0.0))
         
+        // effects
         let effectsFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 1)
         self.effectsContainerCV = UICollectionView.init(frame: .zero, collectionViewLayout: effectsFlowLayout)
         guard let effectsContainerCV = self.effectsContainerCV else {
@@ -153,7 +156,7 @@ class SCSamplerViewController: UIViewController  {
         parameterView.layer.cornerRadius = 15.0
         parameterView.layer.borderWidth = 3
         parameterView.layer.borderColor = UIColor.purple.cgColor
-        parameterView.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.ice
+        parameterView.backgroundColor = UIColor.white
         
         
         self.view.addSubview(parameterView)
@@ -202,7 +205,7 @@ class SCSamplerViewController: UIViewController  {
         let buttonHeight = (toolbarHeight/3)*2
         let yPosition = toolbar.center.y-buttonHeight/2
         
-        self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.purple)
+        self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
         guard let recordBtn = self.recordBtn else {
             print("No record btn.")
             return
@@ -210,15 +213,15 @@ class SCSamplerViewController: UIViewController  {
         recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress), for: .touchUpInside)
         recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
-        let bankBtn = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.purple)
+        let bankBtn = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
         bankBtn.addTarget(self, action: #selector(SCSamplerViewController.bankBtnDidPress), for: .touchUpInside)
         
         
-        let tempBtn1 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.purple)
+        let tempBtn1 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
         
-        let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.purple)
+        let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
         
-        let tempBtn3 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue, secondaryColor: UIColor.purple)
+        let tempBtn3 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue, secondaryColor: UIColor.white)
         
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
@@ -358,6 +361,21 @@ class SCSamplerViewController: UIViewController  {
         }
         reloadSamplerCV()
     }
+    
+    func findColorIndex(indexPath: IndexPath, colors: [UIColor])-> Int{
+        
+        var colorIdx: Int
+        if indexPath.row > colors.count-1 {
+            colorIdx = indexPath.row-colors.count
+            if colorIdx > colors.count-1 {
+                colorIdx -= colors.count
+            }
+        } else {
+            colorIdx = indexPath.row
+        }
+
+        return colorIdx
+    }
 }
 
 
@@ -403,30 +421,13 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         if collectionView == samplerCV {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
            
-            var colorIndex: Int
-            if indexPath.row > iceCreamColors.count-1 {
-                colorIndex = indexPath.row-iceCreamColors.count
-                if colorIndex > iceCreamColors.count-1 {
-                    colorIndex -= iceCreamColors.count
-                }
-            } else {
-                colorIndex = indexPath.row
-            }
-            
-            cell.cellColor = iceCreamColors[colorIndex]
-            cell.setRecordingColorSets()
-            cell.setupGradientLayer()
-//            cell.layer.masksToBounds = true
-//            cell.layer.cornerRadius = 15.0
+            let colorIdx = findColorIndex(indexPath: indexPath, colors: iceCreamColors)
+            cell.cellColor = iceCreamColors[colorIdx]
             // border
-            cell.layer.borderColor = UIColor.purple.cgColor
-            cell.layer.borderWidth = 2.0
-//            cell.layer.cornerRadius = 15.0
-            //shadow
-//            cell.layer.shadowColor = UIColor.darkGray.cgColor
-//            cell.layer.shadowOffset = CGSize(width: 3, height: 3)
-//            cell.layer.shadowOpacity = 0.7
-//            cell.layer.shadowRadius = 3.0
+            cell.layer.borderColor = iceCreamColors[colorIdx].cgColor
+            cell.layer.borderWidth = 3.0
+            cell.layer.masksToBounds = true
+            cell.layer.cornerRadius = 10.0
             
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
             tapGestureRecognizer.delegate = self
@@ -441,23 +442,9 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 cell.isRecordingEnabled = false
             }
             
-            // Editing Mode
-            switch SCAudioManager.shared.isEditingModeEnabled {
-            case true:
-                cell.isEditingEnabled = true
-            case false:
-                cell.isEditingEnabled = false
-            }
-            
-            // Set colors for recording mode
-            if SCAudioManager.shared.isEditingModeEnabled {
-                cell.setEditingColorSets()
-            } else {
-                cell.setRecordingColorSets()
-            }
             
             // Flashing Mode
-            if SCAudioManager.shared.isEditingModeEnabled || SCAudioManager.shared.isRecordingModeEnabled == true {
+            if SCAudioManager.shared.isRecordingModeEnabled == true {
                 cell.startCellFlashing()
             } else {
                 cell.stopCellsFlashing()
@@ -480,11 +467,6 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
 //            cell.layer.borderColor = UIColor.purple.cgColor
 //            cell.layer.borderWidth = 3.0
 //            cell.layer.cornerRadius = 10.0
-            //shadow
-//            cell.layer.shadowColor = UIColor.darkGray.cgColor
-//            cell.layer.shadowOffset = CGSize(width: 3, height: 3)
-//            cell.layer.shadowOpacity = 0.7
-//            cell.layer.shadowRadius = 3.0
 
             cell.contentView.backgroundColor = iceCreamColors[indexPath.row]
             cell.setupLabel()
@@ -522,7 +504,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 } else {
                     if cell.isTouchDelayed == false {
                         cell.playbackSample()
-                        cell.animateLayer()
+                        cell.animateColor()
                     } else {
                         print("extraneous cell touch was delayed.")
                     }
