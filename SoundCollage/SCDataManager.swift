@@ -117,6 +117,7 @@ class SCDataManager {
             userDefaults.set(0, forKey: "sampleBankID")
             return 0
         }
+        userDefaults.set(sampleBankID+1, forKey: "sampleBankID")
         return sampleBankID+1   // increment the sampleBankID when a new one is created
     }
 
@@ -137,6 +138,7 @@ class SCDataManager {
     
     
     func writeToFile(jsonString: String){
+        
         let documentsDirectoryPathString = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         let documentsDirectoryPath = NSURL(string: documentsDirectoryPathString)!
         
@@ -169,10 +171,11 @@ class SCDataManager {
     
     
     
+    
     func printAudioFilePaths(){
         
         guard let sampleBanks = self.user?.sampleBanks else {
-            print("No sampleBanks found in user.")
+            print("SampleBanks not found.")
             return
         }
         for sampleBank in sampleBanks {
@@ -181,6 +184,9 @@ class SCDataManager {
             }
         }
     }
+    
+    
+    
     
     
     func newStandardSampleBank() -> [String: AnyObject]{
@@ -203,6 +209,7 @@ class SCDataManager {
         
         return samples
     }
+    
     
     
     

@@ -20,7 +20,7 @@ class SCSampleBankViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let img1 = UIImage.init(named: "l1")
+        let img1 = UIImage.init(named: "l1") // reminder: prefix iz "l" not "1"
         let img2 = UIImage.init(named: "l2")
         let img3 = UIImage.init(named: "l3")
         let img4 = UIImage.init(named: "l4")
@@ -77,7 +77,8 @@ class SCSampleBankViewController: UIViewController {
     
         collectionView.alpha = 0
         collectionView.transform = CGAffineTransform(scaleX: 0, y: 0)
-        UIView.animate(withDuration: 0.5, delay: 0.5, options: [.curveEaseInOut], animations:{[unowned self] in
+        UIView.animate(withDuration: 0.5, delay: 0.5, options: [.curveEaseInOut],
+                       animations:{[unowned self] in
             
             self.collectionView.alpha = 1.0
             self.collectionView.transform = CGAffineTransform(scaleX: 1, y: 1)
