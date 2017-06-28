@@ -11,16 +11,28 @@ import UIKit
 
 class SCAnimator {
     
-    class func fadeIn(in view: UIView){
-    let transition = CATransition()
-    transition.duration = 0.5
-    transition.type = kCATransitionPush
-    transition.subtype = kCATransitionFade
-    view.window!.layer.add(transition, forKey: kCATransition)
-//    present(vc, animated: true, completion: nil)
-    }
+    class func FadeIn(fromVC: UIViewController, toVC: UIViewController?){
+        
+        
+        UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
+            
+            [weak fromVC] in
+            guard let strongFromVC = fromVC else { return }
 
-    
+            let transition = CATransition() //TODO: use this transition when reloading samplerbankvc
+            transition.duration = 1.0
+            transition.type = kCATransitionPush
+            transition.subtype = kCATransitionFade
+            strongFromVC.view.window!.layer.add(transition, forKey: kCATransition)
+            guard let to = toVC else {
+                return
+            }
+            strongFromVC.present(to, animated: true, completion: nil)
+        
+        }, completion: nil
+        )
+
+    }
 }
 
 /*extension UIView {

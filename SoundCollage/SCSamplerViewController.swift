@@ -31,26 +31,23 @@ class SCSamplerViewController: UIViewController  {
     let backGroundColors: [UIColor] = [UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue, UIColor.Custom.PsychedelicIceCreamShoppe.neonAqua, UIColor.Custom.PsychedelicIceCreamShoppe.deepBlueDark]
     
     
-    
+    //MARK: vc lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        view.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.ice
         effects = ["reverb", "delay", "pitch"]
 
+        view.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.ice
         vintageColors = SCGradientColors.getVintageColors()
         iceCreamColors = SCGradientColors.getPsychedelicIceCreamShopColors()
+       
+        
         let recordingDidFinishNotification = Notification.Name.init("recordingDidFinish")
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
         setupControls()
         setupContainerViews()
-        animateEntrance()
-
-        
     }
-    
-    //MARK: Setup UI
     
     
     override func viewDidLayoutSubviews() {
@@ -70,6 +67,8 @@ class SCSamplerViewController: UIViewController  {
     
     
     
+
+    
     func calibrateSize(samplerCVWidth: CGFloat)-> Bool{
         var result: Bool = false
         
@@ -79,6 +78,9 @@ class SCSamplerViewController: UIViewController  {
 
         return result
     }
+    
+    
+    
     
     //MARK: Collection views
     
@@ -158,17 +160,13 @@ class SCSamplerViewController: UIViewController  {
         parameterView.layer.borderColor = UIColor.purple.cgColor
         parameterView.backgroundColor = UIColor.white
         
-        
         self.view.addSubview(parameterView)
         parameterView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .leading, relatedBy: .equal, toItem: effectsContainerCV, attribute: .trailing, multiplier: 1.0, constant: 5.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: -self.view.frame.width/5-5))
         self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .top, relatedBy: .equal, toItem: samplerCV, attribute: .bottom, multiplier: 1.0, constant: 10.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .bottom, relatedBy: .equal, toItem: toolbar, attribute: .top, multiplier: 1.0, constant: 0))
-        
-        
-
-        
+    
         let pan = UIPanGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
         parameterView.addGestureRecognizer(pan)
         let tap = UITapGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
@@ -178,20 +176,8 @@ class SCSamplerViewController: UIViewController  {
     
     
     
-    //MARK: Effects Parameter
-    
-    func handleParameterGesture(gestureRecognizer: UIGestureRecognizer){
-        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed || gestureRecognizer.state == .ended {
-            let location =  gestureRecognizer.location(in: parameterView)
-            
-            let sampleIndex = SCAudioManager.shared.selectedSampleIndex
-            SCAudioManager.shared.handleEffectsParameters(point: location, sampleIndex: sampleIndex)
-        }
-    }
-    
-    
-    
-    
+    //MARK: ui setup
+
     
     private func setupControls(){
         
@@ -238,30 +224,40 @@ class SCSamplerViewController: UIViewController  {
     
     
     
+    
+    func findColorIndex(indexPath: IndexPath, colors: [UIColor])-> Int{
+        
+        var colorIdx: Int
+        if indexPath.row > colors.count-1 {
+            colorIdx = indexPath.row-colors.count
+            if colorIdx > colors.count-1 {
+                colorIdx -= colors.count
+            }
+        } else {
+            colorIdx = indexPath.row
+        }
+        
+        return colorIdx
+    }
+    
+    
+    
+    //MARK: Navigation
+    
+    
     func bankBtnDidPress(){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController else {
-            print("No sample bank vc.")
+            print("SampleBank vc not found.")
             return
         }
-        present(vc, animated: true, completion: nil)
+        SCAnimator.FadeIn(fromVC: self, toVC: vc)
     }
     
-    //MARK: Animations
     
     
     
-    private func animateEntrance() {
-    
-        view.alpha = 0
-        UIView.animate(withDuration: 1.0, delay: 1.5, options: [.curveEaseInOut], animations:{
-            self.view.alpha = 1
-            }, completion: nil)
-    }
-
-    
-    
-    //MARK: Recording and Playback
+    //MARK: recording and playback
     
     
     
@@ -362,19 +358,18 @@ class SCSamplerViewController: UIViewController  {
         reloadSamplerCV()
     }
     
-    func findColorIndex(indexPath: IndexPath, colors: [UIColor])-> Int{
-        
-        var colorIdx: Int
-        if indexPath.row > colors.count-1 {
-            colorIdx = indexPath.row-colors.count
-            if colorIdx > colors.count-1 {
-                colorIdx -= colors.count
-            }
-        } else {
-            colorIdx = indexPath.row
+    
+    
+    
+    //MARK: effects parameter
+    
+    func handleParameterGesture(gestureRecognizer: UIGestureRecognizer){
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed || gestureRecognizer.state == .ended {
+            let location =  gestureRecognizer.location(in: parameterView)
+            
+            let sampleIndex = SCAudioManager.shared.selectedSampleIndex
+            SCAudioManager.shared.handleEffectsParameters(point: location, sampleIndex: sampleIndex)
         }
-
-        return colorIdx
     }
 }
 

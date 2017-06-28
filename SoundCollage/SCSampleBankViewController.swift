@@ -13,30 +13,50 @@ import UIKit
 class SCSampleBankViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
+    
     let toolbarHeight: CGFloat = 98.0
     var toolbar = UIToolbar()
     var images: [UIImage] = []
+    var window: UIWindow?
 
+    
+    //MARK: vc life cycle 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let img1 = UIImage.init(named: "l1") // reminder: prefix iz "l" not "1"
+        self.view.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.ice
+        
+        let img1 = UIImage.init(named: "l1")
         let img2 = UIImage.init(named: "l2")
         let img3 = UIImage.init(named: "l3")
         let img4 = UIImage.init(named: "l4")
         let img5 = UIImage.init(named: "l7")
         let img6 = UIImage.init(named: "l8")
         images = [img1!, img2!, img3!, img4!, img5!, img6!]
-        
+    
+        setupCollectionView()
         setupTitle(xConstant: 2, yConstant: 2, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral )
         setupTitle(xConstant: 6, yConstant: 6, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue)
         setupTitle(xConstant: 10, yConstant: 10, textColor: UIColor.Custom.PsychedelicIceCreamShoppe.neonAqua)
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-
         setupControls()
-        setupCollectionView()
+    }
+    
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
         animateEntrance()
     }
+    
+    //MARK: ui setup
     
     private func setupTitle(xConstant: CGFloat, yConstant: CGFloat, textColor: UIColor){
     
@@ -46,7 +66,7 @@ class SCSampleBankViewController: UIViewController {
         titleLabel.font = UIFont.init(name: "A DAY WITHOUT SUN", size: 60.0)
         titleLabel.textColor = textColor
         titleLabel.textAlignment = NSTextAlignment.center
-        self.view.addSubview(titleLabel)
+        self.collectionView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 0.8, constant: 0))
         self.view.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.2, constant: 0))
@@ -74,22 +94,19 @@ class SCSampleBankViewController: UIViewController {
     
     
     private func animateEntrance() {
-    
-        collectionView.alpha = 0
-        collectionView.transform = CGAffineTransform(scaleX: 0, y: 0)
-        UIView.animate(withDuration: 0.5, delay: 0.5, options: [.curveEaseInOut],
-                       animations:{[unowned self] in
-            
-            self.collectionView.alpha = 1.0
-            self.collectionView.transform = CGAffineTransform(scaleX: 1, y: 1)
-            }, completion: nil)
+        SCAnimator.FadeIn(fromVC: self, toVC: nil)
     }
     
-    
-    
+
     
     private func setupControls(){
-        
+    
+        let userDefaults = UserDefaults.standard
+        let hideAddBtn = userDefaults.bool(forKey: "hideAddBtn")
+        if hideAddBtn == true {
+            userDefaults.set(false, forKey: "hideAddBtn")
+            return
+        }
         let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
         
         toolbar.frame = CGRect(x: 0, y: self.view.frame.height-toolbarHeight, width: self.view.frame.width, height: toolbarHeight)
@@ -107,15 +124,14 @@ class SCSampleBankViewController: UIViewController {
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
         toolbar.items = [flexibleSpace, standardSamplerBarBtn, flexibleSpace]
-        self.view.addSubview(toolbar)
-        
-        
+        self.collectionView.addSubview(toolbar)
     }
+    
+    
     
     
     func setupToolbarButton(btn: UIButton)-> UIBarButtonItem {
         
-       
         let buttonHeight = (toolbarHeight/3)*2
         let yPosition = toolbar.center.y-buttonHeight/2
         
@@ -128,13 +144,14 @@ class SCSampleBankViewController: UIViewController {
         backgroundView.layer.masksToBounds = true
 //        backgroundView.layer.borderWidth = 1.0
 //        backgroundView.layer.borderColor = UIColor.lightGray.cgColor
-        
         btn.addSubview(backgroundView)
         btn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
         let barBtn = UIBarButtonItem.init(customView: btn)
         return barBtn
     }
+    
+    
     
     
     
@@ -145,11 +162,15 @@ class SCSampleBankViewController: UIViewController {
     }
     
     
+    
+    
 
     func newDoubleSamplerDidPress(){
         let samplerType = SCSampleBank.SamplerType.double
         newSampler(samplerType: samplerType)
     }
+    
+    
     
     
     private func newSampler(samplerType: SCSampleBank.SamplerType){
@@ -171,14 +192,15 @@ class SCSampleBankViewController: UIViewController {
     
     
     
+    
+    
     func presentSampler(){
         
-        self.collectionView.transform = CGAffineTransform(scaleX: 1, y: 1)
         UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations:{
             self.collectionView.transform = CGAffineTransform(scaleX: 5, y: 5)
             
             let vc: SCSamplerViewController = SCSamplerViewController(nibName: nil, bundle: nil)
-            let transition = CATransition()
+            let transition = CATransition() //TODO: use this transition when reloading samplerbankvc
             transition.duration = 1.0
             transition.type = kCATransitionPush
             transition.subtype = kCATransitionFade
@@ -227,7 +249,7 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
         } else {
             imgIdx = indexPath.row
         }
-        cell.imageView.backgroundColor = iceCreamColors[colorIdx]
+        cell.imageView.backgroundColor = iceCreamColors[colorIdx] // TODO: image should have alpha .5
         cell.imageView.image = images[imgIdx]
         return cell
     }
