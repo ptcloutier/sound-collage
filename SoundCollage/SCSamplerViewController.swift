@@ -251,7 +251,7 @@ class SCSamplerViewController: UIViewController  {
             print("SampleBank vc not found.")
             return
         }
-        SCAnimator.FadeIn(fromVC: self, toVC: vc)
+        SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
     }
     
     

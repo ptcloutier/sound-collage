@@ -48,13 +48,7 @@ class SCSampleBankViewController: UIViewController {
         setupControls()
     }
     
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        animateEntrance()
-    }
+     
     
     //MARK: ui setup
     
@@ -91,11 +85,7 @@ class SCSampleBankViewController: UIViewController {
 
     }
     
-    
-    
-    private func animateEntrance() {
-        SCAnimator.FadeIn(fromVC: self, toVC: nil)
-    }
+   
     
 
     

@@ -11,10 +11,10 @@ import UIKit
 
 class SCAnimator {
     
-    class func FadeIn(fromVC: UIViewController, toVC: UIViewController?){
+    class func FadeIn(duration: TimeInterval, fromVC: UIViewController, toVC: UIViewController?){
         
         
-        UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
+        UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations:{
             
             [weak fromVC] in
             guard let strongFromVC = fromVC else { return }
