@@ -14,19 +14,19 @@ import AVFoundation
 
 class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, CAAnimationDelegate {
     
-    
+    var idx: Int = 0
     var cellColor: UIColor?
     var isRecordingEnabled = false
     var isEditingEnabled = false
     var flashTimer: Timer? = nil
     var touchTimer: Timer? = nil
     var isTouchDelayed: Bool = false
+    var padLabel: UILabel = UILabel()
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-       
     }
     
     
@@ -36,6 +36,19 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     }
     
     
+    func setupLabel() {
+        padLabel.frame = .zero
+        padLabel.text = "\(self.idx+1)"
+        padLabel.textAlignment = NSTextAlignment.center
+        padLabel.font = UIFont.init(name: "A DAY WITHOUT SUN", size: 60.0)
+        padLabel.textColor = self.cellColor
+        contentView.addSubview(padLabel)
+        padLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .height, relatedBy: .equal, toItem: self.contentView, attribute: .height, multiplier: 0.75, constant: 0))
+        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .centerX, relatedBy: .equal, toItem: self.contentView, attribute: .centerX, multiplier: 1.0, constant: 0))
+        let centerY = ((contentView.frame.height/4)*3)/4
+        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: centerY))
+    }
     
     //MARK: Colors/animations
     
@@ -50,6 +63,8 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
             print("No cell toColor.")
             return
         }
+        self.padLabel.textColor = UIColor.white
+        self.layer.borderColor = UIColor.white.cgColor
         let animation = CABasicAnimation.init(keyPath: "backgroundColor")
         animation.fromValue = fromColor
         animation.toValue = toColor
@@ -75,6 +90,14 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         })
     }
     
+    
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        if flag == true {
+            guard let color = self.cellColor else {return}
+            self.layer.borderColor = color.cgColor
+            self.padLabel.textColor = color
+        }
+    }
     
     
     
@@ -106,8 +129,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
             flashTimer?.invalidate()
         }
     }
-    
-    
     
     //MARK: Playback
     

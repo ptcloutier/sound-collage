@@ -38,7 +38,7 @@ class SCSamplerViewController: UIViewController  {
     
         effects = ["reverb", "delay", "pitch"]
 
-        view.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.ice
+        view.backgroundColor = UIColor.clear //UIColor.Custom.PsychedelicIceCreamShoppe.ice
         vintageColors = SCGradientColors.getVintageColors()
         iceCreamColors = SCGradientColors.getPsychedelicIceCreamShopColors()
        
@@ -432,7 +432,6 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 
             }
             
-            
             // Flashing Mode
             if SCAudioManager.shared.isRecordingModeEnabled == true {
                 cell.startCellFlashing()
@@ -445,27 +444,37 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             } else {
                 cell.enableTouch()
             }
+            
+            // index 
+            cell.idx = indexPath.row 
             // color
             let colorIdx = findColorIndex(indexPath: indexPath, colors: iceCreamColors)
             cell.cellColor = iceCreamColors[colorIdx]
-            print("idxP: \(indexPath.row), idx:\(SCAudioManager.shared.selectedSampleIndex) ")
-            if SCAudioManager.shared.isRecording == true {
-                let index = SCAudioManager.shared.selectedSampleIndex
-                if indexPath.row == index {
-                    cell.backgroundColor = cell.cellColor
-                }
-            } else {
-                cell.backgroundColor = UIColor.white
-            }
-            
+
             // border
             cell.layer.borderColor = iceCreamColors[colorIdx].cgColor
             cell.layer.borderWidth = 3.0
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 10.0
-
+            
+            // selected color
+            if SCAudioManager.shared.isRecording == true {
+                let index = SCAudioManager.shared.selectedSampleIndex
+                if indexPath.row == index {
+                    cell.backgroundColor = cell.cellColor
+                    cell.layer.borderColor = UIColor.white.cgColor
+                }
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
+            cell.setupLabel()
+            
+            if SCAudioManager.shared.isRecording == true {
+                cell.padLabel.textColor = UIColor.white
+            }
             return cell
-        } else  {
+            
+        } else {
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EffectCell", for: indexPath) as! SCEffectCell
             cell.colors = SCGradientColors.getPsychedelicIceCreamShopColors()
