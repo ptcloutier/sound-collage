@@ -203,7 +203,8 @@ class SCSamplerViewController: UIViewController  {
         bankBtn.addTarget(self, action: #selector(SCSamplerViewController.bankBtnDidPress), for: .touchUpInside)
         
         
-        let tempBtn1 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
+        let sequencerBtn = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
+        sequencerBtn.addTarget(self, action: #selector(SCSamplerViewController.presentSequencer), for: .touchUpInside)
         
         let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
         
@@ -211,14 +212,14 @@ class SCSamplerViewController: UIViewController  {
         
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
-        let tempBarBtn1 = UIBarButtonItem.init(customView: tempBtn1)
+        let sequencerBarBtn = UIBarButtonItem.init(customView: sequencerBtn)
         let tempBarBtn2 = UIBarButtonItem.init(customView: tempBtn2)
         let tempBarBtn3 = UIBarButtonItem.init(customView: tempBtn3)
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
     
 
-        toolbar.items = [flexibleSpace, bankBarBtn, flexibleSpace, tempBarBtn1, flexibleSpace,  recordBarBtn, flexibleSpace, tempBarBtn2, flexibleSpace, tempBarBtn3, flexibleSpace]
+        toolbar.items = [flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace, tempBarBtn2, flexibleSpace, tempBarBtn3, flexibleSpace]
         self.view.addSubview(toolbar)
     }
     
@@ -255,6 +256,22 @@ class SCSamplerViewController: UIViewController  {
     }
     
     
+    func presentSequencer(){
+        
+        let vc: SCScoreViewController = SCScoreViewController(nibName: nil, bundle: nil)
+        SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
+//        UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations:{
+//            
+//            let vc: SCScoreViewController = SCScoreViewController(nibName: nil, bundle: nil)
+//            let transition = CATransition() //TODO: use this transition when reloading samplerbankvc
+//            transition.duration = 1.0
+//            transition.type = kCATransitionPush
+//            transition.subtype = kCATransitionFade
+//            self.view.window!.layer.add(transition, forKey: kCATransition)
+//            self.present(vc, animated: true, completion: nil)
+//        }, completion: nil
+//        )
+    }
     
     
     //MARK: recording and playback
