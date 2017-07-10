@@ -14,18 +14,19 @@ import AVFoundation
 
 class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, CAAnimationDelegate {
     
+    
     var cellColor: UIColor?
     var isRecordingEnabled = false
     var isEditingEnabled = false
     var flashTimer: Timer? = nil
     var touchTimer: Timer? = nil
     var isTouchDelayed: Bool = false
-
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = UIColor.white
+       
     }
     
     
@@ -41,10 +42,9 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     
-    
-    
-    func animateColor(){
-
+    func animateCell(){
+        
+        transformSize()
         let fromColor = UIColor.white.cgColor
         guard let toColor = self.cellColor?.cgColor else {
             print("No cell toColor.")
@@ -53,19 +53,28 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         let animation = CABasicAnimation.init(keyPath: "backgroundColor")
         animation.fromValue = fromColor
         animation.toValue = toColor
-        animation.duration = 0.4
+        animation.duration = 0.3
         animation.isRemovedOnCompletion = true
         animation.fillMode = kCAFilterLinear
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         animation.delegate = self
         self.layer.add(animation, forKey: "backgroundColor")
+        
     }
     
+ 
     
-    
-    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-
+    func transformSize(){
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            })
+        })
     }
+    
     
     
     
@@ -86,10 +95,10 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
             guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
                 return
             }
-            strongSelf.animateColor()
+            strongSelf.animateCell()
         }
     }
-
+    
     
     
     func stopCellsFlashing() {
@@ -97,10 +106,10 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
             flashTimer?.invalidate()
         }
     }
-
     
     
-    //MARK: Playback 
+    
+    //MARK: Playback
     
     
     func playbackSample() {
@@ -113,10 +122,10 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     func recordNewSample() {
         SCAudioManager.shared.recordNew()
     }
- 
     
     
-    //MARK: Touch response 
+    
+    //MARK: Touch response
     
     
     private func playbackTouchDelay(){
@@ -124,7 +133,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         if SCAudioManager.shared.isRecording == false {
             self.isUserInteractionEnabled = false
             isTouchDelayed = true
-            print("cell interaction delayed.")
             let delayInSeconds = 0.001
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delayInSeconds) {
                 self.enableTouch()
@@ -138,7 +146,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     func isRecordingTouchDelay() {
         self.isUserInteractionEnabled = false
         isTouchDelayed = true
-        print("cell interaction delayed.")
     }
     
     
@@ -147,8 +154,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     func enableTouch() {
         self.isUserInteractionEnabled = true
         isTouchDelayed = false
-        print("cell interaction enabled.")
     }
     
-
+    
 }

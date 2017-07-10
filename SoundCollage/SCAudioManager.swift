@@ -386,7 +386,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 DispatchQueue.main.async {
                     if allowed {
                         self.startRecording()
-                        self.isRecording = true
                     } else {
                         print("Failed to record!")
                     }
@@ -400,6 +399,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     func startRecording() {
+        isRecording = true
+
         // TODO: there are many different names for the same thing throughout the app, audioFilepath, sampleURl, titleURL, just need to pick the most descriptive name
         guard let currentSampleBankID = SCDataManager.shared.user?.currentSampleBank?.id else {
             print("current sample bank id not found.")
@@ -429,7 +430,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             audioRecorder.record()
         } catch {
             finishRecording(success: false)
-            self.isRecording = false
+            SCAudioManager.shared.isRecording = false
         }
     }
     
@@ -514,6 +515,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     private func postRecordingFinishedNotification(){
+        
         let notification = Notification.Name.init("recordingDidFinish")
         NotificationCenter.default.post(name: notification, object: nil)
     }
