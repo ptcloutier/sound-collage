@@ -41,6 +41,8 @@
 		A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823421EA81F6C0061D0A0 /* SCStackView.swift */; };
 		A7BD6AB11F140CE9000CDF9A /* SCScoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB01F140CE9000CDF9A /* SCScoreViewController.swift */; };
 		A7BD6AB41F140D85000CDF9A /* SCScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB31F140D85000CDF9A /* SCScoreCell.swift */; };
+		A7BD6AB61F141E4D000CDF9A /* SCSequencerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB51F141E4D000CDF9A /* SCSequencerCell.swift */; };
+		A7BD6AB81F14305B000CDF9A /* SCTriggerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB71F14305B000CDF9A /* SCTriggerCell.swift */; };
 		A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */; };
 		A7BFEE2D1EBA444A00C718E7 /* UIImage+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFEE2C1EBA444A00C718E7 /* UIImage+Color.swift */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
@@ -122,6 +124,8 @@
 		A7A823421EA81F6C0061D0A0 /* SCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCStackView.swift; sourceTree = "<group>"; };
 		A7BD6AB01F140CE9000CDF9A /* SCScoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCScoreViewController.swift; sourceTree = "<group>"; };
 		A7BD6AB31F140D85000CDF9A /* SCScoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SCScoreCell.swift; path = Assets.xcassets/SCScoreCell.swift; sourceTree = "<group>"; };
+		A7BD6AB51F141E4D000CDF9A /* SCSequencerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerCell.swift; sourceTree = "<group>"; };
+		A7BD6AB71F14305B000CDF9A /* SCTriggerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCTriggerCell.swift; sourceTree = "<group>"; };
 		A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+GradientColor.swift"; sourceTree = "<group>"; };
 		A7BFEE2C1EBA444A00C718E7 /* UIImage+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Color.swift"; sourceTree = "<group>"; };
 		A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBank.swift; sourceTree = "<group>"; };
@@ -311,6 +315,8 @@
 			children = (
 				A7BD6AB01F140CE9000CDF9A /* SCScoreViewController.swift */,
 				A7BD6AB31F140D85000CDF9A /* SCScoreCell.swift */,
+				A7BD6AB51F141E4D000CDF9A /* SCSequencerCell.swift */,
+				A7BD6AB71F14305B000CDF9A /* SCTriggerCell.swift */,
 			);
 			name = Sequencer;
 			sourceTree = "<group>";
@@ -515,6 +521,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7BD6AB81F14305B000CDF9A /* SCTriggerCell.swift in Sources */,
+				A7BD6AB61F141E4D000CDF9A /* SCSequencerCell.swift in Sources */,
 				A7A8233E1EA81F500061D0A0 /* SCSamplerCollectionViewCell.swift in Sources */,
 				A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */,
 				A7A8233F1EA81F500061D0A0 /* SCSamplerFlowLayout.swift in Sources */,
