@@ -23,8 +23,8 @@ class SCSamplerViewController: UIViewController  {
     var selectedSampleIndex: Int?
     let navBarBtnFrameSize = CGRect.init(x: 0, y: 0, width: 30, height: 30)
     let toolbarHeight = CGFloat(98.0)
-    var effects: [String] = []
     var toolbar = UIToolbar()
+    var effects: [String] = []
     var vintageColors: [UIColor] = []
     var iceCreamColors: [UIColor] = []
     let parameterViewColors: [UIColor] = [UIColor.Custom.PsychedelicIceCreamShoppe.darkViolet, UIColor.Custom.PsychedelicIceCreamShoppe.medViolet, UIColor.Custom.PsychedelicIceCreamShoppe.darkViolet]
@@ -199,16 +199,16 @@ class SCSamplerViewController: UIViewController  {
         recordBtn.addTarget(self, action: #selector(SCSamplerViewController.recordBtnDidPress), for: .touchUpInside)
         recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
-        let bankBtn = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
+        let bankBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
         bankBtn.addTarget(self, action: #selector(SCSamplerViewController.bankBtnDidPress), for: .touchUpInside)
         
         
-        let sequencerBtn = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
+        let sequencerBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
         sequencerBtn.addTarget(self, action: #selector(SCSamplerViewController.presentSequencer), for: .touchUpInside)
         
-        let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
+        let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
         
-        let tempBtn3 = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue, secondaryColor: UIColor.white)
+        let tempBtn3 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue, secondaryColor: UIColor.white)
         
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
@@ -260,17 +260,6 @@ class SCSamplerViewController: UIViewController  {
         
         let vc: SCScoreViewController = SCScoreViewController(nibName: nil, bundle: nil)
         SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
-//        UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations:{
-//            
-//            let vc: SCScoreViewController = SCScoreViewController(nibName: nil, bundle: nil)
-//            let transition = CATransition() //TODO: use this transition when reloading samplerbankvc
-//            transition.duration = 1.0
-//            transition.type = kCATransitionPush
-//            transition.subtype = kCATransitionFade
-//            self.view.window!.layer.add(transition, forKey: kCATransition)
-//            self.present(vc, animated: true, completion: nil)
-//        }, completion: nil
-//        )
     }
     
     

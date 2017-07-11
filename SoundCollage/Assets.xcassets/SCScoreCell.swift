@@ -12,6 +12,7 @@ class SCScoreCell: UICollectionViewCell {
 
     var sequencerCV: UICollectionView?
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -29,6 +30,8 @@ class SCScoreCell: UICollectionViewCell {
         
     }
     
+    
+    
     func setupSequencer(){
         
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 16)
@@ -37,12 +40,13 @@ class SCScoreCell: UICollectionViewCell {
         sequencerCV.register(SCSequencerCell.self, forCellWithReuseIdentifier: "SCSequencerCell")
         sequencerCV.delegate = self
         sequencerCV.dataSource = self
+        sequencerCV.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral
         contentView.addSubview(sequencerCV)
         sequencerCV.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .height, relatedBy: .equal, toItem: contentView, attribute: .height, multiplier: 1.0, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .width, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 1.0, constant: 0))
-         contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .width, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 1.0, constant: 0))
-         contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .width, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 1.0, constant: 0)) 
+        contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 0))
+        contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1.0, constant: 0))
+        contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 0))
+        contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailing, multiplier: 1.0, constant: 0))
     }
 }
 
@@ -54,9 +58,11 @@ extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource, UI
             return result
         }
     
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        return 4
-//    }
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 16
@@ -65,7 +71,8 @@ extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource, UI
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = sequencerCV?.dequeueReusableCell(withReuseIdentifier: "SCSequencerCell", for: indexPath) as!SCSequencerCell
-        cell.backgroundColor = UIColor.white
+        cell.idx = indexPath.row
+        cell.backgroundColor = UIColor.purple
         cell.layer.borderWidth = 1.0
         cell.layer.borderColor = UIColor.white.cgColor
         cell.setupSequencer()

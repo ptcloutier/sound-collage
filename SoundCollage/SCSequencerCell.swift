@@ -11,6 +11,7 @@ import UIKit
 class SCSequencerCell: UICollectionViewCell {
     
     var triggerCV: UICollectionView?
+    var idx: Int = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -63,18 +64,77 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     
+    
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = triggerCV?.dequeueReusableCell(withReuseIdentifier: "SCTriggerCell", for: indexPath) as!SCTriggerCell
+        cell.sequencerIdx = self.idx
+        cell.idx = indexPath.row
         cell.layer.borderWidth = 1.0
         cell.layer.borderColor = UIColor.purple.cgColor
+        print("cell idx: \(cell.idx), sequencer idx: \(cell.sequencerIdx)")
+
+        
+        switch cell.isPlaybackEnabled {
+        case true:
+            //TODO: This not DRY
+            let iceCreamColors: [UIColor] = SCGradientColors.getPsychedelicIceCreamShopColors()
+            
+            var colorIdx: Int
+            if indexPath.row > iceCreamColors.count-1 {
+                colorIdx = indexPath.row-iceCreamColors.count
+                if colorIdx > iceCreamColors.count-1 {
+                    colorIdx -= iceCreamColors.count
+                }
+            } else {
+                colorIdx = indexPath.row
+            }
+            cell.backgroundColor = iceCreamColors[colorIdx]
+            
+            
+        case false:
+            cell.backgroundColor = UIColor.clear
+            
+        }
         return cell
     }
     
+  
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? SCTriggerCell else {
+            print("No cell found.")
+            return
+        }
+        
+        switch cell.isPlaybackEnabled {
+        case true:
+            cell.isPlaybackEnabled = false
+            cell.backgroundColor = UIColor.clear
+            
+        case false:
+            
+            cell.isPlaybackEnabled = true
+            
+            //TODO: This not DRY
+            let iceCreamColors: [UIColor] = SCGradientColors.getPsychedelicIceCreamShopColors()
+            
+            var colorIdx: Int
+            if indexPath.row > iceCreamColors.count-1 {
+                colorIdx = indexPath.row-iceCreamColors.count
+                if colorIdx > iceCreamColors.count-1 {
+                    colorIdx -= iceCreamColors.count
+                }
+            } else {
+                colorIdx = indexPath.row
+            }
+            cell.backgroundColor = iceCreamColors[colorIdx]
+        }
     }
-    
 }
+
+
 

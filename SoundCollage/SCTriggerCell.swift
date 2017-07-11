@@ -10,9 +10,13 @@ import UIKit
 
 class SCTriggerCell: UICollectionViewCell {
     
-    
+    var sequencerIdx: Int = 0
+    var idx: Int = 0
+    var isPlaybackEnabled: Bool = false
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
     }
     
     
