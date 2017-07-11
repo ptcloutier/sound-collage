@@ -19,7 +19,6 @@ class SCScoreViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.orange
         // Do any additional setup after loading the view.
         setupCollectionView()
         setupControls()
@@ -34,7 +33,9 @@ class SCScoreViewController: UIViewController {
         scoreCV?.register(SCScoreCell.self, forCellWithReuseIdentifier: "SCScoreCell")
         guard let scoreCV = self.scoreCV else { return }
         scoreCV.delegate = self
-        scoreCV.dataSource = self 
+        scoreCV.dataSource = self
+        scoreCV.layer.borderWidth = 2.0
+        scoreCV.layer.borderColor = UIColor.purple.cgColor
         view.addSubview(scoreCV)
         
         scoreCV.translatesAutoresizingMaskIntoConstraints = false

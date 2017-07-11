@@ -37,10 +37,10 @@ class SCScoreCell: UICollectionViewCell {
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 16)
         sequencerCV = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
         guard let sequencerCV = self.sequencerCV else { return }
+        
         sequencerCV.register(SCSequencerCell.self, forCellWithReuseIdentifier: "SCSequencerCell")
         sequencerCV.delegate = self
         sequencerCV.dataSource = self
-        sequencerCV.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral
         contentView.addSubview(sequencerCV)
         sequencerCV.translatesAutoresizingMaskIntoConstraints = false
         contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 0))
@@ -72,9 +72,8 @@ extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = sequencerCV?.dequeueReusableCell(withReuseIdentifier: "SCSequencerCell", for: indexPath) as!SCSequencerCell
         cell.idx = indexPath.row
-        cell.backgroundColor = UIColor.purple
         cell.layer.borderWidth = 1.0
-        cell.layer.borderColor = UIColor.white.cgColor
+        cell.layer.borderColor = UIColor.purple.cgColor
         cell.setupSequencer()
         return cell
     }
