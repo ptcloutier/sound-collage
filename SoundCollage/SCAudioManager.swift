@@ -34,7 +34,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var effectControls: [SCEffectControl] = []
     var audioEngineChain: [SCAudioEngine] = []
     var finishedEngines: [SCAudioEngine] = []
-    
+    var sequencerSettings: [[Bool]] = []
     
     //MARK: Basic setup 
     

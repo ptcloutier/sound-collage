@@ -71,6 +71,7 @@ extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource, UI
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = sequencerCV?.dequeueReusableCell(withReuseIdentifier: "SCSequencerCell", for: indexPath) as!SCSequencerCell
+        print("cell frame originx: \(cell.frame.origin.x)")
         cell.idx = indexPath.row
         cell.layer.borderWidth = 1.0
         cell.layer.borderColor = UIColor.purple.cgColor
