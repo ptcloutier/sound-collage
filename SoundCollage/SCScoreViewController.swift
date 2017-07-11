@@ -16,7 +16,7 @@ class SCScoreViewController: UIViewController {
     var recordBtn: UIButton?
     var sequencerTimer: Timer?
     var sequencerBar: UIView?
-    var triggerCount: Int = 0
+    var triggerCounter: Int = 0
     var triggerTimer: Timer?
     var isPlaying: Bool = false
     
@@ -67,21 +67,31 @@ class SCScoreViewController: UIViewController {
         guard sequencerTimer == nil else { return }
         guard triggerTimer == nil else { return }
         sequencerTimer = Timer.scheduledTimer(timeInterval: 8.0/16.0, target: self, selector: #selector(SCScoreViewController.triggerSample), userInfo: nil, repeats: true)
+        RunLoop.main.add(sequencerTimer!, forMode: RunLoopMode.commonModes)
         triggerTimer = Timer.scheduledTimer(timeInterval: 8.0, target: self, selector: #selector(SCScoreViewController.animateSequencerBarPosition), userInfo: nil, repeats: true)
-    
+        RunLoop.main.add(triggerTimer!, forMode: RunLoopMode.commonModes)
     }
     
     func triggerSample(){
         guard let sequencerBar = self.sequencerBar else { return }
         print("\(sequencerBar.frame.origin.x), \(sequencerBar.frame.origin.y)")
-        if triggerCount>16 {
-            triggerCount = 0
+        if triggerCounter==15 {
+            triggerCounter = 0
         } else {
-            triggerCount+=1
+            triggerCounter+=1
         }
-        
-        SCAudioManager.shared.selectedSampleIndex = triggerCount
-        SCAudioManager.shared.playback()
+        var playbackSamples: [Int] = []
+        print("trigger counter: \(triggerCounter)")
+        for (index,settings) in SCAudioManager.shared.sequencerSettings[triggerCounter].enumerated() {
+            if settings == true {
+                playbackSamples.append(index)
+            }
+            
+        }
+        for sample in playbackSamples {
+            SCAudioManager.shared.selectedSequencerIndex = sample
+            SCAudioManager.shared.playAudio(sampleIndex: SCAudioManager.shared.selectedSequencerIndex)
+        }
  
     }
 
@@ -184,7 +194,6 @@ class SCScoreViewController: UIViewController {
         
         switch self.isPlaying {
         case true:
-            
             guard triggerTimer != nil else { return }
             guard sequencerTimer != nil else { return }
             triggerTimer?.invalidate()
@@ -193,7 +202,7 @@ class SCScoreViewController: UIViewController {
             sequencerTimer = nil
             self.sequencerBar?.isHidden = true
             self.sequencerBar = nil
-            
+            self.triggerCounter = 0
             self.isPlaying = false
             print("stopped sequencer")
         case false:

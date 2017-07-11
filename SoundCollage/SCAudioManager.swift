@@ -22,6 +22,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var audioFile: AVAudioFile!
     let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
     var selectedSampleIndex: Int = 0
+    var selectedSequencerIndex: Int = 0
     var audioRecorder: AVAudioRecorder!
     var audioFilePath: URL?
     var isRecordingModeEnabled = false
@@ -64,21 +65,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     //MARK: Playback
-    
-    
-    func playback() {
-        
-        guard let partialPath = getSample(selectedSampleIndex: selectedSampleIndex) else {
-            print("Playback sample not found")
-            return
-        }
-        let docsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! as String
-        
-        let fullPath = docsDirectory.appending("/\(partialPath)")
-        let fullURL = URL.init(fileURLWithPath: fullPath )
-        
-        playAudio(soundFileURL: fullURL)
-    }
     
     
     
@@ -146,17 +132,26 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     
-    func playAudio(soundFileURL: URL){
+    func playAudio(sampleIndex: Int){
+        
+        guard let partialPath = getSample(selectedSampleIndex: sampleIndex) else {
+            print("Playback sample not found")
+            return
+        }
+        let docsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! as String
+        
+        let fullPath = docsDirectory.appending("/\(partialPath)")
+        let fullURL = URL.init(fileURLWithPath: fullPath )
         
         removeUsedEngines()
         
-        let sampleIndex = self.selectedSampleIndex
+        let sampleIndex = sampleIndex
         self.audioEngine = SCAudioEngine()
         self.audioEngineChain.append(self.audioEngine)
         
         
         do {
-            let audioFile = try AVAudioFile(forReading: soundFileURL)
+            let audioFile = try AVAudioFile(forReading: fullURL)
             let audioFormat = audioFile.processingFormat
             let audioPlayerNode = AVAudioPlayerNode()
             
@@ -321,7 +316,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 print("Play session Error")
             }
             audioPlayerNode.play()
-            print("Playing audiofile at \(soundFileURL)")
+            print("Playing audiofile at \(fullURL.absoluteString)")
         } catch let error {
             print("Could not play sound file! \(error.localizedDescription)")
         }

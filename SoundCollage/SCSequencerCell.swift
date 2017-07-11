@@ -103,14 +103,6 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             cell.backgroundColor = UIColor.clear
             
         }
-        
-        
-        let audioMan = SCAudioManager.shared
-        for settings in audioMan.sequencerSettings {
-            for i in settings {
-                print("sequencer settings\(i.description)")
-            }
-        }
 
         return cell
     }
