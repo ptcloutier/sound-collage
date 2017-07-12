@@ -72,14 +72,12 @@ class SCScoreViewController: UIViewController {
         RunLoop.main.add(triggerTimer!, forMode: RunLoopMode.commonModes)
     }
     
+    
+    
+    
     func triggerSample(){
         guard let sequencerBar = self.sequencerBar else { return }
         print("\(sequencerBar.frame.origin.x), \(sequencerBar.frame.origin.y)")
-        if triggerCounter==15 {
-            triggerCounter = 0
-        } else {
-            triggerCounter+=1
-        }
         var playbackSamples: [Int] = []
         print("trigger counter: \(triggerCounter)")
         for (index,settings) in SCAudioManager.shared.sequencerSettings[triggerCounter].enumerated() {
@@ -92,21 +90,29 @@ class SCScoreViewController: UIViewController {
             SCAudioManager.shared.selectedSequencerIndex = sample
             SCAudioManager.shared.playAudio(sampleIndex: SCAudioManager.shared.selectedSequencerIndex)
         }
+        if triggerCounter == 15 {
+            triggerCounter = 0
+        } else {
+            triggerCounter+=1
+        }
+
  
     }
 
     
     func animateSequencerBarPosition(){
-        guard let sequencerBar = self.sequencerBar else { return }
-        let toPoint = CGPoint(x: UIScreen.main.bounds.width, y: 0)
-        let fromPoint = CGPoint(x: 0, y: 0)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+            guard let sequencerBar = self.sequencerBar else { return }
+            let toPoint = CGPoint(x: UIScreen.main.bounds.width, y: 0)
+            let fromPoint = CGPoint(x: 0, y: 0)
+            let movement = CABasicAnimation.init(keyPath: "position")
+            movement.isAdditive = true
+            movement.fromValue = NSValue.init(cgPoint: fromPoint)
+            movement.toValue = NSValue.init(cgPoint: toPoint)
+            movement.duration = 8.0
+            sequencerBar.layer.add(movement, forKey: "move")
+        })
         
-        let movement = CABasicAnimation.init(keyPath: "position")
-        movement.isAdditive = true
-        movement.fromValue = NSValue.init(cgPoint: fromPoint)
-        movement.toValue = NSValue.init(cgPoint: toPoint)
-        movement.duration = 8.0
-        sequencerBar.layer.add(movement, forKey: "move")
     }
     
     
@@ -177,6 +183,8 @@ class SCScoreViewController: UIViewController {
     
     
     func bankBtnDidPress(){
+        
+        stopPlaying()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController else {
             print("SampleBank vc not found.")
@@ -188,34 +196,53 @@ class SCScoreViewController: UIViewController {
     
     
     
+    
     //MARK: Playback
     
     func playBtnDidPress(){
+        playback()
+    }
+    
+    
+    
+    
+    func playback(){
         
         switch self.isPlaying {
         case true:
-            guard triggerTimer != nil else { return }
-            guard sequencerTimer != nil else { return }
-            triggerTimer?.invalidate()
-            triggerTimer = nil
-            sequencerTimer?.invalidate()
-            sequencerTimer = nil
-            self.sequencerBar?.isHidden = true
-            self.sequencerBar = nil
-            self.triggerCounter = 0
-            self.isPlaying = false
-            print("stopped sequencer")
+            stopPlaying()
         case false:
-            self.isPlaying = true
-            setupSequencerBarUI()
-            animateSequencerBarPosition()
-            startPlayerBarTimers()
-            print("Start sequencer.")
+            startPlaying()
         }
-       
-        
     }
+    
+    
+    
+    func startPlaying(){
+        self.isPlaying = true
+        setupSequencerBarUI()
+        animateSequencerBarPosition()
+        startPlayerBarTimers()
+        print("Start sequencer.")
+    }
+    
+    
+    
+    
+    func stopPlaying(){
+        guard triggerTimer != nil else { return }
+        guard sequencerTimer != nil else { return }
+        triggerTimer?.invalidate()
+        triggerTimer = nil
+        sequencerTimer?.invalidate()
+        sequencerTimer = nil
+        self.sequencerBar?.isHidden = true
+        self.sequencerBar = nil
+        self.triggerCounter = 0
+        self.isPlaying = false
+        print("stopped sequencer")
 
+    }
 }
 
 

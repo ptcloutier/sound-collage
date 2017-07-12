@@ -25,6 +25,7 @@
 		A78A9BD01EABA919007117DD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78A9BCF1EABA919007117DD /* QuartzCore.framework */; };
 		A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */; };
 		A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */; };
+		A79F5C8A1F1551CE00A89492 /* spinner.png in Resources */ = {isa = PBXBuildFile; fileRef = A79F5C891F1551CE00A89492 /* spinner.png */; };
 		A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A21CB21EFAEFF300161DF3 /* UIButton+Custom.swift */; };
 		A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A822F71EA81BEC0061D0A0 /* AppDelegate.swift */; };
 		A7A822FD1EA81BEC0061D0A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7A822FB1EA81BEC0061D0A0 /* Main.storyboard */; };
@@ -102,6 +103,7 @@
 		A78A9BCF1EABA919007117DD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankFlowLayout.swift; sourceTree = "<group>"; };
 		A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankCell.swift; sourceTree = "<group>"; };
+		A79F5C891F1551CE00A89492 /* spinner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spinner.png; sourceTree = "<group>"; };
 		A7A21CB21EFAEFF300161DF3 /* UIButton+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Custom.swift"; sourceTree = "<group>"; };
 		A7A822F41EA81BEC0061D0A0 /* SoundCollage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoundCollage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7A822F71EA81BEC0061D0A0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 		A70814371F01B5A100A8AE92 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A79F5C891F1551CE00A89492 /* spinner.png */,
 				A70814381F01C46400A8AE92 /* plus.png */,
 				A70814301F01B54600A8AE92 /* zetafonts_a-day-without-sun */,
 			);
@@ -445,6 +448,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A70814351F01B54600A8AE92 /* A DAY WITHOUT SUN.otf in Resources */,
+				A79F5C8A1F1551CE00A89492 /* spinner.png in Resources */,
 				A70814391F01C46400A8AE92 /* plus.png in Resources */,
 				A7A823051EA81BEC0061D0A0 /* LaunchScreen.storyboard in Resources */,
 				A7A823021EA81BEC0061D0A0 /* Assets.xcassets in Resources */,

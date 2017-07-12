@@ -130,8 +130,8 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             let iceCreamColors: [UIColor] = SCGradientColors.getPsychedelicIceCreamShopColors()
             var colorIdx: Int
             colorIdx = Int(arc4random_uniform(UInt32(iceCreamColors.count)))
-            
             cell.backgroundColor = iceCreamColors[colorIdx]
+            SCAudioManager.shared.playAudio(sampleIndex: cell.idx)
         }
         
         let audioMan = SCAudioManager.shared

@@ -50,6 +50,40 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: centerY))
     }
     
+    
+    func showIndicator(){
+        
+        padLabel.isHidden = true
+        let indicator = UIImageView.init(image: UIImage.init(named: "spinner"))
+        contentView.addSubview(indicator)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addConstraint(NSLayoutConstraint(item: indicator, attribute: .centerX, relatedBy: .equal, toItem: contentView, attribute: .centerX, multiplier: 1.0, constant: 0))
+         contentView.addConstraint(NSLayoutConstraint(item: indicator, attribute: .centerY, relatedBy: .equal, toItem: contentView, attribute: .centerY, multiplier: 1.0, constant: 0))
+        contentView.addConstraint(NSLayoutConstraint(item: indicator, attribute: .height, relatedBy: .equal, toItem: contentView, attribute: .height, multiplier: 0.5, constant: 0))
+        contentView.addConstraint(NSLayoutConstraint(item: indicator, attribute: .width, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 0.5, constant: 0))
+        SCAnimator.RotateLayer(layer: indicator.layer, completion: {
+            [weak self] _ in
+            guard let strongSelf = self else { return }
+            strongSelf.padLabel.isHidden = false
+            strongSelf.startRecording()
+        })
+        
+    }
+    
+    
+    func startRecording(){
+        switch SCAudioManager.shared.isRecording {
+        case true:
+            print("Audio recording already in session.")
+        case false:
+            print("Started recording on sampler pad \(SCAudioManager.shared.selectedSampleIndex)")
+            recordNewSample()
+            self.isRecordingEnabled = false
+        }
+    }
+
+    
+    
     //MARK: Colors/animations
     
     

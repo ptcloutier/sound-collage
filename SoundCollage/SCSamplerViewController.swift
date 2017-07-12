@@ -302,7 +302,14 @@ class SCSamplerViewController: UIViewController  {
     }
     
     
-
+    
+    func finishedRecording() {
+        reloadSamplerCV()
+        print("Recording finished.")
+    }
+    
+    
+    
     func toggleRecordingMode() {
         
         let audioManager = SCAudioManager.shared
@@ -312,37 +319,11 @@ class SCSamplerViewController: UIViewController  {
             print("Recording mode disabled.")
         case false:
             audioManager.isRecordingModeEnabled = true
-            if audioManager.isEditingModeEnabled == true {
-                audioManager.isEditingModeEnabled = false
-                print("Editing mode disabled.")
-            }
             print("Recording mode enabled.")
         }
         reloadSamplerCV()
     }
 
-    
-
-    func startRecording(in cell: SCSamplerCollectionViewCell,samplePadIndex: Int){
-        switch SCAudioManager.shared.isRecording {
-        case true:
-            print("Audio recording in session.")
-        case false:
-            print("Recording in progress on sampler pad \(samplePadIndex)")
-            cell.recordNewSample()
-            cell.isRecordingEnabled = false
-            toggleRecordingMode()
-        }
-    }
-
-    
-    
-    func finishedRecording() {
-        reloadSamplerCV()
-        print("Recording finished.")
-    }
-    
-    
     
     //MARK: Editing 
     
@@ -474,7 +455,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 cell.backgroundColor = UIColor.white
             }
             cell.setupLabel()
-            
+
             if SCAudioManager.shared.isRecording == true {
                 cell.padLabel.textColor = UIColor.white
             }
@@ -494,7 +475,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
 
             cell.contentView.backgroundColor = iceCreamColors[indexPath.row]
             cell.setupLabel()
-            return cell 
+            return cell
         }
     }
     
@@ -519,7 +500,8 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             case true:
                 if cell.isTouchDelayed == false {
                     cell.animateCell()
-                    startRecording(in: cell, samplePadIndex: indexPath.row)
+                    cell.showIndicator()
+                    reloadSamplerCV()
                 }
             case false:
                 if cell.isTouchDelayed == false {
