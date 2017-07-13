@@ -18,6 +18,7 @@ class SCSampleBankViewController: UIViewController {
     var toolbar = UIToolbar()
     var images: [UIImage] = []
     var window: UIWindow?
+    var timer = Timer()
 
     
     //MARK: vc life cycle 
@@ -25,7 +26,7 @@ class SCSampleBankViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.ice
+        self.view.backgroundColor = UIColor.clear
         
         let img1 = UIImage.init(named: "l1")
         let img2 = UIImage.init(named: "l2")
@@ -46,7 +47,7 @@ class SCSampleBankViewController: UIViewController {
         super.viewWillAppear(animated)
         
         setupControls()
-    }
+     }
     
      
     
@@ -142,6 +143,23 @@ class SCSampleBankViewController: UIViewController {
     }
     
     
+   
+  
+
+   
+
+    
+    func dissolve(){
+        UIView.animate(withDuration: 1.0, delay: 0, options: [.transitionCrossDissolve], animations:{
+            self.collectionView.backgroundColor = UIColor.clear
+        },
+                       completion: { (finished: Bool) in
+                        UIView.animate(withDuration: 1.0, delay: 0, options: [.transitionCrossDissolve], animations:{
+                            self.presentSampler()
+                        })
+        })
+
+    }
     
     
     
@@ -254,6 +272,6 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
         }
         
         SCDataManager.shared.user?.currentSampleBank = sampleBanks[indexPath.row]
-        presentSampler()
+        dissolve()
     }
 }

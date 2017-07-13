@@ -158,7 +158,7 @@ class SCSamplerViewController: UIViewController  {
         parameterView.layer.cornerRadius = 15.0
         parameterView.layer.borderWidth = 3
         parameterView.layer.borderColor = UIColor.purple.cgColor
-        parameterView.backgroundColor = UIColor.white
+        parameterView.backgroundColor = UIColor.clear
         
         self.view.addSubview(parameterView)
         parameterView.translatesAutoresizingMaskIntoConstraints = false
@@ -237,7 +237,6 @@ class SCSamplerViewController: UIViewController  {
         } else {
             colorIdx = indexPath.row
         }
-        
         return colorIdx
     }
     
@@ -277,7 +276,6 @@ class SCSamplerViewController: UIViewController  {
         switch SCAudioManager.shared.isRecording {
         case true:
             SCAudioManager.shared.finishRecording(success: true)
-            reloadSamplerCV()
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 recordBtn.alpha = 1
@@ -312,13 +310,12 @@ class SCSamplerViewController: UIViewController  {
     
     func toggleRecordingMode() {
         
-        let audioManager = SCAudioManager.shared
-        switch audioManager.isRecordingModeEnabled {
+        switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
-            audioManager.isRecordingModeEnabled = false
-            print("Recording mode disabled.")
+            SCAudioManager.shared.isRecordingModeEnabled = false
+            print("Recording mode not enabled.")
         case false:
-            audioManager.isRecordingModeEnabled = true
+            SCAudioManager.shared.isRecordingModeEnabled = true
             print("Recording mode enabled.")
         }
         reloadSamplerCV()
@@ -402,63 +399,56 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if collectionView == samplerCV {
+            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
             
+            // ui
+            cell.idx = indexPath.row
+            let colorIdx = findColorIndex(indexPath: indexPath, colors: iceCreamColors)
+            cell.cellColor = iceCreamColors[colorIdx]
+            cell.layer.borderColor = cell.cellColor?.cgColor
+            cell.layer.borderWidth = 3.0
+            cell.layer.masksToBounds = true
+            cell.layer.cornerRadius = 10.0
+            cell.setupLabel()
             
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
             tapGestureRecognizer.delegate = self
             cell.addGestureRecognizer(tapGestureRecognizer)
             
             
-            // Recording Mode
             switch SCAudioManager.shared.isRecordingModeEnabled {
             case true:
                 cell.isRecordingEnabled = true
+                cell.startCellFlashing()
             case false:
                 cell.isRecordingEnabled = false
-                
-            }
-            
-            // Flashing Mode
-            if SCAudioManager.shared.isRecordingModeEnabled == true {
-                cell.startCellFlashing()
-            } else {
                 cell.stopCellsFlashing()
             }
-            // Touch delay
-            if SCAudioManager.shared.isRecording == true {
-                cell.isRecordingTouchDelay()
-            } else {
+//            
+//            if SCAudioManager.shared.isRecording == true && SCAudioManager.shared.selectedSampleIndex == self.idx {
+//                self.layer.borderColor = UIColor.white.cgColor
+//                self.padLabel.textColor = UIColor.white
+//                self.backgroundColor = cellColor
+//            } else {
+//                self.layer.borderColor = cellColor?.cgColor
+//                self.padLabel.textColor = cellColor
+//                self.backgroundColor = UIColor.white
+
+            switch SCAudioManager.shared.isRecording {
+                
+            case true:
+                cell.isRecordingDelayTouch()
+//                if indexPath.row == SCAudioManager.shared.selectedSampleIndex {
+//                    cell.backgroundColor = cell.cellColor
+//                    cell.layer.borderColor = UIColor.black.cgColor
+//                    cell.padLabel.textColor = UIColor.black
+//                }
+            case false:
                 cell.enableTouch()
             }
             
-            // index 
-            cell.idx = indexPath.row 
-            // color
-            let colorIdx = findColorIndex(indexPath: indexPath, colors: iceCreamColors)
-            cell.cellColor = iceCreamColors[colorIdx]
-
-            // border
-            cell.layer.borderColor = iceCreamColors[colorIdx].cgColor
-            cell.layer.borderWidth = 3.0
-            cell.layer.masksToBounds = true
-            cell.layer.cornerRadius = 10.0
             
-            // selected color
-            if SCAudioManager.shared.isRecording == true {
-                let index = SCAudioManager.shared.selectedSampleIndex
-                if indexPath.row == index {
-                    cell.backgroundColor = cell.cellColor
-                    cell.layer.borderColor = UIColor.white.cgColor
-                }
-            } else {
-                cell.backgroundColor = UIColor.white
-            }
-            cell.setupLabel()
-
-            if SCAudioManager.shared.isRecording == true {
-                cell.padLabel.textColor = UIColor.white
-            }
             return cell
             
         } else {
@@ -468,11 +458,6 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.effect = effects[indexPath.row]
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 10.0
-            // border
-//            cell.layer.borderColor = UIColor.purple.cgColor
-//            cell.layer.borderWidth = 3.0
-//            cell.layer.cornerRadius = 10.0
-
             cell.contentView.backgroundColor = iceCreamColors[indexPath.row]
             cell.setupLabel()
             return cell
@@ -496,12 +481,15 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 return
             }
             
+            
             switch SCAudioManager.shared.isRecordingModeEnabled {
+            
             case true:
                 if cell.isTouchDelayed == false {
-                    cell.animateCell()
                     cell.showIndicator()
-                    reloadSamplerCV()
+                    toggleRecordingMode()
+                    cell.backgroundColor = cell.cellColor
+                    cell.padLabel.textColor = UIColor.clear
                 }
             case false:
                 if cell.isTouchDelayed == false {
@@ -552,6 +540,12 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
     
     func tap(gestureRecognizer: UITapGestureRecognizer) {
         
+        if SCAudioManager.shared.isRecording == true {
+            print("Recording in progress")
+            return
+        }
+        
+        
         let tapLocation = gestureRecognizer.location(in: self.samplerCV)
         
         guard let indexPath = self.samplerCV?.indexPathForItem(at: tapLocation) else {
@@ -559,7 +553,6 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
             return
         }
         
-        //now we can get the cell for item at indexPath
         guard let cell = self.samplerCV?.cellForItem(at: indexPath) else {
             print("Cell not found.")
             return

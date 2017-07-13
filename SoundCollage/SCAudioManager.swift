@@ -425,7 +425,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             audioRecorder.record()
         } catch {
             finishRecording(success: false)
-            SCAudioManager.shared.isRecording = false
+            isRecording = false
+            isRecordingModeEnabled = false
         }
     }
     
@@ -486,7 +487,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         audioRecorder?.stop()
         audioRecorder = nil
         self.postRecordingFinishedNotification()
-        self.isRecording = false
+        isRecording = false
         print("Audio recording stopped.")
         
         guard let audioURL = audioFilePath?.lastPathComponent else {
@@ -505,7 +506,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         }
         removeAudioFile(at: self.replaceableFilePath)
         SCDataManager.shared.user?.currentSampleBank? = sampleBank
-        SCAudioManager.shared.isRecordingModeEnabled = false // so that we set the keyboard buttons to play
+        isRecordingModeEnabled = false // so that we set the keyboard buttons to play
     }
     
     

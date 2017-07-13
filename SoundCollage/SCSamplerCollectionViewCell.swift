@@ -22,10 +22,11 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var touchTimer: Timer? = nil
     var isTouchDelayed: Bool = false
     var padLabel: UILabel = UILabel()
-    
+//    var indicator = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.isUserInteractionEnabled = true 
         
     }
     
@@ -37,6 +38,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     func setupLabel() {
+        padLabel.isUserInteractionEnabled = false
         padLabel.frame = .zero
         padLabel.text = "\(self.idx+1)"
         padLabel.textAlignment = NSTextAlignment.center
@@ -53,21 +55,26 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     func showIndicator(){
         
-        padLabel.isHidden = true
-        let indicator = UIImageView.init(image: UIImage.init(named: "spinner"))
-        contentView.addSubview(indicator)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addConstraint(NSLayoutConstraint(item: indicator, attribute: .centerX, relatedBy: .equal, toItem: contentView, attribute: .centerX, multiplier: 1.0, constant: 0))
-         contentView.addConstraint(NSLayoutConstraint(item: indicator, attribute: .centerY, relatedBy: .equal, toItem: contentView, attribute: .centerY, multiplier: 1.0, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint(item: indicator, attribute: .height, relatedBy: .equal, toItem: contentView, attribute: .height, multiplier: 0.5, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint(item: indicator, attribute: .width, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 0.5, constant: 0))
-        SCAnimator.RotateLayer(layer: indicator.layer, completion: {
-            [weak self] _ in
-            guard let strongSelf = self else { return }
-            strongSelf.padLabel.isHidden = false
-            strongSelf.startRecording()
-        })
-        
+        isRecordingEnabled = false
+        startRecording()
+//        self.contentView.backgroundColor = self.cellColor
+//        padLabel.isHidden = true
+//        indicator.image = UIImage.init(named: "spinner")
+//        indicator.frame = CGRect(x: contentView.center.x-contentView.frame.width/4, y: contentView.center.y-contentView.frame.height/4, width: contentView.frame.width/2, height: contentView.frame.height/2)
+//        indicator.center = self.contentView.center
+//        contentView.addSubview(indicator)
+//
+//        SCAnimator.RotateLayer(layer: indicator.layer, completion: {
+//            [weak self] _ in
+//            guard let strongSelf = self else { return }
+//            strongSelf.padLabel.isHidden = false
+//            strongSelf.indicator.isHidden = true
+//            strongSelf.contentView.backgroundColor = strongSelf.cellColor
+//            strongSelf.contentView.layer.borderColor = UIColor.clear.cgColor
+//            strongSelf.padLabel.textColor = UIColor.clear
+//            strongSelf.startRecording()
+//        })
+    
     }
     
     
@@ -78,7 +85,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         case false:
             print("Started recording on sampler pad \(SCAudioManager.shared.selectedSampleIndex)")
             recordNewSample()
-            self.isRecordingEnabled = false
         }
     }
 
@@ -92,23 +98,25 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     func animateCell(){
         
         transformSize()
-        let fromColor = UIColor.white.cgColor
-        guard let toColor = self.cellColor?.cgColor else {
+        guard let toColor = self.cellColor else {
             print("No cell toColor.")
             return
         }
-        self.padLabel.textColor = UIColor.white
-        self.layer.borderColor = UIColor.white.cgColor
-        let animation = CABasicAnimation.init(keyPath: "backgroundColor")
-        animation.fromValue = fromColor
-        animation.toValue = toColor
-        animation.duration = 0.3
-        animation.isRemovedOnCompletion = true
-        animation.fillMode = kCAFilterLinear
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        animation.delegate = self
-        self.layer.add(animation, forKey: "backgroundColor")
-        
+        UIView.animate(withDuration: 0.6, delay: 0, options: [.transitionCrossDissolve], animations:{
+            [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.backgroundColor = toColor
+            strongSelf.padLabel.textColor = UIColor.black
+            strongSelf.layer.borderColor = UIColor.black.cgColor
+            strongSelf.padLabel.isHidden = false
+//            strongSelf.indicator.isHidden = true
+
+        },
+                       completion: { (finished: Bool) in
+                        self.layer.borderColor = self.cellColor?.cgColor
+                        self.padLabel.textColor = self.cellColor
+                        self.backgroundColor = UIColor.clear
+        })
     }
     
  
@@ -124,14 +132,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         })
     }
     
-    
-    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        if flag == true {
-            guard let color = self.cellColor else {return}
-            self.layer.borderColor = color.cgColor
-            self.padLabel.textColor = color
-        }
-    }
     
     
     
@@ -199,7 +199,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     
-    func isRecordingTouchDelay() {
+    func isRecordingDelayTouch() {
         self.isUserInteractionEnabled = false
         isTouchDelayed = true
     }

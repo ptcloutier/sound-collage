@@ -38,13 +38,12 @@ class SCAnimator {
         let rotation = CABasicAnimation.init(keyPath: "transform.rotation")
         rotation.fromValue = Float(0)
         rotation.toValue = Float(2*Double.pi)
-        rotation.duration = 2.0
-        rotation.repeatCount = 0
+        rotation.duration = 10.0
+        rotation.repeatCount = 10
         layer.removeAllAnimations()
         layer.add(rotation, forKey: "Spin")
         completion(true)
     }
-
 }
 
 /*extension UIView {

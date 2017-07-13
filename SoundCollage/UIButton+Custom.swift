@@ -19,7 +19,7 @@ extension UIButton {
         back.isUserInteractionEnabled = false
         back.layer.cornerRadius = height/2
         back.layer.masksToBounds = true
-        back.layer.borderWidth = 3.0
+//        back.layer.borderWidth = 3.0
         back.backgroundColor = primaryColor
         back.layer.borderColor = secondaryColor.cgColor
         btn.addSubview(back)
@@ -36,7 +36,7 @@ extension UIButton {
         back.isUserInteractionEnabled = false
         back.layer.cornerRadius = height/2
         back.layer.masksToBounds = true
-        back.layer.borderWidth = 3.0
+//        back.layer.borderWidth = 3.0
         back.layer.borderColor = secondaryColor.cgColor 
         btn.addSubview(back)
         return btn
