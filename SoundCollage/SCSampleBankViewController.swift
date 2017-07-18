@@ -207,7 +207,8 @@ class SCSampleBankViewController: UIViewController {
         UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations:{
             self.collectionView.transform = CGAffineTransform(scaleX: 5, y: 5)
             
-            let vc: SCSamplerViewController = SCSamplerViewController(nibName: nil, bundle: nil)
+//            let vc: SCSamplerViewController = SCSamplerViewController(nibName: nil, bundle: nil)
+            let vc: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
             let transition = CATransition() //TODO: use this transition when reloading samplerbankvc
             transition.duration = 1.0
             transition.type = kCATransitionPush
@@ -272,6 +273,6 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
         }
         
         SCDataManager.shared.user?.currentSampleBank = sampleBanks[indexPath.row]
-        dissolve()
+        self.dissolve()
     }
 }

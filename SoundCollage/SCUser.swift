@@ -10,7 +10,6 @@ import Foundation
 
 class SCUser: Mappable {
     
-    // color preference can be set on the datamanager user
     var userName: String?
     var sampleBanks: [SCSampleBank]?
     var currentSampleBank: SCSampleBank?

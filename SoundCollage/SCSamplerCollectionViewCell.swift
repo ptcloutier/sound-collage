@@ -26,7 +26,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.isUserInteractionEnabled = true 
+        self.isUserInteractionEnabled = true
         
     }
     
@@ -115,7 +115,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
                        completion: { (finished: Bool) in
                         self.layer.borderColor = self.cellColor?.cgColor
                         self.padLabel.textColor = self.cellColor
-                        self.backgroundColor = UIColor.clear
+                        self.backgroundColor = UIColor.black
         })
     }
     
