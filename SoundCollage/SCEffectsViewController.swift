@@ -13,6 +13,7 @@ class SCEffectsViewController: UIViewController {
     var parameterView: UIView?
     var effectsContainerCV: UICollectionView?
     var effects: [String] = []
+    let toolbarHeight: CGFloat = 100.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,12 +41,11 @@ class SCEffectsViewController: UIViewController {
         self.view.addSubview(effectsContainerCV)
         
         effectsContainerCV.translatesAutoresizingMaskIntoConstraints = false
+       
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 0.20, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 20))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 1.0, constant: 0))
-        
-     
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: 0))
     }
     
     
@@ -63,19 +63,22 @@ class SCEffectsViewController: UIViewController {
         parameterView.layer.borderWidth = 3
         parameterView.layer.borderColor = UIColor.purple.cgColor
         parameterView.backgroundColor = UIColor.Custom.VintageSeaStyle.brightVintageRed
-        
         self.view.addSubview(parameterView)
+        
         parameterView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .leading, relatedBy: .equal, toItem: effectsContainerCV, attribute: .trailing, multiplier: 1.0, constant: 5.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: -self.view.frame.width/5-5))
-        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 10.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: 100.0))
+        
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .leading, relatedBy: .equal, toItem: effectsContainerCV, attribute: .trailing, multiplier: 1.0, constant: 10.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: -toolbarHeight))
         
         let pan = UIPanGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
         parameterView.addGestureRecognizer(pan)
         let tap = UITapGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
         parameterView.addGestureRecognizer(tap)
     }
+    
+    
     
     //MARK: effects parameter
     

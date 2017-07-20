@@ -36,7 +36,6 @@
 		A791610A1F1EA86B0051113C /* SCFirstContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79161091F1EA86B0051113C /* SCFirstContainerCell.swift */; };
 		A791610C1F1EA8880051113C /* SCSecondContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A791610B1F1EA8880051113C /* SCSecondContainerCell.swift */; };
 		A791610E1F1EBEEA0051113C /* SCEffectsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A791610D1F1EBEEA0051113C /* SCEffectsViewController.swift */; };
-		A79161111F1EC8A30051113C /* SCRecordBtnDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79161101F1EC8A30051113C /* SCRecordBtnDelegate.swift */; };
 		A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */; };
 		A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */; };
 		A79F5C8A1F1551CE00A89492 /* spinner.png in Resources */ = {isa = PBXBuildFile; fileRef = A79F5C891F1551CE00A89492 /* spinner.png */; };
@@ -60,6 +59,7 @@
 		A7BD6AB81F14305B000CDF9A /* SCTriggerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB71F14305B000CDF9A /* SCTriggerCell.swift */; };
 		A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */; };
 		A7BFEE2D1EBA444A00C718E7 /* UIImage+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFEE2C1EBA444A00C718E7 /* UIImage+Color.swift */; };
+		A7DC3AA11F21376C006354A5 /* SCMusicInterfaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DC3AA01F21376C006354A5 /* SCMusicInterfaceCell.swift */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
 		D12EE6F44C0DB1631E344924 /* Pods_SoundCollage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */; };
 /* End PBXBuildFile section */
@@ -128,7 +128,6 @@
 		A79161091F1EA86B0051113C /* SCFirstContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCFirstContainerCell.swift; sourceTree = "<group>"; };
 		A791610B1F1EA8880051113C /* SCSecondContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSecondContainerCell.swift; sourceTree = "<group>"; };
 		A791610D1F1EBEEA0051113C /* SCEffectsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCEffectsViewController.swift; sourceTree = "<group>"; };
-		A79161101F1EC8A30051113C /* SCRecordBtnDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCRecordBtnDelegate.swift; sourceTree = "<group>"; };
 		A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankFlowLayout.swift; sourceTree = "<group>"; };
 		A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankCell.swift; sourceTree = "<group>"; };
 		A79F5C891F1551CE00A89492 /* spinner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spinner.png; sourceTree = "<group>"; };
@@ -158,6 +157,7 @@
 		A7BD6AB71F14305B000CDF9A /* SCTriggerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCTriggerCell.swift; sourceTree = "<group>"; };
 		A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+GradientColor.swift"; sourceTree = "<group>"; };
 		A7BFEE2C1EBA444A00C718E7 /* UIImage+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Color.swift"; sourceTree = "<group>"; };
+		A7DC3AA01F21376C006354A5 /* SCMusicInterfaceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCMusicInterfaceCell.swift; sourceTree = "<group>"; };
 		A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBank.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -261,7 +261,6 @@
 				A78250E01EE13B7E00350768 /* SCAudioEngine.swift */,
 				A78250E21EE601BA00350768 /* SCEffectControl.swift */,
 				A7A21CB21EFAEFF300161DF3 /* UIButton+Custom.swift */,
-				A79161101F1EC8A30051113C /* SCRecordBtnDelegate.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -310,6 +309,7 @@
 			children = (
 				A79161061F1EA7FD0051113C /* SCContainerViewController.swift */,
 				A79161091F1EA86B0051113C /* SCFirstContainerCell.swift */,
+				A7DC3AA01F21376C006354A5 /* SCMusicInterfaceCell.swift */,
 				A791610B1F1EA8880051113C /* SCSecondContainerCell.swift */,
 			);
 			name = Container;
@@ -601,7 +601,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7BD6AB81F14305B000CDF9A /* SCTriggerCell.swift in Sources */,
-				A79161111F1EC8A30051113C /* SCRecordBtnDelegate.swift in Sources */,
 				A7BD6AB61F141E4D000CDF9A /* SCSequencerCell.swift in Sources */,
 				A7A8233E1EA81F500061D0A0 /* SCSamplerCollectionViewCell.swift in Sources */,
 				A79161071F1EA7FD0051113C /* SCContainerViewController.swift in Sources */,
@@ -623,6 +622,7 @@
 				A7BD6AB41F140D85000CDF9A /* SCScoreCell.swift in Sources */,
 				A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */,
 				A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */,
+				A7DC3AA11F21376C006354A5 /* SCMusicInterfaceCell.swift in Sources */,
 				A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */,
 				A791610E1F1EBEEA0051113C /* SCEffectsViewController.swift in Sources */,
 				A791610A1F1EA86B0051113C /* SCFirstContainerCell.swift in Sources */,

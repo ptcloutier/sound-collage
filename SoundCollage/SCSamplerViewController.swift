@@ -39,6 +39,8 @@ class SCSamplerViewController: UIViewController  {
         let recordingDidFinishNotification = Notification.Name.init("recordingDidFinish")
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
         setupSampler()
+         NotificationCenter.default.addObserver( self, selector: #selector(SCSamplerViewController.toggleRecordingMode), name: NSNotification.Name.init("recordBtnDidPress"), object: nil)
+
     }
     
     
@@ -109,7 +111,7 @@ class SCSamplerViewController: UIViewController  {
         samplerCV.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0))
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 20))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0))
         self.view.addConstraint(NSLayoutConstraint(item: samplerCV, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: 0))
     }
     
@@ -133,29 +135,22 @@ class SCSamplerViewController: UIViewController  {
     
     
     
-    //MARK: Navigation
-    
-    
-    func bankBtnDidPress(){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let vc = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController else {
-            print("SampleBank vc not found.")
-            return
-        }
-        SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
-    }
-    
-    
-    func presentSequencer(){
         
-        let vc: SCScoreViewController = SCScoreViewController(nibName: nil, bundle: nil)
-        SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
-    }
-    
-    
     //MARK: recording and playback
     
-    
+    func toggleRecordingMode() {
+        
+        switch SCAudioManager.shared.isRecordingModeEnabled {
+        case true:
+            SCAudioManager.shared.isRecordingModeEnabled = false
+            print("Recording mode not enabled.")
+        case false:
+            SCAudioManager.shared.isRecordingModeEnabled = true
+            print("Recording mode enabled.")
+        }
+        reloadSamplerCV()
+    }
+
     
     func reloadSamplerCV() {
         guard let cv = self.samplerCV else {
@@ -351,20 +346,5 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
 
 
 
-extension SCSamplerViewController: SCRecordBtnDelegate {
-    
-    func toggleRecordingMode() {
-        
-        switch SCAudioManager.shared.isRecordingModeEnabled {
-        case true:
-            SCAudioManager.shared.isRecordingModeEnabled = false
-            print("Recording mode not enabled.")
-        case false:
-            SCAudioManager.shared.isRecordingModeEnabled = true
-            print("Recording mode enabled.")
-        }
-        reloadSamplerCV()
-    }
-}
 
 

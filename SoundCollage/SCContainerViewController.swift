@@ -16,7 +16,8 @@ class SCContainerViewController: UIViewController {
     let navBarBtnFrameSize = CGRect.init(x: 0, y: 0, width: 30, height: 30)
     let toolbarHeight = CGFloat(98.0)
     var toolbar = UIToolbar()
-    weak var delegate: SCRecordBtnDelegate?
+
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +46,17 @@ class SCContainerViewController: UIViewController {
     }
     
     
+    //MARK: notification
+    
+    
+    private func postRecordBtnDidPressNotification(){
+        
+        let notification = Notification.Name.init("recordBtnDidPress")
+        NotificationCenter.default.post(name: notification, object: nil)
+    }
+
+    
+    
     //MARK: ui setup
     
     
@@ -69,11 +81,11 @@ class SCContainerViewController: UIViewController {
         recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
         let bankBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
-        bankBtn.addTarget(self, action: #selector(SCSamplerViewController.bankBtnDidPress), for: .touchUpInside)
+        bankBtn.addTarget(self, action: #selector(SCContainerViewController.bankBtnDidPress), for: .touchUpInside)
         
         
         let sequencerBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
-//        sequencerBtn.addTarget(self, action: #selector(SCSamplerViewController.presentSequencer), for: .touchUpInside)
+        sequencerBtn.addTarget(self, action: #selector(SCContainerViewController.presentSequencer), for: .touchUpInside)
         
         let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
         
@@ -93,6 +105,8 @@ class SCContainerViewController: UIViewController {
     }
     
     
+    
+    
     func recordBtnDidPress(){
         
         guard let recordBtn = self.recordBtn else {
@@ -107,14 +121,36 @@ class SCContainerViewController: UIViewController {
                 recordBtn.alpha = 1
             }, completion: nil)
         case false:
-            guard let delegate = self.delegate else { return }
-            delegate.toggleRecordingMode()
+            
+            postRecordBtnDidPressNotification()
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 recordBtn.alpha = 1
             }, completion: nil)
         }
     }
+    
+    
+    //MARK: Navigation
+    
+    
+    func bankBtnDidPress(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController else {
+            print("SampleBank vc not found.")
+            return
+        }
+        SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
+    }
+    
+    
+    
+    
+    func presentSequencer(){
+        
+      print("sequencer")
+    }
+
 }
 
 
@@ -128,8 +164,8 @@ extension SCContainerViewController: UICollectionViewDelegate, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCFirstContainerCell", for: indexPath) as! SCFirstContainerCell
-            cell.setupSampler()
-            self.delegate = cell.samplerVC
+            cell.setupCollectionView()
+        
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSecondContainerCell", for: indexPath) as! SCSecondContainerCell
