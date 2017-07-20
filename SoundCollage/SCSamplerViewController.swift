@@ -36,10 +36,9 @@ class SCSamplerViewController: UIViewController  {
         iceCreamColors = SCGradientColors.getPsychedelicIceCreamShopColors()
         
         
-        let recordingDidFinishNotification = Notification.Name.init("recordingDidFinish")
-        NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: Notification.Name.init("recordingDidFinish"), object: nil)
         setupSampler()
-         NotificationCenter.default.addObserver( self, selector: #selector(SCSamplerViewController.toggleRecordingMode), name: NSNotification.Name.init("recordBtnDidPress"), object: nil)
+         NotificationCenter.default.addObserver( self, selector: #selector(SCSamplerViewController.toggleRecordingMode), name: Notification.Name.init("recordBtnDidPress"), object: nil)
 
     }
     

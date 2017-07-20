@@ -46,16 +46,6 @@ class SCContainerViewController: UIViewController {
     }
     
     
-    //MARK: notification
-    
-    
-    private func postRecordBtnDidPressNotification(){
-        
-        let notification = Notification.Name.init("recordBtnDidPress")
-        NotificationCenter.default.post(name: notification, object: nil)
-    }
-
-    
     
     //MARK: ui setup
     
@@ -85,7 +75,7 @@ class SCContainerViewController: UIViewController {
         
         
         let sequencerBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
-        sequencerBtn.addTarget(self, action: #selector(SCContainerViewController.presentSequencer), for: .touchUpInside)
+        sequencerBtn.addTarget(self, action: #selector(SCContainerViewController.postSequencerPlaybackDidPressNotification), for: .touchUpInside)
         
         let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
         
@@ -121,7 +111,6 @@ class SCContainerViewController: UIViewController {
                 recordBtn.alpha = 1
             }, completion: nil)
         case false:
-            
             postRecordBtnDidPressNotification()
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
@@ -145,10 +134,20 @@ class SCContainerViewController: UIViewController {
     
     
     
+    //MARK: Notifications
     
-    func presentSequencer(){
+    
+    func postRecordBtnDidPressNotification(){
         
-      print("sequencer")
+        NotificationCenter.default.post(name: Notification.Name.init("recordBtnDidPress"), object: nil)
+        
+    }
+    
+
+    
+    func postSequencerPlaybackDidPressNotification(){
+        
+        NotificationCenter.default.post(name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
     }
 
 }
