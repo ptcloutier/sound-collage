@@ -24,11 +24,12 @@ class SCSamplerViewController: UIViewController  {
     let backGroundColors: [UIColor] = [UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue, UIColor.Custom.PsychedelicIceCreamShoppe.neonAqua, UIColor.Custom.PsychedelicIceCreamShoppe.deepBlueDark]
     
     
+    
+    
     //MARK: vc lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         view.backgroundColor = UIColor.clear //UIColor.Custom.PsychedelicIceCreamShoppe.ice
         vintageColors = SCGradientColors.getVintageColors()
@@ -37,8 +38,9 @@ class SCSamplerViewController: UIViewController  {
         
         let recordingDidFinishNotification = Notification.Name.init("recordingDidFinish")
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: recordingDidFinishNotification, object: nil)
-        setupContainerViews()
+        setupSampler()
     }
+    
     
     
     override func viewDidLayoutSubviews() {
@@ -59,7 +61,6 @@ class SCSamplerViewController: UIViewController  {
     
     
     
-    
     func calibrateSize(samplerCVWidth: CGFloat)-> Bool{
         var result: Bool = false
         
@@ -73,14 +74,11 @@ class SCSamplerViewController: UIViewController  {
     
     
     
-    //MARK: Collection views
+  
     
     
-    private func setupContainerViews() {
-        
-        
-        // sampler
-        
+    private func setupSampler() {
+ 
         var numberOfColumns: CGFloat
         
         if SCDataManager.shared.user?.currentSampleBank?.type == SCSampleBank.SamplerType.double {
@@ -109,14 +107,10 @@ class SCSamplerViewController: UIViewController  {
         self.view.addSubview(samplerCV)
         
         samplerCV.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .leading, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .height, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .height, multiplier: 0.57, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .width, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .width, multiplier: 1.0, constant: 0.0))
-        
-        
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 20))
+        self.view.addConstraint(NSLayoutConstraint(item: samplerCV, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: 0))
     }
     
     

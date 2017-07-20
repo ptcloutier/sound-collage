@@ -23,6 +23,8 @@ class SCFirstContainerCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    
+    
    func setupSampler(){
         self.samplerVC = SCSamplerViewController(nibName: nil, bundle: nil)
         guard let samplerVC = self.samplerVC else { return }
