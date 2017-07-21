@@ -146,7 +146,7 @@ class SCContainerViewController: UIViewController {
 
     
     func postSequencerPlaybackDidPressNotification(){
-        
+       
         NotificationCenter.default.post(name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
     }
 

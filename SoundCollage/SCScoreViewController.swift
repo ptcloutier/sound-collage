@@ -54,13 +54,15 @@ class SCScoreViewController: UIViewController {
     
     func setupSequencerBarUI(){
         
-        sequencerBar = UIView.init(frame: CGRect(x: 0, y: 0 , width: 3.0, height: view.frame.height-toolbarHeight))
+        sequencerBar = UIView.init(frame: CGRect(x: 0, y: 0 , width: 3.0, height: view.frame.height))
         guard let sequencerBar = self.sequencerBar else { return }
         sequencerBar.backgroundColor = UIColor.white
         guard let scoreCV = self.scoreCV else { return }
         scoreCV.addSubview(sequencerBar)
         print("sequencer bar x:\(sequencerBar.frame.origin.x), y:\(sequencerBar.frame.origin.y), w:\(sequencerBar.frame.width), h:\(sequencerBar.frame.height)")
     }
+    
+    
    
     
     func startPlayerBarTimers(){
@@ -95,10 +97,9 @@ class SCScoreViewController: UIViewController {
         } else {
             triggerCounter+=1
         }
-
- 
     }
 
+    
     
     func animateSequencerBarPosition(){
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
