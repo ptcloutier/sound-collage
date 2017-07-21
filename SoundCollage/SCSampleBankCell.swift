@@ -65,7 +65,7 @@ class SCSampleBankCell: UICollectionViewCell {
     private func setupTextField(){
     
 //        titleTextField.text = "Untitled"
-        titleTextField.font = UIFont.init(name: "Futura", size: 40)
+        titleTextField.font = UIFont.init(name: "Futura", size: 20)
         titleTextField.textColor = UIColor.Custom.VintageSeaStyle.darkAqua
         titleTextField.textAlignment = NSTextAlignment.center
         titleTextField.translatesAutoresizingMaskIntoConstraints = false

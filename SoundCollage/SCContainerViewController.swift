@@ -14,7 +14,7 @@ class SCContainerViewController: UIViewController {
     var collectionView: UICollectionView?
     var recordBtn: UIButton?
     let navBarBtnFrameSize = CGRect.init(x: 0, y: 0, width: 30, height: 30)
-    let toolbarHeight = CGFloat(98.0)
+    let toolbarHeight = CGFloat(49.0)
     var toolbar = UIToolbar()
 
     
