@@ -78,6 +78,9 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     
+    func reloadCV(){
+        self.triggerCV?.reloadData()
+    }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

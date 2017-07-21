@@ -16,8 +16,9 @@ class SCScoreViewController: UIViewController {
     var recordBtn: UIButton?
     var sequencerTimer: Timer?
     var sequencerBar = UIView()
-    var triggerCounter: Int = 0
+    var triggerCounter: Int = 1
     var triggerTimer: Timer?
+    var timeSignature: Double = 4.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +29,7 @@ class SCScoreViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(SCScoreViewController.playback), name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
     }
     
+    //MARK: UI setup
     
     func setupCollectionView(){
         
@@ -62,61 +64,6 @@ class SCScoreViewController: UIViewController {
     }
     
     
-    
-    
-    func startPlayerBarTimers(){
-        
-        guard sequencerTimer == nil else { return }
-        guard triggerTimer == nil else { return }
-        sequencerTimer = Timer.scheduledTimer(timeInterval: 8.0/16.0, target: self, selector: #selector(SCScoreViewController.triggerSample), userInfo: nil, repeats: true)
-        RunLoop.main.add(sequencerTimer!, forMode: RunLoopMode.commonModes)
-        triggerTimer = Timer.scheduledTimer(timeInterval: 8.0, target: self, selector: #selector(SCScoreViewController.animateSequencerBarPosition), userInfo: nil, repeats: true)
-        RunLoop.main.add(triggerTimer!, forMode: RunLoopMode.commonModes)
-    }
-    
-    
-    
-    
-    func triggerSample(){
-        
-        print("\(sequencerBar.frame.origin.x), \(sequencerBar.frame.origin.y)")
-        var playbackSamples: [Int] = []
-        print("trigger counter: \(triggerCounter)")
-        for (index,settings) in SCAudioManager.shared.sequencerSettings[triggerCounter].enumerated() {
-            if settings == true {
-                playbackSamples.append(index)
-            }
-            
-        }
-        for sample in playbackSamples {
-            SCAudioManager.shared.selectedSequencerIndex = sample
-            SCAudioManager.shared.playAudio(sampleIndex: SCAudioManager.shared.selectedSequencerIndex)
-        }
-        if triggerCounter == 15 {
-            triggerCounter = 0
-        } else {
-            triggerCounter+=1
-        }
-    }
-    
-    
-    
-    func animateSequencerBarPosition(){
-        DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
-            let toPoint = CGPoint(x: UIScreen.main.bounds.width, y: 0)
-            let fromPoint = CGPoint(x: self.view.frame.width/17, y: 0)
-            let movement = CABasicAnimation.init(keyPath: "position")
-            movement.isAdditive = true
-            movement.fromValue = NSValue.init(cgPoint: fromPoint)
-            movement.toValue = NSValue.init(cgPoint: toPoint)
-            movement.duration = 8.0
-            self.sequencerBar.layer.add(movement, forKey: "move")
-        })
-        
-    }
-    
-    
-    
     //MARK: Playback
     
     
@@ -137,8 +84,8 @@ class SCScoreViewController: UIViewController {
     func startPlaying(){
         self.sequencerBar.isHidden = false
         SCAudioManager.shared.sequencerIsPlaying = true
-        animateSequencerBarPosition()
         startPlayerBarTimers()
+        animateSequencerBarPosition()
         print("Start sequencer.")
     }
     
@@ -157,6 +104,62 @@ class SCScoreViewController: UIViewController {
         SCAudioManager.shared.sequencerIsPlaying = false
         print("stopped sequencer")
         
+    }
+    
+    //MARK: Timers/Animation
+    
+    
+    func startPlayerBarTimers(){
+        
+        guard sequencerTimer == nil else { return }
+        guard triggerTimer == nil else { return }
+        triggerSample()
+        sequencerTimer = Timer.scheduledTimer(timeInterval: timeSignature/16.0, target: self, selector: #selector(SCScoreViewController.triggerSample), userInfo: nil, repeats: true)
+        RunLoop.main.add(sequencerTimer!, forMode: RunLoopMode.commonModes)
+        triggerTimer = Timer.scheduledTimer(timeInterval: timeSignature, target: self, selector: #selector(SCScoreViewController.animateSequencerBarPosition), userInfo: nil, repeats: true)
+        RunLoop.main.add(triggerTimer!, forMode: RunLoopMode.commonModes)
+    }
+    
+    
+    
+    
+    func triggerSample(){
+        
+        print("\(sequencerBar.frame.origin.x), \(sequencerBar.frame.origin.y)")
+        var playbackSamples: [Int] = []
+        print("trigger counter: \(triggerCounter)")
+        
+        let samples = SCAudioManager.shared.sequencerSettings[triggerCounter]
+        for (index,settings) in samples.enumerated() {
+            if settings == true {
+                playbackSamples.append(index)
+            }
+            
+        }
+        for sample in playbackSamples {
+            SCAudioManager.shared.selectedSequencerIndex = sample
+            SCAudioManager.shared.playAudio(sampleIndex: SCAudioManager.shared.selectedSequencerIndex)
+        }
+        if triggerCounter == 16 {
+            triggerCounter = 1
+        } else {
+            triggerCounter+=1
+        }
+    }
+    
+    
+    
+    func animateSequencerBarPosition(){
+        DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
+            let toPoint = CGPoint(x: UIScreen.main.bounds.width, y: 0)
+            let fromPoint = CGPoint(x: self.view.frame.width/17, y: 0)
+            let movement = CABasicAnimation.init(keyPath: "position")
+            movement.isAdditive = true
+            movement.fromValue = NSValue.init(cgPoint: fromPoint)
+            movement.toValue = NSValue.init(cgPoint: toPoint)
+            movement.duration = self.timeSignature
+            self.sequencerBar.layer.add(movement, forKey: "move")
+        })
     }
 }
 
