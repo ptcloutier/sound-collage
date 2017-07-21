@@ -9,7 +9,7 @@
 import UIKit
 
 class SCScoreViewController: UIViewController {
-
+    
     var scoreCV: UICollectionView?
     let toolbarHeight = CGFloat(98.0)
     var toolbar = UIToolbar()
@@ -22,7 +22,7 @@ class SCScoreViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         setupCollectionView()
         setupSequencerBarUI()
@@ -47,7 +47,7 @@ class SCScoreViewController: UIViewController {
         view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: 0))
         view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0))
         view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0))
-
+        
     }
     
     
@@ -63,7 +63,7 @@ class SCScoreViewController: UIViewController {
     }
     
     
-   
+    
     
     func startPlayerBarTimers(){
         guard sequencerTimer == nil else { return }
@@ -98,11 +98,11 @@ class SCScoreViewController: UIViewController {
             triggerCounter+=1
         }
     }
-
+    
     
     
     func animateSequencerBarPosition(){
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
             guard let sequencerBar = self.sequencerBar else { return }
             let toPoint = CGPoint(x: UIScreen.main.bounds.width, y: 0)
             let fromPoint = CGPoint(x: 0, y: 0)
@@ -116,7 +116,7 @@ class SCScoreViewController: UIViewController {
         
     }
     
-  
+    
     
     //MARK: Playback
     
@@ -131,6 +131,7 @@ class SCScoreViewController: UIViewController {
             startPlaying()
         }
     }
+    
     
     
     
@@ -157,7 +158,7 @@ class SCScoreViewController: UIViewController {
         self.triggerCounter = 0
         self.isPlaying = false
         print("stopped sequencer")
-
+        
     }
 }
 
@@ -165,10 +166,6 @@ class SCScoreViewController: UIViewController {
 
 extension SCScoreViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-//     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        let result = CGSize.init(width: view.frame.width/16, height: view.frame.height/16)
-//        return result
-//    }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -176,10 +173,11 @@ extension SCScoreViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = scoreCV?.dequeueReusableCell(withReuseIdentifier: "SCScoreCell", for: indexPath) as!SCScoreCell
         cell.setupSequencer()
-
+        
         return cell
     }
     
@@ -187,7 +185,5 @@ extension SCScoreViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        
-    
-        }
+    }
 }

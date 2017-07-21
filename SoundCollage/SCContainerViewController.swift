@@ -103,6 +103,8 @@ class SCContainerViewController: UIViewController {
             print("No record btn.")
             return
         }
+        postRecordBtnDidPressNotification()
+
         switch SCAudioManager.shared.isRecording {
         case true:
             SCAudioManager.shared.finishRecording(success: true)
@@ -111,7 +113,6 @@ class SCContainerViewController: UIViewController {
                 recordBtn.alpha = 1
             }, completion: nil)
         case false:
-            postRecordBtnDidPressNotification()
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 recordBtn.alpha = 1

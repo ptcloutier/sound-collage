@@ -22,7 +22,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var touchTimer: Timer? = nil
     var isTouchDelayed: Bool = false
     var padLabel: UILabel = UILabel()
-//    var indicator = UIImageView()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,13 +37,19 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     }
     
     
+    
+    
     func setupLabel() {
+        
         padLabel.isUserInteractionEnabled = false
         padLabel.frame = .zero
         padLabel.text = "\(self.idx+1)"
         padLabel.textAlignment = NSTextAlignment.center
-        padLabel.font = UIFont.init(name: "A DAY WITHOUT SUN", size: 60.0)
-        padLabel.textColor = self.cellColor
+        padLabel.font = UIFont.init(name: "Futura", size: 40.0)
+        self.layer.borderWidth = 3.0
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = 10.0
+        
         contentView.addSubview(padLabel)
         padLabel.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .height, relatedBy: .equal, toItem: self.contentView, attribute: .height, multiplier: 0.75, constant: 0))
@@ -52,90 +58,9 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: centerY))
     }
     
-    
-    func showIndicator(){
-        
-        isRecordingEnabled = false
-        startRecording()
-//        self.contentView.backgroundColor = self.cellColor
-//        padLabel.isHidden = true
-//        indicator.image = UIImage.init(named: "spinner")
-//        indicator.frame = CGRect(x: contentView.center.x-contentView.frame.width/4, y: contentView.center.y-contentView.frame.height/4, width: contentView.frame.width/2, height: contentView.frame.height/2)
-//        indicator.center = self.contentView.center
-//        contentView.addSubview(indicator)
-//
-//        SCAnimator.RotateLayer(layer: indicator.layer, completion: {
-//            [weak self] _ in
-//            guard let strongSelf = self else { return }
-//            strongSelf.padLabel.isHidden = false
-//            strongSelf.indicator.isHidden = true
-//            strongSelf.contentView.backgroundColor = strongSelf.cellColor
-//            strongSelf.contentView.layer.borderColor = UIColor.clear.cgColor
-//            strongSelf.padLabel.textColor = UIColor.clear
-//            strongSelf.startRecording()
-//        })
-    
-    }
-    
-    
-    func startRecording(){
-        switch SCAudioManager.shared.isRecording {
-        case true:
-            print("Audio recording already in session.")
-        case false:
-            print("Started recording on sampler pad \(SCAudioManager.shared.selectedSampleIndex)")
-            recordNewSample()
-        }
-    }
 
     
-    
-    //MARK: Colors/animations
-    
-    
-    
-    
-    func animateCell(){
-        
-        transformSize()
-        guard let toColor = self.cellColor else {
-            print("No cell toColor.")
-            return
-        }
-        UIView.animate(withDuration: 0.6, delay: 0, options: [.transitionCrossDissolve], animations:{
-            [weak self] in
-            guard let strongSelf = self else { return }
-            strongSelf.backgroundColor = toColor
-            strongSelf.padLabel.textColor = UIColor.black
-            strongSelf.layer.borderColor = UIColor.black.cgColor
-            strongSelf.padLabel.isHidden = false
-//            strongSelf.indicator.isHidden = true
-
-        },
-                       completion: { (finished: Bool) in
-                        self.layer.borderColor = self.cellColor?.cgColor
-                        self.padLabel.textColor = self.cellColor
-                        self.backgroundColor = UIColor.black
-        })
-    }
-    
- 
-    
-    func transformSize(){
-        
-        UIView.animate(withDuration: 0.1, animations: {
-            self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-        }, completion: { _ in
-            UIView.animate(withDuration: 0.1, animations: {
-                self.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-            })
-        })
-    }
-    
-    
-    
-    
-    //MARK: UI record enabled/cell flashing
+    //MARK: Animations
     
     func startCellFlashing() {
         if flashTimer != nil {
@@ -147,6 +72,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     func startTimer() {
+        
         flashTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) {
             [weak self] flashTimer in  // creates a capture group for the timer
             guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
@@ -164,9 +90,53 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         }
     }
     
-    //MARK: Playback
     
     
+    
+    
+    func animateCell(){
+        
+        transformSize()
+    }
+    
+    
+    
+    func transformSize(){
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            self.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            })
+        })
+    }
+
+    
+    
+    
+    //MARK: Recording/Playback
+    
+    
+    
+    
+    
+    func startRecording(){
+      
+        
+        self.isRecordingEnabled = false
+        
+        switch SCAudioManager.shared.isRecording {
+        case true:
+            print("Audio recording already in session.")
+        case false:
+            print("Started recording on sampler pad \(SCAudioManager.shared.selectedSampleIndex)")
+            recordNewSample()
+        }
+    }
+    
+    
+
     func playbackSample() {
         
         SCAudioManager.shared.playAudio(sampleIndex: SCAudioManager.shared.selectedSampleIndex)
@@ -175,9 +145,12 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     
+    
     func recordNewSample() {
+        
         SCAudioManager.shared.recordNew()
     }
+    
     
     
     
@@ -211,6 +184,5 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         self.isUserInteractionEnabled = true
         isTouchDelayed = false
     }
-    
     
 }

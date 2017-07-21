@@ -12,6 +12,7 @@ class SCSequencerCell: UICollectionViewCell {
     
     var triggerCV: UICollectionView?
     var idx: Int = 0
+    let cellCount: Int = 16
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,6 +31,11 @@ class SCSequencerCell: UICollectionViewCell {
         
     }
     
+    
+    
+    
+    
+    
     func setupSequencer(){
         
         while SCAudioManager.shared.sequencerSettings.count<=16{
@@ -40,7 +46,7 @@ class SCSequencerCell: UICollectionViewCell {
             }
             SCAudioManager.shared.sequencerSettings.append(triggers)
         }
-        let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 16)
+        let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: CGFloat(cellCount))
         triggerCV = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
         guard let triggerCV = self.triggerCV else { return }
         triggerCV.register(SCTriggerCell.self, forCellWithReuseIdentifier: "SCTriggerCell")
@@ -59,7 +65,7 @@ class SCSequencerCell: UICollectionViewCell {
 extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let result = CGSize.init(width: contentView.frame.width, height: contentView.frame.height/16)
+        let result = CGSize.init(width: contentView.frame.width, height: contentView.frame.height/CGFloat(cellCount))
         return result
     }
     
@@ -68,7 +74,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
     //    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 16
+        return cellCount
     }
     
     
@@ -76,34 +82,43 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = triggerCV?.dequeueReusableCell(withReuseIdentifier: "SCTriggerCell", for: indexPath) as!SCTriggerCell
+        
         cell.sequencerIdx = self.idx
         cell.idx = indexPath.row
-        cell.layer.borderWidth = 1.0
+        cell.layer.borderWidth = 1.5
         cell.layer.borderColor = UIColor.purple.cgColor
-        print("cell idx: \(cell.idx), sequencer idx: \(cell.sequencerIdx)")
+        let iceCreamColors: [UIColor] = SCGradientColors.getPsychedelicIceCreamShopColors()
         
-        switch cell.isPlaybackEnabled {
-        case true:
-            //TODO: This not DRY
-            let iceCreamColors: [UIColor] = SCGradientColors.getPsychedelicIceCreamShopColors()
-            
-            var colorIdx: Int
-            if indexPath.row > iceCreamColors.count-1 {
-                colorIdx = indexPath.row-iceCreamColors.count
-                if colorIdx > iceCreamColors.count-1 {
-                    colorIdx -= iceCreamColors.count
-                }
-            } else {
-                colorIdx = indexPath.row
+        var colorIdx: Int
+        if indexPath.row > iceCreamColors.count-1 {
+            colorIdx = indexPath.row-iceCreamColors.count
+            if colorIdx > iceCreamColors.count-1 {
+                colorIdx -= iceCreamColors.count
             }
-            cell.backgroundColor = iceCreamColors[colorIdx]
-            
-            
-        case false:
-            cell.backgroundColor = UIColor.clear
-            
+        } else {
+            colorIdx = indexPath.row
         }
-
+        
+        if self.idx == 0 {
+            cell.padLabel.text = "\(cell.idx+1)"
+            cell.isUserInteractionEnabled = false
+            cell.backgroundColor = iceCreamColors[colorIdx]
+            cell.alpha = 0.8
+        } else {
+            cell.padLabel.isHidden = true
+            
+   
+            switch cell.isPlaybackEnabled {
+            case true:
+                //TODO: This not DRY
+                cell.backgroundColor = iceCreamColors[colorIdx]
+                
+            case false:
+                cell.backgroundColor = UIColor.black
+                
+            }
+        }
+        
         return cell
     }
     
@@ -123,7 +138,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         case true:
             cell.isPlaybackEnabled = false
             SCAudioManager.shared.sequencerSettings[cell.sequencerIdx][cell.idx] = false
-            cell.backgroundColor = UIColor.clear
+            cell.backgroundColor = UIColor.black
         case false:
             cell.isPlaybackEnabled = true
             SCAudioManager.shared.sequencerSettings[cell.sequencerIdx][cell.idx] = true
@@ -140,6 +155,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
                 print("sequencer settings\(i.description)")
             }
         }
+        
     }
 }
 

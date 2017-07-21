@@ -11,7 +11,7 @@ import UIKit
 class SCScoreCell: UICollectionViewCell {
 
     var sequencerCV: UICollectionView?
-    
+    let cellCount: Int = 17
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,7 +34,7 @@ class SCScoreCell: UICollectionViewCell {
     
     func setupSequencer(){
         
-        let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 16)
+        let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: CGFloat(cellCount))
         sequencerCV = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
         guard let sequencerCV = self.sequencerCV else { return }
         
@@ -54,7 +54,7 @@ class SCScoreCell: UICollectionViewCell {
 extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
          func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let result = CGSize.init(width: sequencerCV!.frame.width/16, height: sequencerCV!.frame.height)
+            let result = CGSize.init(width: sequencerCV!.frame.width/CGFloat(cellCount), height: sequencerCV!.frame.height)
             return result
         }
     
@@ -65,24 +65,26 @@ extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource, UI
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 16
+        return cellCount
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = sequencerCV?.dequeueReusableCell(withReuseIdentifier: "SCSequencerCell", for: indexPath) as!SCSequencerCell
-        print("cell frame originx: \(cell.frame.origin.x)")
+
         cell.idx = indexPath.row
         cell.layer.borderWidth = 1.0
         cell.layer.borderColor = UIColor.purple.cgColor
         cell.setupSequencer()
         return cell
+
     }
     
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+       
     }
         
 }

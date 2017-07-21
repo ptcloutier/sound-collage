@@ -58,7 +58,7 @@ class SCSampleBankViewController: UIViewController {
         let margin: CGFloat = 20.0
         let titleLabel = UILabel.init(frame: .zero)
         titleLabel.text = "S O U N D   C O L L A G E"
-        titleLabel.font = UIFont.init(name: "A DAY WITHOUT SUN", size: 60.0)
+        titleLabel.font = UIFont.init(name: "Futura", size: 60.0)
         titleLabel.textColor = textColor
         titleLabel.textAlignment = NSTextAlignment.center
         self.collectionView.addSubview(titleLabel)
@@ -78,7 +78,7 @@ class SCSampleBankViewController: UIViewController {
         collectionView.register(SCSampleBankCell.self, forCellWithReuseIdentifier: "SCSampleBankCell")
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.ice
+        collectionView.backgroundColor = UIColor.black//Custom.PsychedelicIceCreamShoppe.ice
         view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0))
@@ -92,12 +92,6 @@ class SCSampleBankViewController: UIViewController {
     
     private func setupControls(){
     
-        let userDefaults = UserDefaults.standard
-        let hideAddBtn = userDefaults.bool(forKey: "hideAddBtn")
-        if hideAddBtn == true {
-            userDefaults.set(false, forKey: "hideAddBtn")
-            return
-        }
         let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
         
         toolbar.frame = CGRect(x: 0, y: self.view.frame.height-toolbarHeight, width: self.view.frame.width, height: toolbarHeight)
@@ -107,10 +101,8 @@ class SCSampleBankViewController: UIViewController {
         
         let newStandardSamplerBtn = UIButton()
         newStandardSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newStandardSamplerDidPress), for: .touchUpInside)
-        let newDoubleSamplerBtn = UIButton()
-        newDoubleSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newDoubleSamplerDidPress), for: .touchUpInside)
+        
         let standardSamplerBarBtn = setupToolbarButton(btn: newStandardSamplerBtn)
-//        let doubleSamplerBtnBtn = setupToolbarButton(btn: newDoubleSamplerBtn) // TODO: double sampler feature 
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
@@ -123,7 +115,7 @@ class SCSampleBankViewController: UIViewController {
     
     func setupToolbarButton(btn: UIButton)-> UIBarButtonItem {
         
-        let buttonHeight = (toolbarHeight/3)*2
+        let buttonHeight = toolbarHeight/3
         let yPosition = toolbar.center.y-buttonHeight/2
         
         btn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
@@ -133,8 +125,6 @@ class SCSampleBankViewController: UIViewController {
         backgroundView.isUserInteractionEnabled = false
         backgroundView.layer.cornerRadius = buttonHeight/2
         backgroundView.layer.masksToBounds = true
-//        backgroundView.layer.borderWidth = 1.0
-//        backgroundView.layer.borderColor = UIColor.lightGray.cgColor
         btn.addSubview(backgroundView)
         btn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
@@ -146,19 +136,20 @@ class SCSampleBankViewController: UIViewController {
    
   
 
-   
-
+    
+    
     
     func dissolve(){
-        UIView.animate(withDuration: 1.0, delay: 0, options: [.transitionCrossDissolve], animations:{
-            self.collectionView.backgroundColor = UIColor.clear
+
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.transitionCrossDissolve], animations:{
+            self.collectionView.backgroundColor = UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral
         },
                        completion: { (finished: Bool) in
-                        UIView.animate(withDuration: 1.0, delay: 0, options: [.transitionCrossDissolve], animations:{
+                        UIView.animate(withDuration: 0.1, delay: 0, options: [.transitionCrossDissolve], animations:{
                             self.presentSampler()
+
                         })
         })
-
     }
     
     
@@ -172,25 +163,10 @@ class SCSampleBankViewController: UIViewController {
     
     
     
-
-    func newDoubleSamplerDidPress(){
-        let samplerType = SCSampleBank.SamplerType.double
-        newSampler(samplerType: samplerType)
-    }
-    
-    
-    
     
     private func newSampler(samplerType: SCSampleBank.SamplerType){
-        var samples: [String: AnyObject]
         
-        switch samplerType {
-        case .standard:
-            samples = SCDataManager.shared.newStandardSampleBank()
-        case .double:
-            samples = SCDataManager.shared.newDoubleSampleBank()
-        }
-        
+        let samples = SCDataManager.shared.newStandardSampleBank()
         let sampleBankID = SCDataManager.shared.getSampleBankID()
         let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: samplerType)
         SCDataManager.shared.user?.sampleBanks?.append(sampleBank)
@@ -201,15 +177,11 @@ class SCSampleBankViewController: UIViewController {
     
     
     
-    
     func presentSampler(){
         
         UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations:{
-            self.collectionView.transform = CGAffineTransform(scaleX: 5, y: 5)
-            
-//            let vc: SCSamplerViewController = SCSamplerViewController(nibName: nil, bundle: nil)
             let vc: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
-            let transition = CATransition() //TODO: use this transition when reloading samplerbankvc
+            let transition = CATransition()
             transition.duration = 1.0
             transition.type = kCATransitionPush
             transition.subtype = kCATransitionFade
@@ -218,7 +190,6 @@ class SCSampleBankViewController: UIViewController {
         }, completion: nil
         )
     }
-    
 }
 
 

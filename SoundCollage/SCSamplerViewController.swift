@@ -22,8 +22,7 @@ class SCSamplerViewController: UIViewController  {
     var iceCreamColors: [UIColor] = []
     let parameterViewColors: [UIColor] = [UIColor.Custom.PsychedelicIceCreamShoppe.darkViolet, UIColor.Custom.PsychedelicIceCreamShoppe.medViolet, UIColor.Custom.PsychedelicIceCreamShoppe.darkViolet]
     let backGroundColors: [UIColor] = [UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue, UIColor.Custom.PsychedelicIceCreamShoppe.neonAqua, UIColor.Custom.PsychedelicIceCreamShoppe.deepBlueDark]
-    
-    
+    var selectedPadIndex: Int?
     
     
     //MARK: vc lifecycle
@@ -139,15 +138,18 @@ class SCSamplerViewController: UIViewController  {
     
     func toggleRecordingMode() {
         
+
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
             SCAudioManager.shared.isRecordingModeEnabled = false
             print("Recording mode not enabled.")
+            reloadSamplerCV()
         case false:
             SCAudioManager.shared.isRecordingModeEnabled = true
             print("Recording mode enabled.")
+            self.selectedPadIndex = nil
+            reloadSamplerCV()
         }
-        reloadSamplerCV()
     }
 
     
@@ -165,6 +167,8 @@ class SCSamplerViewController: UIViewController  {
         reloadSamplerCV()
         print("Recording finished.")
     }
+    
+    
 }
 
 
@@ -201,11 +205,20 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.idx = indexPath.row
         let colorIdx = findColorIndex(indexPath: indexPath, colors: iceCreamColors)
         cell.cellColor = iceCreamColors[colorIdx]
-        cell.layer.borderColor = cell.cellColor?.cgColor
-        cell.layer.borderWidth = 3.0
-        cell.layer.masksToBounds = true
-        cell.layer.cornerRadius = 10.0
+        
         cell.setupLabel()
+        
+        if indexPath.row == self.selectedPadIndex {
+            cell.backgroundColor = UIColor.black
+            cell.padLabel.textColor = cell.cellColor
+            cell.layer.borderColor = cell.cellColor?.cgColor
+
+        } else {
+            cell.backgroundColor = cell.cellColor
+            cell.padLabel.textColor = UIColor.black
+            cell.layer.borderColor = UIColor.black.cgColor
+        }
+        
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
         tapGestureRecognizer.delegate = self
@@ -220,30 +233,15 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.isRecordingEnabled = false
             cell.stopCellsFlashing()
         }
-        //
-        //            if SCAudioManager.shared.isRecording == true && SCAudioManager.shared.selectedSampleIndex == self.idx {
-        //                self.layer.borderColor = UIColor.white.cgColor
-        //                self.padLabel.textColor = UIColor.white
-        //                self.backgroundColor = cellColor
-        //            } else {
-        //                self.layer.borderColor = cellColor?.cgColor
-        //                self.padLabel.textColor = cellColor
-        //                self.backgroundColor = UIColor.white
         
         switch SCAudioManager.shared.isRecording {
             
         case true:
             cell.isRecordingDelayTouch()
-            //                if indexPath.row == SCAudioManager.shared.selectedSampleIndex {
-            //                    cell.backgroundColor = cell.cellColor
-            //                    cell.layer.borderColor = UIColor.black.cgColor
-            //                    cell.padLabel.textColor = UIColor.black
-        //                }
         case false:
             cell.enableTouch()
         }
-        
-        
+
         return cell
         
     }
@@ -259,23 +257,21 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         }
         SCAudioManager.shared.selectedSampleIndex = indexPath.row
         
+        
         if SCAudioManager.shared.isRecording == true {
             print("Recording in progress")
             return
         }
         
-        
-        switch SCAudioManager.shared.isRecordingModeEnabled {
+        if cell.isTouchDelayed == false {
             
-        case true:
-            if cell.isTouchDelayed == false {
-                cell.showIndicator()
+            switch SCAudioManager.shared.isRecordingModeEnabled {
+                
+            case true:
+                cell.startRecording()
                 toggleRecordingMode()
-                cell.backgroundColor = cell.cellColor
-                cell.padLabel.textColor = UIColor.clear
-            }
-        case false:
-            if cell.isTouchDelayed == false {
+                
+            case false:
                 cell.playbackSample()
                 cell.animateCell()
             }
@@ -339,6 +335,9 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
     func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
         
         print("selected cell at \(indexPath.row)")
+        if SCAudioManager.shared.isRecordingModeEnabled == true {
+            self.selectedPadIndex = indexPath.row
+        }
         self.collectionView(samplerCV!, didSelectItemAt: indexPath)
     }
 }
