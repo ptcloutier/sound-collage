@@ -36,6 +36,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var audioEngineChain: [SCAudioEngine] = []
     var finishedEngines: [SCAudioEngine] = []
     var sequencerSettings: [[Bool]] = []
+    var sequencerIsPlaying: Bool = false
+    
     
     //MARK: Basic setup 
     

@@ -146,13 +146,16 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             var colorIdx: Int
             colorIdx = Int(arc4random_uniform(UInt32(iceCreamColors.count)))
             cell.backgroundColor = iceCreamColors[colorIdx]
-            SCAudioManager.shared.playAudio(sampleIndex: cell.idx)
+            
+            if SCAudioManager.shared.sequencerIsPlaying == false {
+                SCAudioManager.shared.playAudio(sampleIndex: cell.idx)
+            }
         }
         
         let audioMan = SCAudioManager.shared
         for settings in audioMan.sequencerSettings {
             for i in settings {
-                print("sequencer settings\(i.description)")
+                print("sequencer settings - \(i.description)")
             }
         }
         

@@ -15,10 +15,9 @@ class SCScoreViewController: UIViewController {
     var toolbar = UIToolbar()
     var recordBtn: UIButton?
     var sequencerTimer: Timer?
-    var sequencerBar: UIView?
+    var sequencerBar = UIView()
     var triggerCounter: Int = 0
     var triggerTimer: Timer?
-    var isPlaying: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,12 +52,12 @@ class SCScoreViewController: UIViewController {
     
     
     func setupSequencerBarUI(){
-        
-        sequencerBar = UIView.init(frame: CGRect(x: 0, y: 0 , width: 3.0, height: view.frame.height))
-        guard let sequencerBar = self.sequencerBar else { return }
+        sequencerBar.isHidden = true
+        sequencerBar.frame = CGRect(x: 0, y: 0 , width: 3.0, height: view.frame.height)
         sequencerBar.backgroundColor = UIColor.white
         guard let scoreCV = self.scoreCV else { return }
         scoreCV.addSubview(sequencerBar)
+        
         print("sequencer bar x:\(sequencerBar.frame.origin.x), y:\(sequencerBar.frame.origin.y), w:\(sequencerBar.frame.width), h:\(sequencerBar.frame.height)")
     }
     
@@ -66,6 +65,7 @@ class SCScoreViewController: UIViewController {
     
     
     func startPlayerBarTimers(){
+        
         guard sequencerTimer == nil else { return }
         guard triggerTimer == nil else { return }
         sequencerTimer = Timer.scheduledTimer(timeInterval: 8.0/16.0, target: self, selector: #selector(SCScoreViewController.triggerSample), userInfo: nil, repeats: true)
@@ -78,7 +78,7 @@ class SCScoreViewController: UIViewController {
     
     
     func triggerSample(){
-        guard let sequencerBar = self.sequencerBar else { return }
+        
         print("\(sequencerBar.frame.origin.x), \(sequencerBar.frame.origin.y)")
         var playbackSamples: [Int] = []
         print("trigger counter: \(triggerCounter)")
@@ -103,15 +103,14 @@ class SCScoreViewController: UIViewController {
     
     func animateSequencerBarPosition(){
         DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
-            guard let sequencerBar = self.sequencerBar else { return }
             let toPoint = CGPoint(x: UIScreen.main.bounds.width, y: 0)
-            let fromPoint = CGPoint(x: 0, y: 0)
+            let fromPoint = CGPoint(x: self.view.frame.width/17, y: 0)
             let movement = CABasicAnimation.init(keyPath: "position")
             movement.isAdditive = true
             movement.fromValue = NSValue.init(cgPoint: fromPoint)
             movement.toValue = NSValue.init(cgPoint: toPoint)
             movement.duration = 8.0
-            sequencerBar.layer.add(movement, forKey: "move")
+            self.sequencerBar.layer.add(movement, forKey: "move")
         })
         
     }
@@ -124,7 +123,7 @@ class SCScoreViewController: UIViewController {
     
     func playback(){
         
-        switch self.isPlaying {
+        switch SCAudioManager.shared.sequencerIsPlaying {
         case true:
             stopPlaying()
         case false:
@@ -136,8 +135,8 @@ class SCScoreViewController: UIViewController {
     
     
     func startPlaying(){
-        self.isPlaying = true
-        setupSequencerBarUI()
+        self.sequencerBar.isHidden = false
+        SCAudioManager.shared.sequencerIsPlaying = true
         animateSequencerBarPosition()
         startPlayerBarTimers()
         print("Start sequencer.")
@@ -153,10 +152,9 @@ class SCScoreViewController: UIViewController {
         triggerTimer = nil
         sequencerTimer?.invalidate()
         sequencerTimer = nil
-        self.sequencerBar?.isHidden = true
-        self.sequencerBar = nil
+        self.sequencerBar.isHidden = true
         self.triggerCounter = 0
-        self.isPlaying = false
+        SCAudioManager.shared.sequencerIsPlaying = false
         print("stopped sequencer")
         
     }
