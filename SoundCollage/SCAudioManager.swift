@@ -37,7 +37,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var finishedEngines: [SCAudioEngine] = []
     var sequencerSettings: [[Bool]] = []
     var sequencerIsPlaying: Bool = false
-    
+    let effects = ["reverb", "delay", "pitch"]
+
     
     //MARK: Basic setup 
     

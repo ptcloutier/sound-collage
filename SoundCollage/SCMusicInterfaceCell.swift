@@ -12,7 +12,8 @@ class SCMusicInterfaceCell: UICollectionViewCell {
     
     var samplerVC: SCSamplerViewController?
     var sequencerVC: SCScoreViewController?
-    
+    var effectsVC: SCEffectsViewController?
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,5 +40,15 @@ class SCMusicInterfaceCell: UICollectionViewCell {
         sequencerVC.view.frame = contentView.bounds
         self.contentView.addSubview(sequencerVC.view)
     }
+    
+    
+    func setupEffects(){
+        
+        self.effectsVC = SCEffectsViewController(nibName: nil, bundle: nil)
+        guard let effectsVC = self.effectsVC else { return }
+        effectsVC.view.frame = contentView.bounds
+        self.contentView.addSubview(effectsVC.view)
+    }
+
 
 }

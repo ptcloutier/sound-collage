@@ -309,8 +309,8 @@
 			children = (
 				A79161061F1EA7FD0051113C /* SCContainerViewController.swift */,
 				A79161091F1EA86B0051113C /* SCFirstContainerCell.swift */,
-				A7DC3AA01F21376C006354A5 /* SCMusicInterfaceCell.swift */,
 				A791610B1F1EA8880051113C /* SCSecondContainerCell.swift */,
+				A7DC3AA01F21376C006354A5 /* SCMusicInterfaceCell.swift */,
 			);
 			name = Container;
 			sourceTree = "<group>";

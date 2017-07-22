@@ -165,11 +165,11 @@ extension SCContainerViewController: UICollectionViewDelegate, UICollectionViewD
         if indexPath.row == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCFirstContainerCell", for: indexPath) as! SCFirstContainerCell
             cell.setupCollectionView()
-        
+            
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSecondContainerCell", for: indexPath) as! SCSecondContainerCell
-            cell.setupEffects()
+            cell.setupCollectionView()
             return cell
         }
     }
