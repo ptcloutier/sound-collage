@@ -45,7 +45,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         padLabel.frame = .zero
         padLabel.text = "\(self.idx+1)"
         padLabel.textAlignment = NSTextAlignment.center
-        padLabel.font = UIFont.init(name: "Futura", size: 40.0)
+        padLabel.font = UIFont.init(name: "Futura", size: 20.0)
         self.layer.borderWidth = 3.0
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 10.0

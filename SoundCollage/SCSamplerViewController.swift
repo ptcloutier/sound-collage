@@ -307,7 +307,7 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
     
     
     
-    func tap(gestureRecognizer: UITapGestureRecognizer) {
+    func tap(gestureRecognizer: UIGestureRecognizer) {
         
         if SCAudioManager.shared.isRecording == true {
             print("Recording in progress")
