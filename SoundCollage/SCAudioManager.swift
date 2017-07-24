@@ -37,7 +37,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var finishedEngines: [SCAudioEngine] = []
     var sequencerSettings: [[Bool]] = []
     var sequencerIsPlaying: Bool = false
-    let effects = ["reverb", "delay", "pitch"]
 
     
     //MARK: Basic setup 
@@ -106,7 +105,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         let delay = SCEffectControl.init(effectName: "delay")
         let pitch = SCEffectControl.init(effectName: "pitch")
         self.effectControls = [reverb, delay, pitch]
-
     }
 
     

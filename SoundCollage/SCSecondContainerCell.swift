@@ -47,7 +47,7 @@ extension SCSecondContainerCell: UICollectionViewDelegate, UICollectionViewDataS
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return SCAudioManager.shared.effects.count 
+        return SCAudioManager.shared.effectControls.count
     }
     
     

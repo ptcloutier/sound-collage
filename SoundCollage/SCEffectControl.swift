@@ -22,7 +22,7 @@ class SCEffectControl {
     init(effectName: String?) {
         self.effectName = effectName
         self.parameters = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
-        while self.isPadEnabled.count <= 16 {
+        while self.isPadEnabled.count < 16 {
             let value = false
             self.isPadEnabled.append(value)
         }

@@ -13,7 +13,7 @@ class SCEffectsViewController: UIViewController {
     var parameterView: UIView?
     var effectsContainerCV: UICollectionView?
     var effects: [String] = []
-    let toolbarHeight: CGFloat = 100.0
+    let toolbarHeight: CGFloat = 125.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,7 +107,7 @@ extension SCEffectsViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return SCAudioManager.shared.effectControls.count
     }
     
     
@@ -117,11 +117,14 @@ extension SCEffectsViewController: UICollectionViewDelegate, UICollectionViewDat
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EffectCell", for: indexPath) as! SCEffectCell
         cell.colors = SCGradientColors.getPsychedelicIceCreamShopColors()
-//        cell.effect = SCAudioManager.shared.effects[indexPath.row] //TODO: name effect 
+        if SCAudioManager.shared.effectControls[indexPath.row].effectName != nil {
+            cell.effectName = SCAudioManager.shared.effectControls[indexPath.row].effectName!
+        }
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 10.0
         cell.contentView.backgroundColor = cell.colors[indexPath.row]
         cell.setupLabel()
+        cell.setSelectedEffect(index: indexPath.row)
         return cell
 
     }
