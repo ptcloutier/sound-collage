@@ -15,11 +15,16 @@ import AVFoundation
 class SCEffectControl {
 
     var isActive: Bool = false 
-    let effectName: String
+    let effectName: String?
     var parameters: [[Float]] = []
+    var isPadEnabled: [Bool] = []
     
-    init(effectName: String) {
+    init(effectName: String?) {
         self.effectName = effectName
         self.parameters = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
+        while self.isPadEnabled.count <= 16 {
+            let value = false
+            self.isPadEnabled.append(value)
+        }
     }
 }

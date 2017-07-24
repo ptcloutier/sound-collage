@@ -179,7 +179,11 @@ class SCSampleBankViewController: UIViewController {
         
         let samples = SCDataManager.shared.newStandardSampleBank()
         let sampleBankID = SCDataManager.shared.getSampleBankID()
-        let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: samplerType)
+        
+        let score: [[Bool]] = SCDataManager.shared.setupScorePage()
+        let sequencerSettings = SCSequencerSettings.init(score: score)
+        let effectSettings: [SCEffectControl] = []
+        let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: samplerType, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
         SCDataManager.shared.user?.sampleBanks?.append(sampleBank)
         SCDataManager.shared.user?.currentSampleBank = SCDataManager.shared.user?.sampleBanks?.last
         presentSampler()

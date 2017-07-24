@@ -56,13 +56,13 @@ class SCEffectCell: UICollectionViewCell {
                 self.effectLabel.textColor = UIColor.white
                 self.contentView.backgroundColor = colors[index]
                 selected.isActive = false
-                print("\(selected.effectName) turned off.")
+                print("\(String(describing: selected.effectName)) turned off.")
             case false:
                 SCAudioManager.shared.effectIsSelected = true
                 self.contentView.backgroundColor = UIColor.purple
                 self.effectLabel.textColor = UIColor.white
                 selected.isActive = true
-                print("\(selected.effectName) turned on.")
+                print("\(String(describing: selected.effectName)) turned on.")
             }
         }
         if selected.effectName == "delay" {
@@ -72,13 +72,13 @@ class SCEffectCell: UICollectionViewCell {
                 self.effectLabel.textColor = UIColor.white
                 self.contentView.backgroundColor = colors[index]
                 selected.isActive = false
-                print("\(selected.effectName) turned off.")
+                print("\(String(describing: selected.effectName)) turned off.")
             case false:
                 SCAudioManager.shared.effectIsSelected = true
                 self.contentView.backgroundColor = UIColor.purple
                 self.effectLabel.textColor = UIColor.white
                 selected.isActive  = true
-                print("\(selected.effectName) turned on.")
+                print("\(String(describing: selected.effectName)) turned on.")
             }
         }
         if selected.effectName == "reverb" {
@@ -88,14 +88,14 @@ class SCEffectCell: UICollectionViewCell {
                 self.effectLabel.textColor = UIColor.white
                 self.contentView.backgroundColor = colors[index]
                 selected.isActive  = false
-                print("\(selected.effectName) turned off.")
+                print("\(String(describing: selected.effectName)) turned off.")
                 
             case false:
                 SCAudioManager.shared.effectIsSelected = true
                 self.contentView.backgroundColor = UIColor.purple
                 self.effectLabel.textColor = UIColor.white
                 selected.isActive  = true
-                print("\(selected.effectName) turned on.")
+                print("\(String(describing: selected.effectName)) turned on.")
             }
         }
     }

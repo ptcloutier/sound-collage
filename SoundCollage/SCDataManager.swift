@@ -93,7 +93,11 @@ class SCDataManager {
             var sampleBanks: [SCSampleBank] = []
             let samples = newStandardSampleBank()
             let sampleBankID = getSampleBankID()
-            let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: .standard)
+            let effectSettings: [SCEffectControl] = []
+            let score: [[Bool]] = SCDataManager.shared.setupScorePage()
+            let sequencerSettings = SCSequencerSettings.init(score: score)
+            let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: .standard, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
+            
 
             sampleBanks.append(sampleBank)
             let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: sampleBank)
@@ -255,4 +259,21 @@ class SCDataManager {
                                             ]
         return samples
     }
+    
+    
+    func setupScorePage()-> [[Bool]] {
+        
+        var score: [[Bool]] = []
+        while score.count < 16 {
+            var page: [Bool] = []
+            while page.count < 16 {
+                let isSamplePlaybackEnabled = false
+                page.append(isSamplePlaybackEnabled)
+            }
+            score.append(page)
+        }
+        return score
+    }
+
+    
 }

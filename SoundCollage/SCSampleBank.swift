@@ -15,12 +15,16 @@ class SCSampleBank: Mappable {
     var name: String? 
     var id: Int?
     var type: SamplerType?
+    var effectSettings: [SCEffectControl] = []
+    var sequencerSettings: SCSequencerSettings?
     
-    init(name: String?, id: Int?, samples: [String: AnyObject], type: SamplerType?) {
+    init(name: String?, id: Int?, samples: [String: AnyObject], type: SamplerType?, effectSettings: [SCEffectControl], sequencerSettings: SCSequencerSettings? ) {
         self.name = name
         self.id = id
         self.samples = samples
         self.type = type
+        self.effectSettings = effectSettings
+        self.sequencerSettings = sequencerSettings
     }
     
     required init?(map: Map) {
@@ -28,6 +32,8 @@ class SCSampleBank: Mappable {
         name        <- map["name"]
         id          <- map["id"]
         type        <- map["type"]
+        effectSettings  <- map["effectSettings"]
+        sequencerSettings   <- map["sequencerSettings"]
     }
     
     func mapping(map: Map) {
@@ -35,6 +41,8 @@ class SCSampleBank: Mappable {
         name        <- map["name"]
         id          <- map["id"]
         type        <- map["type"]
+        effectSettings  <- map["effectSettings"]
+        sequencerSettings   <- map["sequencerSettings"]
     }
     
     enum SamplerType {

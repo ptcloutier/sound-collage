@@ -19,6 +19,7 @@ class SCScoreViewController: UIViewController {
     var triggerCounter: Int = 1
     var triggerTimer: Timer?
     var timeSignature: Double = 4.0
+    let margin: CGFloat = 10.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,14 +40,14 @@ class SCScoreViewController: UIViewController {
         guard let scoreCV = self.scoreCV else { return }
         scoreCV.delegate = self
         scoreCV.dataSource = self
-        scoreCV.layer.borderWidth = 2.0
-        scoreCV.layer.borderColor = UIColor.purple.cgColor
+//        scoreCV.layer.borderWidth = 2.0
+//        scoreCV.layer.borderColor = UIColor.purple.cgColor
         view.addSubview(scoreCV)
         
         scoreCV.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: 0))
-        view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: 0))
-        view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0))
+        view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant:-margin))
+        view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: margin))
         view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0))
         
     }

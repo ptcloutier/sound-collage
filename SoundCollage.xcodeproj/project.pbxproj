@@ -18,6 +18,7 @@
 		A7264E7D1EAE619800664EDE /* SCAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E7C1EAE619800664EDE /* SCAnimator.swift */; };
 		A7264E811EAEECD700664EDE /* SCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E801EAEECD700664EDE /* SCUser.swift */; };
 		A74BAED61EDA0F0900FABEF5 /* SCEffectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74BAED51EDA0F0900FABEF5 /* SCEffectCell.swift */; };
+		A75D4EBC1F25BFF300C304D8 /* SCSequencerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */; };
 		A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A886A1EB0445200FEDED0 /* SCDataManager.swift */; };
 		A78250E11EE13B7E00350768 /* SCAudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78250E01EE13B7E00350768 /* SCAudioEngine.swift */; };
 		A78250E31EE601BA00350768 /* SCEffectControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78250E21EE601BA00350768 /* SCEffectControl.swift */; };
@@ -109,6 +110,7 @@
 		A7264E7C1EAE619800664EDE /* SCAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAnimator.swift; sourceTree = "<group>"; };
 		A7264E801EAEECD700664EDE /* SCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCUser.swift; sourceTree = "<group>"; };
 		A74BAED51EDA0F0900FABEF5 /* SCEffectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCEffectCell.swift; sourceTree = "<group>"; };
+		A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerSettings.swift; sourceTree = "<group>"; };
 		A76A886A1EB0445200FEDED0 /* SCDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCDataManager.swift; sourceTree = "<group>"; };
 		A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SoundCollage-Bridging-Header.h"; sourceTree = "<group>"; };
 		A78250E01EE13B7E00350768 /* SCAudioEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAudioEngine.swift; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 				A78250E01EE13B7E00350768 /* SCAudioEngine.swift */,
 				A78250E21EE601BA00350768 /* SCEffectControl.swift */,
 				A7A21CB21EFAEFF300161DF3 /* UIButton+Custom.swift */,
+				A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -606,6 +609,7 @@
 				A79161071F1EA7FD0051113C /* SCContainerViewController.swift in Sources */,
 				A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */,
 				A7A8233F1EA81F500061D0A0 /* SCSamplerFlowLayout.swift in Sources */,
+				A75D4EBC1F25BFF300C304D8 /* SCSequencerSettings.swift in Sources */,
 				A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */,
 				A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */,
 				A74BAED61EDA0F0900FABEF5 /* SCEffectCell.swift in Sources */,
