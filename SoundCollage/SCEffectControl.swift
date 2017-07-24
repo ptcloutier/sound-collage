@@ -8,14 +8,14 @@
 
 import Foundation
 import AVFoundation
+import ObjectMapper
 
 
 
+class SCEffectControl: Mappable {
 
-class SCEffectControl {
-
-    var isActive: Bool = false 
-    let effectName: String?
+//    var isActive: Bool = false 
+    var effectName: String?
     var parameters: [[Float]] = []
     var isPadEnabled: [Bool] = []
     
@@ -27,4 +27,17 @@ class SCEffectControl {
             self.isPadEnabled.append(value)
         }
     }
+    
+    required init?(map: Map) {
+        effectName     <- map["effectName"]
+        parameters     <- map["parameters"]
+        isPadEnabled    <- map["isPadEnabled"]
+    }
+    
+    func mapping(map: Map) {
+        effectName     <- map["effectName"]
+        parameters     <- map["parameters"]
+        isPadEnabled    <- map["isPadEnabled"]
+    }
+
 }

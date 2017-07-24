@@ -7,18 +7,33 @@
 //
 
 import Foundation
+import ObjectMapper
 
-class SCSequencerSettings {
+class SCSequencerSettings: Mappable {
     
-    var timeSignature = TimeSignature.fourFour
     
     enum TimeSignature {
         case threeFour
         case fourFour
     }
+    
+    var timeSignature = TimeSignature.fourFour
     var score: [[Bool]] = []
     
     init(score: [[Bool]]) {
         self.score = score
     }
+    
+    
+    required init?(map: Map) {
+        timeSignature   <- map["timeSignature"]
+        score           <- map["score"]
+    }
+    
+    
+    func mapping(map: Map) {
+        timeSignature   <- map["timeSignature"]
+        score           <- map["score"]
+    }
+
 }

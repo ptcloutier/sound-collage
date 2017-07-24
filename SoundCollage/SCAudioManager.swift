@@ -30,7 +30,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isSpeakerEnabled: Bool = false
     var isRecording: Bool = false
     var replaceableFilePath: String?
-    var effectIsSelected: Bool = false
+//    var effectIsSelected: Bool = false
     var audioEngine: SCAudioEngine!
     var effectControls: [SCEffectControl] = []
     var audioEngineChain: [SCAudioEngine] = []
@@ -146,7 +146,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         
         removeUsedEngines()
         
-        let sampleIndex = sampleIndex
+//        let sampleIndex = sampleIndex
         self.audioEngine = SCAudioEngine()
         self.audioEngineChain.append(self.audioEngine)
         
@@ -156,7 +156,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             let audioFormat = audioFile.processingFormat
             let audioPlayerNode = AVAudioPlayerNode()
             
-            if self.effectIsSelected == false {
+            if self.effectControls[0].isPadEnabled[selectedSampleIndex] == false && self.effectControls[1].isPadEnabled[selectedSampleIndex] == false && self.effectControls[2].isPadEnabled[selectedSampleIndex] == false {
+//            if self.effectIsSelected == false {
                 audioEngine.attach(audioPlayerNode)
                 audioEngine.connect(audioPlayerNode, to: audioEngine.mainMixerNode, format: audioFormat)
                 audioEngine.connect(audioEngine.mainMixerNode, to: audioEngine.outputNode, format: audioFormat)
@@ -166,13 +167,14 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 audioEngine.attach(audioPlayerNode)
                 
                     let reverb = AVAudioUnitReverb()
-                    let reverbParameters = self.effectControls[0].parameters[sampleIndex]
+                    let reverbParameters = self.effectControls[0].parameters[selectedSampleIndex]
                     reverb.loadFactoryPreset(.plate)
                     let x = Float(reverbParameters[0])/2
                     let wetDryParam = x
                     reverb.wetDryMix = wetDryParam
                
-                if self.effectControls[0].isActive == true {
+                if self.effectControls[0].isPadEnabled[selectedSampleIndex] == true {
+                //self.effectControls[0].isActive == true {
                     audioEngine.attach(reverb)
                 }
                
@@ -196,7 +198,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                  */
                 //                open var feedback: Float
                 let delay = AVAudioUnitDelay()
-                let delayParameters = self.effectControls[1].parameters[sampleIndex]
+                let delayParameters = self.effectControls[1].parameters[selectedSampleIndex]
                 
                 let time = delayParameters[0]/2
                 var feedback: Float
@@ -209,7 +211,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 delay.delayTime = TimeInterval(delayTime)
                 delay.feedback = feedback
                 
-                if self.effectControls[1].isActive == true {
+                if self.effectControls[1].isPadEnabled[selectedSampleIndex] == true { //.isActive == true {
                     audioEngine.attach(delay)
                 }
                 
@@ -220,7 +222,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 let sum = pitchZero + Int(pitchParam)
                 pitch.pitch = Float(sum)
                 
-                if self.effectControls[2].isActive == true {
+                if self.effectControls[2].isPadEnabled[selectedSampleIndex] == true {
                     audioEngine.attach(pitch)
                     print("Pitch: \(pitch)")
                     
@@ -228,9 +230,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 
                 // Sound effect connection permutations TODO: make this DRY
                 
-                let reverbIsActive = self.effectControls[0].isActive
-                let delayIsActive = self.effectControls[1].isActive
-                let pitchIsActive = self.effectControls[2].isActive
+                let reverbIsActive = self.effectControls[0].isPadEnabled[selectedSampleIndex]
+                let delayIsActive = self.effectControls[1].isPadEnabled[selectedSampleIndex]
+                let pitchIsActive = self.effectControls[2].isPadEnabled[selectedSampleIndex]
                 
                 if reverbIsActive == true && delayIsActive == true && pitchIsActive == true {
                     audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
@@ -278,17 +280,17 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 guard let strongSelf = self else {
                     return
                 }
-
+                // calculate audio tail based on reverb and delay parameters 
                 var durationInt = Int(round(Double(audioFile.length)/44100))
                 if durationInt == 0 {
                     durationInt = 1
                 }
-                if strongSelf.effectControls[0].isActive == true {
-                let reverbParameters = strongSelf.effectControls[0].parameters[sampleIndex]
+                if strongSelf.effectControls[0].isPadEnabled[strongSelf.selectedSampleIndex] == true { //isActive == true {
+                let reverbParameters = strongSelf.effectControls[0].parameters[strongSelf.selectedSampleIndex]
                 let reverbTime = round((Float(reverbParameters[0])/2)/10)
                 durationInt += Int(reverbTime)
                 }
-                if strongSelf.effectControls[1].isActive == true {
+                if strongSelf.effectControls[1].isPadEnabled[strongSelf.selectedSampleIndex] == true {
                     let delayParams = strongSelf.effectControls[1].parameters[sampleIndex]
                     let delayTime = (round(Float(delayParams[1])/10))
                     durationInt += Int(delayTime)

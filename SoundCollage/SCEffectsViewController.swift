@@ -117,7 +117,8 @@ extension SCEffectsViewController: UICollectionViewDelegate, UICollectionViewDat
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EffectCell", for: indexPath) as! SCEffectCell
         cell.colors = SCGradientColors.getPsychedelicIceCreamShopColors()
-        if SCAudioManager.shared.effectControls[indexPath.row].effectName != nil {
+        let effectControls = SCAudioManager.shared.effectControls[indexPath.row]
+        if effectControls.effectName != nil {
             cell.effectName = SCAudioManager.shared.effectControls[indexPath.row].effectName!
         }
         cell.layer.masksToBounds = true

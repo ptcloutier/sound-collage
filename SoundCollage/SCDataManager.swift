@@ -130,7 +130,8 @@ class SCDataManager {
     
     func saveObjectToJSON(){
         
-        if let jsonString = SCDataManager.shared.user?.toJSONString(prettyPrint: true){
+        let user = SCDataManager.shared.user
+        if let jsonString = user?.toJSONString(prettyPrint: true){
             print(jsonString)
             writeToFile(jsonString: jsonString)
         } else {
@@ -280,7 +281,8 @@ class SCDataManager {
         
         var effectSettings: [SCEffectControl] = []
         var index = 0
-        while effectSettings.count < SCAudioManager.shared.effectControls.count {
+        let controls = SCAudioManager.shared.effectControls
+        while effectSettings.count < controls.count {
             let effectControl = SCEffectControl(effectName: SCAudioManager.shared.effectControls[index].effectName)
             effectSettings.append(effectControl)
             index+=1
