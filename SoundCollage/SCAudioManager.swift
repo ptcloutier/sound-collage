@@ -543,7 +543,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         }
         let routeChangedReason = userInfo[AVAudioSessionRouteChangeReasonKey] as! Int
         if routeChangedReason == 1 || routeChangedReason == 2 {
-            
+            observeAudioIO()
         }
         print("reason : \(routeChangedReason)")
     }
