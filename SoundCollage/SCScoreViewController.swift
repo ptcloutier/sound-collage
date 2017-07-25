@@ -21,14 +21,16 @@ class SCScoreViewController: UIViewController {
     var timeSignature: Double = 4.0
     let margin: CGFloat = 10.0
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
         setupCollectionView()
         setupSequencerBarUI()
         NotificationCenter.default.addObserver(self, selector: #selector(SCScoreViewController.playback), name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
     }
+    
     
     //MARK: UI setup
     
@@ -40,8 +42,6 @@ class SCScoreViewController: UIViewController {
         guard let scoreCV = self.scoreCV else { return }
         scoreCV.delegate = self
         scoreCV.dataSource = self
-//        scoreCV.layer.borderWidth = 2.0
-//        scoreCV.layer.borderColor = UIColor.purple.cgColor
         view.addSubview(scoreCV)
         
         scoreCV.translatesAutoresizingMaskIntoConstraints = false
@@ -107,6 +107,7 @@ class SCScoreViewController: UIViewController {
         
     }
     
+    
     //MARK: Timers/Animation
     
     
@@ -130,7 +131,9 @@ class SCScoreViewController: UIViewController {
         var playbackSamples: [Int] = []
         print("trigger counter: \(triggerCounter)")
         
-        let samples = SCAudioManager.shared.sequencerSettings[triggerCounter]
+//        let samples = SCAudioManager.shared.sequencerSettings[triggerCounter]
+        guard let score = SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score else { return}
+        let samples = score[triggerCounter]
         for (index,settings) in samples.enumerated() {
             if settings == true {
                 playbackSamples.append(index)

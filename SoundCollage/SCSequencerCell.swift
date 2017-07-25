@@ -38,14 +38,14 @@ class SCSequencerCell: UICollectionViewCell {
     
     func setupSequencer(){
         
-        while SCAudioManager.shared.sequencerSettings.count<=16{
-            var triggers: [Bool] = []
-            while triggers.count<=16{
-                let isPlayingEnabled = false
-                triggers.append(isPlayingEnabled)
-            }
-            SCAudioManager.shared.sequencerSettings.append(triggers)
-        }
+//        while SCAudioManager.shared.sequencerSettings.count<=16 {
+//            var triggers: [Bool] = []
+//            while triggers.count<=16{
+//                let isPlayingEnabled = false
+//                triggers.append(isPlayingEnabled)
+//            }
+//            SCAudioManager.shared.sequencerSettings.append(triggers)
+//        }
         let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: CGFloat(cellCount))
         triggerCV = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
         guard let triggerCV = self.triggerCV else { return }
@@ -86,7 +86,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = triggerCV?.dequeueReusableCell(withReuseIdentifier: "SCTriggerCell", for: indexPath) as!SCTriggerCell
         
-        cell.sequencerIdx = self.idx
+        cell.sequencerIdx = self.idx-1
         cell.idx = indexPath.row
         cell.layer.borderWidth = 1.5
         cell.layer.borderColor = UIColor.purple.cgColor
@@ -110,7 +110,11 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         } else {
             cell.padLabel.isHidden = true
             
-   
+            let seqIdx = cell.sequencerIdx
+            let idx = cell.idx
+            if let playbackEnabled = SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[seqIdx][idx] {
+                cell.isPlaybackEnabled = playbackEnabled
+            }
             switch cell.isPlaybackEnabled {
             case true:
                 //TODO: This not DRY
@@ -140,11 +144,11 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         
         case true:
             cell.isPlaybackEnabled = false
-            SCAudioManager.shared.sequencerSettings[cell.sequencerIdx][cell.idx] = false
+            SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = false
             cell.backgroundColor = UIColor.black
         case false:
             cell.isPlaybackEnabled = true
-            SCAudioManager.shared.sequencerSettings[cell.sequencerIdx][cell.idx] = true
+            SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = true
             let iceCreamColors: [UIColor] = SCGradientColors.getPsychedelicIceCreamShopColors()
             var colorIdx: Int
             colorIdx = Int(arc4random_uniform(UInt32(iceCreamColors.count)))
@@ -154,14 +158,6 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
                 SCAudioManager.shared.playAudio(sampleIndex: cell.idx)
             }
         }
-        
-        let audioMan = SCAudioManager.shared
-        for settings in audioMan.sequencerSettings {
-            for i in settings {
-                print("sequencer settings - \(i.description)")
-            }
-        }
-        
     }
 }
 
