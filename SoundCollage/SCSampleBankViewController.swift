@@ -259,6 +259,10 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
         }
         
         SCDataManager.shared.user?.currentSampleBank = sampleBanks[indexPath.row]
+        guard let effectSettings = SCDataManager.shared.user?.currentSampleBank?.effectSettings else {
+            return
+        }
+        SCAudioManager.shared.effectControls = effectSettings
         self.dissolve()
     }
 }

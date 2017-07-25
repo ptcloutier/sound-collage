@@ -103,63 +103,48 @@ class SCEffectCell: UICollectionViewCell {
     }
     
     
+    
+    
+    
+    
     func setSelectedEffect(index: Int){ //TODO: This not DRY
+  
         
-        let controls = SCAudioManager.shared.effectControls
-        
-        let selectedEffect = controls[index]
-
-        let selectedPad = SCAudioManager.shared.selectedSampleIndex
-        
-        
-        
-        if selectedEffect.effectName == "pitch" {
-            switch selectedEffect.isPadEnabled[selectedPad] {
+        if SCAudioManager.shared.effectControls[index].effectName == "pitch" {
+            switch SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] {
             case true:
-//                SCAudioManager.shared.effectIsSelected = true
                 self.contentView.backgroundColor = UIColor.purple
                 self.effectLabel.textColor = UIColor.white
-                selectedEffect.isPadEnabled[selectedPad] = true
-                print("\(String(describing: selectedEffect.effectName)) turned on.")
+                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = true
             case false:
-//                SCAudioManager.shared.effectIsSelected = false
                 self.effectLabel.textColor = UIColor.white
                 self.contentView.backgroundColor = colors[index]
-                selectedEffect.isPadEnabled[selectedPad] = false
-                print("\(String(describing: selectedEffect.effectName)) turned off.")
+                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = false
             }
         }
-        if selectedEffect.effectName == "delay" {
-            switch selectedEffect.isPadEnabled[selectedPad] {
+        if SCAudioManager.shared.effectControls[index].effectName == "delay" {
+            switch SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] {
             case true:
-//                SCAudioManager.shared.effectIsSelected = true
                 self.contentView.backgroundColor = UIColor.purple
                 self.effectLabel.textColor = UIColor.white
-                selectedEffect.isPadEnabled[selectedPad] = true
-                print("\(String(describing: selectedEffect.effectName)) turned on.")
+                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = true
             case false:
-//                SCAudioManager.shared.effectIsSelected = false
                 self.effectLabel.textColor = UIColor.white
                 self.contentView.backgroundColor = colors[index]
-                selectedEffect.isPadEnabled[selectedPad] = false
-                print("\(String(describing: selectedEffect.effectName)) turned off.")
+                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = false
             }
         }
-        if selectedEffect.effectName == "reverb" {
-            switch selectedEffect.isPadEnabled[selectedPad] {
+        if SCAudioManager.shared.effectControls[index].effectName == "reverb" {
+            switch SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] {
             case true:
-//                SCAudioManager.shared.effectIsSelected = true
                 self.contentView.backgroundColor = UIColor.purple
                 self.effectLabel.textColor = UIColor.white
-                selectedEffect.isPadEnabled[selectedPad] = true
-                print("\(String(describing: selectedEffect.effectName)) turned on.")
+                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = true
                 
             case false:
-//                SCAudioManager.shared.effectIsSelected = false
                 self.effectLabel.textColor = UIColor.white
                 self.contentView.backgroundColor = colors[index]
-                selectedEffect.isPadEnabled[selectedPad] = false
-                print("\(String(describing: selectedEffect.effectName)) turned off.")
+                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = false
             }
         }
     }

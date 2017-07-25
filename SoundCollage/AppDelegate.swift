@@ -26,7 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // get user and sample banks
         SCAudioManager.shared.setupAudioManager()
         SCDataManager.shared.fetchCurrentUserData()
-        
         window = UIWindow(frame: UIScreen.main.bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let initialViewController = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController
