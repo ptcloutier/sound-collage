@@ -41,131 +41,46 @@ class SCEffectCell: UICollectionViewCell {
         
     }
     
+    
+    
     func toggleEffectIsSelected(index: Int){
         
-        //TODO: this method not DRY
-        
-      
-        let selectedEffect = SCAudioManager.shared.effectControls[index]
-        let selectedPad = SCAudioManager.shared.selectedSampleIndex
-        
-        if selectedEffect.effectName == "pitch" {
-            switch selectedEffect.isPadEnabled[selectedPad] {
-            case true:
-//                SCAudioManager.shared.effectIsSelected = false
-                self.effectLabel.textColor = UIColor.white
-                self.contentView.backgroundColor = colors[index]
-                selectedEffect.isPadEnabled[selectedPad] = false
-                print("\(String(describing: selectedEffect.effectName)) turned off.")
-            case false:
-//                SCAudioManager.shared.effectIsSelected = true
-                self.contentView.backgroundColor = UIColor.purple
-                self.effectLabel.textColor = UIColor.white
-                selectedEffect.isPadEnabled[selectedPad] = true
-                print("\(String(describing: selectedEffect.effectName)) turned on.")
-            }
-        }
-        if selectedEffect.effectName == "delay" {
-            switch  selectedEffect.isPadEnabled[selectedPad]  {
-            case true:
-//                SCAudioManager.shared.effectIsSelected = false
-                self.effectLabel.textColor = UIColor.white
-                self.contentView.backgroundColor = colors[index]
-                selectedEffect.isPadEnabled[selectedPad] = false
-                print("\(String(describing: selectedEffect.effectName)) turned off.")
-            case false:
-//                SCAudioManager.shared.effectIsSelected = true
-                self.contentView.backgroundColor = UIColor.purple
-                self.effectLabel.textColor = UIColor.white
-                selectedEffect.isPadEnabled[selectedPad] = true
-                print("\(String(describing: selectedEffect.effectName)) turned on.")
-            }
-        }
-        if selectedEffect.effectName == "reverb" {
-            switch selectedEffect.isPadEnabled[selectedPad] {
-            case true:
-//                SCAudioManager.shared.effectIsSelected = false
-                self.effectLabel.textColor = UIColor.white
-                self.contentView.backgroundColor = colors[index]
-                selectedEffect.isPadEnabled[selectedPad] = false
-                print("\(String(describing: selectedEffect.effectName)) turned off.")
-                
-            case false:
-//                SCAudioManager.shared.effectIsSelected = true
-                self.contentView.backgroundColor = UIColor.purple
-                self.effectLabel.textColor = UIColor.white
-                selectedEffect.isPadEnabled[selectedPad] = true
-                print("\(String(describing: selectedEffect.effectName)) turned on.")
-            }
+        let sampleIndex = SCAudioManager.shared.selectedSampleIndex
+        guard let settings = SCDataManager.shared.user?.currentSampleBank?.effectSettings[index] else {
+            print("Error accessing settings.")
+            return
         }
         
-        SCDataManager.shared.user?.currentSampleBank?.effectSettings = SCAudioManager.shared.effectControls
+            switch settings.isPadEnabled[sampleIndex] {
+            case true:
+                self.effectLabel.textColor = UIColor.white
+                self.contentView.backgroundColor = colors[index]
+                SCDataManager.shared.user?.currentSampleBank?.effectSettings[index].isPadEnabled[sampleIndex] = false
+            case false:
+                self.contentView.backgroundColor = UIColor.purple
+                self.effectLabel.textColor = UIColor.white
+               SCDataManager.shared.user?.currentSampleBank?.effectSettings[index].isPadEnabled[sampleIndex] = true
+        }
     }
     
     
-    
-    
-    
-    
-    func setSelectedEffect(index: Int){ //TODO: This not DRY
-  
+    func setSelectedEffect(index: Int){
         
-        if SCAudioManager.shared.effectControls[index].effectName == "pitch" {
-            switch SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] {
-            case true:
-                self.contentView.backgroundColor = UIColor.purple
-                self.effectLabel.textColor = UIColor.white
-                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = true
-            case false:
-                self.effectLabel.textColor = UIColor.white
-                self.contentView.backgroundColor = colors[index]
-                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = false
-            }
+        let sampleIndex = SCAudioManager.shared.selectedSampleIndex
+        guard let settings = SCDataManager.shared.user?.currentSampleBank?.effectSettings[index] else {
+            print("Error accessing settings.")
+            return
         }
-        if SCAudioManager.shared.effectControls[index].effectName == "delay" {
-            switch SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] {
-            case true:
-                self.contentView.backgroundColor = UIColor.purple
-                self.effectLabel.textColor = UIColor.white
-                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = true
-            case false:
-                self.effectLabel.textColor = UIColor.white
-                self.contentView.backgroundColor = colors[index]
-                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = false
-            }
-        }
-        if SCAudioManager.shared.effectControls[index].effectName == "reverb" {
-            switch SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] {
-            case true:
-                self.contentView.backgroundColor = UIColor.purple
-                self.effectLabel.textColor = UIColor.white
-                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = true
-                
-            case false:
-                self.effectLabel.textColor = UIColor.white
-                self.contentView.backgroundColor = colors[index]
-                SCAudioManager.shared.effectControls[index].isPadEnabled[SCAudioManager.shared.selectedSampleIndex] = false
-            }
+        
+        switch settings.isPadEnabled[sampleIndex] {
+        case true:
+            self.contentView.backgroundColor = UIColor.purple
+            self.effectLabel.textColor = UIColor.white
+            settings.isPadEnabled[sampleIndex] = true
+        case false:
+            self.effectLabel.textColor = UIColor.white
+            self.contentView.backgroundColor = colors[index]
+            settings.isPadEnabled[sampleIndex] = false
         }
     }
-    
-   /*  
-     
-     func activateTouchEffectParameters(){
-     
-     }
-     
-     func deactivateTouchEffectParameters(){
-     
-     }
-     
-     
-     func effectParameters(){
-     
-        print("tuoch point x : \() , y: \()")
-     
-     }
-     
- 
- */
 }

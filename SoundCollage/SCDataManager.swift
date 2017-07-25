@@ -277,14 +277,15 @@ class SCDataManager {
     }
 
     
+    
+    
     func setupEffectSettings()-> [SCEffectControl] {
         
         var effectSettings: [SCEffectControl] = []
         var index = 0
-        let controls = SCAudioManager.shared.effectControls
-        while effectSettings.count < controls.count {
-            let effectControl = SCEffectControl(effectName: SCAudioManager.shared.effectControls[index].effectName)
-            effectSettings.append(effectControl)
+        
+        while effectSettings.count < SCAudioManager.shared.effectControls.count {
+            effectSettings.append(SCAudioManager.shared.effectControls[index])
             index+=1
         }
         return effectSettings
