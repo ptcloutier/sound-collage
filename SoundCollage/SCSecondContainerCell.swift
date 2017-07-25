@@ -34,7 +34,7 @@ class SCSecondContainerCell: UICollectionViewCell {
         cv.delegate = self
         cv.dataSource = self
         cv.register(SCMusicInterfaceCell.self, forCellWithReuseIdentifier: "SCMusicInterfaceCell")
-        cv.isScrollEnabled = true
+        cv.isScrollEnabled = false 
         cv.frame = self.contentView.bounds
         self.contentView.addSubview(cv)
         

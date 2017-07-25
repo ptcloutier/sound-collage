@@ -177,26 +177,13 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 //self.effectControls[0].isActive == true {
                     audioEngine.attach(reverb)
                 }
-               
+//                AVAudioUnitEQ
+//                AVAudioUnitGenerator
+//                AVAudioUnitDistortion
+//                AVAudioUnitEQFilterType
+//                AVAudioUnitVarispeed
+//                AVAudioUnitTimeEffect
                 
-                /*! @property delayTime
-                 Time taken by the delayed input signal to reach the output
-                 @abstract
-                 Range:      0 -> 2
-                 Default:    1
-                 Unit:       Seconds
-                 */
-                //                open var delayTime: TimeInterval
-                
-                
-                /*! @property feedback
-                 @abstract
-                 Amount of the output signal fed back into the delay line
-                 Range:      -100 -> 100
-                 Default:    50
-                 Unit:       Percent
-                 */
-                //                open var feedback: Float
                 let delay = AVAudioUnitDelay()
                 let delayParameters = self.effectControls[1].parameters[selectedSampleIndex]
                 
