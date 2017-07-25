@@ -14,7 +14,7 @@ class SCMixerViewController: UIViewController {
     var mixerCV: UICollectionView?
     var effects: [String] = []
     let toolbarHeight: CGFloat = 125.0
-    var sliders: [UISlider] = []
+    var sliders: [SCSlider] = []
     
     
     
@@ -36,9 +36,9 @@ class SCMixerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         for slider in sliders {
-            UISlider.setSliderFrame(slider: slider, view: view)
             if self.parameterView != nil {
-                self.parameterView?.addSubview(slider)
+                slider.isHidden = false
+                self.parameterView!.addSubview(slider)
             }
         }
     }
@@ -46,10 +46,10 @@ class SCMixerViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         
-        var xPosition = 20.0
+        var xPosition = 30.0
         
         for (index, slider) in sliders.enumerated() {
-            UISlider.updateSlider(slider: slider, xPosition: CGFloat(xPosition), view: view)
+            slider.updateSlider(slider: slider, xPosition: CGFloat(xPosition), view: view)
             xPosition+=35.0
             print("\(index)")
         }
@@ -64,8 +64,14 @@ class SCMixerViewController: UIViewController {
     
     func initializeSliders(){
         
-        while sliders.count < 8  {
-            let slider = UISlider.setupSlider()
+        while sliders.count < 10 {
+            let slider = SCSlider.init(frame: .zero)
+            let frame = slider.trackRect(forBounds: view.frame)
+            slider.frame = frame 
+            // make vertical
+            slider.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi/2))
+            slider.isContinuous = false
+            slider.isHidden = true
             sliders.append(slider)
         }
     }
@@ -83,12 +89,12 @@ class SCMixerViewController: UIViewController {
     }
     
     
-    func addSliderTarget(slider: UISlider){
-        slider.addTarget(self, action: #selector(SCEffectsViewController.sliderChanged(sender:)), for: .valueChanged)
+    func addSliderTarget(slider: SCSlider){
+        slider.addTarget(self, action: #selector(SCMixerViewController.sliderChanged(sender:)), for: .valueChanged)
     }
     
     
-    func sliderChanged(sender: UISlider) {
+    func sliderChanged(sender: SCSlider) {
         //Use the value from the slider for something
         print("sup")
     }
@@ -104,6 +110,7 @@ class SCMixerViewController: UIViewController {
             print("No effects container.")
             return
         }
+     
         mixerCV.isPagingEnabled = true
         mixerCV.allowsMultipleSelection = true
         mixerCV.delegate = self
@@ -118,8 +125,8 @@ class SCMixerViewController: UIViewController {
         
         mixerCV.translatesAutoresizingMaskIntoConstraints = false
         
-        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 20.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 10.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 10.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.1, constant: 0))
     }
@@ -191,14 +198,13 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return 1
     }
     
     
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        if indexPath.row == 0 {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PadNumberCell", for: indexPath) as! SCPadNumberCell
         cell.colors = SCGradientColors.getPsychedelicIceCreamShopColors()
         cell.layer.masksToBounds = true
@@ -206,9 +212,6 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         cell.contentView.backgroundColor = cell.colors[indexPath.row]
         cell.setupLabel(title: "\(SCAudioManager.shared.selectedSampleIndex+1)")
         return cell
-//        } else {
-//            
-//        }
         
     }
 }

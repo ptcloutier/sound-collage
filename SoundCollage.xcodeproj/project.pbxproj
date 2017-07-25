@@ -17,7 +17,6 @@
 		A7176C9B1EE090A300D27CFB /* UIColor+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7176C9A1EE090A300D27CFB /* UIColor+Custom.swift */; };
 		A7264E7D1EAE619800664EDE /* SCAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E7C1EAE619800664EDE /* SCAnimator.swift */; };
 		A7264E811EAEECD700664EDE /* SCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E801EAEECD700664EDE /* SCUser.swift */; };
-		A74BAED61EDA0F0900FABEF5 /* SCEffectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74BAED51EDA0F0900FABEF5 /* SCEffectCell.swift */; };
 		A75D4EBC1F25BFF300C304D8 /* SCSequencerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */; };
 		A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A886A1EB0445200FEDED0 /* SCDataManager.swift */; };
 		A78250E11EE13B7E00350768 /* SCAudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78250E01EE13B7E00350768 /* SCAudioEngine.swift */; };
@@ -36,7 +35,6 @@
 		A79161071F1EA7FD0051113C /* SCContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79161061F1EA7FD0051113C /* SCContainerViewController.swift */; };
 		A791610A1F1EA86B0051113C /* SCFirstContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79161091F1EA86B0051113C /* SCFirstContainerCell.swift */; };
 		A791610C1F1EA8880051113C /* SCSecondContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A791610B1F1EA8880051113C /* SCSecondContainerCell.swift */; };
-		A791610E1F1EBEEA0051113C /* SCEffectsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A791610D1F1EBEEA0051113C /* SCEffectsViewController.swift */; };
 		A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */; };
 		A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */; };
 		A79F5C8A1F1551CE00A89492 /* spinner.png in Resources */ = {isa = PBXBuildFile; fileRef = A79F5C891F1551CE00A89492 /* spinner.png */; };
@@ -61,10 +59,10 @@
 		A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */; };
 		A7D7CDC01F27BDD9000EE8DA /* SCMixerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7CDBF1F27BDD9000EE8DA /* SCMixerViewController.swift */; };
 		A7D7CDC51F27C498000EE8DA /* SCPadNumberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7CDC41F27C498000EE8DA /* SCPadNumberCell.swift */; };
+		A7D7CDC71F27E115000EE8DA /* SCSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7CDC61F27E115000EE8DA /* SCSlider.swift */; };
 		A7DC3AA11F21376C006354A5 /* SCMusicInterfaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DC3AA01F21376C006354A5 /* SCMusicInterfaceCell.swift */; };
 		A7E117D11F278C8300041400 /* rectPink.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E117D01F278C8300041400 /* rectPink.png */; };
 		A7E117D31F278DE800041400 /* UIImage+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E117D21F278DE800041400 /* UIImage+Custom.swift */; };
-		A7E117D51F279A8500041400 /* UISlider+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E117D41F279A8500041400 /* UISlider+Custom.swift */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
 		D12EE6F44C0DB1631E344924 /* Pods_SoundCollage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */; };
 /* End PBXBuildFile section */
@@ -113,7 +111,6 @@
 		A7176C9A1EE090A300D27CFB /* UIColor+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Custom.swift"; sourceTree = "<group>"; };
 		A7264E7C1EAE619800664EDE /* SCAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAnimator.swift; sourceTree = "<group>"; };
 		A7264E801EAEECD700664EDE /* SCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCUser.swift; sourceTree = "<group>"; };
-		A74BAED51EDA0F0900FABEF5 /* SCEffectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCEffectCell.swift; sourceTree = "<group>"; };
 		A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerSettings.swift; sourceTree = "<group>"; };
 		A76A886A1EB0445200FEDED0 /* SCDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCDataManager.swift; sourceTree = "<group>"; };
 		A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SoundCollage-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -133,7 +130,6 @@
 		A79161061F1EA7FD0051113C /* SCContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCContainerViewController.swift; sourceTree = "<group>"; };
 		A79161091F1EA86B0051113C /* SCFirstContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCFirstContainerCell.swift; sourceTree = "<group>"; };
 		A791610B1F1EA8880051113C /* SCSecondContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSecondContainerCell.swift; sourceTree = "<group>"; };
-		A791610D1F1EBEEA0051113C /* SCEffectsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCEffectsViewController.swift; sourceTree = "<group>"; };
 		A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankFlowLayout.swift; sourceTree = "<group>"; };
 		A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankCell.swift; sourceTree = "<group>"; };
 		A79F5C891F1551CE00A89492 /* spinner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spinner.png; sourceTree = "<group>"; };
@@ -164,10 +160,10 @@
 		A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+GradientColor.swift"; sourceTree = "<group>"; };
 		A7D7CDBF1F27BDD9000EE8DA /* SCMixerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCMixerViewController.swift; sourceTree = "<group>"; };
 		A7D7CDC41F27C498000EE8DA /* SCPadNumberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCPadNumberCell.swift; sourceTree = "<group>"; };
+		A7D7CDC61F27E115000EE8DA /* SCSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSlider.swift; sourceTree = "<group>"; };
 		A7DC3AA01F21376C006354A5 /* SCMusicInterfaceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCMusicInterfaceCell.swift; sourceTree = "<group>"; };
 		A7E117D01F278C8300041400 /* rectPink.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rectPink.png; sourceTree = "<group>"; };
 		A7E117D21F278DE800041400 /* UIImage+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Custom.swift"; sourceTree = "<group>"; };
-		A7E117D41F279A8500041400 /* UISlider+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UISlider+Custom.swift"; sourceTree = "<group>"; };
 		A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBank.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -273,7 +269,7 @@
 				A78250E21EE601BA00350768 /* SCEffectControl.swift */,
 				A7A21CB21EFAEFF300161DF3 /* UIButton+Custom.swift */,
 				A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */,
-				A7E117D41F279A8500041400 /* UISlider+Custom.swift */,
+				A7D7CDC61F27E115000EE8DA /* SCSlider.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -328,15 +324,6 @@
 			name = Container;
 			sourceTree = "<group>";
 		};
-		A791610F1F1EBEF20051113C /* Effects */ = {
-			isa = PBXGroup;
-			children = (
-				A791610D1F1EBEEA0051113C /* SCEffectsViewController.swift */,
-				A74BAED51EDA0F0900FABEF5 /* SCEffectCell.swift */,
-			);
-			name = Effects;
-			sourceTree = "<group>";
-		};
 		A7A822EB1EA81BEC0061D0A0 = {
 			isa = PBXGroup;
 			children = (
@@ -368,7 +355,6 @@
 				A79161081F1EA80D0051113C /* Container */,
 				A7264E771EAE285900664EDE /* Sampler */,
 				A7D7CDC11F27BDE5000EE8DA /* Mixer */,
-				A791610F1F1EBEF20051113C /* Effects */,
 				A7264E761EAE284600664EDE /* Sample Bank */,
 				A7BD6AB21F140CF7000CDF9A /* Sequencer */,
 			);
@@ -631,11 +617,9 @@
 				A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */,
 				A7A8233F1EA81F500061D0A0 /* SCSamplerFlowLayout.swift in Sources */,
 				A75D4EBC1F25BFF300C304D8 /* SCSequencerSettings.swift in Sources */,
-				A7E117D51F279A8500041400 /* UISlider+Custom.swift in Sources */,
 				A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */,
 				A7E117D31F278DE800041400 /* UIImage+Custom.swift in Sources */,
 				A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */,
-				A74BAED61EDA0F0900FABEF5 /* SCEffectCell.swift in Sources */,
 				A787338A1EB1177A00B5A8AE /* SCGradientColors.swift in Sources */,
 				A7BD6AB11F140CE9000CDF9A /* SCScoreViewController.swift in Sources */,
 				A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */,
@@ -651,13 +635,13 @@
 				A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */,
 				A7DC3AA11F21376C006354A5 /* SCMusicInterfaceCell.swift in Sources */,
 				A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */,
-				A791610E1F1EBEEA0051113C /* SCEffectsViewController.swift in Sources */,
 				A791610A1F1EA86B0051113C /* SCFirstContainerCell.swift in Sources */,
 				A7264E811EAEECD700664EDE /* SCUser.swift in Sources */,
 				A791610C1F1EA8880051113C /* SCSecondContainerCell.swift in Sources */,
 				A7176C9B1EE090A300D27CFB /* UIColor+Custom.swift in Sources */,
 				A7A823311EA81D300061D0A0 /* SCAudioManager.swift in Sources */,
 				A7D7CDC01F27BDD9000EE8DA /* SCMixerViewController.swift in Sources */,
+				A7D7CDC71F27E115000EE8DA /* SCSlider.swift in Sources */,
 				A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
