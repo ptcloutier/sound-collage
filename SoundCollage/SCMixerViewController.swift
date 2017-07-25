@@ -1,15 +1,15 @@
 //
-//  SCEffectsViewController.swift
+//  SCMixerViewController.swift
 //  SoundCollage
 //
-//  Created by perrin cloutier on 7/18/17.
+//  Created by perrin cloutier on 7/25/17.
 //  Copyright © 2017 ptcloutier. All rights reserved.
 //
 
 import UIKit
 
-class SCEffectsViewController: UIViewController {
-
+class SCMixerViewController: UIViewController {
+    
     var parameterView: UIView?
     var effectsContainerCV: UICollectionView?
     var effects: [String] = []
@@ -22,7 +22,7 @@ class SCEffectsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupEffectsView()
         setupParameterView()
         initializeSliders()
@@ -91,7 +91,7 @@ class SCEffectsViewController: UIViewController {
         //Use the value from the slider for something
         print("sup")
     }
-
+    
     
     
     func setupEffectsView(){
@@ -112,7 +112,7 @@ class SCEffectsViewController: UIViewController {
         self.view.addSubview(effectsContainerCV)
         
         effectsContainerCV.translatesAutoresizingMaskIntoConstraints = false
-       
+        
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 0.20, constant: 0.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0))
@@ -143,16 +143,16 @@ class SCEffectsViewController: UIViewController {
         self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0))
         self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: -toolbarHeight))
         
-//        let pan = UIPanGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
-//        parameterView.addGestureRecognizer(pan)
-//        let tap = UITapGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
-//        parameterView.addGestureRecognizer(tap)
+        //        let pan = UIPanGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
+        //        parameterView.addGestureRecognizer(pan)
+        //        let tap = UITapGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
+        //        parameterView.addGestureRecognizer(tap)
         
-      
+        
         
     }
     
- 
+    
     
     
     
@@ -171,7 +171,7 @@ class SCEffectsViewController: UIViewController {
 
 
 
-extension SCEffectsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -179,7 +179,7 @@ extension SCEffectsViewController: UICollectionViewDelegate, UICollectionViewDat
         let effectsCellSize = CGSize.init(width: collectionView.frame.size.width, height: collectionView.frame.size.height/5)
         return effectsCellSize
     }
-
+    
     
     
     
@@ -204,7 +204,7 @@ extension SCEffectsViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.setupLabel()
         cell.setSelectedEffect(index: indexPath.row)
         return cell
-
+        
     }
     
     
