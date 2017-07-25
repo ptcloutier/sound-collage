@@ -156,6 +156,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             
             if SCAudioManager.shared.sequencerIsPlaying == false {
                 SCAudioManager.shared.playAudio(sampleIndex: cell.idx)
+                NotificationCenter.default.post(name: Notification.Name.init("selectedSamplePadDidChangeNotification"), object: nil)
             }
         }
     }

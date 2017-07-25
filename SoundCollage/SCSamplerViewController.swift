@@ -37,7 +37,7 @@ class SCSamplerViewController: UIViewController  {
         
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: Notification.Name.init("recordingDidFinish"), object: nil)
         setupSampler()
-         NotificationCenter.default.addObserver( self, selector: #selector(SCSamplerViewController.toggleRecordingMode), name: Notification.Name.init("recordBtnDidPress"), object: nil)
+        NotificationCenter.default.addObserver( self, selector: #selector(SCSamplerViewController.toggleRecordingMode), name: Notification.Name.init("recordBtnDidPress"), object: nil)
 
     }
     
@@ -256,7 +256,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             fatalError("Wrong cell or no cell at indexpath.")
         }
         SCAudioManager.shared.selectedSampleIndex = indexPath.row
-        
+        NotificationCenter.default.post(name: Notification.Name.init("selectedSamplePadDidChangeNotification"), object: nil)
         
         if SCAudioManager.shared.isRecording == true {
             print("Recording in progress")

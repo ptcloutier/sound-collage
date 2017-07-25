@@ -17,7 +17,6 @@ extension UISlider {
         let slider = UISlider(frame: .zero)
         //Rotate to a vertical slider
         slider.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi/2))
-        slider.value = 0
         slider.isContinuous = false
         slider.isHidden = true
         return slider

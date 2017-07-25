@@ -135,6 +135,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func playAudio(sampleIndex: Int){
         
+        
+        
         guard let partialPath = getSample(selectedSampleIndex: sampleIndex) else {
             print("Playback sample not found")
             return
@@ -295,9 +297,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                     strongSelf.finishedEngines.append(fin)
                 }
             })
-            
-            
-            
 
             audioEngine.prepare()
             do {
@@ -384,6 +383,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     func startRecording() {
+        
+     
         isRecording = true
 
         // TODO: there are many different names for the same thing throughout the app, audioFilepath, sampleURl, titleURL, just need to pick the most descriptive name

@@ -11,7 +11,7 @@ import UIKit
 class SCMixerViewController: UIViewController {
     
     var parameterView: UIView?
-    var effectsContainerCV: UICollectionView?
+    var mixerCV: UICollectionView?
     var effects: [String] = []
     let toolbarHeight: CGFloat = 125.0
     var sliders: [UISlider] = []
@@ -23,10 +23,11 @@ class SCMixerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupEffectsView()
+        setupMixerCV()
         setupParameterView()
         initializeSliders()
         setupSliders()
+        NotificationCenter.default.addObserver(self, selector: #selector(SCMixerViewController.selectedSamplePadDidChange), name: Notification.Name.init("selectedSamplePadDidChangeNotification"), object: nil)
     }
     
     
@@ -49,7 +50,7 @@ class SCMixerViewController: UIViewController {
         
         for (index, slider) in sliders.enumerated() {
             UISlider.updateSlider(slider: slider, xPosition: CGFloat(xPosition), view: view)
-            xPosition+=50.0
+            xPosition+=35.0
             print("\(index)")
         }
     }
@@ -63,7 +64,7 @@ class SCMixerViewController: UIViewController {
     
     func initializeSliders(){
         
-        while sliders.count < 5  {
+        while sliders.count < 8  {
             let slider = UISlider.setupSlider()
             sliders.append(slider)
         }
@@ -93,34 +94,41 @@ class SCMixerViewController: UIViewController {
     }
     
     
+    //MARK: left-hand vertical collection view
     
-    func setupEffectsView(){
-        // effects
-        let effectsFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 1)
-        self.effectsContainerCV = UICollectionView.init(frame: .zero, collectionViewLayout: effectsFlowLayout)
-        guard let effectsContainerCV = self.effectsContainerCV else {
+    func setupMixerCV(){
+        
+        let mixerFlowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
+        self.mixerCV = UICollectionView.init(frame: .zero, collectionViewLayout: mixerFlowLayout)
+        guard let mixerCV = self.mixerCV else {
             print("No effects container.")
             return
         }
-        effectsContainerCV.isPagingEnabled = true
-        effectsContainerCV.allowsMultipleSelection = true
-        effectsContainerCV.delegate = self
-        effectsContainerCV.dataSource = self
-        effectsContainerCV.isScrollEnabled = true
-        effectsContainerCV.register(SCEffectCell.self, forCellWithReuseIdentifier: "EffectCell")
-        effectsContainerCV.backgroundColor = UIColor.clear
-        self.view.addSubview(effectsContainerCV)
+        mixerCV.isPagingEnabled = true
+        mixerCV.allowsMultipleSelection = true
+        mixerCV.delegate = self
+        mixerCV.dataSource = self
+        mixerCV.isScrollEnabled = false 
+        // selected cell number, a cv you can scroll
+        mixerCV.register(SCPadNumberCell.self, forCellWithReuseIdentifier: "PadNumberCell")
+        // sequencer tempo, a cv you can scroll
+        // a visual metronome
+        mixerCV.backgroundColor = UIColor.clear
+        self.view.addSubview(mixerCV)
         
-        effectsContainerCV.translatesAutoresizingMaskIntoConstraints = false
+        mixerCV.translatesAutoresizingMaskIntoConstraints = false
         
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 0.20, constant: 0.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: effectsContainerCV, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 10.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.1, constant: 0))
     }
     
     
+    //MARK: main mixer sliders
+    
     func setupParameterView(){
+        
         parameterView = UIView.init(frame: .zero)
         guard let parameterView = self.parameterView else {
             print("No parameter view.")
@@ -138,25 +146,17 @@ class SCMixerViewController: UIViewController {
         
         parameterView.translatesAutoresizingMaskIntoConstraints = false
         
-        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .leading, relatedBy: .equal, toItem: effectsContainerCV, attribute: .trailing, multiplier: 1.0, constant: 10.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0))
         self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .top, relatedBy: .equal, toItem: self.mixerCV, attribute: .bottom, multiplier: 1.0, constant: 10.0))
         self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: -toolbarHeight))
-        
-        //        let pan = UIPanGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
-        //        parameterView.addGestureRecognizer(pan)
-        //        let tap = UITapGestureRecognizer.init(target: self, action: #selector(handleParameterGesture))
-        //        parameterView.addGestureRecognizer(tap)
-        
-        
-        
     }
     
     
     
     
     
-    //MARK: effects parameter
+    //MARK: effects parameter //TODO: update to slider values
     
     func handleParameterGesture(gestureRecognizer: UIGestureRecognizer){
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed || gestureRecognizer.state == .ended {
@@ -165,6 +165,13 @@ class SCMixerViewController: UIViewController {
             let sampleIndex = SCAudioManager.shared.selectedSampleIndex
             SCAudioManager.shared.handleEffectsParameters(point: location, sampleIndex: sampleIndex)
         }
+    }
+    
+    
+    //MARK: selected sample pad 
+    
+    func selectedSamplePadDidChange(){
+        self.mixerCV?.reloadData()
     }
 }
 
@@ -176,44 +183,32 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let effectsCellSize = CGSize.init(width: collectionView.frame.size.width, height: collectionView.frame.size.height/5)
-        return effectsCellSize
+        let mixerCellSize = CGSize.init(width: collectionView.frame.size.height, height: collectionView.frame.size.height)
+        return mixerCellSize
     }
     
     
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return SCAudioManager.shared.effectControls.count
+        return 5
     }
     
     
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EffectCell", for: indexPath) as! SCEffectCell
+//        if indexPath.row == 0 {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PadNumberCell", for: indexPath) as! SCPadNumberCell
         cell.colors = SCGradientColors.getPsychedelicIceCreamShopColors()
-        let effectControls = SCAudioManager.shared.effectControls[indexPath.row]
-        if effectControls.effectName != nil {
-            cell.effectName = SCAudioManager.shared.effectControls[indexPath.row].effectName!
-        }
         cell.layer.masksToBounds = true
-        cell.layer.cornerRadius = 10.0
+        cell.layer.cornerRadius = collectionView.frame.size.height/2
         cell.contentView.backgroundColor = cell.colors[indexPath.row]
-        cell.setupLabel()
-        cell.setSelectedEffect(index: indexPath.row)
+        cell.setupLabel(title: "\(SCAudioManager.shared.selectedSampleIndex+1)")
         return cell
+//        } else {
+//            
+//        }
         
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? SCEffectCell else {
-            print("Wrong cell or no cell at indexPath.")
-            return
-        }
-        cell.toggleEffectIsSelected(index: indexPath.row)
-        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
