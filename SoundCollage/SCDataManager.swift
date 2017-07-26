@@ -295,19 +295,19 @@ class SCDataManager {
     
     
     
-    func getSelectedEffectIndex()-> Int{
+    func getSelectedMixerPanelIndex()-> Int{
         
-        let selectedEffectIdx: Int = UserDefaults.standard.integer(forKey: "selectedEffectIndex")
+        let selectedMixerPanelIdx: Int = UserDefaults.standard.integer(forKey: "selectedMixerPanelIndex")
        
-        return selectedEffectIdx
+        return selectedMixerPanelIdx
     }
     
     
     
     
-    func setSelectedEffectIndex(index: Int){
+    func setSelectedMixerPanelIndex(index: Int){
         
-        UserDefaults.standard.set(index, forKey: "selectedEffectIndex")
+        UserDefaults.standard.set(index, forKey: "selectedMixerPanelIndex")
     }
     
 }

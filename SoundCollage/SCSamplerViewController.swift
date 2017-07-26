@@ -20,8 +20,8 @@ class SCSamplerViewController: UIViewController  {
     var selectedSampleIndex: Int?
     var vintageColors: [UIColor] = []
     var iceCreamColors: [UIColor] = []
-    let parameterViewColors: [UIColor] = [UIColor.Custom.PsychedelicIceCreamShoppe.darkViolet, UIColor.Custom.PsychedelicIceCreamShoppe.medViolet, UIColor.Custom.PsychedelicIceCreamShoppe.darkViolet]
-    let backGroundColors: [UIColor] = [UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue, UIColor.Custom.PsychedelicIceCreamShoppe.neonAqua, UIColor.Custom.PsychedelicIceCreamShoppe.deepBlueDark]
+    let parameterViewColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet, SCColor.Custom.PsychedelicIceCreamShoppe.medViolet, SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet]
+    let backGroundColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua, SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueDark]
     var selectedPadIndex: Int?
     
     
@@ -30,9 +30,9 @@ class SCSamplerViewController: UIViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.clear //UIColor.Custom.PsychedelicIceCreamShoppe.ice
-        vintageColors = SCGradientColors.getVintageColors()
-        iceCreamColors = SCGradientColors.getPsychedelicIceCreamShopColors()
+        view.backgroundColor = UIColor.clear //SCColor.Custom.PsychedelicIceCreamShoppe.ice
+        vintageColors = SCColor.getVintageColors()
+        iceCreamColors = SCColor.getPsychedelicIceCreamShopColors()
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: Notification.Name.init("recordingDidFinish"), object: nil)

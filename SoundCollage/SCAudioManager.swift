@@ -30,8 +30,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isSpeakerEnabled: Bool = false
     var isRecording: Bool = false
     var replaceableFilePath: String?
-//    var effectIsSelected: Bool = false
     var audioEngine: SCAudioEngine!
+    var mixerPanels: [String] = []
     var effectControls: [SCEffectControl] = []
     var audioEngineChain: [SCAudioEngine] = []
     var finishedEngines: [SCAudioEngine] = []
@@ -39,12 +39,23 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var sequencerIsPlaying: Bool = false
 
     
-    //MARK: Basic setup 
     
     
     func setupAudioManager(){
-        let nc = NotificationCenter.default
-        nc.addObserver( self, selector: #selector(routeChanged), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
+        
+        self.mixerPanels = [  "Reverb", // 13 reverb presets to choose from
+                              "Delay", // delay has 4 parameters
+                              "Pitch",
+                              "Distortion" // AVAudioUnitDistortion
+        ]
+        
+/* TODO: "Analyzer", // volume, pan, waveform visual, trim/edit capabilities
+         "Equalizer", //  AVAudioUnitEQ, AVAudioUnitEQFilterType
+         "Time", AVAudioUnitTimeEffect
+         "Speed" AVAudioUnitVarispeed */
+
+        
+        NotificationCenter.default.addObserver( self, selector: #selector(routeChanged), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
         
         
         audioSession.requestRecordPermission({ allowed in
@@ -145,7 +156,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             let audioPlayerNode = AVAudioPlayerNode()
             audioEngine.attach(audioPlayerNode)
             
-            //self.effectControls[0].parameter[selectedSampleIndex] effectControl (effect) parameter (samplepad)
+            // selected effect in effectControl, selectedSamplePad parameter in parameter
             
             let reverb = AVAudioUnitReverb()
             let reverbParameter1 = self.effectControls[0].parameter[selectedSampleIndex]
@@ -184,12 +195,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             audioEngine.attach(pitch)
             
-            //                AVAudioUnitEQ
-            //                AVAudioUnitGenerator
-            //                AVAudioUnitDistortion
-            //                AVAudioUnitEQFilterType
-            //                AVAudioUnitVarispeed
-            //                AVAudioUnitTimeEffect
             
             
             audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
@@ -251,40 +256,10 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
-//    
-//    func handleEffectsParameters(point: CGPoint, sampleIndex: Int) {
-//        
-//        var xValue = Float(point.x)/2
-//        if xValue>100{
-//            xValue=100
-//        }
-//        if xValue<0 {
-//            xValue=0
-//        }
-//        var yValue = (200.0-Float(point.y))/2
-//        if yValue>100{
-//            yValue=100
-//        }
-//        if yValue<0{
-//            yValue=0
-//        }
-//        
-//        let xySum = xValue+yValue
-//        
-//        for effect in self.effectControls {
-//            effect.parameters[sampleIndex][0] = xValue
-//            effect.parameters[sampleIndex][1] = yValue
-//            effect.parameters[sampleIndex][2] = xySum/2
-//        }
-//        
-//        print("Parameters: \(xValue), \(yValue), \(xySum/2)")
-//        
-//    }
-    
-    
     
     func effectsParametersDidChange(){
-        
+       
+//        SCDataManager.shared.user?.currentSampleBank?.effectSettings
     }
     
     

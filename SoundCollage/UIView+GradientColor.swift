@@ -39,6 +39,8 @@ enum GradientOrientation {
     }
 }
 
+
+
 extension UIView {
     
     func applyGradient(withColors colors: [UIColor], locations: [NSNumber]? = nil) {

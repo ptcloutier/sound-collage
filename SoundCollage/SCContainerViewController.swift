@@ -70,16 +70,16 @@ class SCContainerViewController: UIViewController {
         recordBtn.addTarget(self, action: #selector(SCContainerViewController.recordBtnDidPress), for: .touchUpInside)
         recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
-        let bankBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
+        let bankBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
         bankBtn.addTarget(self, action: #selector(SCContainerViewController.bankBtnDidPress), for: .touchUpInside)
         
         
-        let sequencerBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
+        let sequencerBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
         sequencerBtn.addTarget(self, action: #selector(SCContainerViewController.postSequencerPlaybackDidPressNotification), for: .touchUpInside)
         
-        let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
+        let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
         
-        let tempBtn3 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: UIColor.Custom.PsychedelicIceCreamShoppe.deepBlue, secondaryColor: UIColor.white)
+        let tempBtn3 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, secondaryColor: UIColor.white)
         
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)

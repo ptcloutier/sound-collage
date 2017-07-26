@@ -90,7 +90,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         cell.idx = indexPath.row
         cell.layer.borderWidth = 1.5
         cell.layer.borderColor = UIColor.purple.cgColor
-        let iceCreamColors: [UIColor] = SCGradientColors.getPsychedelicIceCreamShopColors()
+        let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
         
         var colorIdx: Int
         if indexPath.row > iceCreamColors.count-1 {
@@ -149,7 +149,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         case false:
             cell.isPlaybackEnabled = true
             SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = true
-            let iceCreamColors: [UIColor] = SCGradientColors.getPsychedelicIceCreamShopColors()
+            let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
             var colorIdx: Int
             colorIdx = Int(arc4random_uniform(UInt32(iceCreamColors.count)))
             cell.backgroundColor = iceCreamColors[colorIdx]
