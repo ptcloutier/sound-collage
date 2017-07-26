@@ -10,7 +10,7 @@ import UIKit
 
 class SCSlider: UISlider {
     
-    
+    var idx: Int = 0
     var trackHeight: CGFloat = 2
     
     override func trackRect(forBounds bounds: CGRect) -> CGRect {

@@ -11,18 +11,18 @@ import UIKit
 class SCMixerViewController: UIViewController {
     
     var parameterView: UIView?
-    var mixerCV: UICollectionView?
+    var effectsCV: UICollectionView?
     var effects: [String] = []
     let toolbarHeight: CGFloat = 125.0
     var sliders: [SCSlider] = []
-    
+    var selectedEffectIndex: Int = 0
     
     //MARK: VC lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupMixerCV()
+        setupEffectsCV()
         setupParameterView()
         initializeSliders()
         setupSliders()
@@ -52,7 +52,7 @@ class SCMixerViewController: UIViewController {
         for (index, slider) in sliders.enumerated() {
             slider.updateSlider(slider: slider, xPosition: CGFloat(xPosition), view: view)
             xPosition+=35.0
-            print("\(index)")
+            slider.idx = index
         }
     }
     
@@ -97,39 +97,66 @@ class SCMixerViewController: UIViewController {
     
     func sliderChanged(sender: SCSlider) {
         //Use the value from the slider for something
-        print("sup")
+        switch sender.idx {
+        case 0:
+            print("index - \(sender.idx), value - \(sender.value)")
+        case 1:
+            print("index - \(sender.idx), value - \(sender.value)")
+
+        case 2:
+            print("index - \(sender.idx), value - \(sender.value)")
+
+        case 3:
+            print("index - \(sender.idx), value - \(sender.value)")
+
+        case 4:
+            print("index - \(sender.idx), value - \(sender.value)")
+
+        case 5:
+            print("index - \(sender.idx), value - \(sender.value)")
+
+        case 6:
+            print("index - \(sender.idx), value - \(sender.value)")
+
+        case 7:
+            print("index - \(sender.idx), value - \(sender.value)")
+
+        case 8:
+            print("index - \(sender.idx), value - \(sender.value)")
+
+        case 9:
+            print("index - \(sender.idx), value - \(sender.value)")
+        default:
+            print("nada")
+        }
     }
     
     
-    //MARK: left-hand vertical collection view
     
-    func setupMixerCV(){
+    func setupEffectsCV(){
         
         let mixerFlowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
-        self.mixerCV = UICollectionView.init(frame: .zero, collectionViewLayout: mixerFlowLayout)
-        guard let mixerCV = self.mixerCV else {
+        self.effectsCV = UICollectionView.init(frame: .zero, collectionViewLayout: mixerFlowLayout)
+        guard let effectsCV = self.effectsCV else {
             print("No effects container.")
             return
         }
-        mixerCV.isPagingEnabled = true
-        mixerCV.allowsMultipleSelection = true
-        mixerCV.delegate = self
-        mixerCV.dataSource = self
-        mixerCV.isScrollEnabled = false 
-        mixerCV.register(SCPadNumberCell.self, forCellWithReuseIdentifier: "PadNumberCell")
-        mixerCV.register(SCRecordingButtonCell.self, forCellWithReuseIdentifier: "RecordingButtonCell")
-        // sequencer tempo, scroll to change, a visual metronome
-        // time signature
-        // record sample 
-        mixerCV.backgroundColor = UIColor.clear
-        self.view.addSubview(mixerCV)
+        effectsCV.isPagingEnabled = true
+        effectsCV.allowsMultipleSelection = true
+        effectsCV.delegate = self
+        effectsCV.dataSource = self
+        effectsCV.isScrollEnabled = false
+        effectsCV.register(SCEffectPickerCell.self, forCellWithReuseIdentifier: "EffectPickerCell")
+     
+        effectsCV.backgroundColor = UIColor.clear
+        self.view.addSubview(effectsCV)
         
-        mixerCV.translatesAutoresizingMaskIntoConstraints = false
+        effectsCV.translatesAutoresizingMaskIntoConstraints = false
         
-        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 20.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 10.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 10.0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.1, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 10.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 10.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 10.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: effectsCV, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 0.1, constant: 0))
     }
     
     
@@ -154,45 +181,60 @@ class SCMixerViewController: UIViewController {
         
         parameterView.translatesAutoresizingMaskIntoConstraints = false
         
-        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .top, relatedBy: .equal, toItem: self.mixerCV, attribute: .bottom, multiplier: 1.0, constant: 10.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 10.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 10.0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .top, relatedBy: .equal, toItem: self.effectsCV, attribute: .bottom, multiplier: 1.0, constant: 0))
         self.view.addConstraint(NSLayoutConstraint.init(item: parameterView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: -toolbarHeight))
+        
+        
     }
     
     
     
+  
     
-    //MARK: effects parameter //TODO: update to slider values
-    
-    func handleParameterGesture(gestureRecognizer: UIGestureRecognizer){
-        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed || gestureRecognizer.state == .ended {
-            let location =  gestureRecognizer.location(in: parameterView)
-            
-            let sampleIndex = SCAudioManager.shared.selectedSampleIndex
-            SCAudioManager.shared.handleEffectsParameters(point: location, sampleIndex: sampleIndex)
-        }
-    }
-    
-    
-    //MARK: selected sample pad 
+    //MARK: selected sample pad
     
     func selectedSamplePadDidChange(){
-        self.mixerCV?.reloadData()
+       
+        self.effectsCV?.reloadData()
     }
     
     
     
     
-    //MARK: Notifications
-    
-    
-    func postRecordBtnDidPressNotification(){
+    func setSelectedEffectIndex(index: Int){
         
-        NotificationCenter.default.post(name: Notification.Name.init("recordBtnDidPress"), object: nil)
-        
+        SCDataManager.shared.setSelectedEffectIndex(index: index)
+        self.effectsCV?.reloadData()
     }
     
+    
+    
+    
+    
+    func getSelectedEffectIndex(){
+        
+        selectedEffectIndex = SCDataManager.shared.getSelectedEffectIndex()
+    }
+
+    
+    
+    
+    func findColorIndex(indexPath: IndexPath, colors: [UIColor])-> Int{
+        
+        var colorIdx: Int
+        if indexPath.row > colors.count-1 {
+            colorIdx = indexPath.row-colors.count
+            if colorIdx > colors.count-1 {
+                colorIdx -= colors.count
+            }
+        } else {
+            colorIdx = indexPath.row
+        }
+        return colorIdx
+    }
+ 
 }
 
 
@@ -203,87 +245,37 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        
+        let c = (SCDataManager.shared.user?.currentSampleBank?.effectSettings.count)!
+        return c
     }
     
     
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.row == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PadNumberCell", for: indexPath) as! SCPadNumberCell
-            cell.colors = SCGradientColors.getPsychedelicIceCreamShopColors()
-            cell.layer.masksToBounds = true
-            cell.layer.cornerRadius = collectionView.frame.size.height/2
-            cell.contentView.backgroundColor = cell.colors[indexPath.row]
-            cell.setupLabel(title: "\(SCAudioManager.shared.selectedSampleIndex+1)")
-            return cell
-        } else if indexPath.row == 1 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecordingButtonCell", for: indexPath) as! SCRecordingButtonCell
-            cell.layer.masksToBounds = true
-            cell.layer.cornerRadius = collectionView.frame.size.height/2
-            cell.contentView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
-            return cell
-        } else if indexPath.row == 2 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecordingButtonCell", for: indexPath) as! SCRecordingButtonCell
-            cell.layer.masksToBounds = true
-            cell.layer.cornerRadius = collectionView.frame.size.height/2
-            cell.contentView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCMixerViewController.tap(gestureRecognizer:)))
-            tapGestureRecognizer.delegate = self
-            cell.addGestureRecognizer(tapGestureRecognizer)
-            
-            return cell
-
-        } else if indexPath.row == 3 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecordingButtonCell", for: indexPath) as! SCRecordingButtonCell
-            cell.layer.masksToBounds = true
-            cell.layer.cornerRadius = collectionView.frame.size.height/2
-            cell.contentView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
-            return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EffectPickerCell", for: indexPath) as! SCEffectPickerCell
+        cell.colors = SCGradientColors.getPsychedelicIceCreamShopColors()
+        if indexPath.row == self.selectedEffectIndex {
+            cell.contentView.backgroundColor = UIColor.purple
+            cell.effectLabel.textColor = UIColor.white
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecordingButtonCell", for: indexPath) as! SCRecordingButtonCell
-            cell.layer.masksToBounds = true
-            cell.layer.cornerRadius = collectionView.frame.size.height/2
-            cell.contentView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
-            return cell
-
+            cell.effectLabel.textColor = UIColor.black
+            let idx = findColorIndex(indexPath: indexPath, colors: cell.colors)
+            cell.contentView.backgroundColor = cell.colors[idx]
         }
+        return cell
     }
+    
+    
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if indexPath.row == 0 {
-           print("selected  cell")
-        } else if indexPath.row == 1 {
-            print("time signature did press")
-        } else if indexPath.row == 2 {
-            
-            let cell = collectionView.cellForItem(at: indexPath) as! SCRecordingButtonCell
-            
-            print("record button did press")
-            postRecordBtnDidPressNotification()
-            
-            switch SCAudioManager.shared.isRecording {
-            case true:
-                SCAudioManager.shared.finishRecording(success: true)
-                cell.alpha = 0
-                UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
-                    cell.alpha = 1
-                }, completion: nil)
-            case false:
-                cell.alpha = 0
-                UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
-                    cell.alpha = 1
-                }, completion: nil)
-            }
-        } else if indexPath.row == 3 {
-            print("tempo did press")
-        } else {
-            print("tempo light did press")
-        }
+        setSelectedEffectIndex(index: indexPath.row)
     }
+    
+    
     
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
@@ -310,11 +302,11 @@ extension SCMixerViewController:  UICollectionViewDelegateFlowLayout {
     }
   
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 36.0
+        return 5.0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 36.0
+        return 5.0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -342,14 +334,14 @@ extension SCMixerViewController: UIGestureRecognizerDelegate {
         }
         
         
-        let tapLocation = gestureRecognizer.location(in: self.mixerCV)
+        let tapLocation = gestureRecognizer.location(in: self.effectsCV)
         
-        guard let indexPath = self.mixerCV?.indexPathForItem(at: tapLocation) else {
+        guard let indexPath = self.effectsCV?.indexPathForItem(at: tapLocation) else {
             print("IndexPath not found.")
             return
         }
         
-        guard let cell = self.mixerCV?.cellForItem(at: indexPath) else {
+        guard let cell = self.effectsCV?.cellForItem(at: indexPath) else {
             print("Cell not found.")
             return
         }
@@ -361,7 +353,7 @@ extension SCMixerViewController: UIGestureRecognizerDelegate {
     
     func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
         
-        self.collectionView(mixerCV!, didSelectItemAt: indexPath)
+        self.collectionView(effectsCV!, didSelectItemAt: indexPath)
     }
 }
 

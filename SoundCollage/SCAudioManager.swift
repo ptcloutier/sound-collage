@@ -56,7 +56,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 }
             }
         })
-        setupEffectControls()
         observeAudioIO()
     }
     
@@ -92,20 +91,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         
         return selectedSample
     }
-    
 
-    
-    //MARK: Effects 
-    
-    
-    
-    func setupEffectControls(){
-        
-        let reverb = SCEffectControl.init(effectName: "reverb")
-        let delay = SCEffectControl.init(effectName: "delay")
-        let pitch = SCEffectControl.init(effectName: "pitch")
-        self.effectControls = [reverb, delay, pitch]
-    }
 
     
   
@@ -157,106 +143,60 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             let audioFile = try AVAudioFile(forReading: fullURL)
             let audioFormat = audioFile.processingFormat
             let audioPlayerNode = AVAudioPlayerNode()
+            audioEngine.attach(audioPlayerNode)
             
-            if self.effectControls[0].isPadEnabled[selectedSampleIndex] == false && self.effectControls[1].isPadEnabled[selectedSampleIndex] == false && self.effectControls[2].isPadEnabled[selectedSampleIndex] == false {
-//            if self.effectIsSelected == false {
-                audioEngine.attach(audioPlayerNode)
-                audioEngine.connect(audioPlayerNode, to: audioEngine.mainMixerNode, format: audioFormat)
-                audioEngine.connect(audioEngine.mainMixerNode, to: audioEngine.outputNode, format: audioFormat)
-
-            } else {
-                
-                audioEngine.attach(audioPlayerNode)
-                
-                    let reverb = AVAudioUnitReverb()
-                    let reverbParameters = self.effectControls[0].parameters[selectedSampleIndex]
-                    reverb.loadFactoryPreset(.plate)
-                    let x = Float(reverbParameters[0])/2
-                    let wetDryParam = x
-                    reverb.wetDryMix = wetDryParam
-               
-                if self.effectControls[0].isPadEnabled[selectedSampleIndex] == true {
-                //self.effectControls[0].isActive == true {
-                    audioEngine.attach(reverb)
-                }
-//                AVAudioUnitEQ
-//                AVAudioUnitGenerator
-//                AVAudioUnitDistortion
-//                AVAudioUnitEQFilterType
-//                AVAudioUnitVarispeed
-//                AVAudioUnitTimeEffect
-                
-                let delay = AVAudioUnitDelay()
-                let delayParameters = self.effectControls[1].parameters[selectedSampleIndex]
-                
-                let time = delayParameters[0]/2
-                var feedback: Float
-                if delayParameters[1]<=75.0 {
-                    feedback = delayParameters[1]
-                } else {
-                    feedback = 75.0
-                }
-                let delayTime = time/Float(100.0)
-                delay.delayTime = TimeInterval(delayTime)
-                delay.feedback = feedback
-                
-                if self.effectControls[1].isPadEnabled[selectedSampleIndex] == true { //.isActive == true {
-                    audioEngine.attach(delay)
-                }
-                
-                let pitch = AVAudioUnitTimePitch()
-                let pitchParameters = self.effectControls[2].parameters[sampleIndex]
-                let pitchZero = -1200
-                let pitchParam = Float(pitchParameters[2])*24
-                let sum = pitchZero + Int(pitchParam)
-                pitch.pitch = Float(sum)
-                
-                if self.effectControls[2].isPadEnabled[selectedSampleIndex] == true {
-                    audioEngine.attach(pitch)
-                    print("Pitch: \(pitch)")
-                    
-                }
-                
-                // Sound effect connection permutations TODO: make this DRY
-                
-                let reverbIsActive = self.effectControls[0].isPadEnabled[selectedSampleIndex]
-                let delayIsActive = self.effectControls[1].isPadEnabled[selectedSampleIndex]
-                let pitchIsActive = self.effectControls[2].isPadEnabled[selectedSampleIndex]
-                
-                if reverbIsActive == true && delayIsActive == true && pitchIsActive == true {
-                    audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
-                    audioEngine.connect(pitch, to: delay, format: audioFormat)
-                    audioEngine.connect(delay, to: reverb, format: audioFormat)
-                    audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: audioFormat)
-                }
-                if reverbIsActive == true && delayIsActive == true && pitchIsActive == false {
-                    audioEngine.connect(audioPlayerNode, to: delay, format: audioFormat)
-                    audioEngine.connect(delay, to: reverb, format: audioFormat)
-                    audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: audioFormat)
-                }
-                if reverbIsActive == true && delayIsActive == false && pitchIsActive == false {
-                    audioEngine.connect(audioPlayerNode, to: reverb, format: audioFormat)
-                    audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: audioFormat)
-                }
-                if reverbIsActive == false && delayIsActive == true && pitchIsActive == false {
-                    audioEngine.connect(audioPlayerNode, to: delay, format: audioFormat)
-                    audioEngine.connect(delay, to: audioEngine.mainMixerNode, format: audioFormat)
-                }
-                if reverbIsActive == false && delayIsActive == true && pitchIsActive == true {
-                    audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
-                    audioEngine.connect(pitch, to: delay, format: audioFormat)
-                    audioEngine.connect(delay, to: audioEngine.mainMixerNode, format: audioFormat)
-                }
-                if reverbIsActive == false && delayIsActive == false && pitchIsActive == true {
-                    audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
-                    audioEngine.connect(pitch, to: audioEngine.mainMixerNode, format: audioFormat)
-                }
-                if reverbIsActive == true && delayIsActive == false && pitchIsActive == true {
-                    audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
-                    audioEngine.connect(pitch, to: reverb, format: audioFormat)
-                    audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: audioFormat)
-                }
+            //self.effectControls[0].parameter[selectedSampleIndex] effectControl (effect) parameter (samplepad)
+            
+            let reverb = AVAudioUnitReverb()
+            let reverbParameter1 = self.effectControls[0].parameter[selectedSampleIndex]
+            reverb.loadFactoryPreset(.plate) // there are thirteen posible presets
+            reverb.wetDryMix = reverbParameter1
+            audioEngine.attach(reverb)
+            
+            
+            
+            let delay = AVAudioUnitDelay()
+            var delayFeedback = self.effectControls[1].parameter[selectedSampleIndex]
+            
+            if delayFeedback>75.0 {
+                delayFeedback = 75.0
             }
+            delay.feedback = delayFeedback
+            
+            let delayTime = self.effectControls[2].parameter[selectedSampleIndex]
+            delay.delayTime = TimeInterval(delayTime)
+            
+            let delayLPCutoff = self.effectControls[3].parameter[selectedSampleIndex]
+            delay.lowPassCutoff = delayLPCutoff
+            
+            let delayWetDryMix = self.effectControls[4].parameter[selectedSampleIndex]
+            delay.wetDryMix = delayWetDryMix
+            
+            audioEngine.attach(delay)
+            
+            
+            let pitch = AVAudioUnitTimePitch()
+            let pitchParameter = self.effectControls[5].parameter[selectedSampleIndex]
+            let pitchZero = -1200
+            let pitchValue = Float(pitchParameter)*24
+            let sum = pitchZero + Int(pitchValue)
+            pitch.pitch = Float(sum)
+            
+            audioEngine.attach(pitch)
+            
+            //                AVAudioUnitEQ
+            //                AVAudioUnitGenerator
+            //                AVAudioUnitDistortion
+            //                AVAudioUnitEQFilterType
+            //                AVAudioUnitVarispeed
+            //                AVAudioUnitTimeEffect
+            
+            
+            audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
+            audioEngine.connect(pitch, to: delay, format: audioFormat)
+            audioEngine.connect(delay, to: reverb, format: audioFormat)
+            audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: audioFormat)
+            
             guard let fin = self.audioEngine else {
                 print("no engine.")
                 return
@@ -269,21 +209,20 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 guard let strongSelf = self else {
                     return
                 }
-                // calculate audio tail based on reverb and delay parameters 
+                // calculate audio tail based on reverb and delay parameters
                 var durationInt = Int(round(Double(audioFile.length)/44100))
                 if durationInt == 0 {
                     durationInt = 1
                 }
-                if strongSelf.effectControls[0].isPadEnabled[strongSelf.selectedSampleIndex] == true { //isActive == true {
-                let reverbParameters = strongSelf.effectControls[0].parameters[strongSelf.selectedSampleIndex]
-                let reverbTime = round((Float(reverbParameters[0])/2)/10)
+                
+                let reverbParameter = strongSelf.effectControls[0].parameter[strongSelf.selectedSampleIndex]
+                let reverbTime = round((Float(reverbParameter/2)/10))
                 durationInt += Int(reverbTime)
-                }
-                if strongSelf.effectControls[1].isPadEnabled[strongSelf.selectedSampleIndex] == true {
-                    let delayParams = strongSelf.effectControls[1].parameters[sampleIndex]
-                    let delayTime = (round(Float(delayParams[1])/10))
-                    durationInt += Int(delayTime)
-                }
+                
+                let delayParams = strongSelf.effectControls[1].parameter[strongSelf.selectedSampleIndex]
+                let delayTime = round(Float(delayParams)/10)
+                durationInt += Int(delayTime)
+                
                 
                 let duration = DispatchTimeInterval.seconds(durationInt)
                
@@ -312,33 +251,39 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
+//    
+//    func handleEffectsParameters(point: CGPoint, sampleIndex: Int) {
+//        
+//        var xValue = Float(point.x)/2
+//        if xValue>100{
+//            xValue=100
+//        }
+//        if xValue<0 {
+//            xValue=0
+//        }
+//        var yValue = (200.0-Float(point.y))/2
+//        if yValue>100{
+//            yValue=100
+//        }
+//        if yValue<0{
+//            yValue=0
+//        }
+//        
+//        let xySum = xValue+yValue
+//        
+//        for effect in self.effectControls {
+//            effect.parameters[sampleIndex][0] = xValue
+//            effect.parameters[sampleIndex][1] = yValue
+//            effect.parameters[sampleIndex][2] = xySum/2
+//        }
+//        
+//        print("Parameters: \(xValue), \(yValue), \(xySum/2)")
+//        
+//    }
     
-    func handleEffectsParameters(point: CGPoint, sampleIndex: Int) {
-        
-        var xValue = Float(point.x)/2
-        if xValue>100{
-            xValue=100
-        }
-        if xValue<0 {
-            xValue=0
-        }
-        var yValue = (200.0-Float(point.y))/2
-        if yValue>100{
-            yValue=100
-        }
-        if yValue<0{
-            yValue=0
-        }
-        
-        let xySum = xValue+yValue
-        
-        for effect in self.effectControls {
-            effect.parameters[sampleIndex][0] = xValue
-            effect.parameters[sampleIndex][1] = yValue
-            effect.parameters[sampleIndex][2] = xySum/2
-        }
-        
-        print("Parameters: \(xValue), \(yValue), \(xySum/2)")
+    
+    
+    func effectsParametersDidChange(){
         
     }
     

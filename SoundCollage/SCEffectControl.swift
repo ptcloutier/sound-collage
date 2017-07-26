@@ -14,30 +14,22 @@ import ObjectMapper
 
 class SCEffectControl: Mappable {
 
-//    var isActive: Bool = false 
-    var effectName: String?
-    var parameters: [[Float]] = []
-    var isPadEnabled: [Bool] = []
+    var parameter: [Float] = []
     
-    init(effectName: String?) {
-        self.effectName = effectName
-        self.parameters = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
-        while self.isPadEnabled.count < 16 {
-            let value = true
-            self.isPadEnabled.append(value)
+    init() {
+        self.parameter = []
+        
+        while self.parameter.count < 16 {
+            let value: Float = 0
+            self.parameter.append(value)
         }
     }
     
     required init?(map: Map) {
-        effectName     <- map["effectName"]
-        parameters     <- map["parameters"]
-        isPadEnabled    <- map["isPadEnabled"]
+        parameter     <- map["parameter"]
     }
     
     func mapping(map: Map) {
-        effectName     <- map["effectName"]
-        parameters     <- map["parameters"]
-        isPadEnabled    <- map["isPadEnabled"]
+        parameter     <- map["parameter"]
     }
-
 }

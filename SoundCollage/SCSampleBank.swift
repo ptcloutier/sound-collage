@@ -18,6 +18,7 @@ class SCSampleBank: Mappable {
     var effectSettings: [SCEffectControl] = []
     var sequencerSettings: SCSequencerSettings?
     
+    
     init(name: String?, id: Int?, samples: [String: AnyObject], type: SamplerType?, effectSettings: [SCEffectControl], sequencerSettings: SCSequencerSettings? ) {
         self.name = name
         self.id = id

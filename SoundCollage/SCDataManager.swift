@@ -284,11 +284,30 @@ class SCDataManager {
         var effectSettings: [SCEffectControl] = []
         var index = 0
         
-        while effectSettings.count < SCAudioManager.shared.effectControls.count {
-            effectSettings.append(SCAudioManager.shared.effectControls[index])
+        while effectSettings.count < 10 {
+            let effectControl: SCEffectControl = SCEffectControl.init()
+            effectSettings.append(effectControl)
             index+=1
         }
         return effectSettings
+    }
+    
+    
+    
+    
+    func getSelectedEffectIndex()-> Int{
+        
+        let selectedEffectIdx: Int = UserDefaults.standard.integer(forKey: "selectedEffectIndex")
+       
+        return selectedEffectIdx
+    }
+    
+    
+    
+    
+    func setSelectedEffectIndex(index: Int){
+        
+        UserDefaults.standard.set(index, forKey: "selectedEffectIndex")
     }
     
 }

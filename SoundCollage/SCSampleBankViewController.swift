@@ -56,29 +56,29 @@ class SCSampleBankViewController: UIViewController {
     private func setupTitle(xConstant: CGFloat, yConstant: CGFloat, textColor: UIColor){
     
         let margin: CGFloat = 20.0
-        let titleLabel = UILabel.init(frame: .zero)
-        titleLabel.text = "S O U N D"
-        titleLabel.font = UIFont.init(name: "Futura", size: 50.0)
-        titleLabel.textColor = textColor
-        titleLabel.textAlignment = NSTextAlignment.center
-        self.collectionView.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.1, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: xConstant))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: yConstant+margin))
+        let titleLabel1 = UILabel.init(frame: .zero)
+        titleLabel1.text = "S O U N D"
+        titleLabel1.font = UIFont.init(name: "Futura", size: 40.0)
+        titleLabel1.textColor = textColor
+        titleLabel1.textAlignment = NSTextAlignment.center
+        self.collectionView.addSubview(titleLabel1)
+        titleLabel1.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.1, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: xConstant))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: yConstant+margin))
         
-        let t2 = UILabel.init(frame: .zero)
-        t2.text = "C O L L A G E"
-        t2.font = UIFont.init(name: "Futura", size: 50.0)
-        t2.textColor = textColor
-        t2.textAlignment = NSTextAlignment.center
-        self.collectionView.addSubview(t2)
-        t2.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addConstraint(NSLayoutConstraint(item: t2, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: t2, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.1, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: t2, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: xConstant))
-        self.view.addConstraint(NSLayoutConstraint(item: t2, attribute: .top, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1.0, constant: margin/2))
+        let titleLabel2 = UILabel.init(frame: .zero)
+        titleLabel2.text = "C O L L A G E"
+        titleLabel2.font = UIFont.init(name: "Futura", size: 40.0)
+        titleLabel2.textColor = textColor
+        titleLabel2.textAlignment = NSTextAlignment.center
+        self.collectionView.addSubview(titleLabel2)
+        titleLabel2.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.1, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: xConstant))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .top, relatedBy: .equal, toItem: titleLabel1, attribute: .bottom, multiplier: 1.0, constant: margin/2))
     }
     
     
@@ -145,7 +145,6 @@ class SCSampleBankViewController: UIViewController {
     
     
    
-  
 
     
     
