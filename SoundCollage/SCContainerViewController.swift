@@ -50,7 +50,7 @@ class SCContainerViewController: UIViewController {
     //MARK: ui setup
     
     
-    private func setupControls(){
+    private func setupControls(){ // record a song, see songs, go back to banks 
         
         let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
         
@@ -103,7 +103,6 @@ class SCContainerViewController: UIViewController {
             print("No record btn.")
             return
         }
-        postRecordBtnDidPressNotification()
 
         switch SCAudioManager.shared.isRecording {
         case true:
@@ -138,11 +137,11 @@ class SCContainerViewController: UIViewController {
     //MARK: Notifications
     
     
-    func postRecordBtnDidPressNotification(){
-        
-        NotificationCenter.default.post(name: Notification.Name.init("recordBtnDidPress"), object: nil)
-        
-    }
+//    func postRecordBtnDidPressNotification(){
+//        
+//        NotificationCenter.default.post(name: Notification.Name.init("recordBtnDidPress"), object: nil)
+//        
+//    }
     
 
     

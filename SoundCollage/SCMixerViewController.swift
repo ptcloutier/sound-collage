@@ -17,7 +17,6 @@ class SCMixerViewController: UIViewController {
     var sliders: [SCSlider] = []
     
     
-    
     //MARK: VC lifecycle
     
     override func viewDidLoad() {
@@ -27,7 +26,9 @@ class SCMixerViewController: UIViewController {
         setupParameterView()
         initializeSliders()
         setupSliders()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(SCMixerViewController.selectedSamplePadDidChange), name: Notification.Name.init("selectedSamplePadDidChangeNotification"), object: nil)
+
     }
     
     
@@ -110,16 +111,16 @@ class SCMixerViewController: UIViewController {
             print("No effects container.")
             return
         }
-     
         mixerCV.isPagingEnabled = true
         mixerCV.allowsMultipleSelection = true
         mixerCV.delegate = self
         mixerCV.dataSource = self
         mixerCV.isScrollEnabled = false 
-        // selected cell number, a cv you can scroll
         mixerCV.register(SCPadNumberCell.self, forCellWithReuseIdentifier: "PadNumberCell")
-        // sequencer tempo, a cv you can scroll
-        // a visual metronome
+        mixerCV.register(SCRecordingButtonCell.self, forCellWithReuseIdentifier: "RecordingButtonCell")
+        // sequencer tempo, scroll to change, a visual metronome
+        // time signature
+        // record sample 
         mixerCV.backgroundColor = UIColor.clear
         self.view.addSubview(mixerCV)
         
@@ -162,7 +163,6 @@ class SCMixerViewController: UIViewController {
     
     
     
-    
     //MARK: effects parameter //TODO: update to slider values
     
     func handleParameterGesture(gestureRecognizer: UIGestureRecognizer){
@@ -180,12 +180,127 @@ class SCMixerViewController: UIViewController {
     func selectedSamplePadDidChange(){
         self.mixerCV?.reloadData()
     }
+    
+    
+    
+    
+    //MARK: Notifications
+    
+    
+    func postRecordBtnDidPressNotification(){
+        
+        NotificationCenter.default.post(name: Notification.Name.init("recordBtnDidPress"), object: nil)
+        
+    }
+    
 }
 
 
 
 
-extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.row == 0 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PadNumberCell", for: indexPath) as! SCPadNumberCell
+            cell.colors = SCGradientColors.getPsychedelicIceCreamShopColors()
+            cell.layer.masksToBounds = true
+            cell.layer.cornerRadius = collectionView.frame.size.height/2
+            cell.contentView.backgroundColor = cell.colors[indexPath.row]
+            cell.setupLabel(title: "\(SCAudioManager.shared.selectedSampleIndex+1)")
+            return cell
+        } else if indexPath.row == 1 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecordingButtonCell", for: indexPath) as! SCRecordingButtonCell
+            cell.layer.masksToBounds = true
+            cell.layer.cornerRadius = collectionView.frame.size.height/2
+            cell.contentView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
+            return cell
+        } else if indexPath.row == 2 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecordingButtonCell", for: indexPath) as! SCRecordingButtonCell
+            cell.layer.masksToBounds = true
+            cell.layer.cornerRadius = collectionView.frame.size.height/2
+            cell.contentView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCMixerViewController.tap(gestureRecognizer:)))
+            tapGestureRecognizer.delegate = self
+            cell.addGestureRecognizer(tapGestureRecognizer)
+            
+            return cell
+
+        } else if indexPath.row == 3 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecordingButtonCell", for: indexPath) as! SCRecordingButtonCell
+            cell.layer.masksToBounds = true
+            cell.layer.cornerRadius = collectionView.frame.size.height/2
+            cell.contentView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecordingButtonCell", for: indexPath) as! SCRecordingButtonCell
+            cell.layer.masksToBounds = true
+            cell.layer.cornerRadius = collectionView.frame.size.height/2
+            cell.contentView.applyGradient(withColors: [UIColor.red, UIColor.magenta, UIColor.orange], gradientOrientation: .topLeftBottomRight)
+            return cell
+
+        }
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if indexPath.row == 0 {
+           print("selected  cell")
+        } else if indexPath.row == 1 {
+            print("time signature did press")
+        } else if indexPath.row == 2 {
+            
+            let cell = collectionView.cellForItem(at: indexPath) as! SCRecordingButtonCell
+            
+            print("record button did press")
+            postRecordBtnDidPressNotification()
+            
+            switch SCAudioManager.shared.isRecording {
+            case true:
+                SCAudioManager.shared.finishRecording(success: true)
+                cell.alpha = 0
+                UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
+                    cell.alpha = 1
+                }, completion: nil)
+            case false:
+                cell.alpha = 0
+                UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
+                    cell.alpha = 1
+                }, completion: nil)
+            }
+        } else if indexPath.row == 3 {
+            print("tempo did press")
+        } else {
+            print("tempo light did press")
+        }
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        
+        if let selectedItems = collectionView.indexPathsForSelectedItems {
+            if selectedItems.contains(indexPath) {
+                collectionView.deselectItem(at: indexPath, animated: true)
+                return false
+            }
+        }
+        return true
+    }
+
+}
+
+
+extension SCMixerViewController:  UICollectionViewDelegateFlowLayout {
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -193,25 +308,65 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         let mixerCellSize = CGSize.init(width: collectionView.frame.size.height, height: collectionView.frame.size.height)
         return mixerCellSize
     }
-    
-    
-    
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+  
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 36.0
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 36.0
+    }
     
-    
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PadNumberCell", for: indexPath) as! SCPadNumberCell
-        cell.colors = SCGradientColors.getPsychedelicIceCreamShopColors()
-        cell.layer.masksToBounds = true
-        cell.layer.cornerRadius = collectionView.frame.size.height/2
-        cell.contentView.backgroundColor = cell.colors[indexPath.row]
-        cell.setupLabel(title: "\(SCAudioManager.shared.selectedSampleIndex+1)")
-        return cell
-        
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0, 0, 0, 0)
     }
 }
+
+
+
+extension SCMixerViewController: UIGestureRecognizerDelegate {
+    
+    
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    
+    
+    func tap(gestureRecognizer: UIGestureRecognizer) {
+        
+        if SCAudioManager.shared.isRecording == true {
+            print("Recording in progress")
+            return
+        }
+        
+        
+        let tapLocation = gestureRecognizer.location(in: self.mixerCV)
+        
+        guard let indexPath = self.mixerCV?.indexPathForItem(at: tapLocation) else {
+            print("IndexPath not found.")
+            return
+        }
+        
+        guard let cell = self.mixerCV?.cellForItem(at: indexPath) else {
+            print("Cell not found.")
+            return
+        }
+        
+        selectCell(cell: cell, indexPath: indexPath)
+    }
+    
+    
+    
+    func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
+        
+        self.collectionView(mixerCV!, didSelectItemAt: indexPath)
+    }
+}
+
+
+
+
+
+

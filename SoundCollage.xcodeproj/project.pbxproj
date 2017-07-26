@@ -60,6 +60,7 @@
 		A7D7CDC01F27BDD9000EE8DA /* SCMixerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7CDBF1F27BDD9000EE8DA /* SCMixerViewController.swift */; };
 		A7D7CDC51F27C498000EE8DA /* SCPadNumberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7CDC41F27C498000EE8DA /* SCPadNumberCell.swift */; };
 		A7D7CDC71F27E115000EE8DA /* SCSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7CDC61F27E115000EE8DA /* SCSlider.swift */; };
+		A7D7CDC91F28126F000EE8DA /* SCRecordingButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7CDC81F28126F000EE8DA /* SCRecordingButtonCell.swift */; };
 		A7DC3AA11F21376C006354A5 /* SCMusicInterfaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DC3AA01F21376C006354A5 /* SCMusicInterfaceCell.swift */; };
 		A7E117D11F278C8300041400 /* rectPink.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E117D01F278C8300041400 /* rectPink.png */; };
 		A7E117D31F278DE800041400 /* UIImage+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E117D21F278DE800041400 /* UIImage+Custom.swift */; };
@@ -161,6 +162,7 @@
 		A7D7CDBF1F27BDD9000EE8DA /* SCMixerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCMixerViewController.swift; sourceTree = "<group>"; };
 		A7D7CDC41F27C498000EE8DA /* SCPadNumberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCPadNumberCell.swift; sourceTree = "<group>"; };
 		A7D7CDC61F27E115000EE8DA /* SCSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSlider.swift; sourceTree = "<group>"; };
+		A7D7CDC81F28126F000EE8DA /* SCRecordingButtonCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCRecordingButtonCell.swift; sourceTree = "<group>"; };
 		A7DC3AA01F21376C006354A5 /* SCMusicInterfaceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCMusicInterfaceCell.swift; sourceTree = "<group>"; };
 		A7E117D01F278C8300041400 /* rectPink.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rectPink.png; sourceTree = "<group>"; };
 		A7E117D21F278DE800041400 /* UIImage+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Custom.swift"; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 			children = (
 				A7D7CDBF1F27BDD9000EE8DA /* SCMixerViewController.swift */,
 				A7D7CDC41F27C498000EE8DA /* SCPadNumberCell.swift */,
+				A7D7CDC81F28126F000EE8DA /* SCRecordingButtonCell.swift */,
 			);
 			name = Mixer;
 			sourceTree = "<group>";
@@ -629,6 +632,7 @@
 				A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */,
 				A78250E31EE601BA00350768 /* SCEffectControl.swift in Sources */,
 				A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */,
+				A7D7CDC91F28126F000EE8DA /* SCRecordingButtonCell.swift in Sources */,
 				A7264E7D1EAE619800664EDE /* SCAnimator.swift in Sources */,
 				A7BD6AB41F140D85000CDF9A /* SCScoreCell.swift in Sources */,
 				A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */,
