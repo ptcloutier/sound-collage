@@ -103,7 +103,7 @@ class SCContainerViewController: UIViewController {
             print("No record btn.")
             return
         }
-
+        postRecordBtnDidPressNotification()
         switch SCAudioManager.shared.isRecording {
         case true:
             SCAudioManager.shared.finishRecording(success: true)
@@ -137,11 +137,11 @@ class SCContainerViewController: UIViewController {
     //MARK: Notifications
     
     
-//    func postRecordBtnDidPressNotification(){
-//        
-//        NotificationCenter.default.post(name: Notification.Name.init("recordBtnDidPress"), object: nil)
-//        
-//    }
+    func postRecordBtnDidPressNotification(){
+        
+        NotificationCenter.default.post(name: Notification.Name.init("recordBtnDidPress"), object: nil)
+        
+    }
     
 
     
