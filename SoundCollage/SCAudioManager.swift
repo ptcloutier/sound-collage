@@ -31,22 +31,59 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isRecording: Bool = false
     var replaceableFilePath: String?
     var audioEngine: SCAudioEngine!
-    var mixerPanels: [String] = []
+    var mixerPanels: [String : [String]] = [:]
     var effectControls: [SCEffectControl] = []
     var audioEngineChain: [SCAudioEngine] = []
     var finishedEngines: [SCAudioEngine] = []
     var sequencerSettings: [[Bool]] = []
     var sequencerIsPlaying: Bool = false
-
+    
     
     
     
     func setupAudioManager(){
         
-        self.mixerPanels = [  "Reverb", // 13 reverb presets to choose from
-                              "Delay", // delay has 4 parameters
-                              "Pitch",
-                              "Distortion" // AVAudioUnitDistortion
+        self.mixerPanels = ["Reverb" : ["Mix"], // "Presets", "SmallRoom", "MediumRoom", "LargeRoom", "MediumHall", "LargeHall", "Plate", "MediumChamber", "LargeChamber", "Cathedral", "LargeRoom2", "MediumHall2", "MediumHall3", "LargeHall2"],
+                              
+        /*  AVAudioUnitReverbPresetSmallRoom       = 0,
+            AVAudioUnitReverbPresetMediumRoom      = 1,
+            AVAudioUnitReverbPresetLargeRoom       = 2,
+            AVAudioUnitReverbPresetMediumHall      = 3,
+            AVAudioUnitReverbPresetLargeHall       = 4,
+            AVAudioUnitReverbPresetPlate           = 5,
+            AVAudioUnitReverbPresetMediumChamber   = 6,
+            AVAudioUnitReverbPresetLargeChamber    = 7,
+            AVAudioUnitReverbPresetCathedral       = 8,
+            AVAudioUnitReverbPresetLargeRoom2      = 9,
+            AVAudioUnitReverbPresetMediumHall2     = 10,
+            AVAudioUnitReverbPresetMediumHall3     = 11,
+            AVAudioUnitReverbPresetLargeHall2      = 12 */
+            "Delay" : ["Mix", "Delay Time", "Feedback", "Low Pass Cutoff"], // AVAudioUnitDelay
+            "Pitch" : ["Pitch", "Rate", "Overlap"], //AVAudioUnitTimePitch
+            "Distortion" : ["Pregain", "Mix"] //, "Presets", "DrumsBitBrush", "DrumsBufferBeats", "DrumsLoFi", "MultiBrokenSpeaker", "MultiCellphoneConcert", "MultiDecimated1", "MultiDecimated2" ,"MultiDecimated3" ,"MultiDecimated4", "MultiDistortedFunk", "MultiDistortedCubed", "MultiDistortedSquared", "MultiEcho1", "MultiEcho2", "MultiEchoTight1", "MultiEchoTight2", "MultiEverythingIsBroken", "SpeechAlienChatter", "SpeechCosmicInterference", "SpeechGoldenPi", "SpeechRadioTower", "SpeechWaves"]
+            // AVAudioUnitDistortion
+        /*  AVAudioUnitDistortionPresetDrumsBitBrush           = 0,
+            AVAudioUnitDistortionPresetDrumsBufferBeats        = 1,
+            AVAudioUnitDistortionPresetDrumsLoFi               = 2,
+            AVAudioUnitDistortionPresetMultiBrokenSpeaker      = 3,
+            AVAudioUnitDistortionPresetMultiCellphoneConcert   = 4,
+            AVAudioUnitDistortionPresetMultiDecimated1         = 5,
+            AVAudioUnitDistortionPresetMultiDecimated2         = 6,
+            AVAudioUnitDistortionPresetMultiDecimated3         = 7,
+            AVAudioUnitDistortionPresetMultiDecimated4         = 8,
+            AVAudioUnitDistortionPresetMultiDistortedFunk      = 9,
+            AVAudioUnitDistortionPresetMultiDistortedCubed     = 10,
+            AVAudioUnitDistortionPresetMultiDistortedSquared   = 11,
+            AVAudioUnitDistortionPresetMultiEcho1              = 12,
+            AVAudioUnitDistortionPresetMultiEcho2              = 13,
+            AVAudioUnitDistortionPresetMultiEchoTight1         = 14,
+            AVAudioUnitDistortionPresetMultiEchoTight2         = 15,
+            AVAudioUnitDistortionPresetMultiEverythingIsBroken = 16,
+            AVAudioUnitDistortionPresetSpeechAlienChatter      = 17,
+            AVAudioUnitDistortionPresetSpeechCosmicInterference = 18,
+            AVAudioUnitDistortionPresetSpeechGoldenPi          = 19,
+            AVAudioUnitDistortionPresetSpeechRadioTower        = 20,
+            AVAudioUnitDistortionPresetSpeechWaves             = 21*/
         ]
         
 /* TODO: "Analyzer", // volume, pan, waveform visual, trim/edit capabilities
@@ -159,48 +196,63 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             // selected effect in effectControl, selectedSamplePad parameter in parameter
             
             let reverb = AVAudioUnitReverb()
-            let reverbParameter1 = self.effectControls[0].parameter[selectedSampleIndex]
+            let reverbMix = self.effectControls[0].parameter[selectedSampleIndex]
             reverb.loadFactoryPreset(.plate) // there are thirteen posible presets
-            reverb.wetDryMix = reverbParameter1
+            reverb.wetDryMix = reverbMix
             audioEngine.attach(reverb)
             
             
             
             let delay = AVAudioUnitDelay()
-            var delayFeedback = self.effectControls[1].parameter[selectedSampleIndex]
+            
+            let delayWetDryMix = self.effectControls[1].parameter[selectedSampleIndex]
+            delay.wetDryMix = delayWetDryMix
+            
+            
+            let delayTime = self.effectControls[2].parameter[selectedSampleIndex]
+            delay.delayTime = TimeInterval(delayTime)
+            
+            var delayFeedback = self.effectControls[3].parameter[selectedSampleIndex]
             
             if delayFeedback>75.0 {
                 delayFeedback = 75.0
             }
             delay.feedback = delayFeedback
             
-            let delayTime = self.effectControls[2].parameter[selectedSampleIndex]
-            delay.delayTime = TimeInterval(delayTime)
-            
-            let delayLPCutoff = self.effectControls[3].parameter[selectedSampleIndex]
+            let delayLPCutoff = self.effectControls[4].parameter[selectedSampleIndex]
             delay.lowPassCutoff = delayLPCutoff
-            
-            let delayWetDryMix = self.effectControls[4].parameter[selectedSampleIndex]
-            delay.wetDryMix = delayWetDryMix
-            
+           
             audioEngine.attach(delay)
             
             
             let pitch = AVAudioUnitTimePitch()
             let pitchParameter = self.effectControls[5].parameter[selectedSampleIndex]
+            let playbackRate = self.effectControls[6].parameter[selectedSampleIndex]
+            let overlap = self.effectControls[7].parameter[selectedSampleIndex]
             let pitchZero = -1200
             let pitchValue = Float(pitchParameter)*24
             let sum = pitchZero + Int(pitchValue)
             pitch.pitch = Float(sum)
+            pitch.rate = playbackRate
+            pitch.overlap = overlap
             
             audioEngine.attach(pitch)
             
             
+            let distortion = AVAudioUnitDistortion()
+            let preGain = self.effectControls[8].parameter[selectedSampleIndex]
+            let dmix = self.effectControls[9].parameter[selectedSampleIndex]
+            distortion.preGain = preGain
+            distortion.wetDryMix = dmix
             
-            audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
-            audioEngine.connect(pitch, to: delay, format: audioFormat)
-            audioEngine.connect(delay, to: reverb, format: audioFormat)
-            audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: audioFormat)
+            audioEngine.attach(distortion)
+            
+            
+            audioEngine.connect(audioPlayerNode, to: distortion, format: audioFormat)
+            audioEngine.connect(distortion, to: pitch, format: audioFormat)
+            audioEngine.connect(pitch, to: reverb, format: audioFormat)
+            audioEngine.connect(reverb, to: delay, format: audioFormat)
+            audioEngine.connect(delay, to: audioEngine.mainMixerNode, format: audioFormat)
             
             guard let fin = self.audioEngine else {
                 print("no engine.")

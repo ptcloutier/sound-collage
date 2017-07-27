@@ -12,7 +12,7 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     var mixerPanelIdx: Int?
     var sliders: [SCSlider] = []
-
+ 
     
     
     override init(frame: CGRect) {
@@ -24,28 +24,6 @@ class SCMixerPanelCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
-    func slidersWillAppear() {
-        
-        for slider in sliders {
-            slider.isHidden = false
-            self.contentView.addSubview(slider)
-            
-        }
-    }
-    
-    
-    func viewWillLayoutSliders() {
-        
-        var xPosition = 30.0
-        
-        for (index, slider) in sliders.enumerated() {
-            slider.updateSlider(slider: slider, xPosition: CGFloat(xPosition), view: self.contentView)
-            xPosition+=35.0
-            slider.idx = index
-        }
-    }
     
     
     
@@ -81,6 +59,30 @@ class SCMixerPanelCell: UICollectionViewCell {
     }
     
     
+    
+    func slidersWillAppear() {
+        
+        for slider in sliders {
+            slider.isHidden = false
+            self.contentView.addSubview(slider)
+            
+        }
+    }
+    
+    
+    func viewWillLayoutSliders() {
+        
+        var xPosition = 30.0
+        
+        for (index, slider) in sliders.enumerated() {
+            slider.updateSlider(slider: slider, xPosition: CGFloat(xPosition), view: self.contentView)
+            xPosition+=35.0
+            slider.idx = index
+        }
+    }
+    
+    
+
     func addSliderTarget(slider: SCSlider){
         slider.addTarget(self, action: #selector(SCMixerPanelCell.sliderChanged(sender:)), for: .valueChanged)
     }
