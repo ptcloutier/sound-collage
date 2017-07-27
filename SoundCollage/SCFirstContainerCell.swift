@@ -26,7 +26,7 @@ class SCFirstContainerCell: UICollectionViewCell {
 
     func setupCollectionView(){
         
-        let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 1)
+        let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
         collectionView = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
         guard let cv = self.collectionView else { return }
         cv.delegate = self

@@ -29,7 +29,7 @@ class SCMixerPanelCell: UICollectionViewCell {
     func setupNameLabel(name: String, textColor: UIColor) {
         
         nameLabel.text = name
-        nameLabel.font = UIFont.init(name: "Futura", size: 10.0)
+        nameLabel.font = UIFont.init(name: "Futura", size: 20.0)
         nameLabel.textColor = textColor
         nameLabel.textAlignment = NSTextAlignment.center
         self.contentView.addSubview(nameLabel)
@@ -84,11 +84,13 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     func viewWillLayoutSliders() {
         
-        var xPosition = 30.0
+        let result: (CGFloat, CGFloat) = getSliderXPositionAndOffset()
+        var xPosition = result.0
+        let offset = result.1
         
         for (index, slider) in sliders.enumerated() {
-            slider.updateSlider(slider: slider, xPosition: CGFloat(xPosition), view: self.contentView)
-            xPosition+=35.0
+            slider.updateSlider(slider: slider, xPosition: xPosition, view: self.contentView)
+            xPosition+=offset
             slider.idx = index
         }
     }
@@ -107,6 +109,44 @@ class SCMixerPanelCell: UICollectionViewCell {
         
     }
     
+    
+    
+    func getSliderXPositionAndOffset()-> (CGFloat, CGFloat){
+        
+        let vals = Array(SCAudioManager.shared.mixerPanels.values)
+        
+        var xPos: CGFloat
+        var offset: CGFloat
+        
+        switch vals[self.mixerPanelIdx!].count  {
+    
+        case 1 :
+            print("1 slider")
+            xPos = self.center.x
+            offset = 0
+        case 2 :
+            print("2 sliders")
+            xPos = self.center.x - self.contentView.frame.width/6
+            offset = (self.contentView.frame.width/6)*2
+        case 3 :
+            print("3 sliders")
+            xPos = self.contentView.frame.width/8
+            offset = self.contentView.frame.width/4
+        case 4 :
+            print("4 sliders")
+            xPos = self.contentView.frame.width/10
+            offset = self.contentView.frame.width/5
+        case 5 :
+            print("5 sliders")
+            xPos = self.contentView.frame.width/12
+            offset = self.contentView.frame.width/6
+        default :
+            print("Default default default")
+            xPos = 0
+            offset = 0
+        }
+        return (xPos, offset)
+    }
 
     
     

@@ -24,7 +24,7 @@ class SCSlider: UISlider {
     func updateSlider(slider: SCSlider, xPosition: CGFloat, view: UIView){
         //Update the slider, this is called after the rotation, thus it has the correct size
         
-        let yPosition = view.frame.minY + view.frame.height * 0.1
+        let yPosition = (view.frame.minY + view.frame.height * 0.3)
         let width = view.frame.width * 0.1
         let height = view.frame.height * 0.3
         let sliderFrame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
