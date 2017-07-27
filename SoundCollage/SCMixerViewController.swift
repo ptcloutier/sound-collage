@@ -99,13 +99,18 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         cell.setupSliders()
         cell.slidersWillAppear()
         cell.viewWillLayoutSliders()
-
+        
         //TODO: should scroll to last selected mixer panel
         self.selectedMixerPanel = getSelectedMixerPanelIndex()
-
+        
+        let keys: [String] = Array(SCAudioManager.shared.mixerPanels.keys)
+        cell.setupNameLabel(name: "\(keys[indexPath.row])", textColor: UIColor.white)
+        
+        
         return cell
         
     }
+    
     
     
     
@@ -130,6 +135,9 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
 
 }
+
+
+
 
 
 extension SCMixerViewController:  UICollectionViewDelegateFlowLayout {

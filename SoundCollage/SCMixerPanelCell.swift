@@ -12,6 +12,7 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     var mixerPanelIdx: Int?
     var sliders: [SCSlider] = []
+    var nameLabel = UILabel()
  
     
     
@@ -25,7 +26,18 @@ class SCMixerPanelCell: UICollectionViewCell {
     }
     
     
-    
+    func setupNameLabel(name: String, textColor: UIColor) {
+        
+        nameLabel.text = name
+        nameLabel.font = UIFont.init(name: "Futura", size: 10.0)
+        nameLabel.textColor = textColor
+        nameLabel.textAlignment = NSTextAlignment.center
+        self.contentView.addSubview(nameLabel)
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .centerX, relatedBy: .equal, toItem: self.contentView, attribute: .centerX, multiplier: 1.0, constant: 0))
+        self.contentView.addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 10.0))
+//        self.contentView.addConstraint(NSLayoutConstraint(item: nameLabel, attribute: .height, relatedBy: .equal, toItem: self.contentView, attribute: ., multiplier: <#T##CGFloat#>, constant: <#T##CGFloat#>)
+    }
     
     //MARK: UISlider
     

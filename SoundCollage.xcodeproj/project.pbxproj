@@ -240,8 +240,8 @@
 		A7264E761EAE284600664EDE /* Sample Bank */ = {
 			isa = PBXGroup;
 			children = (
-				A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */,
 				A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */,
+				A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */,
 				A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */,
 			);
 			name = "Sample Bank";
