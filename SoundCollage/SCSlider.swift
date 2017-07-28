@@ -12,6 +12,10 @@ class SCSlider: UISlider {
     
     var idx: Int = 0
     var trackHeight: CGFloat = 2
+    var xPos: CGFloat = 0
+    
+  
+    
     
     override func trackRect(forBounds bounds: CGRect) -> CGRect {
         //set your bounds here
@@ -21,13 +25,13 @@ class SCSlider: UISlider {
     
     
     
-    func updateSlider(slider: SCSlider, xPosition: CGFloat, view: UIView){
+    func updateSlider(slider: SCSlider, view: UIView){
         //Update the slider, this is called after the rotation, thus it has the correct size
         
         let yPosition = (view.frame.minY + view.frame.height * 0.3)
         let width = view.frame.width * 0.1
         let height = view.frame.height * 0.3
-        let sliderFrame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+        let sliderFrame = CGRect(x: self.xPos, y: yPosition, width: width, height: height)
         slider.frame = sliderFrame
     }
     

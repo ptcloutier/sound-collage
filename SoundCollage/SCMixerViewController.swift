@@ -95,10 +95,26 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MixerPanelCell", for: indexPath) as! SCMixerPanelCell
         
         cell.mixerPanelIdx = indexPath.row
-        cell.initializeSliders()
-        cell.setupSliders()
-        cell.slidersWillAppear()
-        cell.viewWillLayoutSliders()
+        
+        let xPos = cell.contentView.frame.width/6
+        cell.sliderXPositions = [xPos, xPos*2, xPos*3, xPos*4, xPos*5 ]
+        for x in cell.sliderXPositions {
+            print("\(x)")
+        }
+        cell.sliders = [cell.slider1,  cell.slider2,  cell.slider3,  cell.slider4,  cell.slider5 ]
+        cell.parameterLabels = [ cell.pLabel1, cell.pLabel2, cell.pLabel3, cell.pLabel4, cell.pLabel5 ]
+        
+        for (index, slider) in cell.sliders.enumerated() {
+            cell.setupSlider(slider: slider)
+            slider.xPos = cell.sliderXPositions[index]
+            slider.updateSlider(slider: slider, view: cell.contentView)
+        }
+        for (index, pLabel) in cell.parameterLabels.enumerated() {
+            cell.setupParameterLabel(parameterLabel: pLabel, slider: cell.sliders[index])
+        }
+        
+        
+        cell.showSlidersAndLabels()
         
         //TODO: should scroll to last selected mixer panel
         self.selectedMixerPanel = getSelectedMixerPanelIndex()
@@ -225,15 +241,15 @@ extension SCMixerViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
        
-        guard let cv = self.mixerCV else {
-            print("Error getting mixerCV")
-            return
-        }
-        let indexPaths = cv.indexPathsForVisibleItems
-        let idx = (indexPaths.last?.last)!
-        print("scrollview did end dragging, index - \(idx)")
-        self.selectedMixerPanel = idx
-        setSelectedMixerPanelIndex(index: idx)
+//        guard let cv = self.mixerCV else {
+//            print("Error getting mixerCV")
+//            return
+//        }
+//        let indexPaths = cv.indexPathsForVisibleItems
+//        let idx = (indexPaths.last?.last)!
+//        print("scrollview did end dragging, index - \(idx)")
+//        self.selectedMixerPanel = idx
+//        setSelectedMixerPanelIndex(index: idx)
     }
 }
 
