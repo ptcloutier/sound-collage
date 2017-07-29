@@ -26,7 +26,8 @@ class SCMixerPanelCell: UICollectionViewCell {
     var parameterLabels: [UILabel] = []
     
     var sliderXPositions: [CGFloat] = []
-    var selectedCellLabel = UILabel()
+    var selectedPadTextLabel = UILabel()
+    var selectedPadNumberLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,8 +41,8 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     func setupNameLabel() {
         
-        nameLabel.font = UIFont.init(name: "Quicksand_light", size: 20.0)
-        nameLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.ice
+        nameLabel.font = UIFont.init(name: "Futura", size: 30.0)
+        nameLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua
         nameLabel.textAlignment = NSTextAlignment.center
         self.contentView.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -52,13 +53,23 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     func setupSelectedCellLabel(number: Int){
        
-        selectedCellLabel.text = "\(number)"
-        selectedCellLabel.font = UIFont.init(name: "Quicksand_light", size: 30)
-        selectedCellLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.ice
-        self.contentView.addSubview(selectedCellLabel)
-        selectedCellLabel.translatesAutoresizingMaskIntoConstraints = false 
-        self.contentView.addConstraint(NSLayoutConstraint(item: selectedCellLabel, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 1.0, constant: 30.0))
-        self.contentView.addConstraint(NSLayoutConstraint(item: selectedCellLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 10.0))
+        selectedPadTextLabel.text = "Selected"
+        selectedPadTextLabel.font = UIFont.init(name: "Futura", size: 15)
+        selectedPadTextLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
+        self.contentView.addSubview(selectedPadTextLabel)
+        selectedPadTextLabel.translatesAutoresizingMaskIntoConstraints = false
+                selectedPadNumberLabel.text = "\(number)"
+        selectedPadNumberLabel.font = UIFont.init(name: "Futura", size: 40)
+        selectedPadNumberLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
+        self.contentView.addSubview(selectedPadNumberLabel)
+        selectedPadNumberLabel.translatesAutoresizingMaskIntoConstraints = false 
+        
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadNumberLabel, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 1.0, constant: -40.0))
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadNumberLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 15.0))
+        
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadTextLabel, attribute: .trailing, relatedBy: .equal, toItem: selectedPadNumberLabel, attribute: .leading, multiplier: 1.0, constant: 40.0))
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadTextLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 3.0))
+        
         
 
     }
@@ -91,8 +102,8 @@ class SCMixerPanelCell: UICollectionViewCell {
         
         parameterLabel.frame = CGRect(x: slider.frame.origin.x, y: slider.frame.origin.y, width: 100.0, height: 20.0)
         parameterLabel.text = name
-        parameterLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.ice
-        parameterLabel.font = UIFont.init(name: "Quicksand_Light", size: 12.0)
+        parameterLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueShade
+        parameterLabel.font = UIFont.init(name: "Futura", size: 17.0)
         parameterLabel.textAlignment = NSTextAlignment.left
         parameterLabel.sizeToFit()
         self.contentView.addSubview(parameterLabel)
@@ -241,20 +252,10 @@ class SCMixerPanelCell: UICollectionViewCell {
         
         //Use the value from the slider for something
         // When slider changes, alert the controller, the controller will get the selected effect, the index of the slider will be the parameter to change and slider value will be the value 
-        
+        print("mixer panel #\(self.mixerPanelIdx), slider #\(sender.idx), val - \(sender.value) changed ")
     }
     
-//    
-//    func setupLabelAutoLayout(parameterLabel: UILabel, slider: SCSlider, labelWidth: CGFloat){
-//        parameterLabel.translatesAutoresizingMaskIntoConstraints = false
-//        
-//        self.contentView.addConstraint(NSLayoutConstraint(item: parameterLabel, attribute: .leading, relatedBy: .equal, toItem: slider, attribute: .leading, multiplier: 1.0, constant: 0))
-//        self.contentView.addConstraint(NSLayoutConstraint(item: parameterLabel, attribute: .bottom, relatedBy: .equal, toItem: slider, attribute: .bottom, multiplier: 1.0, constant: 0))
-//    }
-//    
-    
-    
-    
+
     
     func verticalLabel(label: UILabel){
         

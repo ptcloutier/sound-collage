@@ -18,15 +18,13 @@ class SCSlider: UISlider {
     
     
     override func trackRect(forBounds bounds: CGRect) -> CGRect {
-        //set your bounds here
+
         return CGRect(origin: bounds.origin, size: CGSize(width: bounds.width, height: trackHeight))
-        
     }
     
     
     
     func updateSlider(slider: SCSlider, view: UIView){
-        //Update the slider, this is called after the rotation, thus it has the correct size
         
         let yPosition = (view.frame.minY + view.frame.height * 0.3)
         let width = view.frame.width * 0.1
@@ -38,7 +36,6 @@ class SCSlider: UISlider {
     
     
     func setSliderFrame(slider: SCSlider, view: UIView) {
-        //Now that we have a frame, set the slider frame
         
         let xPos = view.frame.maxX - view.frame.width * 0.1
         let yPos = view.frame.minY + view.frame.height * 0.1
@@ -48,4 +45,7 @@ class SCSlider: UISlider {
         slider.frame = sliderFrame
         slider.isHidden = false
     }
+    
+    
+    
 }

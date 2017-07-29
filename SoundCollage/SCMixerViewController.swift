@@ -20,6 +20,9 @@ class SCMixerViewController: UIViewController {
         super.viewDidLoad()
         
         setupMixerCV()
+        NotificationCenter.default.addObserver(self, selector: #selector(SCMixerViewController.selectedSampleDidChange), name: Notification.Name.init("selectedSampleDidChangeNotification"), object: nil)
+        
+
      
     }
     
@@ -72,6 +75,13 @@ class SCMixerViewController: UIViewController {
         let index = SCDataManager.shared.getSelectedMixerPanelIndex()
         return index
     }
+    
+    
+    
+    
+    func selectedSampleDidChange(){
+        // selected effect in effectControl, selectedSamplePad parameter in parameter
+    }
 }
 
 
@@ -98,13 +108,17 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         let xPos = cell.contentView.frame.width/12.0
         cell.sliderXPositions = [xPos, xPos*3.0, xPos*6.0, xPos*9.0, xPos*12.0 ]
+        
         cell.sliders = [cell.slider1,  cell.slider2,  cell.slider3,  cell.slider4,  cell.slider5 ]
+        
         cell.parameterLabels = [ cell.pLabel1, cell.pLabel2, cell.pLabel3, cell.pLabel4, cell.pLabel5 ]
         
         let keys: [String] = Array(SCAudioManager.shared.mixerPanels.keys)
         let vals: [[String]] = Array(SCAudioManager.shared.mixerPanels.values)
         
         for (index, slider) in cell.sliders.enumerated() {
+            
+            slider.idx = cell.sliders.index(of: slider)!
             cell.setupSlider(slider: slider)
             slider.xPos = cell.sliderXPositions[index]
             slider.updateSlider(slider: slider, view: cell.contentView)

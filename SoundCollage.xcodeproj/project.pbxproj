@@ -35,6 +35,7 @@
 		A79161071F1EA7FD0051113C /* SCContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79161061F1EA7FD0051113C /* SCContainerViewController.swift */; };
 		A791610A1F1EA86B0051113C /* SCFirstContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79161091F1EA86B0051113C /* SCFirstContainerCell.swift */; };
 		A791610C1F1EA8880051113C /* SCSecondContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A791610B1F1EA8880051113C /* SCSecondContainerCell.swift */; };
+		A79170CC1F2D211F00B38D16 /* stars.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A79170CB1F2D211F00B38D16 /* stars.jpg */; };
 		A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */; };
 		A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */; };
 		A79F5C8A1F1551CE00A89492 /* spinner.png in Resources */ = {isa = PBXBuildFile; fileRef = A79F5C891F1551CE00A89492 /* spinner.png */; };
@@ -131,6 +132,7 @@
 		A79161061F1EA7FD0051113C /* SCContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCContainerViewController.swift; sourceTree = "<group>"; };
 		A79161091F1EA86B0051113C /* SCFirstContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCFirstContainerCell.swift; sourceTree = "<group>"; };
 		A791610B1F1EA8880051113C /* SCSecondContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSecondContainerCell.swift; sourceTree = "<group>"; };
+		A79170CB1F2D211F00B38D16 /* stars.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stars.jpg; sourceTree = "<group>"; };
 		A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankFlowLayout.swift; sourceTree = "<group>"; };
 		A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankCell.swift; sourceTree = "<group>"; };
 		A79F5C891F1551CE00A89492 /* spinner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spinner.png; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 				A79160FA1F1EA2B50051113C /* Quicksand_Light.otf */,
 				A79160FB1F1EA2B50051113C /* Quicksand_Light_Oblique.otf */,
 				A79160FC1F1EA2B50051113C /* SPECIMENPOSTER_4967.jpg */,
+				A79170CB1F2D211F00B38D16 /* stars.jpg */,
 			);
 			path = quicksand;
 			sourceTree = "<group>";
@@ -531,6 +534,7 @@
 				A70814351F01B54600A8AE92 /* A DAY WITHOUT SUN.otf in Resources */,
 				A79161021F1EA2B50051113C /* Quicksand_Dash.otf in Resources */,
 				A79161001F1EA2B50051113C /* Quicksand_Book.otf in Resources */,
+				A79170CC1F2D211F00B38D16 /* stars.jpg in Resources */,
 				A79F5C8A1F1551CE00A89492 /* spinner.png in Resources */,
 				A70814391F01C46400A8AE92 /* plus.png in Resources */,
 				A79160FE1F1EA2B50051113C /* Quicksand_Bold.otf in Resources */,
