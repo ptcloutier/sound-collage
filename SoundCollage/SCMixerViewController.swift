@@ -13,6 +13,9 @@ class SCMixerViewController: UIViewController {
     var mixerCV: UICollectionView?
     let toolbarHeight: CGFloat = 125.0
     var selectedMixerPanel: Int = 0
+    var selectedSamplePad: Int = 0
+    
+    
     
     //MARK: VC lifecycle
     
@@ -20,7 +23,7 @@ class SCMixerViewController: UIViewController {
         super.viewDidLoad()
         
         setupMixerCV()
-        NotificationCenter.default.addObserver(self, selector: #selector(SCMixerViewController.selectedSampleDidChange), name: Notification.Name.init("selectedSampleDidChangeNotification"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SCMixerViewController.selectedSamplePadDidChange), name: Notification.Name.init("selectedSamplePadDidChangeNotification"), object: nil)
         
 
      
@@ -79,8 +82,10 @@ class SCMixerViewController: UIViewController {
     
     
     
-    func selectedSampleDidChange(){
-        // selected effect in effectControl, selectedSamplePad parameter in parameter
+    func selectedSamplePadDidChange(){
+        
+        self.selectedSamplePad = SCAudioManager.shared.selectedSampleIndex
+        self.mixerCV?.reloadData()
     }
 }
 

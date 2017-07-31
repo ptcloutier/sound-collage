@@ -204,19 +204,20 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         // ui
         cell.idx = indexPath.row
         let colorIdx = findColorIndex(indexPath: indexPath, colors: iceCreamColors)
-        cell.cellColor = iceCreamColors[colorIdx]
+        cell.cellColor = UIColor.white//iceCreamColors[colorIdx]
         
         cell.setupLabel()
         
         if indexPath.row == self.selectedPadIndex {
-            cell.backgroundColor = UIColor.black
-            cell.padLabel.textColor = cell.cellColor
-            cell.layer.borderColor = cell.cellColor?.cgColor
-
-        } else {
-            cell.backgroundColor = cell.cellColor
+            cell.backgroundColor = UIColor.white//cell.cellColor
             cell.padLabel.textColor = UIColor.black
             cell.layer.borderColor = UIColor.black.cgColor
+        } else {
+            cell.backgroundColor = UIColor.black
+            cell.padLabel.textColor = UIColor.white// cell.cellColor
+            cell.layer.borderColor = UIColor.white.cgColor//cell.cellColor?.cgColor
+            
+
         }
         
         
@@ -256,6 +257,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             fatalError("Wrong cell or no cell at indexpath.")
         }
         SCAudioManager.shared.selectedSampleIndex = indexPath.row
+   
         NotificationCenter.default.post(name: Notification.Name.init("selectedSamplePadDidChangeNotification"), object: nil)
         
         if SCAudioManager.shared.isRecording == true {

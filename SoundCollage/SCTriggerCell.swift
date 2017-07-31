@@ -30,7 +30,7 @@ class SCTriggerCell: UICollectionViewCell {
         
         padLabel.isUserInteractionEnabled = false
         padLabel.frame = .zero
-        padLabel.textColor = UIColor.black 
+        padLabel.textColor = UIColor.white 
                 
 
         padLabel.textAlignment = NSTextAlignment.center

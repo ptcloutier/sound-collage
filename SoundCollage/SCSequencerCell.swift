@@ -89,7 +89,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         cell.sequencerIdx = self.idx-1
         cell.idx = indexPath.row
         cell.layer.borderWidth = 1.5
-        cell.layer.borderColor = UIColor.purple.cgColor
+        cell.layer.borderColor = UIColor.black.cgColor //purple.cgColor
         let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
         
         var colorIdx: Int
@@ -105,7 +105,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         if self.idx == 0 {
             cell.padLabel.text = "\(cell.idx+1)"
             cell.isUserInteractionEnabled = false
-            cell.backgroundColor = iceCreamColors[colorIdx]
+            cell.backgroundColor = UIColor.black //iceCreamColors[colorIdx]
             cell.alpha = 0.8
         } else {
             cell.padLabel.isHidden = true
@@ -118,10 +118,10 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             switch cell.isPlaybackEnabled {
             case true:
                 //TODO: This not DRY
-                cell.backgroundColor = iceCreamColors[colorIdx]
+                cell.backgroundColor = UIColor.black // iceCreamColors[colorIdx]
                 
             case false:
-                cell.backgroundColor = UIColor.black
+                cell.backgroundColor = UIColor.white
                 
             }
         }
@@ -152,7 +152,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
             var colorIdx: Int
             colorIdx = Int(arc4random_uniform(UInt32(iceCreamColors.count)))
-            cell.backgroundColor = iceCreamColors[colorIdx]
+            cell.backgroundColor =  UIColor.white //iceCreamColors[colorIdx]
             
             if SCAudioManager.shared.sequencerIsPlaying == false {
                 SCAudioManager.shared.selectedSampleIndex = cell.idx

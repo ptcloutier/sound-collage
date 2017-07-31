@@ -57,7 +57,8 @@ class SCScoreViewController: UIViewController {
     func setupSequencerBarUI(){
         sequencerBar.isHidden = true
         sequencerBar.frame = CGRect(x: 0, y: 0 , width: 3.0, height: view.frame.height)
-        sequencerBar.backgroundColor = UIColor.white
+        sequencerBar.backgroundColor = UIColor.black
+        sequencerBar.alpha = 0.6
         guard let scoreCV = self.scoreCV else { return }
         scoreCV.addSubview(sequencerBar)
         

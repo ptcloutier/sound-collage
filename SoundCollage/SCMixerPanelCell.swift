@@ -24,10 +24,10 @@ class SCMixerPanelCell: UICollectionViewCell {
     var pLabel4 = UILabel()
     var pLabel5 = UILabel()
     var parameterLabels: [UILabel] = []
-    
     var sliderXPositions: [CGFloat] = []
     var selectedPadTextLabel = UILabel()
     var selectedPadNumberLabel = UILabel()
+    var selectedPadCircle = SCCircularImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,7 +42,7 @@ class SCMixerPanelCell: UICollectionViewCell {
     func setupNameLabel() {
         
         nameLabel.font = UIFont.init(name: "Futura", size: 30.0)
-        nameLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua
+        nameLabel.textColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua
         nameLabel.textAlignment = NSTextAlignment.center
         self.contentView.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -53,25 +53,36 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     func setupSelectedCellLabel(number: Int){
        
+        
         selectedPadTextLabel.text = "Selected"
         selectedPadTextLabel.font = UIFont.init(name: "Futura", size: 15)
-        selectedPadTextLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
+        selectedPadTextLabel.textColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
         self.contentView.addSubview(selectedPadTextLabel)
         selectedPadTextLabel.translatesAutoresizingMaskIntoConstraints = false
-                selectedPadNumberLabel.text = "\(number)"
+        
+        selectedPadNumberLabel.text = "\(number+1)"
         selectedPadNumberLabel.font = UIFont.init(name: "Futura", size: 40)
-        selectedPadNumberLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
+        selectedPadNumberLabel.textColor = UIColor.white// SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
         self.contentView.addSubview(selectedPadNumberLabel)
         selectedPadNumberLabel.translatesAutoresizingMaskIntoConstraints = false 
         
-        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadNumberLabel, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 1.0, constant: -40.0))
-        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadNumberLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 15.0))
+        
+        selectedPadCircle.layer.borderWidth = 1.0
+        selectedPadCircle.layer.borderColor = UIColor.white.cgColor
+        selectedPadCircle.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(selectedPadCircle)
+        
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadNumberLabel, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 1.0, constant: -50.0))
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadNumberLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 30.0))
         
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadTextLabel, attribute: .trailing, relatedBy: .equal, toItem: selectedPadNumberLabel, attribute: .leading, multiplier: 1.0, constant: 40.0))
-        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadTextLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 3.0))
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadTextLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 20.0))
         
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: .width, relatedBy: .equal, toItem: self.selectedPadTextLabel, attribute: .width,  multiplier: 1.5, constant: 0))
         
-
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: .height, relatedBy: .equal, toItem: selectedPadCircle, attribute: .width,  multiplier: 1.0, constant: 0))
+     
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: NSLayoutAttribute.centerX, relatedBy: .equal, toItem: self.selectedPadNumberLabel, attribute: .centerX, multiplier: 1.0, constant: 0))
     }
     
     
@@ -86,7 +97,7 @@ class SCMixerPanelCell: UICollectionViewCell {
         slider.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi/2))
         slider.isContinuous = false
         addSliderTarget(slider: slider)
-        slider.minimumTrackTintColor = SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
+        slider.minimumTrackTintColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
         slider.maximumTrackTintColor = UIColor.white
         let image = UIImage.imageWithImage(image: UIImage.init(named: "rectPink")!, newSize: CGSize(width: 20.0, height: 50.0))
         slider.setThumbImage(image, for: .normal)
@@ -102,7 +113,7 @@ class SCMixerPanelCell: UICollectionViewCell {
         
         parameterLabel.frame = CGRect(x: slider.frame.origin.x, y: slider.frame.origin.y, width: 100.0, height: 20.0)
         parameterLabel.text = name
-        parameterLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueShade
+        parameterLabel.textColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueShade
         parameterLabel.font = UIFont.init(name: "Futura", size: 17.0)
         parameterLabel.textAlignment = NSTextAlignment.left
         parameterLabel.sizeToFit()

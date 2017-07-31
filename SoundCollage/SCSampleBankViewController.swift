@@ -37,9 +37,10 @@ class SCSampleBankViewController: UIViewController {
         images = [img1!, img2!, img3!, img4!, img5!, img6!]
     
         setupCollectionView()
-        setupTitle(xConstant: 2, yConstant: 2, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral )
-        setupTitle(xConstant: 6, yConstant: 6, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue)
-        setupTitle(xConstant: 10, yConstant: 10, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua)
+        setupTitle(xConstant: 0, yConstant:  0, textColor: UIColor.white)
+//        setupTitle(xConstant: 2, yConstant: 2, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral )
+//        setupTitle(xConstant: 6, yConstant: 6, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue)
+//        setupTitle(xConstant: 10, yConstant: 10, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua)
     }
     
     
@@ -152,7 +153,7 @@ class SCSampleBankViewController: UIViewController {
     func dissolve(){
 
         UIView.animate(withDuration: 0.3, delay: 0, options: [.transitionCrossDissolve], animations:{
-            self.collectionView.backgroundColor = SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
+//            self.collectionView.backgroundColor = SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
         },
                        completion: { (finished: Bool) in
                         UIView.animate(withDuration: 0.1, delay: 0, options: [.transitionCrossDissolve], animations:{
@@ -243,7 +244,7 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
         } else {
             imgIdx = indexPath.row
         }
-        cell.imageView.backgroundColor = iceCreamColors[colorIdx] // TODO: image should have alpha .5
+        cell.imageView.backgroundColor =  UIColor.white //iceCreamColors[colorIdx] 
         cell.imageView.image = images[imgIdx]
         return cell
     }
