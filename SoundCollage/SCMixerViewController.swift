@@ -141,7 +141,10 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         for (index, slider) in cell.sliders.enumerated() {
             
             cell.adjustLabel(label: cell.parameterLabels[index], slider: slider)
-            slider.value = SCAudioManager.shared.effectControls[cell.mixerPanelIdx][index].parameter[SCAudioManager.shared.selectedSampleIndex]
+           let effectControls = SCAudioManager.shared.effectControls[cell.mixerPanelIdx]
+            let parameters = effectControls[index].parameter
+            let parameter = parameters[SCAudioManager.shared.selectedSampleIndex]
+            slider.value = parameter
         }
         
         
@@ -278,6 +281,7 @@ extension SCMixerViewController: UIScrollViewDelegate {
         setSelectedMixerPanelIndex(index: idx)
         
         scrollView.snapToNearestCell(scrollView: scrollView, collectionView: cv)
+        cv.reloadData()
     }
 }
 
@@ -292,6 +296,7 @@ extension SCMixerViewController: SCFaderDelegate {
     
     func faderValueDidChange(sender: SCSlider){
         print("delegate")
+        
             
 //            let selectedSampleIdx = SCAudioManager.shared.selectedSampleIndex
 //            let mixerIdx = getSelectedMixerPanelIndex()

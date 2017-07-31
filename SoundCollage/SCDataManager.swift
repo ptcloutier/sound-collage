@@ -280,26 +280,25 @@ class SCDataManager {
     
     
     func setupEffectSettings()-> [[SCEffectControl]] {
-
         
-        let effectControl = SCEffectControl()
-        var effectControls: [SCEffectControl] = []
         var effectSettings: [[SCEffectControl]] = []
-        while effectControls.count<5 {
-            effectControls.append(effectControl)
+        
+        while effectSettings.count<4{
+            var controls: [SCEffectControl] = []
+            while controls.count<5{
+            let ec = SCEffectControl.init()
+            controls.append(ec)
+            }
+            effectSettings.append(controls)
         }
         
-        while effectSettings.count < Array(SCAudioManager.shared.mixerPanels.keys).count {
-            effectSettings.append(effectControls)
-        }
-
         return effectSettings
     }
     
     
     
     
-    func getSelectedMixerPanelIndex()-> Int{
+    func getSelectedMixerPanelIndex()-> Int {
         
         let selectedMixerPanelIdx: Int = UserDefaults.standard.integer(forKey: "selectedMixerPanelIndex")
        

@@ -260,11 +260,7 @@ class SCMixerPanelCell: UICollectionViewCell {
             pLabel4.center.x = slider4.xPos
             pLabel5.center.x = slider5.xPos
         }
-//        for (index, l) in parameterLabels.enumerated() {
-//            let width: CGFloat = 0
-//            setupLabelAutoLayout(parameterLabel: l, slider: sliders[index], labelWidth: width)
-//            
-//        }
+
     }
 
     
