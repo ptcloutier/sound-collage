@@ -146,6 +146,9 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         cell.nameLabel.text = keys[indexPath.row]
         cell.setupSelectedCellLabel(number: SCAudioManager.shared.selectedSampleIndex)
         
+        for slider in cell.sliders {
+            cell.setSliderValue(slider: slider)
+        }
         return cell
         
     }

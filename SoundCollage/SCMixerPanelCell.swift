@@ -263,11 +263,26 @@ class SCMixerPanelCell: UICollectionViewCell {
         
         //Use the value from the slider for something
         // When slider changes, alert the controller, the controller will get the selected effect, the index of the slider will be the parameter to change and slider value will be the value 
-        print("mixer panel #\(self.mixerPanelIdx), slider #\(sender.idx), val - \(sender.value) changed ")
-        SCAudioManager.shared.effectsParametersDidChange(mixerPanelIdx: self.mixerPanelIdx, sliderIdx: sender.idx, value: sender.value)
+        print("Effect value, before - \(String(describing: SCDataManager.shared.user?.currentSampleBank?.effectSettings[mixerPanelIdx]?[sender.idx].parameter[SCAudioManager.shared.selectedSampleIndex]))")
+        
+        SCAudioManager.shared.effectsParametersDidChange(mixerPanelIdx: self.mixerPanelIdx, sliderIdx: sender.idx, selectedSamplePad: SCAudioManager.shared.selectedSampleIndex, value: sender.value)
     }
     
 
+    
+    func setSliderValue(slider: SCSlider){
+        let selectedSampleIdx = SCAudioManager.shared.selectedSampleIndex
+        let mixerIdx = self.mixerPanelIdx
+        let sliderIdx = slider.idx
+        guard let value =  SCAudioManager.shared.effectControls[mixerIdx]?[sliderIdx].parameter[selectedSampleIdx] else {
+            print("Error retrieving value for slider.")
+            return 
+        }
+        slider.value = value
+    }
+    
+    
+    
     
     func verticalLabel(label: UILabel){
         

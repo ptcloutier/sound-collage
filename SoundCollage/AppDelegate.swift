@@ -24,8 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let userDefaults = UserDefaults.standard
         userDefaults.set(true, forKey: "hideAddBtn")
         // get user and sample banks
-        SCAudioManager.shared.setupAudioManager()
         SCDataManager.shared.fetchCurrentUserData()
+        SCAudioManager.shared.setupAudioManager()
+
         window = UIWindow(frame: UIScreen.main.bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let initialViewController = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController

@@ -93,7 +93,7 @@ class SCDataManager {
             var sampleBanks: [SCSampleBank] = []
             let samples = newStandardSampleBank()
             let sampleBankID = getSampleBankID()
-            let effectSettings = setupEffectSettings()
+            let effectSettings: [Int:[SCEffectControl]] = setupEffectSettings()
             let score: [[Bool]] = SCDataManager.shared.setupScorePage()
             let sequencerSettings = SCSequencerSettings.init(score: score)
             let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: .standard, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
@@ -279,16 +279,25 @@ class SCDataManager {
     
     
     
-    func setupEffectSettings()-> [SCEffectControl] {
+    func setupEffectSettings()-> [Int:[SCEffectControl]] {
+//
+//        var effectSettings: [SCEffectControl] = []
+//        var index = 0
+//        
+//        let keys = Array(SCAudioManager.shared.mixerPanels.keys)
+//        
+//        while effectSettings.count < keys.count {
+//            let effectControl: SCEffectControl = SCEffectControl.init()
+//            effectSettings.append(effectControl)
+//            index+=1
+//        }
         
-        var effectSettings: [SCEffectControl] = []
-        var index = 0
-        
-        while effectSettings.count < 10 {
-            let effectControl: SCEffectControl = SCEffectControl.init()
-            effectSettings.append(effectControl)
-            index+=1
+        let effectControl = SCEffectControl()
+        var effectControls: [SCEffectControl] = []
+        while effectControls.count<5 {
+            effectControls.append(effectControl)
         }
+        let effectSettings = [0: effectControls, 1: effectControls, 2: effectControls, 3: effectControls]
         return effectSettings
     }
     
