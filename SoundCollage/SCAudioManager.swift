@@ -32,7 +32,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var replaceableFilePath: String?
     var audioEngine: SCAudioEngine!
     var mixerPanels: [String : [String]] = [:]
-    var effectControls: [Int:[SCEffectControl]] = [:]
+    var effectControls: [[SCEffectControl]] = []
     var audioEngineChain: [SCAudioEngine] = []
     var finishedEngines: [SCAudioEngine] = []
     var sequencerSettings: [[Bool]] = []
@@ -115,7 +115,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
          "Equalizer", //  AVAudioUnitEQ, AVAudioUnitEQFilterType
          "Time", AVAudioUnitTimeEffect
          "Speed" AVAudioUnitVarispeed */
-        self.effectControls = (SCDataManager.shared.user?.currentSampleBank?.effectSettings)!
     }
     
     
@@ -203,10 +202,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             // selected effect in effectControl, selectedSamplePad parameter in parameter
             
             let reverb = AVAudioUnitReverb()
-            guard let reverbParams =  self.effectControls[0] else {
-                print("Error getting reverb values.")
-                return
-            }
+            let reverbParams =  self.effectControls[0]
             let reverbMix = reverbParams[0].parameter[selectedSampleIndex]
             reverb.loadFactoryPreset(.plate) // there are thirteen posible presets
             reverb.wetDryMix = reverbMix
@@ -215,11 +211,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             
             let delay = AVAudioUnitDelay()
-            guard let delayParams =  self.effectControls[1] else {
-                print("Error getting delay values.")
-                return
-            }
-            
+            let delayParams =  self.effectControls[1]
             let delayWetDryMix = delayParams[0].parameter[selectedSampleIndex]
             delay.wetDryMix = delayWetDryMix
             
@@ -241,10 +233,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             
             let pitch = AVAudioUnitTimePitch()
-            guard let pitchParams =  self.effectControls[2] else {
-                print("Error getting pitch values.")
-                return
-            }
+            let pitchParams =  self.effectControls[2]
             let pitchParameter = pitchParams[0].parameter[selectedSampleIndex]
             let playbackRate = pitchParams[1].parameter[selectedSampleIndex]
             let overlap = pitchParams[2].parameter[selectedSampleIndex]
@@ -259,10 +248,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             
             let distortion = AVAudioUnitDistortion()
-            guard let distortionParams =  self.effectControls[3] else {
-                print("Error getting distortion values.")
-                return
-            }
+            let distortionParams = self.effectControls[3]
             let preGain = distortionParams[0].parameter[selectedSampleIndex]
             let dmix = distortionParams[1].parameter[selectedSampleIndex]
             distortion.preGain = preGain
@@ -285,10 +271,10 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
                 
-                [weak self] in
-                guard let strongSelf = self else {
-                    return
-                }
+//                [weak self] in
+//                guard let strongSelf = self else {
+//                    return
+//                }
                 // calculate audio tail based on reverb and delay parameters
                 var durationInt = Int(round(Double(audioFile.length)/44100))
                 if durationInt == 0 {
@@ -333,16 +319,16 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     
-    func effectsParametersDidChange(mixerPanelIdx: Int, sliderIdx: Int, selectedSamplePad: Int, value: Float){
+    func effectsParametersDidChange(values: [Int], sliderValue: Float) {
         
-       
-        self.effectControls[mixerPanelIdx]?[sliderIdx].parameter[selectedSamplePad] = value
-       
-        SCDataManager.shared.user?.currentSampleBank?.effectSettings[mixerPanelIdx]?[sliderIdx].parameter[selectedSamplePad] = (self.effectControls[mixerPanelIdx]?[sliderIdx].parameter[selectedSamplePad])!
-
+        let mixerPanelIdx = Int(values[0])
+        let sliderIdx = Int(values[1])
+        let selectedSamplePad = Int(values[2])
+ 
+//        SCDataManager.shared.user?.currentSampleBank?.effectSettings[mixerPanelIdx][sliderIdx].parameter[selectedSamplePad] = sliderValue
         
-        print("Effect value, after - \(String(describing: SCDataManager.shared.user?.currentSampleBank?.effectSettings[mixerPanelIdx]?[sliderIdx].parameter[selectedSamplePad]))")
-
+        self.effectControls[mixerPanelIdx][sliderIdx].parameter[selectedSamplePad] = sliderValue
+        SCDataManager.shared.user?.currentSampleBank?.effectSettings = self.effectControls
     }
     
     

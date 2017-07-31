@@ -139,8 +139,12 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         cell.showSlidersAndLabels()
         
         for (index, slider) in cell.sliders.enumerated() {
+            
             cell.adjustLabel(label: cell.parameterLabels[index], slider: slider)
+            slider.value = SCAudioManager.shared.effectControls[cell.mixerPanelIdx][index].parameter[SCAudioManager.shared.selectedSampleIndex]
         }
+        
+        
         
         //TODO: should scroll to last selected mixer panel
         self.selectedMixerPanel = getSelectedMixerPanelIndex()
@@ -149,9 +153,6 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         cell.nameLabel.text = keys[indexPath.row]
         cell.setupSelectedCellLabel(number: SCAudioManager.shared.selectedSampleIndex)
         
-        for slider in cell.sliders {
-            cell.setSliderValue(slider: slider)
-        }
         return cell
         
     }
@@ -290,9 +291,18 @@ extension SCMixerViewController: UIScrollViewDelegate {
 extension SCMixerViewController: SCFaderDelegate {
     
     func faderValueDidChange(sender: SCSlider){
-        print("delegate ")
-//        reloadCV()
-    }
+        print("delegate")
+            
+//            let selectedSampleIdx = SCAudioManager.shared.selectedSampleIndex
+//            let mixerIdx = getSelectedMixerPanelIndex()
+//            let sliderIdx = sender.idx
+//        
+//            guard let value =  SCAudioManager.shared.effectControls[mixerIdx]?[sliderIdx].parameter[selectedSampleIdx] else {
+//                print("Error retrieving value for slider.")
+//                return
+//            }
+//            sender.setValue(value, animated: true)
+        }
 }
 
 
