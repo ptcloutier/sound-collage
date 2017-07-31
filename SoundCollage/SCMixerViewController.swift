@@ -14,7 +14,7 @@ class SCMixerViewController: UIViewController {
     let toolbarHeight: CGFloat = 125.0
     var selectedMixerPanel: Int = 0
     var selectedSamplePad: Int = 0
-    
+
     
     
     //MARK: VC lifecycle
@@ -32,6 +32,7 @@ class SCMixerViewController: UIViewController {
     
         
     func setupMixerCV(){
+        
         
         let mixerFlowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
         self.mixerCV = UICollectionView.init(frame: .zero, collectionViewLayout: mixerFlowLayout)
@@ -87,6 +88,14 @@ class SCMixerViewController: UIViewController {
         self.selectedSamplePad = SCAudioManager.shared.selectedSampleIndex
         self.mixerCV?.reloadData()
     }
+    
+    
+    
+    func reloadCV(){
+        
+        guard let cv = self.mixerCV else { return }
+        cv.reloadData()
+    }
 }
 
 
@@ -110,27 +119,20 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MixerPanelCell", for: indexPath) as! SCMixerPanelCell
         
         cell.mixerPanelIdx = indexPath.row
-        
+        cell.setupFaderDelegate(delegate: self)
         let xPos = cell.contentView.frame.width/12.0
         cell.sliderXPositions = [xPos, xPos*3.0, xPos*6.0, xPos*9.0, xPos*12.0 ]
-        
         cell.sliders = [cell.slider1,  cell.slider2,  cell.slider3,  cell.slider4,  cell.slider5 ]
-        
         cell.parameterLabels = [ cell.pLabel1, cell.pLabel2, cell.pLabel3, cell.pLabel4, cell.pLabel5 ]
-        
         let keys: [String] = Array(SCAudioManager.shared.mixerPanels.keys)
         let vals: [[String]] = Array(SCAudioManager.shared.mixerPanels.values)
         
         for (index, slider) in cell.sliders.enumerated() {
-            
             slider.idx = cell.sliders.index(of: slider)!
             cell.setupSlider(slider: slider)
             slider.xPos = cell.sliderXPositions[index]
             slider.updateSlider(slider: slider, view: cell.contentView)
-          
             cell.setupParameterLabel(parameterLabel: cell.parameterLabels[index], slider: slider, name: vals[indexPath.row][index])
-            
-            print("\(cell.mixerPanelIdx), \(index)")
             cell.verticalLabel(label: cell.parameterLabels[index])
         }
         
@@ -139,6 +141,7 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         for (index, slider) in cell.sliders.enumerated() {
             cell.adjustLabel(label: cell.parameterLabels[index], slider: slider)
         }
+        
         //TODO: should scroll to last selected mixer panel
         self.selectedMixerPanel = getSelectedMixerPanelIndex()
         
@@ -182,6 +185,8 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
 
 
 
+
+
 extension SCMixerViewController:  UICollectionViewDelegateFlowLayout {
     
     
@@ -206,8 +211,12 @@ extension SCMixerViewController:  UICollectionViewDelegateFlowLayout {
 
 
 
+
+
+
+
+
 extension SCMixerViewController: UIGestureRecognizerDelegate {
-    
     
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -249,7 +258,11 @@ extension SCMixerViewController: UIGestureRecognizerDelegate {
 
 
 
+
+
+
 extension SCMixerViewController: UIScrollViewDelegate {
+    
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
        
@@ -267,6 +280,20 @@ extension SCMixerViewController: UIScrollViewDelegate {
     }
 }
 
+
+
+
+
+
+
+
+extension SCMixerViewController: SCFaderDelegate {
+    
+    func faderValueDidChange(sender: SCSlider){
+        print("delegate ")
+//        reloadCV()
+    }
+}
 
 
 

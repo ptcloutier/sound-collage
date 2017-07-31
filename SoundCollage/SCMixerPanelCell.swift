@@ -28,7 +28,8 @@ class SCMixerPanelCell: UICollectionViewCell {
     var selectedPadTextLabel = UILabel()
     var selectedPadNumberLabel = UILabel()
     var selectedPadCircle = SCCircularImageView()
-    
+    weak var faderDelegate: SCFaderDelegate?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -37,6 +38,16 @@ class SCMixerPanelCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    
+    
+    func setupFaderDelegate(delegate: SCFaderDelegate){
+        
+        self.faderDelegate = delegate
+    }
+    
+    
     
     
     func setupNameLabel() {
@@ -86,6 +97,8 @@ class SCMixerPanelCell: UICollectionViewCell {
     }
     
     
+    
+    
     //MARK: UISlider
   
     
@@ -121,6 +134,8 @@ class SCMixerPanelCell: UICollectionViewCell {
         
     }
    
+    
+    
     
     
     func showSlidersAndLabels() { //TODO: DRY
@@ -253,22 +268,34 @@ class SCMixerPanelCell: UICollectionViewCell {
     }
 
     
+    
+    
 
     func addSliderTarget(slider: SCSlider){
         slider.addTarget(self, action: #selector(SCMixerPanelCell.sliderChanged(sender:)), for: .valueChanged)
     }
     
     
+    
+    
+    
     func sliderChanged(sender: SCSlider) {
         
         //Use the value from the slider for something
         // When slider changes, alert the controller, the controller will get the selected effect, the index of the slider will be the parameter to change and slider value will be the value 
+       
         print("Effect value, before - \(String(describing: SCDataManager.shared.user?.currentSampleBank?.effectSettings[mixerPanelIdx]?[sender.idx].parameter[SCAudioManager.shared.selectedSampleIndex]))")
         
         SCAudioManager.shared.effectsParametersDidChange(mixerPanelIdx: self.mixerPanelIdx, sliderIdx: sender.idx, selectedSamplePad: SCAudioManager.shared.selectedSampleIndex, value: sender.value)
+        
+        self.faderDelegate?.faderValueDidChange(sender: sender)
+        setSliderValue(slider: sender)
     }
     
 
+    
+    
+    
     
     func setSliderValue(slider: SCSlider){
         let selectedSampleIdx = SCAudioManager.shared.selectedSampleIndex

@@ -12,6 +12,7 @@
 		A70814391F01C46400A8AE92 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = A70814381F01C46400A8AE92 /* plus.png */; };
 		A713F50A1F2F2DA700742D1C /* rectWhite.png in Resources */ = {isa = PBXBuildFile; fileRef = A713F5091F2F2DA700742D1C /* rectWhite.png */; };
 		A713F50C1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A713F50B1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift */; };
+		A713F50E1F2F65A900742D1C /* SCFaderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A713F50D1F2F65A900742D1C /* SCFaderDelegate.swift */; };
 		A71414FA1EA82B3B00BE9718 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414F91EA82B3B00BE9718 /* AVFoundation.framework */; };
 		A71414FC1EA82B4300BE9718 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */; };
 		A71414FF1EA82B5000BE9718 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FD1EA82B5000BE9718 /* CoreAudio.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -111,6 +112,7 @@
 		A70814381F01C46400A8AE92 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		A713F5091F2F2DA700742D1C /* rectWhite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rectWhite.png; sourceTree = "<group>"; };
 		A713F50B1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+SnapToCell.swift"; sourceTree = "<group>"; };
+		A713F50D1F2F65A900742D1C /* SCFaderDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCFaderDelegate.swift; sourceTree = "<group>"; };
 		A71414F91EA82B3B00BE9718 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A71414FD1EA82B5000BE9718 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -284,6 +286,7 @@
 				A7404BD01F290AA5004BC4E1 /* SCColor.swift */,
 				A78C12941F2DAAE500682750 /* SCCircularView.swift */,
 				A713F50B1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift */,
+				A713F50D1F2F65A900742D1C /* SCFaderDelegate.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -653,6 +656,7 @@
 				A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */,
 				A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */,
 				A7DC3AA11F21376C006354A5 /* SCMusicInterfaceCell.swift in Sources */,
+				A713F50E1F2F65A900742D1C /* SCFaderDelegate.swift in Sources */,
 				A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */,
 				A791610A1F1EA86B0051113C /* SCFirstContainerCell.swift in Sources */,
 				A7264E811EAEECD700664EDE /* SCUser.swift in Sources */,
