@@ -62,26 +62,24 @@ class SCContainerViewController: UIViewController {
         let buttonHeight = (toolbarHeight/3)*2
         let yPosition = toolbar.center.y-buttonHeight/2
         
-        self.recordBtn = UIButton() //UIButton.GradientColorStyle(height: buttonHeight, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
+        self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
         guard let recordBtn = self.recordBtn else {
             print("No record btn.")
             return
         }
-        recordBtn.backgroundColor = UIColor.white //
         recordBtn.addTarget(self, action: #selector(SCContainerViewController.recordBtnDidPress), for: .touchUpInside)
         recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
-        let bankBtn = UIButton()//UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
+        let bankBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
         bankBtn.addTarget(self, action: #selector(SCContainerViewController.bankBtnDidPress), for: .touchUpInside)
-        bankBtn.backgroundColor = UIColor.white
         
-        let sequencerBtn = UIButton()// UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
+        let sequencerBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
         sequencerBtn.addTarget(self, action: #selector(SCContainerViewController.postSequencerPlaybackDidPressNotification), for: .touchUpInside)
-        sequencerBtn.backgroundColor = UIColor.white
         
-        let tempBtn2 = UIButton()//.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
         
-        let tempBtn3 = UIButton()//.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, secondaryColor: UIColor.white)
+        let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
+        
+        let tempBtn3 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, secondaryColor: UIColor.white)
         
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)

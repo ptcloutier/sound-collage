@@ -259,20 +259,8 @@ extension SCMixerViewController: UIScrollViewDelegate {
         print("scrollview did end decelerating, index - \(idx)")
         self.selectedMixerPanel = idx
         setSelectedMixerPanelIndex(index: idx)
-    }
-    
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-       
-//        guard let cv = self.mixerCV else {
-//            print("Error getting mixerCV")
-//            return
-//        }
-//        let indexPaths = cv.indexPathsForVisibleItems
-//        let idx = (indexPaths.last?.last)!
-//        print("scrollview did end dragging, index - \(idx)")
-//        self.selectedMixerPanel = idx
-//        setSelectedMixerPanelIndex(index: idx)
+        
+        scrollView.snapToNearestCell(scrollView: scrollView, collectionView: cv)
     }
 }
 

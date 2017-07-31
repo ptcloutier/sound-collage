@@ -10,6 +10,8 @@
 		A7054EC61EA82D7700BBC34E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7054EC51EA82D7700BBC34E /* Foundation.framework */; };
 		A70814351F01B54600A8AE92 /* A DAY WITHOUT SUN.otf in Resources */ = {isa = PBXBuildFile; fileRef = A70814321F01B54600A8AE92 /* A DAY WITHOUT SUN.otf */; };
 		A70814391F01C46400A8AE92 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = A70814381F01C46400A8AE92 /* plus.png */; };
+		A713F50A1F2F2DA700742D1C /* rectWhite.png in Resources */ = {isa = PBXBuildFile; fileRef = A713F5091F2F2DA700742D1C /* rectWhite.png */; };
+		A713F50C1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A713F50B1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift */; };
 		A71414FA1EA82B3B00BE9718 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414F91EA82B3B00BE9718 /* AVFoundation.framework */; };
 		A71414FC1EA82B4300BE9718 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */; };
 		A71414FF1EA82B5000BE9718 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A71414FD1EA82B5000BE9718 /* CoreAudio.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -107,6 +109,8 @@
 		A7054EC51EA82D7700BBC34E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A70814321F01B54600A8AE92 /* A DAY WITHOUT SUN.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "A DAY WITHOUT SUN.otf"; sourceTree = "<group>"; };
 		A70814381F01C46400A8AE92 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
+		A713F5091F2F2DA700742D1C /* rectWhite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rectWhite.png; sourceTree = "<group>"; };
+		A713F50B1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+SnapToCell.swift"; sourceTree = "<group>"; };
 		A71414F91EA82B3B00BE9718 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A71414FD1EA82B5000BE9718 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -231,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				A7E117D01F278C8300041400 /* rectPink.png */,
+				A713F5091F2F2DA700742D1C /* rectWhite.png */,
 				A79F5C891F1551CE00A89492 /* spinner.png */,
 				A7D7CDCA1F283366000EE8DA /* ts.png */,
 				A7D7CDCE1F28368A000EE8DA /* met.png */,
@@ -278,6 +283,7 @@
 				A7D7CDC61F27E115000EE8DA /* SCSlider.swift */,
 				A7404BD01F290AA5004BC4E1 /* SCColor.swift */,
 				A78C12941F2DAAE500682750 /* SCCircularView.swift */,
+				A713F50B1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -538,6 +544,7 @@
 				A79161021F1EA2B50051113C /* Quicksand_Dash.otf in Resources */,
 				A79161001F1EA2B50051113C /* Quicksand_Book.otf in Resources */,
 				A79170CC1F2D211F00B38D16 /* stars.jpg in Resources */,
+				A713F50A1F2F2DA700742D1C /* rectWhite.png in Resources */,
 				A79F5C8A1F1551CE00A89492 /* spinner.png in Resources */,
 				A70814391F01C46400A8AE92 /* plus.png in Resources */,
 				A79160FE1F1EA2B50051113C /* Quicksand_Bold.otf in Resources */,
@@ -640,6 +647,7 @@
 				A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */,
 				A78250E31EE601BA00350768 /* SCEffectControl.swift in Sources */,
 				A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */,
+				A713F50C1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift in Sources */,
 				A7264E7D1EAE619800664EDE /* SCAnimator.swift in Sources */,
 				A7BD6AB41F140D85000CDF9A /* SCScoreCell.swift in Sources */,
 				A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */,

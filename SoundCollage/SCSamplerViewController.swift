@@ -17,7 +17,6 @@ class SCSamplerViewController: UIViewController  {
     var samplerFlowLayout: SCSamplerFlowLayout?
     var newRecordingTitle: String?
     var lastRecording: URL?
-    var selectedSampleIndex: Int?
     var vintageColors: [UIColor] = []
     var iceCreamColors: [UIColor] = []
     let parameterViewColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet, SCColor.Custom.PsychedelicIceCreamShoppe.medViolet, SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet]

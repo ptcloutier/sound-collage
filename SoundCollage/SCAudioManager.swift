@@ -309,9 +309,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     
-    func effectsParametersDidChange(){
+    func effectsParametersDidChange(mixerPanelIdx: Int, sliderIdx: Int, value: Int){
        
-//        SCDataManager.shared.user?.currentSampleBank?.effectSettings
+        SCDataManager.shared.user?.currentSampleBank?.effectSettings
     }
     
     

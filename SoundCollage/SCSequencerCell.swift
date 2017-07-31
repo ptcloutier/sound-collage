@@ -126,6 +126,13 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             }
         }
         
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSequencerCell.tap(gestureRecognizer:)))
+        tapGestureRecognizer.delegate = self
+        cell.addGestureRecognizer(tapGestureRecognizer)
+        
+
+        
         return cell
     }
     
@@ -145,14 +152,14 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         case true:
             cell.isPlaybackEnabled = false
             SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = false
-            cell.backgroundColor = UIColor.black
+            cell.backgroundColor = UIColor.white
         case false:
             cell.isPlaybackEnabled = true
             SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = true
             let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
             var colorIdx: Int
             colorIdx = Int(arc4random_uniform(UInt32(iceCreamColors.count)))
-            cell.backgroundColor =  UIColor.white //iceCreamColors[colorIdx]
+            cell.backgroundColor =  UIColor.black //iceCreamColors[colorIdx]
             
             if SCAudioManager.shared.sequencerIsPlaying == false {
                 SCAudioManager.shared.selectedSampleIndex = cell.idx
@@ -161,7 +168,68 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             }
         }
     }
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        
+        if let selectedItems = collectionView.indexPathsForSelectedItems {
+            if selectedItems.contains(indexPath) {
+                collectionView.deselectItem(at: indexPath, animated: true)
+                return false
+            }
+        }
+        return true
+    }
+
 }
+
+
+
+
+extension SCSequencerCell: UIGestureRecognizerDelegate {
+    
+    
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    
+    
+    func tap(gestureRecognizer: UIGestureRecognizer) {
+        
+        if SCAudioManager.shared.isRecording == true {
+            print("Recording in progress")
+            return
+        }
+        
+        
+        let tapLocation = gestureRecognizer.location(in: self.triggerCV)
+        
+        guard let indexPath = self.triggerCV?.indexPathForItem(at: tapLocation) else {
+            print("IndexPath not found.")
+            return
+        }
+        
+        guard let cell = self.triggerCV?.cellForItem(at: indexPath) else {
+            print("Cell not found.")
+            return
+        }
+        
+        selectCell(cell: cell, indexPath: indexPath)
+    }
+    
+    
+    
+    func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
+        
+        print("selected cell at \(indexPath.row)")
+      
+        self.collectionView(triggerCV!, didSelectItemAt: indexPath)
+    }
+}
+
 
 
 

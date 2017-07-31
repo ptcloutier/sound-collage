@@ -33,11 +33,14 @@ class SCFirstContainerCell: UICollectionViewCell {
         cv.dataSource = self
         cv.register(SCMusicInterfaceCell.self, forCellWithReuseIdentifier: "SCMusicInterfaceCell")
         cv.isScrollEnabled = true
+        cv.showsHorizontalScrollIndicator = false
         cv.frame = self.contentView.bounds
         self.contentView.addSubview(cv)
         
     }
+    
 }
+
 
 
 
@@ -64,3 +67,20 @@ extension SCFirstContainerCell: UICollectionViewDelegate, UICollectionViewDataSo
     }
 }
 
+
+extension SCFirstContainerCell: UIScrollViewDelegate {
+    
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if let cv = self.collectionView {
+            scrollView.snapToNearestCell(scrollView: scrollView, collectionView: cv)
+        }
+    }
+    
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if let cv = collectionView {
+            scrollView.snapToNearestCell(scrollView: scrollView, collectionView: cv)
+        }
+    }
+}

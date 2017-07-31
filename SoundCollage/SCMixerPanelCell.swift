@@ -75,7 +75,7 @@ class SCMixerPanelCell: UICollectionViewCell {
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadNumberLabel, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 1.0, constant: -50.0))
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadNumberLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 30.0))
         
-        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadTextLabel, attribute: .trailing, relatedBy: .equal, toItem: selectedPadNumberLabel, attribute: .leading, multiplier: 1.0, constant: 40.0))
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadTextLabel, attribute: .centerX, relatedBy: .equal, toItem: selectedPadNumberLabel, attribute: .centerX, multiplier: 1.0, constant: 0))
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadTextLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 20.0))
         
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: .width, relatedBy: .equal, toItem: self.selectedPadTextLabel, attribute: .width,  multiplier: 1.5, constant: 0))
@@ -99,7 +99,7 @@ class SCMixerPanelCell: UICollectionViewCell {
         addSliderTarget(slider: slider)
         slider.minimumTrackTintColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
         slider.maximumTrackTintColor = UIColor.white
-        let image = UIImage.imageWithImage(image: UIImage.init(named: "rectPink")!, newSize: CGSize(width: 20.0, height: 50.0))
+        let image = UIImage.imageWithImage(image: UIImage.init(named: "rectWhite")!, newSize: CGSize(width: 20.0, height: 50.0))
         slider.setThumbImage(image, for: .normal)
         self.contentView.addSubview(slider)
     }
@@ -264,6 +264,7 @@ class SCMixerPanelCell: UICollectionViewCell {
         //Use the value from the slider for something
         // When slider changes, alert the controller, the controller will get the selected effect, the index of the slider will be the parameter to change and slider value will be the value 
         print("mixer panel #\(self.mixerPanelIdx), slider #\(sender.idx), val - \(sender.value) changed ")
+        SCAudioManager.shared.effectsParametersDidChange(mixerPanelIdx: self.mixerPanelIdx, sliderIdx: sender.idx, value: sender.value)
     }
     
 
