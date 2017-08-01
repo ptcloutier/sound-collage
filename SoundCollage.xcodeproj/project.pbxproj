@@ -21,6 +21,14 @@
 		A7264E811EAEECD700664EDE /* SCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E801EAEECD700664EDE /* SCUser.swift */; };
 		A7404BCD1F290884004BC4E1 /* SCMixerPanelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7404BCC1F290884004BC4E1 /* SCMixerPanelCell.swift */; };
 		A7404BD11F290AA5004BC4E1 /* SCColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7404BD01F290AA5004BC4E1 /* SCColor.swift */; };
+		A74541831F310C3E007A89B7 /* sampleBank.png in Resources */ = {isa = PBXBuildFile; fileRef = A74541821F310C3E007A89B7 /* sampleBank.png */; };
+		A74541851F310E02007A89B7 /* lp.png in Resources */ = {isa = PBXBuildFile; fileRef = A74541841F310E02007A89B7 /* lp.png */; };
+		A74541871F310E0E007A89B7 /* mic.png in Resources */ = {isa = PBXBuildFile; fileRef = A74541861F310E0E007A89B7 /* mic.png */; };
+		A74541891F311054007A89B7 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = A74541881F311054007A89B7 /* back.png */; };
+		A745418B1F311101007A89B7 /* playlist.png in Resources */ = {isa = PBXBuildFile; fileRef = A745418A1F311101007A89B7 /* playlist.png */; };
+		A745418D1F31115A007A89B7 /* record.png in Resources */ = {isa = PBXBuildFile; fileRef = A745418C1F31115A007A89B7 /* record.png */; };
+		A745418F1F311229007A89B7 /* plus1.png in Resources */ = {isa = PBXBuildFile; fileRef = A745418E1F311229007A89B7 /* plus1.png */; };
+		A74541911F3112C3007A89B7 /* lp1.png in Resources */ = {isa = PBXBuildFile; fileRef = A74541901F3112C3007A89B7 /* lp1.png */; };
 		A74B368E1F3105D7000E8DEA /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = A74B368D1F3105D7000E8DEA /* play.png */; };
 		A75D4EBC1F25BFF300C304D8 /* SCSequencerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */; };
 		A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A886A1EB0445200FEDED0 /* SCDataManager.swift */; };
@@ -122,6 +130,14 @@
 		A7264E801EAEECD700664EDE /* SCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCUser.swift; sourceTree = "<group>"; };
 		A7404BCC1F290884004BC4E1 /* SCMixerPanelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCMixerPanelCell.swift; sourceTree = "<group>"; };
 		A7404BD01F290AA5004BC4E1 /* SCColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCColor.swift; sourceTree = "<group>"; };
+		A74541821F310C3E007A89B7 /* sampleBank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sampleBank.png; sourceTree = "<group>"; };
+		A74541841F310E02007A89B7 /* lp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lp.png; sourceTree = "<group>"; };
+		A74541861F310E0E007A89B7 /* mic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mic.png; sourceTree = "<group>"; };
+		A74541881F311054007A89B7 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
+		A745418A1F311101007A89B7 /* playlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playlist.png; sourceTree = "<group>"; };
+		A745418C1F31115A007A89B7 /* record.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = record.png; sourceTree = "<group>"; };
+		A745418E1F311229007A89B7 /* plus1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus1.png; sourceTree = "<group>"; };
+		A74541901F3112C3007A89B7 /* lp1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lp1.png; sourceTree = "<group>"; };
 		A74B368D1F3105D7000E8DEA /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerSettings.swift; sourceTree = "<group>"; };
 		A76A886A1EB0445200FEDED0 /* SCDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCDataManager.swift; sourceTree = "<group>"; };
@@ -240,10 +256,18 @@
 			children = (
 				A74B368D1F3105D7000E8DEA /* play.png */,
 				A7E117D01F278C8300041400 /* rectPink.png */,
+				A74541841F310E02007A89B7 /* lp.png */,
+				A74541901F3112C3007A89B7 /* lp1.png */,
+				A74541881F311054007A89B7 /* back.png */,
 				A713F5091F2F2DA700742D1C /* rectWhite.png */,
+				A745418E1F311229007A89B7 /* plus1.png */,
+				A74541861F310E0E007A89B7 /* mic.png */,
 				A79F5C891F1551CE00A89492 /* spinner.png */,
 				A7D7CDCA1F283366000EE8DA /* ts.png */,
+				A745418C1F31115A007A89B7 /* record.png */,
+				A745418A1F311101007A89B7 /* playlist.png */,
 				A7D7CDCE1F28368A000EE8DA /* met.png */,
+				A74541821F310C3E007A89B7 /* sampleBank.png */,
 				A70814381F01C46400A8AE92 /* plus.png */,
 				A79160F31F1EA2B50051113C /* quicksand */,
 				A70814301F01B54600A8AE92 /* zetafonts_a-day-without-sun */,
@@ -546,18 +570,26 @@
 				A7D7CDCF1F28368A000EE8DA /* met.png in Resources */,
 				A79160FD1F1EA2B50051113C /* Quicksand SIL OFL License 1.1.txt in Resources */,
 				A79161011F1EA2B50051113C /* Quicksand_Book_Oblique.otf in Resources */,
+				A74541911F3112C3007A89B7 /* lp1.png in Resources */,
+				A74541871F310E0E007A89B7 /* mic.png in Resources */,
 				A70814351F01B54600A8AE92 /* A DAY WITHOUT SUN.otf in Resources */,
 				A79161021F1EA2B50051113C /* Quicksand_Dash.otf in Resources */,
 				A79161001F1EA2B50051113C /* Quicksand_Book.otf in Resources */,
+				A745418B1F311101007A89B7 /* playlist.png in Resources */,
 				A79170CC1F2D211F00B38D16 /* stars.jpg in Resources */,
 				A713F50A1F2F2DA700742D1C /* rectWhite.png in Resources */,
+				A74541851F310E02007A89B7 /* lp.png in Resources */,
 				A79F5C8A1F1551CE00A89492 /* spinner.png in Resources */,
+				A74541891F311054007A89B7 /* back.png in Resources */,
 				A70814391F01C46400A8AE92 /* plus.png in Resources */,
 				A79160FE1F1EA2B50051113C /* Quicksand_Bold.otf in Resources */,
 				A79160FF1F1EA2B50051113C /* Quicksand_Bold_Oblique.otf in Resources */,
 				A7A823051EA81BEC0061D0A0 /* LaunchScreen.storyboard in Resources */,
+				A74541831F310C3E007A89B7 /* sampleBank.png in Resources */,
 				A7A823021EA81BEC0061D0A0 /* Assets.xcassets in Resources */,
+				A745418D1F31115A007A89B7 /* record.png in Resources */,
 				A74B368E1F3105D7000E8DEA /* play.png in Resources */,
+				A745418F1F311229007A89B7 /* plus1.png in Resources */,
 				A79161051F1EA2B50051113C /* SPECIMENPOSTER_4967.jpg in Resources */,
 				A7D7CDCB1F283366000EE8DA /* ts.png in Resources */,
 				A7A822FD1EA81BEC0061D0A0 /* Main.storyboard in Resources */,

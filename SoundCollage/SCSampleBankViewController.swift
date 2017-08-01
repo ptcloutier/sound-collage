@@ -131,7 +131,7 @@ class SCSampleBankViewController: UIViewController {
         let yPosition = toolbar.center.y-buttonHeight/2
         
         btn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
-        btn.setImage(UIImage.init(named: "plus-1"), for: .normal)
+        btn.setImage(UIImage.init(named: "plus1"), for: .normal)
         
         let backgroundView = UIView.init(frame: btn.frame)
         backgroundView.isUserInteractionEnabled = false

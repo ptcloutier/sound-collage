@@ -62,21 +62,31 @@ class SCContainerViewController: UIViewController {
         let buttonHeight = (toolbarHeight/3)*2
         let yPosition = toolbar.center.y-buttonHeight/2
         
-        self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
+        self.recordBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))//UIButton.GradientColorStyle(height: buttonHeight, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
+        
         guard let recordBtn = self.recordBtn else {
             print("No record btn.")
             return
         }
+        recordBtn.setBackgroundImage(UIImage.init(named: "record"), for: .normal)
         recordBtn.addTarget(self, action: #selector(SCContainerViewController.recordBtnDidPress), for: .touchUpInside)
         recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
-        let bankBtn = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
+        let bankBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))//FlatColorStyle(height: buttonHeight, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
+        bankBtn.setBackgroundImage(UIImage.init(named: "back"), for: .normal)
         bankBtn.addTarget(self, action: #selector(SCContainerViewController.bankBtnDidPress), for: .touchUpInside)
         
         let sequencerBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))//FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
         sequencerBtn.setBackgroundImage(UIImage.init(named: "play"), for: .normal)
         sequencerBtn.addTarget(self, action: #selector(SCContainerViewController.postSequencerPlaybackDidPressNotification), for: .touchUpInside)
         
+        let libraryBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
+        libraryBtn.setBackgroundImage(UIImage.init(named: "playlist"), for: .normal)
+        libraryBtn.addTarget(self, action: #selector(SCContainerViewController.libraryBtnDidPress), for: .touchUpInside)
+        
+        let recordNewSCBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
+        recordNewSCBtn.setBackgroundImage(UIImage.init(named: "lp1"), for: .normal)
+        recordNewSCBtn.addTarget(self, action: #selector(SCContainerViewController.recordNewSoundCollageBtnDidPress), for: .touchUpInside)
         
 //        let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
 //        
@@ -85,17 +95,18 @@ class SCContainerViewController: UIViewController {
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
         let sequencerBarBtn = UIBarButtonItem.init(customView: sequencerBtn)
-//        let tempBarBtn2 = UIBarButtonItem.init(customView: tempBtn2)
-//        let tempBarBtn3 = UIBarButtonItem.init(customView: tempBtn3)
+        let libraryBarBtn = UIBarButtonItem.init(customView: libraryBtn)
+        let recordNewSCBarBtn = UIBarButtonItem.init(customView: recordNewSCBtn)
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
         
-        toolbar.items = [flexibleSpace, bankBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace]
+        toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace,  libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
         self.view.addSubview(toolbar)
     }
     
     
+    //MARK: Navigation
     
     
     func recordBtnDidPress(){
@@ -121,7 +132,6 @@ class SCContainerViewController: UIViewController {
     }
     
     
-    //MARK: Navigation
     
     
     func bankBtnDidPress(){
@@ -131,6 +141,20 @@ class SCContainerViewController: UIViewController {
             return
         }
         SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
+    }
+    
+    
+    
+    func libraryBtnDidPress(){
+        
+        print("library button pressed.")
+    }
+    
+    
+    
+    func recordNewSoundCollageBtnDidPress(){
+        
+        print("new recording sound collage did press.")
     }
     
     
