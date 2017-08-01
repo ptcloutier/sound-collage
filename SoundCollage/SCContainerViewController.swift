@@ -70,27 +70,28 @@ class SCContainerViewController: UIViewController {
         recordBtn.addTarget(self, action: #selector(SCContainerViewController.recordBtnDidPress), for: .touchUpInside)
         recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
         
-        let bankBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
+        let bankBtn = UIButton.FlatColorStyle(height: buttonHeight, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral, secondaryColor: UIColor.white)
         bankBtn.addTarget(self, action: #selector(SCContainerViewController.bankBtnDidPress), for: .touchUpInside)
         
-        let sequencerBtn = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
+        let sequencerBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))//FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.lightBlueSky, secondaryColor: UIColor.white)
+        sequencerBtn.setBackgroundImage(UIImage.init(named: "play"), for: .normal)
         sequencerBtn.addTarget(self, action: #selector(SCContainerViewController.postSequencerPlaybackDidPressNotification), for: .touchUpInside)
         
         
-        let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
-        
-        let tempBtn3 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, secondaryColor: UIColor.white)
+//        let tempBtn2 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.rose, secondaryColor: UIColor.white)
+//        
+//        let tempBtn3 = UIButton.FlatColorStyle(height: buttonHeight*0.75, primaryColor: SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, secondaryColor: UIColor.white)
         
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
         let sequencerBarBtn = UIBarButtonItem.init(customView: sequencerBtn)
-        let tempBarBtn2 = UIBarButtonItem.init(customView: tempBtn2)
-        let tempBarBtn3 = UIBarButtonItem.init(customView: tempBtn3)
+//        let tempBarBtn2 = UIBarButtonItem.init(customView: tempBtn2)
+//        let tempBarBtn3 = UIBarButtonItem.init(customView: tempBtn3)
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
         
-        toolbar.items = [flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace, tempBarBtn2, flexibleSpace, tempBarBtn3, flexibleSpace]
+        toolbar.items = [flexibleSpace, bankBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace]
         self.view.addSubview(toolbar)
     }
     
