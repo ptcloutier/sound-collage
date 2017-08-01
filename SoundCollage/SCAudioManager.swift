@@ -203,30 +203,33 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             let reverb = AVAudioUnitReverb()
             let reverbParams =  self.effectControls[0]
-            let reverbMix = reverbParams[0].parameter[selectedSampleIndex]
-            reverb.loadFactoryPreset(.plate) // there are thirteen posible presets
-            reverb.wetDryMix = reverbMix
+            if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[selectedSampleIndex]*100.0)) {
+                reverb.loadFactoryPreset(.plate) // there are thirteen posible presets
+                reverb.wetDryMix = reverbValue
+            }
             audioEngine.attach(reverb)
             
             
             
             let delay = AVAudioUnitDelay()
             let delayParams =  self.effectControls[1]
-            let delayWetDryMix = delayParams[0].parameter[selectedSampleIndex]
-            delay.wetDryMix = delayWetDryMix
+            if let delayWetDryMixValue = Float(String(format: "%.0f", delayParams[0].parameter[selectedSampleIndex]*100.0)) {
+                delay.wetDryMix = delayWetDryMixValue
+            }
             
-            
-            let delayTime = delayParams[1].parameter[selectedSampleIndex]
+            let delayTime = delayParams[1].parameter[selectedSampleIndex]*2.0
             delay.delayTime = TimeInterval(delayTime)
             
-            var delayFeedback = delayParams[2].parameter[selectedSampleIndex]
             
-            if delayFeedback>75.0 {
-                delayFeedback = 75.0
+            if var delayFeedback: Float = Float(String(format: "%.0f", delayParams[2].parameter[selectedSampleIndex]*100.0)) {
+                
+                if delayFeedback>75.0 {
+                    delayFeedback = 75.0
+                }
+                delay.feedback = delayFeedback
             }
-            delay.feedback = delayFeedback
             
-            let delayLPCutoff = delayParams[3].parameter[selectedSampleIndex]
+            let delayLPCutoff = delayParams[3].parameter[selectedSampleIndex]*600.0 // 10 -> (samplerate/2), default 15000
             delay.lowPassCutoff = delayLPCutoff
            
             audioEngine.attach(delay)
@@ -234,25 +237,42 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             let pitch = AVAudioUnitTimePitch()
             let pitchParams =  self.effectControls[2]
+            if var playbackRate = Float(String(format: "%.0f", pitchParams[1].parameter[selectedSampleIndex]*100.0)) {
+               
+                if playbackRate>32.0{
+                    playbackRate = 32.0
+                }
+                pitch.rate = playbackRate
+            }
+            if var overlap = Float(String(format: "%.0f", pitchParams[2].parameter[selectedSampleIndex]*100.0)) {
+                
+                if overlap<3.0 {
+                    overlap = 3.0
+                }
+                if overlap>32.0{
+                    overlap = 32.0
+                }
+                pitch.overlap = overlap
+            }
             let pitchParameter = pitchParams[0].parameter[selectedSampleIndex]
-            let playbackRate = pitchParams[1].parameter[selectedSampleIndex]
-            let overlap = pitchParams[2].parameter[selectedSampleIndex]
-            let pitchZero = -1200
+            let pitchFloor = -1200
             let pitchValue = Float(pitchParameter)*24
-            let sum = pitchZero + Int(pitchValue)
-            pitch.pitch = Float(sum)
-            pitch.rate = playbackRate
-            pitch.overlap = overlap
+            pitch.pitch = Float(pitchFloor+Int(pitchValue))
             
             audioEngine.attach(pitch)
             
             
             let distortion = AVAudioUnitDistortion()
             let distortionParams = self.effectControls[3]
-            let preGain = distortionParams[0].parameter[selectedSampleIndex]
-            let dmix = distortionParams[1].parameter[selectedSampleIndex]
-            distortion.preGain = preGain
-            distortion.wetDryMix = dmix
+            
+            if let preGainValue = Float(String(format: "%.0f", distortionParams[0].parameter[selectedSampleIndex])) { // range -80.0 -> 20.0
+                
+                let preGainFloor = Float(-80.0)
+                distortion.preGain = Float(preGainFloor * preGainValue)
+            }
+            if let dmix = Float(String(format: ".0f", distortionParams[1].parameter[selectedSampleIndex]*100.0)) {
+                distortion.wetDryMix = dmix
+            }
             
             audioEngine.attach(distortion)
             
