@@ -202,8 +202,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             // selected effect in effectControl, selectedSamplePad parameter in parameter
             
+            let effectSettings = self.effectControls
             let reverb = AVAudioUnitReverb()
-            let reverbParams =  self.effectControls[0]
+            let reverbParams = effectSettings[0]
             if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[selectedSampleIndex]*100.0)) {
                 reverb.loadFactoryPreset(.plate) // there are thirteen posible presets
                 reverb.wetDryMix = reverbValue
@@ -213,7 +214,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             
             let delay = AVAudioUnitDelay()
-            let delayParams =  self.effectControls[1]
+            let delayParams = effectSettings[1]
             let delayWetDryMixValue = delayParams[0].parameter[selectedSampleIndex] * 100.0
             delay.wetDryMix = delayWetDryMixValue
             
@@ -234,7 +235,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             
             let pitch = AVAudioUnitTimePitch()
-            let pitchParams =  self.effectControls[2]
+            let pitchParams = effectSettings[2]
             let pitchUp = pitchParams[0].parameter[selectedSampleIndex] * 100.0
             let pitchUpValue = pitchUp * 24.0
             let posiPitch = pitchUpValue+1.0
@@ -250,7 +251,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             
             let distortion = AVAudioUnitDistortion()
-            let distortionParams = self.effectControls[3]
+            let distortionParams = effectSettings[4]
             let preGainValue = distortionParams[0].parameter[selectedSampleIndex] * 100.0// range -80.0 -> 20.0
             distortion.preGain = Float(preGainValue - 80.0)
             let dmix = distortionParams[1].parameter[selectedSampleIndex] * 100.0
@@ -260,17 +261,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             
             let time = AVAudioUnitVarispeed()
-            let timeParams = self.effectControls[4]
-            var timeRateUp = timeParams[0].parameter[selectedSampleIndex]*4.0
-            var timeRateDown = 1.0 - timeParams[1].parameter[selectedSampleIndex]+0.25
-            if timeRateUp == 0 {
-                timeRateUp = 1.0
-            }
-            if timeRateDown == 0 {
-                timeRateDown = 0.25
-            }
+            let timeParams = effectSettings[3]
+            let timeRateUp = 1.0 + timeParams[0].parameter[selectedSampleIndex] * 4.0
+            let timeRateDown = timeParams[1].parameter[selectedSampleIndex] * 0.75
             
-            time.rate = Float(timeRateUp - timeRateDown)
+            let rateValue = Float(timeRateUp - timeRateDown)
+            time.rate = rateValue
             audioEngine.attach(time)
             
             audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
@@ -301,12 +297,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                 }
                 
                 //TODO: calculate effect tail for engine destruction
-//                let reverbParameter = strongSelf.effectControls[0].parameter[strongSelf.selectedSampleIndex]
-//                let reverbTime = round((Float(reverbParameter/2)/10))
-//                durationInt += Int(reverbTime)
-//                
+                let reverbParameter = strongSelf.effectControls[0][0].parameter[strongSelf.selectedSampleIndex]
+                let reverbTime = round(Float(reverbParameter * 10.0))
+                durationInt += Int(reverbTime)
+                
                 let delayParams = strongSelf.effectControls[1][2].parameter[strongSelf.selectedSampleIndex]
-                let delayTime = round(Float(delayParams * 30.0))
+                let delayTime = round(Float(delayParams * 20.0))
                 durationInt += Int(delayTime)
                 
                 let duration = DispatchTimeInterval.seconds(durationInt)

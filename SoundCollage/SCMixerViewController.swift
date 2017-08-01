@@ -107,7 +107,7 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return SCAudioManager.shared.mixerPanels.count
+        return Array(SCAudioManager.shared.mixerPanels.keys).count
     }
     
     
@@ -141,7 +141,7 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         for (index, slider) in cell.sliders.enumerated() {
             
             cell.adjustLabel(label: cell.parameterLabels[index], slider: slider)
-           let effectControls = SCAudioManager.shared.effectControls[cell.mixerPanelIdx]
+            let effectControls = SCAudioManager.shared.effectControls[cell.mixerPanelIdx]
             let parameters = effectControls[index].parameter
             let parameter = parameters[SCAudioManager.shared.selectedSampleIndex]
             slider.value = parameter

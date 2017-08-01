@@ -30,6 +30,8 @@ class SCMixerPanelCell: UICollectionViewCell {
     var selectedPadCircle = SCCircularImageView()
     weak var faderDelegate: SCFaderDelegate?
 
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -50,6 +52,13 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     
     
+    
+    //MARK: Labels
+   
+    
+    
+    
+    
     func setupNameLabel() {
         
         nameLabel.font = UIFont.init(name: "Futura", size: 30.0)
@@ -62,8 +71,9 @@ class SCMixerPanelCell: UICollectionViewCell {
     }
     
     
+    
+    
     func setupSelectedCellLabel(number: Int){
-       
         
         selectedPadTextLabel.text = "Selected"
         selectedPadTextLabel.font = UIFont.init(name: "Futura", size: 12)
@@ -75,7 +85,7 @@ class SCMixerPanelCell: UICollectionViewCell {
         selectedPadNumberLabel.font = UIFont.init(name: "Futura", size: 25)
         selectedPadNumberLabel.textColor = UIColor.white// SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
         self.contentView.addSubview(selectedPadNumberLabel)
-        selectedPadNumberLabel.translatesAutoresizingMaskIntoConstraints = false 
+        selectedPadNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         
         
         selectedPadCircle.layer.borderWidth = 1.0
@@ -92,35 +102,11 @@ class SCMixerPanelCell: UICollectionViewCell {
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: .width, relatedBy: .equal, toItem: self.selectedPadTextLabel, attribute: .width,  multiplier: 1.4, constant: 0))
         
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: .height, relatedBy: .equal, toItem: selectedPadCircle, attribute: .width,  multiplier: 1.0, constant: 0))
-     
+        
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: NSLayoutAttribute.centerX, relatedBy: .equal, toItem: self.selectedPadNumberLabel, attribute: .centerX, multiplier: 1.0, constant: 0))
     }
     
-    
-    
-    
-    //MARK: UISlider
-  
-    
-    func setupSlider(slider: SCSlider){
-        
-        let frame = slider.trackRect(forBounds: self.contentView.frame)
-        slider.frame = frame
-        // make vertical
-        slider.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi/2))
-        slider.isContinuous = false
-        addSliderTarget(slider: slider)
-        slider.minimumTrackTintColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
-        slider.maximumTrackTintColor = UIColor.white
-        let image = UIImage.imageWithImage(image: UIImage.init(named: "rectWhite")!, newSize: CGSize(width: 30.0, height: 60.0))
-        slider.setThumbImage(image, for: .normal)
-        self.contentView.addSubview(slider)
-    }
-    
-    
-   
-    
-    
+
     
     func setupParameterLabel(parameterLabel: UILabel, slider: SCSlider, name: String){
         
@@ -266,6 +252,44 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     
     
+    func verticalLabel(label: UILabel) {
+        
+        label.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi/2))
+        
+    }
+    
+    
+    
+    
+    func adjustLabel(label: UILabel, slider: SCSlider) {
+        
+        label.frame.origin.x = slider.frame.origin.x-45.0
+        label.frame.origin.y = slider.frame.minY
+    }
+
+    
+    
+    
+    
+    //MARK: UISlider
+    
+    
+    func setupSlider(slider: SCSlider){
+        
+        let frame = slider.trackRect(forBounds: self.contentView.frame)
+        slider.frame = frame
+        // make vertical
+        slider.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi/2))
+        slider.isContinuous = false
+        addSliderTarget(slider: slider)
+        slider.minimumTrackTintColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
+        slider.maximumTrackTintColor = UIColor.white
+        let image = UIImage.imageWithImage(image: UIImage.init(named: "rectWhite")!, newSize: CGSize(width: 40.0, height: 70.0))
+        slider.setThumbImage(image, for: .normal)
+        self.contentView.addSubview(slider)
+    }
+    
+
 
     func addSliderTarget(slider: SCSlider){
         slider.addTarget(self, action: #selector(SCMixerPanelCell.sliderChanged(sender:)), for: .valueChanged)
@@ -291,21 +315,5 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     
     
-    
-    func verticalLabel(label: UILabel) {
-        
-        label.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi/2))
-
-    }
-    
-    
-    
-    
-    func adjustLabel(label: UILabel, slider: SCSlider) {
-        
-        label.frame.origin.x = slider.frame.origin.x-45.0
-        label.frame.origin.y = slider.frame.minY 
-    }
-
     
 }
