@@ -154,6 +154,16 @@ class SCContainerViewController: UIViewController {
     func recordNewSoundCollageBtnDidPress(){
         
         print("new recording sound collage did press.")
+        
+        switch SCAudioManager.shared.isRecordingSoundCollage {
+        case true:
+            SCAudioManager.shared.stopRecordingSoundCollage()
+            SCAudioManager.shared.isRecordingSoundCollage = false
+        case false:
+            SCAudioManager.shared.setupNewSoundCollage()
+            SCAudioManager.shared.startRecordingSoundCollage()
+            SCAudioManager.shared.isRecordingSoundCollage = true 
+        }
     }
     
     

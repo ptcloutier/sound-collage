@@ -37,9 +37,11 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var finishedEngines: [SCAudioEngine] = []
     var sequencerSettings: [[Bool]] = []
     var sequencerIsPlaying: Bool = false
-    
-    
-    
+    var audioBuffer = AVAudioPCMBuffer()
+    var outputFile = AVAudioFile()
+    var recordingEngine = AVAudioEngine()
+    var isRecordingSoundCollage: Bool = false 
+    var outputFileURL: URL?
     
     func setupAudioManager(){
         
@@ -314,7 +316,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                     guard let strongSelf = self else {
                         return
                     }
-                    strongSelf.finishedEngines.append(fin)
+                    let serialQueue = DispatchQueue(label: "myqueue")
+                    
+                    serialQueue.sync {
+                        strongSelf.finishedEngines.append(fin)
+                    }
+                    
                 }
             })
 
@@ -403,7 +410,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         let newFullURL = getDocumentsDirectory().appendingPathComponent(newPath)
         SCDataManager.shared.currentSampleTitle = newFullURL.absoluteString
         self.replaceableFilePath = "sampleBank_\(currentSampleBankID)_pad_\(samplePadIndex)_id_\(sampleID-1)\(audioType)"
-        self.audioFilePath  = newFullURL
+        self.audioFilePath = newFullURL
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -583,6 +590,81 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("Audio source: headphone output")
         }
     }
+    
+    
+    
+    
+    func setupNewSoundCollage(){
+        
+        if isSpeakerEnabled == true {
+            setAudioPlaybackSource()
+        }
+        recordingEngine.stop()
+        recordingEngine.reset()
+        recordingEngine = AVAudioEngine()
+        
+        do {
+            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            
+            let ioBufferDuration = 128.0 / 44100.0
+            
+            try audioSession.setPreferredIOBufferDuration(ioBufferDuration)
+            
+        } catch {
+            
+            assertionFailure("AVAudioSession setup error: \(error)")
+        }
+        
+        let newPath = "newRecording"+".caf"
+        self.outputFileURL = getDocumentsDirectory().appendingPathComponent(newPath)
+        guard let outputFileURL = self.outputFileURL else { return }
+        print(outputFileURL)
+        do {
+            
+            try self.outputFile = AVAudioFile(forWriting: outputFileURL, settings: recordingEngine.mainMixerNode.outputFormat(forBus: 0).settings)
+        }
+        catch {
+            print("Error setting up audio file")
+        }
+        
+        let input = recordingEngine.inputNode!
+        let format = input.inputFormat(forBus: 0)
+        
+        recordingEngine.connect(input, to: recordingEngine.mainMixerNode, format: format)
+        assert(recordingEngine.inputNode != nil)
+        
+        try! recordingEngine.start()
+        //save url to property
+    }
+    
+    
+    func startRecordingSoundCollage() {
+        
+        let mixer = recordingEngine.mainMixerNode
+        let format = mixer.outputFormat(forBus: 0)
+        
+        mixer.installTap(onBus: 0, bufferSize: 1024, format: format, block:
+            { (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+                
+                print(NSString(string: "writing"))
+                do{
+                    try self.outputFile.write(from: buffer)
+                }
+                catch {
+                    print(NSString(string: "Write failed"));
+                }
+        })
+    }
+    
+    
+    
+    func stopRecordingSoundCollage() {
+        
+        recordingEngine.mainMixerNode.removeTap(onBus: 0)
+        recordingEngine.stop()
+        setAudioPlaybackSource()
+    }
+    
     
     
 }
