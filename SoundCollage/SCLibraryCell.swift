@@ -28,7 +28,7 @@ class SCLibraryCell: UICollectionViewCell {
     
     func setupLabel(){
         
-        self.contentView.backgroundColor = UIColor.blue
+        self.contentView.backgroundColor = UIColor.white 
        
     }
     

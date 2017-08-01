@@ -15,11 +15,11 @@ class SCLibraryViewController: UIViewController {
     var libraryCV: UICollectionView?
     let toolbarHeight: CGFloat = 98.0
     var toolbar = UIToolbar()
+    let inset: CGFloat = 2.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.red
         setupCollectionView()
         setupControls()
         
@@ -30,15 +30,16 @@ class SCLibraryViewController: UIViewController {
     func setupCollectionView(){
         
         
-        let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 3)
-        
-        libraryCV = UICollectionView.init(frame: self.view.frame, collectionViewLayout: flowLayout)
+        let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 1)
+        let frame = CGRect(x: self.view.frame.width/3.0, y: 10.0, width: self.view.frame.width/3.0, height: self.view.frame.height)
+        libraryCV = UICollectionView.init(frame: frame, collectionViewLayout: flowLayout)
         guard let libraryCV = self.libraryCV else { return }
-        libraryCV.backgroundColor = UIColor.purple
+        libraryCV.backgroundColor = UIColor.black
         libraryCV.delegate = self
         libraryCV.dataSource = self
         libraryCV.allowsMultipleSelection = false
         libraryCV.isUserInteractionEnabled = true
+        libraryCV.isScrollEnabled = true
         libraryCV.register(SCLibraryCell.self, forCellWithReuseIdentifier: "LibraryCell")
         self.view.addSubview(libraryCV)
     }
@@ -149,7 +150,7 @@ class SCLibraryViewController: UIViewController {
 
 
 
-extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -170,6 +171,7 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         print("selected item")
+        
     }
     
     
@@ -184,5 +186,32 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
         return true
     }
     
+}
+
+
+
+
+extension SCLibraryViewController:  UICollectionViewDelegateFlowLayout {
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width = collectionView.frame.size.width-(inset*2.0)
+        let libraryCellSize = CGSize.init(width: width, height: width)
+        return libraryCellSize
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return inset
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return inset
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0,0,0,0)
+    }
 }
 

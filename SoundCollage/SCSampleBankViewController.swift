@@ -149,22 +149,6 @@ class SCSampleBankViewController: UIViewController {
 
     
     
-    
-    func dissolve(){
-
-        UIView.animate(withDuration: 0.3, delay: 0, options: [.transitionCrossDissolve], animations:{
-//            self.collectionView.backgroundColor = SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
-        },
-                       completion: { (finished: Bool) in
-                        UIView.animate(withDuration: 0.1, delay: 0, options: [.transitionCrossDissolve], animations:{
-                            self.presentSampler()
-
-                        })
-        })
-    }
-    
-    
-    
     func newStandardSamplerDidPress(){
       
         let samplerType = SCSampleBank.SamplerType.standard
@@ -193,17 +177,8 @@ class SCSampleBankViewController: UIViewController {
     
     
     func presentSampler(){
-        
-        UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations:{
-            let vc: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
-            let transition = CATransition()
-            transition.duration = 1.0
-            transition.type = kCATransitionPush
-            transition.subtype = kCATransitionFade
-            self.view.window!.layer.add(transition, forKey: kCATransition)
-            self.present(vc, animated: true, completion: nil)
-        }, completion: nil
-        )
+        let vc: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
+        SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
     }
 }
 
@@ -263,6 +238,6 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
             return
         }
         SCAudioManager.shared.effectControls = effectSettings
-        self.dissolve()
+        self.presentSampler()
     }
 }

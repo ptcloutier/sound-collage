@@ -202,7 +202,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         
         // ui
         cell.idx = indexPath.row
-        let colorIdx = findColorIndex(indexPath: indexPath, colors: iceCreamColors)
+//        let colorIdx = findColorIndex(indexPath: indexPath, colors: iceCreamColors)
         cell.cellColor = UIColor.white//iceCreamColors[colorIdx]
         
         cell.setupLabel()

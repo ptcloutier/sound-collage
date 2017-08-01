@@ -51,12 +51,17 @@ class SCScoreCell: UICollectionViewCell {
 }
 
 
+
+
+
 extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let result = CGSize.init(width: sequencerCV!.frame.width/CGFloat(cellCount), height: sequencerCV!.frame.height)
-            return result
-        }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let result = CGSize.init(width: sequencerCV!.frame.width/CGFloat(cellCount), height: sequencerCV!.frame.height)
+        return result
+    }
+    
+    
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1

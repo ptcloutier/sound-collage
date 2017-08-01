@@ -343,7 +343,6 @@
 				A74541951F31153E007A89B7 /* SCLibraryCell.swift */,
 			);
 			name = "Song Library";
-			path = SoundCollage;
 			sourceTree = "<group>";
 		};
 		A78733881EB1160F00B5A8AE /* Managers */ = {
@@ -387,7 +386,6 @@
 			isa = PBXGroup;
 			children = (
 				A7A822F61EA81BEC0061D0A0 /* SoundCollage */,
-				A74541941F3114F6007A89B7 /* Song Library */,
 				A7A8230E1EA81BEC0061D0A0 /* SoundCollageTests */,
 				A7A823191EA81BEC0061D0A0 /* SoundCollageUITests */,
 				A7A822F51EA81BEC0061D0A0 /* Products */,
@@ -417,6 +415,7 @@
 				A7D7CDC11F27BDE5000EE8DA /* Mixer */,
 				A7264E761EAE284600664EDE /* Sample Bank */,
 				A7BD6AB21F140CF7000CDF9A /* Sequencer */,
+				A74541941F3114F6007A89B7 /* Song Library */,
 			);
 			path = SoundCollage;
 			sourceTree = "<group>";
