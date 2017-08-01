@@ -283,7 +283,7 @@ class SCDataManager {
         
         var effectSettings: [[SCEffectControl]] = []
         
-        while effectSettings.count<4{
+        while effectSettings.count<Array(SCAudioManager.shared.mixerPanels.keys).count{
             var controls: [SCEffectControl] = []
             while controls.count<5{
             let ec = SCEffectControl.init()

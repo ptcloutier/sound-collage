@@ -85,7 +85,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
              AVAudioUnitReverbPresetLargeHall2      = 12 */
             "Delay" : ["Mix", "Delay Time", "Feedback", "Cutoff", ""], // AVAudioUnitDelay
             "Pitch" : ["Pitch Up", "Pitch Down", "", "", ""], //AVAudioUnitTimePitch
-            "Distortion" : ["Mix", "Gain", "", "", ""] //, "Presets", "DrumsBitBrush", "DrumsBufferBeats", "DrumsLoFi", "MultiBrokenSpeaker", "MultiCellphoneConcert", "MultiDecimated1", "MultiDecimated2" ,"MultiDecimated3" ,"MultiDecimated4", "MultiDistortedFunk", "MultiDistortedCubed", "MultiDistortedSquared", "MultiEcho1", "MultiEcho2", "MultiEchoTight1", "MultiEchoTight2", "MultiEverythingIsBroken", "SpeechAlienChatter", "SpeechCosmicInterference", "SpeechGoldenPi", "SpeechRadioTower", "SpeechWaves"]
+            "Distortion" : ["Mix", "Gain", "", "", ""],//, "Presets", "DrumsBitBrush", "DrumsBufferBeats", "DrumsLoFi", "MultiBrokenSpeaker", "MultiCellphoneConcert", "MultiDecimated1", "MultiDecimated2" ,"MultiDecimated3" ,"MultiDecimated4", "MultiDistortedFunk", "MultiDistortedCubed", "MultiDistortedSquared", "MultiEcho1", "MultiEcho2", "MultiEchoTight1", "MultiEchoTight2", "MultiEverythingIsBroken", "SpeechAlienChatter", "SpeechCosmicInterference", "SpeechGoldenPi", "SpeechRadioTower", "SpeechWaves"]
             // AVAudioUnitDistortion
             /*  AVAudioUnitDistortionPresetDrumsBitBrush           = 0,
              AVAudioUnitDistortionPresetDrumsBufferBeats        = 1,
@@ -109,6 +109,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
              AVAudioUnitDistortionPresetSpeechGoldenPi          = 19,
              AVAudioUnitDistortionPresetSpeechRadioTower        = 20,
              AVAudioUnitDistortionPresetSpeechWaves             = 21*/
+            "Time": ["Speed Up", "Slow Down", "", "", ""]
         ]
         
         /* TODO: "Analyzer", // volume, pan, waveform visual, trim/edit capabilities
@@ -235,7 +236,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             let pitch = AVAudioUnitTimePitch()
             let pitchParams =  self.effectControls[2]
             let pitchUp = pitchParams[0].parameter[selectedSampleIndex] * 100.0
-            
             let pitchUpValue = pitchUp * 24.0
             let posiPitch = pitchUpValue+1.0
             
@@ -243,7 +243,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             let pitchDown = pitchParams[1].parameter[selectedSampleIndex] * 100.0
             let pitchDownValue = pitchDown * 24.0
             let negiPitch = (pitchDownValue+1.0) * -1.0
-            
             pitch.pitch = posiPitch + negiPitch
 
             audioEngine.attach(pitch)
@@ -252,22 +251,34 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             let distortion = AVAudioUnitDistortion()
             let distortionParams = self.effectControls[3]
-            
             let preGainValue = distortionParams[0].parameter[selectedSampleIndex] * 100.0// range -80.0 -> 20.0
-            
             distortion.preGain = Float(preGainValue - 80.0)
-            
             let dmix = distortionParams[1].parameter[selectedSampleIndex] * 100.0
             distortion.wetDryMix = dmix
-            
-            
             audioEngine.attach(distortion)
+
             
-            audioEngine.connect(audioPlayerNode, to: distortion, format: audioFormat)
-            audioEngine.connect(distortion, to: pitch, format: audioFormat)
-            audioEngine.connect(pitch, to: reverb, format: audioFormat)
-            audioEngine.connect(reverb, to: delay, format: audioFormat)
-            audioEngine.connect(delay, to: audioEngine.mainMixerNode, format: audioFormat)
+            
+            let time = AVAudioUnitVarispeed()
+            let timeParams = self.effectControls[4]
+            var timeRateUp = timeParams[0].parameter[selectedSampleIndex]*4.0
+            var timeRateDown = 1.0 - timeParams[1].parameter[selectedSampleIndex]+0.25
+            if timeRateUp == 0 {
+                timeRateUp = 1.0
+            }
+            if timeRateDown == 0 {
+                timeRateDown = 0.25
+            }
+            
+            time.rate = Float(timeRateUp - timeRateDown)
+            audioEngine.attach(time)
+            
+            audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
+            audioEngine.connect(pitch, to: time, format: audioFormat)
+            audioEngine.connect(time, to: distortion, format: audioFormat)
+            audioEngine.connect(distortion, to: delay, format: audioFormat)
+            audioEngine.connect(delay, to: reverb, format: audioFormat)
+            audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: audioFormat)
             
             
             

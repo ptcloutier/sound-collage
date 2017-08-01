@@ -28,7 +28,7 @@ class SCSlider: UISlider {
         
         let yPosition = (view.frame.minY + view.frame.height * 0.3)
         let width = view.frame.width * 0.1
-        let height = view.frame.height * 0.45
+        let height = view.frame.height * 0.5
         let sliderFrame = CGRect(x: self.xPos, y: yPosition, width: width, height: height)
         slider.frame = sliderFrame
     }

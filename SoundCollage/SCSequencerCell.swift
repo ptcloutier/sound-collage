@@ -88,7 +88,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         
         cell.sequencerIdx = self.idx-1
         cell.idx = indexPath.row
-        cell.layer.borderWidth = 1.5
+        cell.layer.borderWidth = 1.0
         cell.layer.borderColor = UIColor.black.cgColor //purple.cgColor
         let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
         

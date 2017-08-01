@@ -74,7 +74,7 @@ extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource, UI
         let cell = sequencerCV?.dequeueReusableCell(withReuseIdentifier: "SCSequencerCell", for: indexPath) as!SCSequencerCell
 
         cell.idx = indexPath.row
-        cell.layer.borderWidth = 0.5
+        cell.layer.borderWidth = 1.0
         cell.layer.borderColor = UIColor.darkGray.cgColor//UIColor.purple.cgColor
         cell.setupSequencer()
         return cell

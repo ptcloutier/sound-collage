@@ -66,13 +66,13 @@ class SCMixerPanelCell: UICollectionViewCell {
        
         
         selectedPadTextLabel.text = "Selected"
-        selectedPadTextLabel.font = UIFont.init(name: "Futura", size: 15)
+        selectedPadTextLabel.font = UIFont.init(name: "Futura", size: 12)
         selectedPadTextLabel.textColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
         self.contentView.addSubview(selectedPadTextLabel)
         selectedPadTextLabel.translatesAutoresizingMaskIntoConstraints = false
         
         selectedPadNumberLabel.text = "\(number+1)"
-        selectedPadNumberLabel.font = UIFont.init(name: "Futura", size: 40)
+        selectedPadNumberLabel.font = UIFont.init(name: "Futura", size: 25)
         selectedPadNumberLabel.textColor = UIColor.white// SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
         self.contentView.addSubview(selectedPadNumberLabel)
         selectedPadNumberLabel.translatesAutoresizingMaskIntoConstraints = false 
@@ -89,7 +89,7 @@ class SCMixerPanelCell: UICollectionViewCell {
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadTextLabel, attribute: .centerX, relatedBy: .equal, toItem: selectedPadNumberLabel, attribute: .centerX, multiplier: 1.0, constant: 0))
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadTextLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 20.0))
         
-        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: .width, relatedBy: .equal, toItem: self.selectedPadTextLabel, attribute: .width,  multiplier: 1.5, constant: 0))
+        self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: .width, relatedBy: .equal, toItem: self.selectedPadTextLabel, attribute: .width,  multiplier: 1.4, constant: 0))
         
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: .height, relatedBy: .equal, toItem: selectedPadCircle, attribute: .width,  multiplier: 1.0, constant: 0))
      
@@ -112,7 +112,7 @@ class SCMixerPanelCell: UICollectionViewCell {
         addSliderTarget(slider: slider)
         slider.minimumTrackTintColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
         slider.maximumTrackTintColor = UIColor.white
-        let image = UIImage.imageWithImage(image: UIImage.init(named: "rectWhite")!, newSize: CGSize(width: 20.0, height: 50.0))
+        let image = UIImage.imageWithImage(image: UIImage.init(named: "rectWhite")!, newSize: CGSize(width: 30.0, height: 60.0))
         slider.setThumbImage(image, for: .normal)
         self.contentView.addSubview(slider)
     }
@@ -175,8 +175,8 @@ class SCMixerPanelCell: UICollectionViewCell {
             self.slider3.isHidden = true
             self.slider4.isHidden = true
             self.slider5.isHidden = true
-            self.slider1.frame.origin.x = (contentView.frame.width/12)*5.0
-            self.slider2.frame.origin.x = (contentView.frame.width/12)*7.0
+            self.slider1.frame.origin.x = (contentView.frame.width/12)*4.0
+            self.slider2.frame.origin.x = (contentView.frame.width/12)*8.0
             self.slider1.xPos = self.slider1.frame.origin.x
             self.slider2.xPos = self.slider2.frame.origin.x
            
@@ -303,7 +303,7 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     func adjustLabel(label: UILabel, slider: SCSlider) {
         
-        label.frame.origin.x = slider.frame.origin.x-40.0
+        label.frame.origin.x = slider.frame.origin.x-45.0
         label.frame.origin.y = slider.frame.minY 
     }
 
