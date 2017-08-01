@@ -97,10 +97,9 @@ class SCDataManager {
             let score: [[Bool]] = SCDataManager.shared.setupScorePage()
             let sequencerSettings = SCSequencerSettings.init(score: score)
             let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: .standard, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
-            
-
             sampleBanks.append(sampleBank)
-            let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: sampleBank)
+            let soundCollages: [URL] = []
+            let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: sampleBank, soundCollages: soundCollages)
             self.user = newUser
             printAudioFilePaths()
             print("Created new user")
