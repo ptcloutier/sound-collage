@@ -121,7 +121,7 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         cell.mixerPanelIdx = indexPath.row
         cell.setupFaderDelegate(delegate: self)
         let xPos = cell.contentView.frame.width/12.0
-        cell.sliderXPositions = [xPos, xPos*3.0, xPos*6.0, xPos*9.0, xPos*12.0 ]
+        cell.sliderXPositions = [xPos, xPos*2.5, xPos*6.0, xPos*9.5, xPos*13.0 ]
         cell.sliders = [cell.slider1,  cell.slider2,  cell.slider3,  cell.slider4,  cell.slider5 ]
         cell.parameterLabels = [ cell.pLabel1, cell.pLabel2, cell.pLabel3, cell.pLabel4, cell.pLabel5 ]
         let keys: [String] = Array(SCAudioManager.shared.mixerPanels.keys)
@@ -295,19 +295,8 @@ extension SCMixerViewController: UIScrollViewDelegate {
 extension SCMixerViewController: SCFaderDelegate {
     
     func faderValueDidChange(sender: SCSlider){
-        print("delegate")
-        
-            
-//            let selectedSampleIdx = SCAudioManager.shared.selectedSampleIndex
-//            let mixerIdx = getSelectedMixerPanelIndex()
-//            let sliderIdx = sender.idx
-//        
-//            guard let value =  SCAudioManager.shared.effectControls[mixerIdx]?[sliderIdx].parameter[selectedSampleIdx] else {
-//                print("Error retrieving value for slider.")
-//                return
-//            }
-//            sender.setValue(value, animated: true)
-        }
+        print("fader value changed - \(sender.value)")
+    }
 }
 
 

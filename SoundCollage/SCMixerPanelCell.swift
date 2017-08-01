@@ -175,8 +175,8 @@ class SCMixerPanelCell: UICollectionViewCell {
             self.slider3.isHidden = true
             self.slider4.isHidden = true
             self.slider5.isHidden = true
-            self.slider1.frame.origin.x = (contentView.frame.width/6)*2.5
-            self.slider2.frame.origin.x = (contentView.frame.width/6)*3.5
+            self.slider1.frame.origin.x = (contentView.frame.width/12)*5.0
+            self.slider2.frame.origin.x = (contentView.frame.width/12)*7.0
             self.slider1.xPos = self.slider1.frame.origin.x
             self.slider2.xPos = self.slider2.frame.origin.x
            
@@ -194,9 +194,9 @@ class SCMixerPanelCell: UICollectionViewCell {
             self.slider3.isHidden = false
             self.slider4.isHidden = true
             self.slider5.isHidden = true
-            self.slider1.frame.origin.x = (contentView.frame.width/6)*2
-            self.slider2.frame.origin.x = (contentView.frame.width/6)*3
-            self.slider3.frame.origin.x = (contentView.frame.width/6)*4
+            self.slider1.frame.origin.x = (contentView.frame.width/12)*2.5
+            self.slider2.frame.origin.x = (contentView.frame.width/12)*6.0
+            self.slider3.frame.origin.x = (contentView.frame.width/12)*9.5
             self.slider1.xPos = self.slider1.frame.origin.x
             self.slider2.xPos = self.slider2.frame.origin.x
             self.slider3.xPos = self.slider3.frame.origin.x
@@ -214,10 +214,10 @@ class SCMixerPanelCell: UICollectionViewCell {
             self.slider3.isHidden = false
             self.slider4.isHidden = false
             self.slider5.isHidden = true
-            self.slider1.frame.origin.x = (contentView.frame.width/6)*1.5
-            self.slider2.frame.origin.x = (contentView.frame.width/6)*2.5
-            self.slider3.frame.origin.x = (contentView.frame.width/6)*3.5
-            self.slider4.frame.origin.x = (contentView.frame.width/6)*4.5
+            self.slider1.frame.origin.x = (contentView.frame.width/12)*2.0
+            self.slider2.frame.origin.x = (contentView.frame.width/12)*4.75
+            self.slider3.frame.origin.x = (contentView.frame.width/12)*7.50
+            self.slider4.frame.origin.x = (contentView.frame.width/12)*10.25
             self.slider1.xPos = self.slider1.frame.origin.x
             self.slider2.xPos = self.slider2.frame.origin.x
             self.slider3.xPos = self.slider3.frame.origin.x
@@ -238,11 +238,11 @@ class SCMixerPanelCell: UICollectionViewCell {
             self.slider3.isHidden = false
             self.slider4.isHidden = false
             self.slider5.isHidden = false
-            self.slider1.frame.origin.x = (contentView.frame.width/6)
-            self.slider2.frame.origin.x = (contentView.frame.width/6)*2
-            self.slider3.frame.origin.x = (contentView.frame.width/6)*3
-            self.slider4.frame.origin.x = (contentView.frame.width/6)*4
-            self.slider5.frame.origin.x = (contentView.frame.width/6)*5
+            self.slider1.frame.origin.x = (contentView.frame.width/12)*1.75
+            self.slider2.frame.origin.x = (contentView.frame.width/12)*4.0
+            self.slider3.frame.origin.x = (contentView.frame.width/12)*6.25
+            self.slider4.frame.origin.x = (contentView.frame.width/12)*8.5
+            self.slider5.frame.origin.x = (contentView.frame.width/12)*10.75
             self.slider1.xPos = self.slider1.frame.origin.x
             self.slider2.xPos = self.slider2.frame.origin.x
             self.slider3.xPos = self.slider3.frame.origin.x
