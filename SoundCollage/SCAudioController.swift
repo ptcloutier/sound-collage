@@ -29,18 +29,18 @@ import AVFoundation
 
 struct SCAudioControllerConstants{
     
-    static let kRecordingCompletedNotification = "RecordingCompletedNotification"
-    static let kShouldEnginePauseNotification = "kShouldEnginePauseNotification"
+    static let kRecordingCompletedNotification: Notification.Name = Notification.Name(rawValue: "RecordingCompletedNotification")
+    static let kShouldEnginePauseNotification: Notification.Name = Notification.Name(rawValue: "kShouldEnginePauseNotification")
 }
 
 
 
 protocol SCAudioControllerDelegate {
     
-    @objc optional func engineWasInterrupted()
-    @objc optional func engineConfigurationHasChanged()
-    @objc optional func engineHasBeenPaused()
-    @objc optional func mixerOutputFilePlayerHasStopped()
+    func engineWasInterrupted()
+    func engineConfigurationHasChanged()
+    func engineHasBeenPaused()
+    func mixerOutputFilePlayerHasStopped()
 }
 
 
@@ -103,8 +103,24 @@ class SCAudioController {
         self.isSessionInterrupted = false
         self.isConfigChangePending = false
         
-        // AVAudioSession setup
+        initAVAudioSession()
+        initAndCreateNodes()
+        createEngineAndAttachNodes()
+        makeEngineConnections()
+        createAndSetupSequencer()
+        setNodeDefaults()
         
+        print("\(engine?.description)")
+        
+        NotificationCenter.default.addObserver(forName: SCAudioControllerConstants.kShouldEnginePauseNotification, object: nil, queue: OperationQueue.main, using: {
+            note in
+            
+            /* pausing stops the audio engine and the audio hardware, but does not deallocate the resources allocated by prepare().
+             When your app does not need to play audio, you should pause or stop the engine (as applicable), to minimize power consumption.
+             */
+
+            
+        })
     }
     
     
