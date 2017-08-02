@@ -60,16 +60,17 @@ class SCContainerViewController: UIViewController {
         toolbar.isTranslucent = true
         
         let buttonHeight = (toolbarHeight/3)*2
-        let yPosition = toolbar.center.y-buttonHeight/2
-        
-        self.recordBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight*1.25, height: buttonHeight*1.25))
+//        let yPosition = toolbar.center.y-buttonHeight/2
+//        let recordingBtnYPosition = toolbar.center.y-(buttonHeight*1.5)/2
+        self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight*1.5, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
+//        self.recordBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight*1.25, height: buttonHeight*1.25))
         guard let recordBtn = self.recordBtn else {
             print("No record btn.")
             return
         }
         recordBtn.setBackgroundImage(UIImage.init(named: "record"), for: .normal)
         recordBtn.addTarget(self, action: #selector(SCContainerViewController.recordBtnDidPress), for: .touchUpInside)
-        recordBtn.center = CGPoint(x: toolbar.center.x, y: yPosition)
+//        recordBtn.center = CGPoint(x: toolbar.center.x, y: recordingBtnYPosition)
         
         let bankBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         bankBtn.setBackgroundImage(UIImage.init(named: "back"), for: .normal)

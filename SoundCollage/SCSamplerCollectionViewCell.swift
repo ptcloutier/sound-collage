@@ -105,9 +105,13 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         
         UIView.animate(withDuration: 0.05, animations: {
             self.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
+//            let colors = [UIColor.red, UIColor.magenta, UIColor.orange]
+//            self.applyGradient(withColors: colors, gradientOrientation: .topLeftBottomRight)
         }, completion: { _ in
             UIView.animate(withDuration: 0.05, animations: {
                 self.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+//                self.backgroundColor = UIColor.black
+                
             })
         })
     }
