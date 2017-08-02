@@ -62,7 +62,7 @@ class SCContainerViewController: UIViewController {
         let buttonHeight = (toolbarHeight/3)*2
         let yPosition = toolbar.center.y-buttonHeight/2
         
-        self.recordBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
+        self.recordBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight*1.25, height: buttonHeight*1.25))
         guard let recordBtn = self.recordBtn else {
             print("No record btn.")
             return
@@ -90,8 +90,8 @@ class SCContainerViewController: UIViewController {
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
         let sequencerBarBtn = UIBarButtonItem.init(customView: sequencerBtn)
-        let libraryBarBtn = UIBarButtonItem.init(customView: libraryBtn)
-        let recordNewSCBarBtn = UIBarButtonItem.init(customView: recordNewSCBtn)
+//        let libraryBarBtn = UIBarButtonItem.init(customView: libraryBtn)
+//        let recordNewSCBarBtn = UIBarButtonItem.init(customView: recordNewSCBtn)
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         

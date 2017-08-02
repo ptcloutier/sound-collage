@@ -16,7 +16,7 @@ class SCScoreViewController: UIViewController {
     var recordBtn: UIButton?
     var sequencerTimer: Timer?
     var sequencerBar = UIView()
-    var triggerCounter: Int = 1
+    var triggerCounter: Int = 0
     var triggerTimer: Timer?
     var timeSignature: Double = 4.0
     let margin: CGFloat = 10.0

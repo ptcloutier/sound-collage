@@ -152,7 +152,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             let effectSettings = self.effectControls
             let reverb = AVAudioUnitReverb()
             let reverbParams = effectSettings[0]
-            if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[selectedSampleIndex]*100.0)) {
+            if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*100.0)) {
                 reverb.loadFactoryPreset(.plate) // there are thirteen posible presets
                 reverb.wetDryMix = reverbValue
             }
@@ -162,20 +162,20 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             let delay = AVAudioUnitDelay()
             let delayParams = effectSettings[1]
-            let delayWetDryMixValue = delayParams[0].parameter[selectedSampleIndex] * 100.0
+            let delayWetDryMixValue = delayParams[0].parameter[sampleIndex] * 100.0
             delay.wetDryMix = delayWetDryMixValue
             
             
-            let delayTime = delayParams[1].parameter[selectedSampleIndex]
+            let delayTime = delayParams[1].parameter[sampleIndex]
             delay.delayTime = TimeInterval(delayTime)
             
             
-            let delayFeedback = delayParams[2].parameter[selectedSampleIndex] * 80.0
+            let delayFeedback = delayParams[2].parameter[sampleIndex] * 80.0
             
             delay.feedback = delayFeedback
             
             
-            let delayLPCutoff = delayParams[3].parameter[selectedSampleIndex] * 6000.0 // 10 -> (samplerate/2), default 15000
+            let delayLPCutoff = delayParams[3].parameter[sampleIndex] * 6000.0 // 10 -> (samplerate/2), default 15000
             delay.lowPassCutoff = delayLPCutoff
            
             audioEngine.attach(delay)
@@ -183,12 +183,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             let pitch = AVAudioUnitTimePitch()
             let pitchParams = effectSettings[2]
-            let pitchUp = pitchParams[0].parameter[selectedSampleIndex] * 100.0
+            let pitchUp = pitchParams[0].parameter[sampleIndex] * 100.0
             let pitchUpValue = pitchUp * 24.0
             let posiPitch = pitchUpValue+1.0
             
             
-            let pitchDown = pitchParams[1].parameter[selectedSampleIndex] * 100.0
+            let pitchDown = pitchParams[1].parameter[sampleIndex] * 100.0
             let pitchDownValue = pitchDown * 24.0
             let negiPitch = (pitchDownValue+1.0) * -1.0
             pitch.pitch = posiPitch + negiPitch
@@ -199,9 +199,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             let distortion = AVAudioUnitDistortion()
             let distortionParams = effectSettings[4]
-            let preGainValue = distortionParams[0].parameter[selectedSampleIndex] * 100.0// range -80.0 -> 20.0
+            let preGainValue = distortionParams[0].parameter[sampleIndex] * 100.0// range -80.0 -> 20.0
             distortion.preGain = Float(preGainValue - 80.0)
-            let dmix = distortionParams[1].parameter[selectedSampleIndex] * 100.0
+            let dmix = distortionParams[1].parameter[sampleIndex] * 100.0
             distortion.wetDryMix = dmix
             audioEngine.attach(distortion)
 
@@ -209,8 +209,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             
             let time = AVAudioUnitVarispeed()
             let timeParams = effectSettings[3]
-            let timeRateUp = 1.0 + timeParams[0].parameter[selectedSampleIndex] * 4.0
-            let timeRateDown = timeParams[1].parameter[selectedSampleIndex] * 0.75
+            let timeRateUp = 1.0 + timeParams[0].parameter[sampleIndex] * 4.0
+            let timeRateDown = timeParams[1].parameter[sampleIndex] * 0.75
             
             let rateValue = Float(timeRateUp - timeRateDown)
             time.rate = rateValue
@@ -245,11 +245,11 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                     durationInt = 1
                 }
                 
-                let reverbParameter = strongSelf.effectControls[0][0].parameter[strongSelf.selectedSampleIndex]
+                let reverbParameter = strongSelf.effectControls[0][0].parameter[sampleIndex]
                 let reverbTime = round(Float(reverbParameter * 10.0))
                 durationInt += Int(reverbTime)
                 
-                let delayParams = strongSelf.effectControls[1][2].parameter[strongSelf.selectedSampleIndex]
+                let delayParams = strongSelf.effectControls[1][2].parameter[sampleIndex]
                 let delayTime = round(Float(delayParams * 20.0))
                 durationInt += Int(delayTime)
                 
