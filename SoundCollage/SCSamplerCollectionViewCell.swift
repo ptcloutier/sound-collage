@@ -103,10 +103,10 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     func transformSize(){
         
-        UIView.animate(withDuration: 0.1, animations: {
+        UIView.animate(withDuration: 0.05, animations: {
             self.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
         }, completion: { _ in
-            UIView.animate(withDuration: 0.1, animations: {
+            UIView.animate(withDuration: 0.05, animations: {
                 self.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             })
         })

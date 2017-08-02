@@ -95,8 +95,9 @@ class SCContainerViewController: UIViewController {
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
+        toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, recordBarBtn, flexibleSpace,  sequencerBarBtn, flexibleSpace]
         
-        toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace,  libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
+//        toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace,  libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
         self.view.addSubview(toolbar)
     }
     

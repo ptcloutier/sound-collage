@@ -66,62 +66,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
 
-    //MARK: Effects
-    
-    
-    private func setupEffects(){
-        
-        self.mixerPanels = ["Reverb" : ["Mix", "", "", "", ""], // "Presets", "SmallRoom", "MediumRoom", "LargeRoom", "MediumHall", "LargeHall", "Plate", "MediumChamber", "LargeChamber", "Cathedral", "LargeRoom2", "MediumHall2", "MediumHall3", "LargeHall2"],
-            
-            /*  AVAudioUnitReverbPresetSmallRoom       = 0,
-             AVAudioUnitReverbPresetMediumRoom      = 1,
-             AVAudioUnitReverbPresetLargeRoom       = 2,
-             AVAudioUnitReverbPresetMediumHall      = 3,
-             AVAudioUnitReverbPresetLargeHall       = 4,
-             AVAudioUnitReverbPresetPlate           = 5,
-             AVAudioUnitReverbPresetMediumChamber   = 6,
-             AVAudioUnitReverbPresetLargeChamber    = 7,
-             AVAudioUnitReverbPresetCathedral       = 8,
-             AVAudioUnitReverbPresetLargeRoom2      = 9,
-             AVAudioUnitReverbPresetMediumHall2     = 10,
-             AVAudioUnitReverbPresetMediumHall3     = 11,
-             AVAudioUnitReverbPresetLargeHall2      = 12 */
-            "Delay" : ["Mix", "Delay Time", "Feedback", "Cutoff", ""], // AVAudioUnitDelay
-            "Pitch" : ["Pitch Up", "Pitch Down", "", "", ""], //AVAudioUnitTimePitch
-            "Distortion" : ["Mix", "Gain", "", "", ""],//, "Presets", "DrumsBitBrush", "DrumsBufferBeats", "DrumsLoFi", "MultiBrokenSpeaker", "MultiCellphoneConcert", "MultiDecimated1", "MultiDecimated2" ,"MultiDecimated3" ,"MultiDecimated4", "MultiDistortedFunk", "MultiDistortedCubed", "MultiDistortedSquared", "MultiEcho1", "MultiEcho2", "MultiEchoTight1", "MultiEchoTight2", "MultiEverythingIsBroken", "SpeechAlienChatter", "SpeechCosmicInterference", "SpeechGoldenPi", "SpeechRadioTower", "SpeechWaves"]
-            // AVAudioUnitDistortion
-            /*  AVAudioUnitDistortionPresetDrumsBitBrush           = 0,
-             AVAudioUnitDistortionPresetDrumsBufferBeats        = 1,
-             AVAudioUnitDistortionPresetDrumsLoFi               = 2,
-             AVAudioUnitDistortionPresetMultiBrokenSpeaker      = 3,
-             AVAudioUnitDistortionPresetMultiCellphoneConcert   = 4,
-             AVAudioUnitDistortionPresetMultiDecimated1         = 5,
-             AVAudioUnitDistortionPresetMultiDecimated2         = 6,
-             AVAudioUnitDistortionPresetMultiDecimated3         = 7,
-             AVAudioUnitDistortionPresetMultiDecimated4         = 8,
-             AVAudioUnitDistortionPresetMultiDistortedFunk      = 9,
-             AVAudioUnitDistortionPresetMultiDistortedCubed     = 10,
-             AVAudioUnitDistortionPresetMultiDistortedSquared   = 11,
-             AVAudioUnitDistortionPresetMultiEcho1              = 12,
-             AVAudioUnitDistortionPresetMultiEcho2              = 13,
-             AVAudioUnitDistortionPresetMultiEchoTight1         = 14,
-             AVAudioUnitDistortionPresetMultiEchoTight2         = 15,
-             AVAudioUnitDistortionPresetMultiEverythingIsBroken = 16,
-             AVAudioUnitDistortionPresetSpeechAlienChatter      = 17,
-             AVAudioUnitDistortionPresetSpeechCosmicInterference = 18,
-             AVAudioUnitDistortionPresetSpeechGoldenPi          = 19,
-             AVAudioUnitDistortionPresetSpeechRadioTower        = 20,
-             AVAudioUnitDistortionPresetSpeechWaves             = 21*/
-            "Time": ["Speed Up", "Slow Down", "", "", ""]
-        ]
-        
-        /* TODO: "Analyzer", // volume, pan, waveform visual, trim/edit capabilities
-         "Equalizer", //  AVAudioUnitEQ, AVAudioUnitEQFilterType
-         "Time", AVAudioUnitTimeEffect
-         "Speed" AVAudioUnitVarispeed */
-    }
-    
-    
     
     //MARK: Playback
     
@@ -177,6 +121,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     
+    
     func playAudio(sampleIndex: Int){
         
         
@@ -190,7 +135,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         let fullPath = docsDirectory.appending("/\(partialPath)")
         let fullURL = URL.init(fileURLWithPath: fullPath )
         
-//        removeUsedEngines()
+        removeUsedEngines()
         
         self.audioEngine = SCAudioEngine()
         self.audioEngineChain.append(self.audioEngine)
@@ -271,9 +216,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             time.rate = rateValue
             audioEngine.attach(time)
             
-//            sampler = AVAudioUnitSampler()
-//            audioEngine.attach(sampler)
-//            let stereoFormat: AVAudioFormat
             
             audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
             audioEngine.connect(pitch, to: time, format: audioFormat)
@@ -297,12 +239,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                     return
                 }
                 // calculate audio tail based on reverb and delay parameters
+                
                 var durationInt = Int(round(Double(audioFile.length)/44100))
                 if durationInt == 0 {
                     durationInt = 1
                 }
                 
-                //TODO: calculate effect tail for engine destruction
                 let reverbParameter = strongSelf.effectControls[0][0].parameter[strongSelf.selectedSampleIndex]
                 let reverbTime = round(Float(reverbParameter * 10.0))
                 durationInt += Int(reverbTime)
@@ -350,10 +292,10 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         let sliderIdx = Int(values[1])
         let selectedSamplePad = Int(values[2])
  
-//        SCDataManager.shared.user?.currentSampleBank?.effectSettings[mixerPanelIdx][sliderIdx].parameter[selectedSamplePad] = sliderValue
         
         self.effectControls[mixerPanelIdx][sliderIdx].parameter[selectedSamplePad] = sliderValue
         SCDataManager.shared.user?.currentSampleBank?.effectSettings = self.effectControls
+        SCDataManager.shared.saveObjectToJSON()
     }
     
     
@@ -364,6 +306,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     //MARK: Recording
+    
     
     func recordNew() {
         
@@ -511,8 +454,12 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         }
         removeAudioFile(at: self.replaceableFilePath)
         SCDataManager.shared.user?.currentSampleBank? = sampleBank
-        isRecordingModeEnabled = false // so that we set the keyboard buttons to play
+        isRecordingModeEnabled = false
+        SCDataManager.shared.saveObjectToJSON()
     }
+    
+    
+    
     
     
     private func postRecordingFinishedNotification(){
@@ -520,6 +467,64 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         let notification = Notification.Name.init("recordingDidFinish")
         NotificationCenter.default.post(name: notification, object: nil)
     }
+    
+    
+    
+    //MARK: Effects
+    
+    
+    private func setupEffects(){
+        
+        self.mixerPanels = ["Reverb" : ["Mix", "", "", "", ""], // "Presets", "SmallRoom", "MediumRoom", "LargeRoom", "MediumHall", "LargeHall", "Plate", "MediumChamber", "LargeChamber", "Cathedral", "LargeRoom2", "MediumHall2", "MediumHall3", "LargeHall2"],
+            
+            /*  AVAudioUnitReverbPresetSmallRoom       = 0,
+             AVAudioUnitReverbPresetMediumRoom      = 1,
+             AVAudioUnitReverbPresetLargeRoom       = 2,
+             AVAudioUnitReverbPresetMediumHall      = 3,
+             AVAudioUnitReverbPresetLargeHall       = 4,
+             AVAudioUnitReverbPresetPlate           = 5,
+             AVAudioUnitReverbPresetMediumChamber   = 6,
+             AVAudioUnitReverbPresetLargeChamber    = 7,
+             AVAudioUnitReverbPresetCathedral       = 8,
+             AVAudioUnitReverbPresetLargeRoom2      = 9,
+             AVAudioUnitReverbPresetMediumHall2     = 10,
+             AVAudioUnitReverbPresetMediumHall3     = 11,
+             AVAudioUnitReverbPresetLargeHall2      = 12 */
+            "Delay" : ["Mix", "Delay Time", "Feedback", "Cutoff", ""], // AVAudioUnitDelay
+            "Pitch" : ["Pitch Up", "Pitch Down", "", "", ""], //AVAudioUnitTimePitch
+            "Distortion" : ["Mix", "Gain", "", "", ""],//, "Presets", "DrumsBitBrush", "DrumsBufferBeats", "DrumsLoFi", "MultiBrokenSpeaker", "MultiCellphoneConcert", "MultiDecimated1", "MultiDecimated2" ,"MultiDecimated3" ,"MultiDecimated4", "MultiDistortedFunk", "MultiDistortedCubed", "MultiDistortedSquared", "MultiEcho1", "MultiEcho2", "MultiEchoTight1", "MultiEchoTight2", "MultiEverythingIsBroken", "SpeechAlienChatter", "SpeechCosmicInterference", "SpeechGoldenPi", "SpeechRadioTower", "SpeechWaves"]
+            // AVAudioUnitDistortion
+            /*  AVAudioUnitDistortionPresetDrumsBitBrush           = 0,
+             AVAudioUnitDistortionPresetDrumsBufferBeats        = 1,
+             AVAudioUnitDistortionPresetDrumsLoFi               = 2,
+             AVAudioUnitDistortionPresetMultiBrokenSpeaker      = 3,
+             AVAudioUnitDistortionPresetMultiCellphoneConcert   = 4,
+             AVAudioUnitDistortionPresetMultiDecimated1         = 5,
+             AVAudioUnitDistortionPresetMultiDecimated2         = 6,
+             AVAudioUnitDistortionPresetMultiDecimated3         = 7,
+             AVAudioUnitDistortionPresetMultiDecimated4         = 8,
+             AVAudioUnitDistortionPresetMultiDistortedFunk      = 9,
+             AVAudioUnitDistortionPresetMultiDistortedCubed     = 10,
+             AVAudioUnitDistortionPresetMultiDistortedSquared   = 11,
+             AVAudioUnitDistortionPresetMultiEcho1              = 12,
+             AVAudioUnitDistortionPresetMultiEcho2              = 13,
+             AVAudioUnitDistortionPresetMultiEchoTight1         = 14,
+             AVAudioUnitDistortionPresetMultiEchoTight2         = 15,
+             AVAudioUnitDistortionPresetMultiEverythingIsBroken = 16,
+             AVAudioUnitDistortionPresetSpeechAlienChatter      = 17,
+             AVAudioUnitDistortionPresetSpeechCosmicInterference = 18,
+             AVAudioUnitDistortionPresetSpeechGoldenPi          = 19,
+             AVAudioUnitDistortionPresetSpeechRadioTower        = 20,
+             AVAudioUnitDistortionPresetSpeechWaves             = 21*/
+            "Time": ["Speed Up", "Slow Down", "", "", ""]
+        ]
+        
+        /* TODO: "Analyzer", // volume, pan, waveform visual, trim/edit capabilities
+         "Equalizer", //  AVAudioUnitEQ, AVAudioUnitEQFilterType
+         */
+    }
+    
+    
     
     
     //MARK: Audio i/o
@@ -596,7 +601,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
-    
+    //MARK: Recording output
     
     func setupNewSoundCollage(){
         
@@ -663,7 +668,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     func stopRecordingSoundCollage() {
-//        
+//
 //        recordingEngine.mainMixerNode.removeTap(onBus: 0)
 //        recordingEngine.stop()
 //        setAudioPlaybackSource()
