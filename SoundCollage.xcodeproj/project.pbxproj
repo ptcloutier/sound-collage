@@ -68,6 +68,7 @@
 		A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */; };
 		A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */; };
 		A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823421EA81F6C0061D0A0 /* SCStackView.swift */; };
+		A7AC37951F32044400FD3347 /* SCAudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AC37941F32044400FD3347 /* SCAudioController.swift */; };
 		A7BD6AB11F140CE9000CDF9A /* SCScoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB01F140CE9000CDF9A /* SCScoreViewController.swift */; };
 		A7BD6AB41F140D85000CDF9A /* SCScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB31F140D85000CDF9A /* SCScoreCell.swift */; };
 		A7BD6AB61F141E4D000CDF9A /* SCSequencerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB51F141E4D000CDF9A /* SCSequencerCell.swift */; };
@@ -186,6 +187,7 @@
 		A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSamplerViewController.swift; sourceTree = "<group>"; };
 		A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankViewController.swift; sourceTree = "<group>"; };
 		A7A823421EA81F6C0061D0A0 /* SCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCStackView.swift; sourceTree = "<group>"; };
+		A7AC37941F32044400FD3347 /* SCAudioController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAudioController.swift; sourceTree = "<group>"; };
 		A7BD6AB01F140CE9000CDF9A /* SCScoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCScoreViewController.swift; sourceTree = "<group>"; };
 		A7BD6AB31F140D85000CDF9A /* SCScoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SCScoreCell.swift; path = Assets.xcassets/SCScoreCell.swift; sourceTree = "<group>"; };
 		A7BD6AB51F141E4D000CDF9A /* SCSequencerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerCell.swift; sourceTree = "<group>"; };
@@ -350,6 +352,7 @@
 			children = (
 				A76A886A1EB0445200FEDED0 /* SCDataManager.swift */,
 				A7A823301EA81D300061D0A0 /* SCAudioManager.swift */,
+				A7AC37941F32044400FD3347 /* SCAudioController.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -710,6 +713,7 @@
 				A713F50E1F2F65A900742D1C /* SCFaderDelegate.swift in Sources */,
 				A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */,
 				A791610A1F1EA86B0051113C /* SCFirstContainerCell.swift in Sources */,
+				A7AC37951F32044400FD3347 /* SCAudioController.swift in Sources */,
 				A7264E811EAEECD700664EDE /* SCUser.swift in Sources */,
 				A791610C1F1EA8880051113C /* SCSecondContainerCell.swift in Sources */,
 				A7404BCD1F290884004BC4E1 /* SCMixerPanelCell.swift in Sources */,
