@@ -23,8 +23,13 @@ class SCFirstContainerCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
 
     func setupCollectionView(){
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SCFirstContainerCell.scrollToSampler), name: NSNotification.Name(rawValue: "recordBtnDidPress"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SCFirstContainerCell.scrollToSequencer), name: NSNotification.Name(rawValue: "sequencerPlaybackDidPress"), object: nil)
         
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
         collectionView = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
@@ -34,17 +39,55 @@ class SCFirstContainerCell: UICollectionViewCell {
         cv.register(SCMusicInterfaceCell.self, forCellWithReuseIdentifier: "SCMusicInterfaceCell")
         cv.isScrollEnabled = true
         cv.showsHorizontalScrollIndicator = false
-        cv.frame = self.contentView.bounds
+        cv.frame = self.contentView.frame
         self.contentView.addSubview(cv)
         
     }
     
+    
+    func scrollToSampler(){
+        if let cv = self.collectionView {
+            let indexPath = IndexPath(item: 0, section: 0)
+            cv.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        }
+    }
+    
+    
+    func scrollToSequencer(){
+        if let cv = self.collectionView {
+            let indexPath = IndexPath(item: 1, section: 0)
+            cv.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        }
+    }
+    
+    
 }
 
 
+extension SCFirstContainerCell:  UICollectionViewDelegateFlowLayout {
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let cellSize = CGSize.init(width: collectionView.frame.size.width, height: collectionView.frame.size.height)
+        return cellSize
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0, 0, 0, 0)
+    }
+}
 
 
-extension SCFirstContainerCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension SCFirstContainerCell: UICollectionViewDelegate, UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -68,6 +111,9 @@ extension SCFirstContainerCell: UICollectionViewDelegate, UICollectionViewDataSo
 }
 
 
+
+
+
 extension SCFirstContainerCell: UIScrollViewDelegate {
     
     
@@ -83,4 +129,5 @@ extension SCFirstContainerCell: UIScrollViewDelegate {
             scrollView.snapToNearestCell(scrollView: scrollView, collectionView: cv)
         }
     }
+    
 }

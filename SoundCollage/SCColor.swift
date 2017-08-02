@@ -30,31 +30,34 @@ class SCColor {
     
     func configureGradientLayer(in view: UIView, from startPoint: CGPoint, to endPoint: CGPoint) {
         
-        gradientLayer.frame = view.bounds
+        gradientLayer.frame = view.frame
         gradientLayer.colors = colors
-        gradientLayer.locations = [0.0, 0.35]
+//        gradientLayer.locations = [0.0, 0.35]
         gradientLayer.startPoint = startPoint
         gradientLayer.endPoint = endPoint
-        view.layer.addSublayer(gradientLayer)
-        //        view.layer.insertSublayer(gradientLayer, at: 0)
+//        view.layer.addSublayer(gradientLayer)
+        view.layer.insertSublayer(gradientLayer, at: 0)
         
     }
     
     
     func morphColors(in view: UIView) {
-        if currentColors < colors.count - 1 {
-            currentColors+=1
-        } else {
-            currentColors = 0
-        }
+//        
+//        if currentColors < colors.count - 1 {
+//            currentColors+=1
+//        } else {
+//            currentColors = 0
+//        }
         let colorChangeAnimation = CABasicAnimation(keyPath: "colors")
-        colorChangeAnimation.duration = 0.1
-        colorChangeAnimation.toValue = colors[currentColors]
-        colorChangeAnimation.fillMode = kCAFillModeForwards
-        colorChangeAnimation.isRemovedOnCompletion = false
+        colorChangeAnimation.duration = 0.3
+        colorChangeAnimation.fromValue = colors[0]
+        colorChangeAnimation.toValue = colors[1]
+        colorChangeAnimation.fillMode = kCATransitionFade
+        colorChangeAnimation.autoreverses = true
         gradientLayer.add(colorChangeAnimation, forKey: "colorChange")
     }
 
+    
     //MARK: Custom colors
     
     struct Custom {

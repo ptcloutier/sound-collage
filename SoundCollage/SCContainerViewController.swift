@@ -26,8 +26,6 @@ class SCContainerViewController: UIViewController {
         setupCollectionView()
         setupControls()
     }
-
-   
     
     
     func setupCollectionView(){
@@ -113,6 +111,7 @@ class SCContainerViewController: UIViewController {
             return
         }
         postRecordBtnDidPressNotification()
+    
         switch SCAudioManager.shared.isRecording {
         case true:
             SCAudioManager.shared.finishRecording(success: true)

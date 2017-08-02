@@ -26,41 +26,80 @@ class SCScoreCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         guard let sequencerCV = self.sequencerCV else { return }
+        
+        while calibrateSize(width: sequencerCV.frame.size.width) == false {
+            sequencerCV.frame.size.width = sequencerCV.frame.size.width-1.0
+        }
         sequencerCV.bounds.size = sequencerCV.collectionViewLayout.collectionViewContentSize
         
     }
     
     
     
+    
+    func calibrateSize(width: CGFloat)-> Bool{
+        var result: Bool = false
+        
+        if width.truncatingRemainder(dividingBy: 17.0) == 0 {
+            result = true
+        }
+        
+        return result
+    }
+    
+    
+
+        
+    
+    
+    
     func setupSequencer(){
         
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: CGFloat(cellCount))
-        sequencerCV = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
+        sequencerCV = UICollectionView.init(frame: self.contentView.frame, collectionViewLayout: flowLayout)
         guard let sequencerCV = self.sequencerCV else { return }
-        
+        sequencerCV.backgroundColor = UIColor.white 
         sequencerCV.register(SCSequencerCell.self, forCellWithReuseIdentifier: "SCSequencerCell")
         sequencerCV.delegate = self
         sequencerCV.dataSource = self
         contentView.addSubview(sequencerCV)
-        sequencerCV.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1.0, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1.0, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint.init(item: sequencerCV, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailing, multiplier: 1.0, constant: 0))
+      
     }
 }
 
 
 
 
-
-extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension SCScoreCell: UICollectionViewDelegateFlowLayout {
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let result = CGSize.init(width: sequencerCV!.frame.width/CGFloat(cellCount), height: sequencerCV!.frame.height)
+        
+        let result = CGSize.init(width: (collectionView.frame.width/CGFloat(cellCount))-2.0, height: collectionView.frame.height-2.0)
         return result
     }
     
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0, 0, 0, 0)
+    }
+    
+}
+
+
+
+
+
+extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource {
     
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -79,8 +118,6 @@ extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource, UI
         let cell = sequencerCV?.dequeueReusableCell(withReuseIdentifier: "SCSequencerCell", for: indexPath) as!SCSequencerCell
 
         cell.idx = indexPath.row
-        cell.layer.borderWidth = 1.0
-        cell.layer.borderColor = UIColor.darkGray.cgColor//UIColor.purple.cgColor
         cell.setupSequencer()
         return cell
 

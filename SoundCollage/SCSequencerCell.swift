@@ -11,6 +11,7 @@ import UIKit
 class SCSequencerCell: UICollectionViewCell {
     
     var triggerCV: UICollectionView?
+    
     var idx: Int = 0
     let cellCount: Int = 16
     
@@ -27,11 +28,25 @@ class SCSequencerCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         guard let triggerCV = self.triggerCV else { return }
+        
+        while calibrateSize(height: triggerCV.frame.size.height) == false {
+            triggerCV.frame.size.height = triggerCV.frame.size.height-1.0
+        }
         triggerCV.bounds.size = triggerCV.collectionViewLayout.collectionViewContentSize
         
     }
+
     
-    
+    func calibrateSize(height: CGFloat)-> Bool{
+        var result: Bool = false
+        
+        if height.truncatingRemainder(dividingBy: 16.0) == 0 {
+            result = true
+        }
+        
+        return result
+    }
+
     
     
     
@@ -47,31 +62,48 @@ class SCSequencerCell: UICollectionViewCell {
 //            SCAudioManager.shared.sequencerSettings.append(triggers)
 //        }
         let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: CGFloat(cellCount))
-        triggerCV = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
+        triggerCV = UICollectionView.init(frame: self.contentView.frame, collectionViewLayout: flowLayout)
         guard let triggerCV = self.triggerCV else { return }
+        triggerCV.backgroundColor = UIColor.clear
         triggerCV.register(SCTriggerCell.self, forCellWithReuseIdentifier: "SCTriggerCell")
         triggerCV.delegate = self
         triggerCV.dataSource = self
         contentView.addSubview(triggerCV)
-        triggerCV.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addConstraint(NSLayoutConstraint.init(item: triggerCV, attribute: .height, relatedBy: .equal, toItem: contentView, attribute: .height, multiplier: 1.0, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint.init(item: triggerCV, attribute: .width, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 1.0, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint.init(item: triggerCV, attribute: .width, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 1.0, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint.init(item: triggerCV, attribute: .width, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 1.0, constant: 0))
+        
     }
 }
 
 
-extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+
+extension SCSequencerCell: UICollectionViewDelegateFlowLayout {
+  
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let result = CGSize.init(width: contentView.frame.width, height: contentView.frame.height/CGFloat(cellCount))
+        
+        let result = CGSize.init(width: collectionView.frame.width, height: collectionView.frame.height/CGFloat(cellCount))
         return result
     }
     
-    //    func numberOfSections(in collectionView: UICollectionView) -> Int {
-    //        return 4
-    //    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0, 0, 0, 0)
+    }
+}
+
+
+
+
+extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource {
+   
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cellCount
@@ -106,7 +138,6 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             cell.padLabel.text = "\(cell.idx+1)"
             cell.isUserInteractionEnabled = false
             cell.backgroundColor = UIColor.black //iceCreamColors[colorIdx]
-            cell.alpha = 0.8
         } else {
             cell.padLabel.isHidden = true
             
@@ -121,7 +152,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
                 cell.backgroundColor = UIColor.black // iceCreamColors[colorIdx]
                 
             case false:
-                cell.backgroundColor = UIColor.white
+                cell.backgroundColor = UIColor.clear
                 
             }
         }
@@ -156,9 +187,9 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         case false:
             cell.isPlaybackEnabled = true
             SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = true
-            let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
-            var colorIdx: Int
-            colorIdx = Int(arc4random_uniform(UInt32(iceCreamColors.count)))
+//            let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
+//            var colorIdx: Int
+//            colorIdx = Int(arc4random_uniform(UInt32(iceCreamColors.count)))
             cell.backgroundColor =  UIColor.black //iceCreamColors[colorIdx]
             
             if SCAudioManager.shared.sequencerIsPlaying == false {
@@ -188,7 +219,6 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
 
 
 extension SCSequencerCell: UIGestureRecognizerDelegate {
-    
     
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {

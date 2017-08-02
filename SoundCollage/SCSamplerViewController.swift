@@ -55,6 +55,8 @@ class SCSamplerViewController: UIViewController  {
         if SCDataManager.shared.user?.currentSampleBank?.type == SCSampleBank.SamplerType.standard {
             samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
         }
+        
+        print("sampler size - \(samplerCV.frame.width), \(samplerCV.frame.height)")
     }
     
     

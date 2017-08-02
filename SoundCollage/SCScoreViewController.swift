@@ -37,19 +37,14 @@ class SCScoreViewController: UIViewController {
     func setupCollectionView(){
         
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
-        scoreCV = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
+        scoreCV = UICollectionView.init(frame: self.view.frame, collectionViewLayout: flowLayout)
         scoreCV?.register(SCScoreCell.self, forCellWithReuseIdentifier: "SCScoreCell")
         guard let scoreCV = self.scoreCV else { return }
         scoreCV.delegate = self
         scoreCV.dataSource = self
         view.addSubview(scoreCV)
         
-        scoreCV.translatesAutoresizingMaskIntoConstraints = false
-        view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: 0))
-        view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant:-margin))
-        view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: margin))
-        view.addConstraint(NSLayoutConstraint.init(item: scoreCV, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0))
-        
+                
     }
     
     
@@ -169,8 +164,32 @@ class SCScoreViewController: UIViewController {
 }
 
 
+extension SCScoreViewController: UICollectionViewDelegateFlowLayout {
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let cellSize = CGSize.init(width: collectionView.frame.size.width, height: 368.0) // TODO: get this property from the samplerVC
+        print("cellSize - \(cellSize.width), \(cellSize.height)")
+        return cellSize
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0, 0, 0, 0)
+    }
+}
 
-extension SCScoreViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+
+
+extension SCScoreViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     
     
