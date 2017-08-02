@@ -42,6 +42,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var recordingEngine = AVAudioEngine()
     var isRecordingSoundCollage: Bool = false 
     var outputFileURL: URL?
+    var sampler: AVAudioUnitSampler?
     
     func setupAudioManager(){
         
@@ -189,9 +190,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         let fullPath = docsDirectory.appending("/\(partialPath)")
         let fullURL = URL.init(fileURLWithPath: fullPath )
         
-        removeUsedEngines()
+//        removeUsedEngines()
         
-//        let sampleIndex = sampleIndex
         self.audioEngine = SCAudioEngine()
         self.audioEngineChain.append(self.audioEngine)
         
@@ -270,6 +270,10 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             let rateValue = Float(timeRateUp - timeRateDown)
             time.rate = rateValue
             audioEngine.attach(time)
+            
+//            sampler = AVAudioUnitSampler()
+//            audioEngine.attach(sampler)
+//            let stereoFormat: AVAudioFormat
             
             audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
             audioEngine.connect(pitch, to: time, format: audioFormat)
@@ -596,73 +600,75 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func setupNewSoundCollage(){
         
-        if isSpeakerEnabled == true {
-            setAudioPlaybackSource()
-        }
-        recordingEngine.stop()
-        recordingEngine.reset()
-        recordingEngine = AVAudioEngine()
-        
-        do {
-            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            
-            let ioBufferDuration = 128.0 / 44100.0
-            
-            try audioSession.setPreferredIOBufferDuration(ioBufferDuration)
-            
-        } catch {
-            
-            assertionFailure("AVAudioSession setup error: \(error)")
-        }
-        
-        let newPath = "newRecording"+".caf"
-        self.outputFileURL = getDocumentsDirectory().appendingPathComponent(newPath)
-        guard let outputFileURL = self.outputFileURL else { return }
-        print(outputFileURL)
-        do {
-            
-            try self.outputFile = AVAudioFile(forWriting: outputFileURL, settings: recordingEngine.mainMixerNode.outputFormat(forBus: 0).settings)
-        }
-        catch {
-            print("Error setting up audio file")
-        }
-        
-        let input = recordingEngine.inputNode!
-        let format = input.inputFormat(forBus: 0)
-        
-        recordingEngine.connect(input, to: recordingEngine.mainMixerNode, format: format)
-        assert(recordingEngine.inputNode != nil)
-        
-        try! recordingEngine.start()
-        //save url to property
+//        if isSpeakerEnabled == true {
+//            setAudioPlaybackSource()
+//        }
+//        recordingEngine.stop()
+//        recordingEngine.reset()
+//        recordingEngine = AVAudioEngine()
+//        
+//        do {
+//            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+//            
+//            let ioBufferDuration = 128.0 / 44100.0
+//            
+//            try audioSession.setPreferredIOBufferDuration(ioBufferDuration)
+//            
+//        } catch {
+//            
+//            assertionFailure("AVAudioSession setup error: \(error)")
+//        }
+//        
+//        let newPath = "newRecording"+".caf"
+//        self.outputFileURL = getDocumentsDirectory().appendingPathComponent(newPath)
+//        guard let outputFileURL = self.outputFileURL else { return }
+//        print(outputFileURL)
+//        do {
+//            
+//            try self.outputFile = AVAudioFile(forWriting: outputFileURL, settings: recordingEngine.mainMixerNode.outputFormat(forBus: 0).settings)
+//        }
+//        catch {
+//            print("Error setting up audio file")
+//        }
+//        
+//        let input = recordingEngine.inputNode!
+//        let format = input.inputFormat(forBus: 0)
+//        
+//        recordingEngine.connect(input, to: recordingEngine.mainMixerNode, format: format)
+//        assert(recordingEngine.inputNode != nil)
+//        
+//        try! recordingEngine.start()
+//        //save url to property
     }
     
     
     func startRecordingSoundCollage() {
         
-        let mixer = recordingEngine.mainMixerNode
-        let format = mixer.outputFormat(forBus: 0)
-        
-        mixer.installTap(onBus: 0, bufferSize: 1024, format: format, block:
-            { (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                
-                print(NSString(string: "writing"))
-                do{
-                    try self.outputFile.write(from: buffer)
-                }
-                catch {
-                    print(NSString(string: "Write failed"));
-                }
-        })
+//        let mixer = recordingEngine.mainMixerNode
+//        let format = mixer.outputFormat(forBus: 0)
+//        
+//        mixer.installTap(onBus: 0, bufferSize: 1024, format: format, block:
+//            { (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+//                
+//                print(NSString(string: "writing"))
+//                do{
+//                    try self.outputFile.write(from: buffer)
+//                }
+//                catch {
+//                    print(NSString(string: "Write failed"));
+//                }
+//        })
     }
     
     
     
     func stopRecordingSoundCollage() {
-        
-        recordingEngine.mainMixerNode.removeTap(onBus: 0)
-        recordingEngine.stop()
-        setAudioPlaybackSource()
+//        
+//        recordingEngine.mainMixerNode.removeTap(onBus: 0)
+//        recordingEngine.stop()
+//        setAudioPlaybackSource()
+//        guard let url = self.outputFileURL else { return }
+//        print("file recorded at \(String(describing: url.absoluteString))")
     }
     
     
