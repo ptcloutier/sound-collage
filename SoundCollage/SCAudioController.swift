@@ -35,7 +35,7 @@ struct SCAudioControllerConstants{
 
 
 
-protocol SCAudioControllerDelegate {
+protocol SCAudioControllerDelegate: class {
     
     func engineWasInterrupted()
     func engineConfigurationHasChanged()
@@ -45,27 +45,27 @@ protocol SCAudioControllerDelegate {
 
 
 class SCAudioController {
-    
-    var recordingIsAvailable:           Bool = false
+//    
+//    var recordingIsAvailable:           Bool = false
     var playerIsPlaying:                Bool = false
     var sequencerIsPlaying:             Bool = false
-    
-    var sequencerCurrentPosition:       Float?
-    var sequencerPlaybackRate:          Float?
-    
-    var playerVolume:                   Float? // 0.0 - 1.0
-    var playerPan:                      Float? // -1.0 - 1.0
-    
-    var samplerDirectVolume:            Float? // 0.0 - 1.0
-    var samplerEffectVolume:            Float? // 0.0 - 1.0
-    
-    var distortionWEtDryMix:            Float? // 0.0 - 1.0
-    var distortionPreset:               Int?
-    
-    var reverbWetDryMix:                Float?  // 0.0 - 1.0
-    var reverbPreset:                   Int?
-    
-    var outputVolume:                   Float?  // 0.0 - 1.0
+//
+//    var sequencerCurrentPosition:       Float?
+//    var sequencerPlaybackRate:          Float?
+//    
+//    var playerVolume:                   Float? // 0.0 - 1.0
+//    var playerPan:                      Float? // -1.0 - 1.0
+//    
+//    var samplerDirectVolume:            Float? // 0.0 - 1.0
+//    var samplerEffectVolume:            Float? // 0.0 - 1.0
+//    
+//    var distortionWEtDryMix:            Float? // 0.0 - 1.0
+//    var distortionPreset:               Int?
+//    
+//    var reverbWetDryMix:                Float?  // 0.0 - 1.0
+//    var reverbPreset:                   Int?
+//    
+//    var outputVolume:                   Float?  // 0.0 - 1.0
     
     weak var delegate:                  SCAudioControllerDelegate?
     
@@ -74,18 +74,18 @@ class SCAudioController {
     // private class extensions
     
     // AVAudioEngine and AVAudioNodes
-    let engine:                         AVAudioEngine?
-    let sampler:                        AVAudioUnitSampler?
-    let distortion:                     AVAudioUnitDistortion?
-    let reverb:                         AVAudioUnitReverb?
-    let player:                         AVAudioPlayerNode?
+    var engine:                         AVAudioEngine?
+    var sampler:                        AVAudioUnitSampler?
+    var distortion:                     AVAudioUnitDistortion?
+    var reverb:                         AVAudioUnitReverb?
+    var player:                         AVAudioPlayerNode?
     
     // the sequencer
-    let sequencer:                      AVAudioSequencer?
+    var sequencer:                      AVAudioSequencer?
     var sequencerTrackLengthSeconds:    Double?
     
     // buffer for the player
-    let playerLoopBuffer:               AVAudioPCMBuffer?
+    var playerLoopBuffer:               AVAudioPCMBuffer?
     
     // for the node tap
     let mixerOutputFileURL:             URL?
@@ -96,8 +96,9 @@ class SCAudioController {
     var isSessionInterrupted:           Bool = false
     var isConfigChangePending:          Bool = false
     
+    
+    
     init() {
-        super.init()
         
         self.mixerOutputFileURL = nil
         self.isSessionInterrupted = false
@@ -110,7 +111,7 @@ class SCAudioController {
         createAndSetupSequencer()
         setNodeDefaults()
         
-        print("\(engine?.description)")
+        print("\(String(describing: engine?.description))")
         
         NotificationCenter.default.addObserver(forName: SCAudioControllerConstants.kShouldEnginePauseNotification, object: nil, queue: OperationQueue.main, using: {
             note in
@@ -118,8 +119,19 @@ class SCAudioController {
             /* pausing stops the audio engine and the audio hardware, but does not deallocate the resources allocated by prepare().
              When your app does not need to play audio, you should pause or stop the engine (as applicable), to minimize power consumption.
              */
-
+            if !self.isSessionInterrupted && !self.isConfigChangePending {
+                if self.playerIsPlaying || self.sequencerIsPlaying || self.isRecording {
+                
+                    print("Pausing engine.")
+                    self.engine?.pause()
+                    self.engine?.reset()
+                    
+                    // post notificatino
+                    self.delegate?.engineHasBeenPaused()
             
+            
+                }
+            }
         })
     }
     
@@ -127,6 +139,54 @@ class SCAudioController {
     //MARK: AVAudioEngine Setup
     private func initAndCreateNodes(){
         
+        engine = nil
+        sampler = nil
+        distortion = nil
+        reverb = nil
+        player = nil
+        
+        // create the various nodes
+        
+        /*  AVAudioPlayerNode supports scheduling the playback of AVAudioBuffer instances,
+         or segments of audio files opened via AVAudioFile. Buffers and segments may be
+         scheduled at specific points in time, or to play immediately following preceding segments. */
+        
+        player = AVAudioPlayerNode.init()
+        
+        /* The AVAudioUnitSampler class encapsulates Apple's Sampler Audio Unit.
+         The sampler audio unit can be configured by loading different types of instruments such as an “.aupreset” file,
+         a DLS or SF2 sound bank, an EXS24 instrument, a single audio file or with an array of audio files.
+         The output is a single stereo bus. */
+        
+        sampler = AVAudioUnitSampler.init()
+        
+        /* An AVAudioUnitEffect that implements a multi-stage distortion effect */
+        
+        distortion = AVAudioUnitDistortion.init()
+        
+        /*  A reverb simulates the acoustic characteristics of a particular environment.
+         Use the different presets to simulate a particular space and blend it in with
+         the original signal using the wetDryMix parameter. */
+        
+        reverb = AVAudioUnitReverb.init()
+        
+        // load drumloop into a buffer for the playernode
+        do {
+            let drumLoopURL = URL.init(fileURLWithPath: Bundle.main.path(forResource: "drumLoop", ofType: "caf")!)
+            let drumLoopFile = try AVAudioFile.init(forReading: drumLoopURL)
+            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: drumLoopFile.processingFormat, frameCapacity: AVAudioFrameCount(drumLoopFile.length))
+            do {
+                try drumLoopFile.read(into: playerLoopBuffer!)//:_playerLoopBuffer error:&error];
+            } catch let error {
+                print("Error reading buffer from file\(error.localizedDescription)")
+            }
+        } catch let error {
+            print("Error reading audio file \(error.localizedDescription)")
+        }
+        
+        isRecording = false
+        isRecordingSelected = false
+ 
     }
     
     private func createEngineAndAttachNodes(){
@@ -166,11 +226,11 @@ class SCAudioController {
     }
     
     
-    private func sequencerIsPlaying() -> Bool {
-        
+    func getSequencerIsPlaying() -> Bool {
+       return self.sequencerIsPlaying
     }
     
-    private func sequencerCurrentPosition() -> Float {
+    func sequencerCurrentPosition() -> Float {
         
     }
     
@@ -179,7 +239,7 @@ class SCAudioController {
     }
     
     
-    private func sequencerPlaybackRate() -> Float {
+    func sequencerPlaybackRate() -> Float {
         
     }
     
@@ -197,7 +257,7 @@ class SCAudioController {
     }
     
     
-    private func samplerDirectVolume() -> Float {
+    func samplerDirectVolume() -> Float {
         
     }
     
@@ -209,7 +269,7 @@ class SCAudioController {
     
     
     
-    private func samplerEffectVolume() -> Float {
+    func samplerEffectVolume() -> Float {
         
     }
     
@@ -222,7 +282,7 @@ class SCAudioController {
     }
     
     
-    private func outputVolume()-> Float {
+    func outputVolume()-> Float {
         
     }
     
@@ -251,7 +311,7 @@ class SCAudioController {
     }
     
     
-    private func reverbWetDryMix() -> Float {
+    func reverbWetDryMix() -> Float {
         
     }
     
@@ -280,12 +340,12 @@ class SCAudioController {
     }
     
     
-    private func playerVolume() -> Float {
+    func playerVolume() -> Float {
         
     }
     
     
-    private func playerPan() -> Float {
+    func playerPan() -> Float {
         
     }
     
@@ -325,7 +385,7 @@ class SCAudioController {
     
     
     
-    private func recordingIsAvailable() -> Bool {
+    func recordingIsAvailable() -> Bool {
         
     }
     
