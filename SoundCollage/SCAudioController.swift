@@ -57,8 +57,8 @@ class SCAudioController {
 //    var playerPan:                      Float? // -1.0 - 1.0
 //    
 //    var samplerDirectVolume:            Float? // 0.0 - 1.0
-//    var samplerEffectVolume:            Float? // 0.0 - 1.0
-//    
+    var samplerEffectVolume:            Float? // 0.0 - 1.0
+//
 //    var distortionWEtDryMix:            Float? // 0.0 - 1.0
 //    var distortionPreset:               Int?
 //    
@@ -128,8 +128,6 @@ class SCAudioController {
                     
                     // post notificatino
                     self.delegate?.engineHasBeenPaused()
-            
-            
                 }
             }
         })
@@ -191,16 +189,102 @@ class SCAudioController {
     
     private func createEngineAndAttachNodes(){
         
+        /*  An AVAudioEngine contains a group of connected AVAudioNodes ("nodes"), each of which performs
+         an audio signal generation, processing, or input/output task.
+         
+         Nodes are created separately and attached to the engine.
+         
+         The engine supports dynamic connection, disconnection and removal of nodes while running,
+         with only minor limitations:
+         - all dynamic reconnections must occur upstream of a mixer
+         - while removals of effects will normally result in the automatic connection of the adjacent
+         nodes, removal of a node which has differing input vs. output channel counts, or which
+         is a mixer, is likely to result in a broken graph. */
+        
+        engine = AVAudioEngine.init()
+        
+        /*  To support the instantiation of arbitrary AVAudioNode subclasses, instances are created
+         externally to the engine, but are not usable until they are attached to the engine via
+         the attachNode method. */
+        
+        engine?.attach(sampler!)
+        engine?.attach(distortion!)
+        engine?.attach(reverb!)
+        engine?.attach(player!)
+
     }
     
     
     private func makeEngineConnections(){
         
+        /*  The engine will construct a singleton main mixer and connect it to the outputNode on demand,
+         when this property is first accessed. You can then connect additional nodes to the mixer.
+         
+         By default, the mixer's output format (sample rate and channel count) will track the format
+         of the output node. You may however make the connection explicitly with a different format. */
+        
+        // get the engine's optional singleton main mixer node
+        let mainMixer = engine?.mainMixerNode
+        
+        /*  Nodes have input and output buses (AVAudioNodeBus). Use connect:to:fromBus:toBus:format: to
+         establish connections betweeen nodes. Connections are always one-to-one, never one-to-many or
+         many-to-one.
+         
+         Note that any pre-existing connection(s) involving the source's output bus or the
+         destination's input bus will be broken.
+         
+         @method connect:to:fromBus:toBus:format:
+         @param node1 the source node
+         @param node2 the destination node
+         @param bus1 the output bus on the source node
+         @param bus2 the input bus on the destination node
+         @param format if non-null, the format of the source node's output bus is set to this
+         format. In all cases, the format of the destination node's input bus is set to
+         match that of the source node's output bus. */
+        
+        let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
+        let playerFormat = playerLoopBuffer?.format
+        
+        // establish a connection between nodes
+        
+        // connect the player to the reverb
+        // use the buffer format for the connection format as they must match
+        engine?.connect(player!, to: reverb!, format: playerFormat)
+        
+        // connect the reverb effect to mixer input bus 0
+        // use the buffer format for the connection format as they must match
+        engine?.connect(reverb!, to: mainMixer!, fromBus: 0,  toBus: 0, format: playerFormat)
+        
+        // connect the distortion effect to mixer input bus 2
+        
+        engine?.connect(distortion!, to: mainMixer!, fromBus: 0, toBus: 2,  format:stereoFormat)
+        
+        // fan out the sampler to mixer input 1 and distortion effect
+        let destinationNodes: [AVAudioConnectionPoint] = [ AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1), AVAudioConnectionPoint.init(node: distortion!, bus: 0)]//NSArray<AVAudioConnectionPoint *>
+
+        
+        
+        engine?.connect( sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
     }
+    
+    
     
     
     private func setNodeDefaults(){
         
+        
+        // settings for effects units
+        reverb?.wetDryMix = 40.0
+        reverb?.loadFactoryPreset( AVAudioUnitReverbPreset.mediumHall)
+    
+        distortion?.loadFactoryPreset( AVAudioUnitDistortionPreset.drumsBitBrush)
+        distortion?.wetDryMix = 100
+        self.samplerEffectVolume = 0
+        
+        bankURL: URL = URL.fileURLWit//fileURLWithPath:NSBundl bundleForClass:[self class]] pathForResource:@"gs_instruments" ofType:@"dls"]];
+        BOOL success = [_sampler loadSoundBankInstrumentAtURL:bankURL program:0 bankMSB:0x79 bankLSB:0 error:&error];
+        NSAssert(success, @"couldn't load SoundBank into sampler node, %@", [error localizedDescription]);
+
     }
     
     
