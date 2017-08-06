@@ -724,7 +724,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             AVSampleRateKey: 44100,
             AVNumberOfChannelsKey: 2,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
-            AVLinearPCMIsNonInterleaved: true
+//            AVLinearPCMIsNonInterleaved: true
             ] as [String : Any]
 
         do {
@@ -777,7 +777,4 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         print("file recorded at \(String(describing: url.absoluteString))")
         observeAudioIO()
     }
-    
-    
-    
 }

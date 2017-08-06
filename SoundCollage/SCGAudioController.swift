@@ -45,7 +45,8 @@ protocol SCGAudioControllerDelegate: class {
 
 class SCGAudioController {
     
-    var arrayOfPlayers:                 [AVAudioPlayer] = []
+//    var arrayOfPlayers:                 [AVAudioPlayer] = []
+    var arrayOfPlayers:                 [AVAudioPlayerNode] = []
     var mixerOutputFile:                AVAudioFile!
     var recordingIsAvailable:           Bool = false
     var playerIsPlaying:                Bool = false
@@ -622,20 +623,103 @@ class SCGAudioController {
     //MARK: Multiple players
     
     func playSample(sampleURL: URL) {
-        
-        startEngine()
-        arrayOfPlayers = arrayOfPlayers.filter(){$0.isPlaying}
-
         do {
-            let audioPlayer = try AVAudioPlayer(contentsOf: sampleURL)
-            arrayOfPlayers.append(audioPlayer)
-            arrayOfPlayers.last?.prepareToPlay()
-            arrayOfPlayers.last?.play()
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         } catch let error {
-            print("Error, couldn't create AVAudioPlayer, \(error.localizedDescription)")
+            print("Error setting avaudiosession category, \(error.localizedDescription)")
         }
+
+        
+//        arrayOfPlayers = arrayOfPlayers.filter(){$0.isPlaying}
+        startEngine()
+        let player = AVAudioPlayerNode.init()
+        player.volume = 1.0
+        engine?.attach(player)
+        makeEngineConnectionsForMultiPlayer(player: player)
+        print("playing file at \(sampleURL.absoluteString)")
+        do {
+            let sample = try AVAudioFile.init(forReading: sampleURL)
+            player.scheduleFile(sample, at: nil, completionHandler: nil)
+        } catch let error {
+            print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
+        }
+        
+//        arrayOfPlayers = arrayOfPlayers.filter(){$0.isPlaying}
+//
+//        do {
+//            let audioPlayer = try AVAudioPlayer(contentsOf: sampleURL)
+//            arrayOfPlayers.append(audioPlayer)
+//            arrayOfPlayers.last?.prepareToPlay()
+//            arrayOfPlayers.last?.play()
+//        } catch let error {
+        
+//            print("Error, couldn't create AVAudioPlayer, \(error.localizedDescription)")
+//        }
+        engine?.prepare()
+        do {
+            try engine?.start()
+        } catch _ {
+            print("Play session Error")
+        }
+        player.play()
+        print("Playing audiofile at \(sampleURL.absoluteString)")
     }
     
+    
+    func makeEngineConnectionsForMultiPlayer(player: AVAudioPlayerNode){
+        
+            /*  The engine will construct a singleton main mixer and connect it to the outputNode on demand,
+             when this property is first accessed. You can then connect additional nodes to the mixer.
+             
+             By default, the mixer's output format (sample rate and channel count) will track the format
+             of the output node. You may however make the connection explicitly with a different format. */
+            
+            // get the engine's optional singleton main mixer node
+            let mainMixer = engine?.mainMixerNode
+            
+            /*  Nodes have input and output buses (AVAudioNodeBus). Use connect:to:fromBus:toBus:format: to
+             establish connections betweeen nodes. Connections are always one-to-one, never one-to-many or
+             many-to-one.
+             
+             Note that any pre-existing connection(s) involving the source's output bus or the
+             destination's input bus will be broken.
+             
+             @method connect:to:fromBus:toBus:format:
+             @param node1 the source node
+             @param node2 the destination node
+             @param bus1 the output bus on the source node
+             @param bus2 the input bus on the destination node
+             @param format if non-null, the format of the source node's output bus is set to this
+             format. In all cases, the format of the destination node's input bus is set to
+             match that of the source node's output bus. */
+            
+            let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
+        
+            let playerBuffer = AVAudioPCMBuffer.init()
+            let playerFormat = playerBuffer.format
+//            let playerFormat = playerLoopBuffer?.format
+            
+            // establish a connection between nodes
+            
+            // connect the player to the reverb
+            // use the buffer format for the connection format as they must match
+            engine?.connect(player, to: reverb!, format: playerFormat)
+            
+            // connect the reverb effect to mixer input bus 0
+            // use the buffer format for the connection format as they must match
+            engine?.connect(reverb!, to: mainMixer!, fromBus: 0,  toBus: 0, format: playerFormat)
+            
+            // connect the distortion effect to mixer input bus 2
+            
+            engine?.connect(distortion!, to: mainMixer!, fromBus: 0, toBus: 2,  format:stereoFormat)
+            
+            // fan out the sampler to mixer input 1 and distortion effect
+            let destinationNodes: [AVAudioConnectionPoint] = [ AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1), AVAudioConnectionPoint.init(node: distortion!, bus: 0)]//NSArray<AVAudioConnectionPoint *>
+            
+            
+            
+            engine?.connect( sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
+    }
     
     
     //MARK: Recording Methods
@@ -663,42 +747,67 @@ class SCGAudioController {
          the engine is running.
          ---------------------------------------------------------------- */
         
-        if mixerOutputFileURL == nil {
-            mixerOutputFileURL = URL.init(string: NSTemporaryDirectory()+"mixerOutput.caf")
-        }
-        
-        let mainMixer = engine?.mainMixerNode
-        
         do {
-            mixerOutputFile = try AVAudioFile.init(forWriting: mixerOutputFileURL!, settings: (mainMixer?.outputFormat(forBus: 0).settings)!)
-        } catch let error {
-            print("mixerOutputFile is nil, \(error.localizedDescription)")
-        }
-        
-        
-        mainMixer?.installTap(onBus: 0, bufferSize: 4096, format: mainMixer?.outputFormat(forBus: 0), block:  {
-            (buffer : AVAudioPCMBuffer!, when : AVAudioTime!) in
-            //print("Got buffer of length: \(buffer.frameLength) at time: \(when)")
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord)
             
-            do {
-                try self.mixerOutputFile.write(from: buffer)
-            } catch {
-                print("error \(error.localizedDescription)")
-                
+            if mixerOutputFileURL == nil {
+                mixerOutputFileURL = URL.init(string: NSTemporaryDirectory()+"mixerOutput.aac")
             }
             
-        })
-        
-        print("starting audio engine for recording")
-        print("writing to \(String(describing: self.mixerOutputFileURL?.absoluteString))")
-        
-        
-        do {
-            try self.engine?.start()
-        } catch {
-            print("Error starting audio engine: \(error.localizedDescription)")
+            let mainMixer = engine?.mainMixerNode
+            
+            let settings  = [AVSampleRateKey: 44100,
+                             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+                             AVNumberOfChannelsKey: 2,
+                             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue] as [String : Any]
+            
+            let format: AVAudioFormat = AVAudioFormat.init(settings: settings)
+            /*NSMutableDictionary *recordSettings = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+             [NSNumber numberWithFloat: 44100.], AVSampleRateKey,
+             [NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
+             [NSNumber numberWithInt: 2], AVNumberOfChannelsKey,
+             [NSNumber numberWithInt: AVAudioQualityHigh], AVEncoderAudioQualityKey, nil];
+             
+             /*set bitrate to taste*/
+             [recordSettings setObject: [NSNumber numberWithInt: 192000] forKey: AVEncoderBitRateKey];
+             
+             AVAudioFile *outputFile = [[AVAudioFile alloc] initForWriting:outputFileURL settings:recordSettings error:&error];
+         */
+            
+            do {
+                mixerOutputFile = try AVAudioFile.init(forWriting: mixerOutputFileURL!, settings: format.settings)
+                //(mainMixer?.outputFormat(forBus: 0).settings)!)
+            } catch let error {
+                print("mixerOutputFile is nil, \(error.localizedDescription)")
+            }
+            
+            
+            mainMixer?.installTap(onBus: 0, bufferSize: 4096, format: mainMixer?.outputFormat(forBus: 0), block:  {
+                (buffer : AVAudioPCMBuffer!, when : AVAudioTime!) in
+                //print("Got buffer of length: \(buffer.frameLength) at time: \(when)")
+                
+                do {
+                    try self.mixerOutputFile.write(from: buffer)
+                } catch {
+                    print("error \(error.localizedDescription)")
+                    
+                }
+                
+            })
+            
+            print("starting audio engine for recording")
+            print("writing to \(String(describing: self.mixerOutputFileURL?.absoluteString))")
+            
+            
+            do {
+                try self.engine?.start()
+            } catch {
+                print("Error starting audio engine: \(error.localizedDescription)")
+            }
+            self.isRecording = true
+        } catch let error {
+            print("Error setting avaudiosession category, \(error.localizedDescription)")
         }
-        self.isRecording = true
     }
     
     
@@ -766,17 +875,6 @@ class SCGAudioController {
         nc.addObserver(self, selector: #selector(handleInterruption(notification:)), name: NSNotification.Name.AVAudioSessionInterruption, object: sessionInstance)
         nc.addObserver(self, selector: #selector(handleRouteChange(notification:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: sessionInstance)
         nc.addObserver(self, selector: #selector(handleMediaServicesReset(notification:)), name: NSNotification.Name.AVAudioSessionMediaServicesWereReset, object: sessionInstance)
-        
-        //
-        //        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.handleInterruption(_:)), name: AVAudioSessionInterruptionNotification, object: theSession)
-        
-        //        NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: NSNotification.Name.AVAu
-        // dioSessionInterruptionNotification, object: sessionInstance)
-        
-        // we don't do anything special in the route change notification
-        //        NotificationCenter.default.addObserver(self, selector: #selector(handleRouteChange), name: NSNotification.Name.AVAudioSessionRouteChange, object: sessionInstance)
-        //
-        //        NotificationCenter.default.addObserver(self, selector: #selector(handleMediaServicesReset), name: NSNotification.Name.AVAudioAudioSessionMediaServicesReset, object: sessionInstance)
         
         // activate the audio session
         do {

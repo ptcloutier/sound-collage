@@ -89,14 +89,14 @@ class SCContainerViewController: UIViewController {
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
         let sequencerBarBtn = UIBarButtonItem.init(customView: sequencerBtn)
-//        let libraryBarBtn = UIBarButtonItem.init(customView: libraryBtn)
-//        let recordNewSCBarBtn = UIBarButtonItem.init(customView: recordNewSCBtn)
+        let libraryBarBtn = UIBarButtonItem.init(customView: libraryBtn)
+        let recordNewSCBarBtn = UIBarButtonItem.init(customView: recordNewSCBtn)
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, recordBarBtn, flexibleSpace,  sequencerBarBtn, flexibleSpace]
+//        toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, recordBarBtn, flexibleSpace,  sequencerBarBtn, flexibleSpace]
         
-//        toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace,  libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
+        toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace,  libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
         self.view.addSubview(toolbar)
     }
     
@@ -159,11 +159,13 @@ class SCContainerViewController: UIViewController {
         
         switch SCAudioManager.shared.isRecordingSoundCollage {
         case true:
-            SCAudioManager.shared.stopRecordingSoundCollage()
+            SCAudioManager.shared.audioController?.stopRecordingMixerOutput()
+//            SCAudioManager.shared.stopRecordingSoundCollage()
             SCAudioManager.shared.isRecordingSoundCollage = false
         case false:
-            SCAudioManager.shared.setupNewSoundCollage()
-            SCAudioManager.shared.startRecordingSoundCollage()
+            SCAudioManager.shared.audioController?.startRecordingMixerOutput()
+//            SCAudioManager.shared.setupNewSoundCollage()
+//            SCAudioManager.shared.startRecordingSoundCollage()
             SCAudioManager.shared.isRecordingSoundCollage = true 
         }
     }
