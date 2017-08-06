@@ -29,8 +29,8 @@ import AVFoundation
 
 struct SCConstants{
     
-    static let RecordingCompletedNotification: Notification.Name = Notification.Name(rawValue: "RecordingCompletedNotification")
-    static let ShouldEnginePauseNotification: Notification.Name = Notification.Name(rawValue: "ShouldEnginePauseNotification")
+    static let RecordingCompletedNotification: NSNotification.Name = Notification.Name(rawValue: "RecordingCompletedNotification")
+    static let ShouldEnginePauseNotification: NSNotification.Name = Notification.Name(rawValue: "ShouldEnginePauseNotification")
 }
 
 
@@ -45,8 +45,9 @@ protocol SCAudioControllerDelegate: class {
 
 
 class SCAudioController {
-//    
-//    var recordingIsAvailable:           Bool = false
+   
+    var mixerOutputFile:                AVAudioFile!
+    var recordingIsAvailable:           Bool = false
     var playerIsPlaying:                Bool = false
     var sequencerIsPlaying:             Bool = false
 //
@@ -113,7 +114,10 @@ class SCAudioController {
         
         print("\(String(describing: engine?.description))")
         
-        NotificationCenter.default.addObserver(forName: SCConstants.ShouldEnginePauseNotification, object: nil, queue: OperationQueue.main, using: {
+        NotificationCenter.default.addObserver(forName: SCConstants.ShouldEnginePauseNotification,
+                                               object: nil,
+                                               queue: OperationQueue.main,
+                                               using: {
             note in
             
             /* pausing stops the audio engine and the audio hardware, but does not deallocate the resources allocated by prepare().
@@ -618,11 +622,13 @@ class SCAudioController {
     
     private func createAudioFileForPlayback() -> AVAudioFile? {
         
+        var recording: AVAudioFile
         do {
-            let recording: AVAudioFile = try AVAudioFile.init(forReading: mixerOutputFileURL!)
+            recording = try AVAudioFile.init(forReading: mixerOutputFileURL!)
             return recording
         } catch let error {
             print("couldn't create AVAudioFile, \(error.localizedDescription)")
+            return nil 
         }
     }
     
@@ -650,51 +656,74 @@ class SCAudioController {
          a block to be called with audio buffers
          
          Only one tap may be installed on any bus. Taps may be safely installed and removed while
-         the engine is running. */
+         the engine is running.
+         ---------------------------------------------------------------- */
         
         if mixerOutputFileURL == nil {
-            mixerOutputFileURL = URL.init(string: NSTemporaryDirectory() + "mixerOutput.caf")
+            mixerOutputFileURL = URL.init(string: NSTemporaryDirectory()+"mixerOutput.caf")
         }
+        
         let mainMixer = engine?.mainMixerNode
         
         do {
-            let mixerOutputFile: AVAudioFile = try AVAudioFile.init(forWriting: mixerOutputFileURL!, settings: (mainMixer?.outputFormat(forBus: 0).settings)! as! [String: Any])
-            startEngine()
-            mainMixer?.installTap(onBus: 0, bufferSize: 4096, format: mainMixer?.outputFormat(forBus: 0), block: {(buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                do {
-                    try mixerOutputFile.write(from: buffer)
-                } catch {
-                    print("error writing buffer data to file,\(error.localizedDescription)")
-                }
-            })
+            mixerOutputFile = try AVAudioFile.init(forWriting: mixerOutputFileURL!, settings: (mainMixer?.outputFormat(forBus: 0).settings)!)
         } catch let error {
             print("mixerOutputFile is nil, \(error.localizedDescription)")
         }
-        isRecording = true
+        
+        
+        mainMixer?.installTap(onBus: 0, bufferSize: 4096, format: mainMixer?.outputFormat(forBus: 0), block:  {
+            (buffer : AVAudioPCMBuffer!, when : AVAudioTime!) in
+            //print("Got buffer of length: \(buffer.frameLength) at time: \(when)")
+            
+            do {
+                try self.mixerOutputFile.write(from: buffer)
+            } catch {
+                print("error \(error.localizedDescription)")
+                
+            }
+            
+        })
+        
+        print("starting audio engine for recording")
+        print("writing to \(String(describing: self.mixerOutputFileURL?.absoluteString))")
+        
+        
+        do {
+            try self.engine?.start()
+        } catch {
+            print("Error starting audio engine: \(error.localizedDescription)")
+        }
+        self.isRecording = true
     }
     
     
     func stopRecordingMixerOutput(){
-//        if (_isRecording) {
-//            [[_engine mainMixerNode] removeTapOnBus:0];
-//            _isRecording = NO;
-//            
-//            if (self.recordingIsAvailable) {
-//                // Post a notificaiton that the record is complete
-//                // Other nodes/objects can listen to this update accordingly
-//                [[NSNotificationCenter defaultCenter] postNotificationName:kRecordingCompletedNotification object:nil];
-//            }
-//            
-//            [[NSNotificationCenter defaultCenter] postNotificationName:kShouldEnginePauseNotification object:nil];
-//        }
- 
+        
+        if isRecording == true {
+            engine?.mainMixerNode.removeTap(onBus: 0)
+            isRecording = false
+            
+            if recordingIsAvailable == true {
+                //Post a notification that recording is complete
+                // Other nodes/objects can listen to this update accordingly
+                NotificationCenter.default.post(name: SCConstants.ShouldEnginePauseNotification, object: nil)
+            }
+        }
     }
     
     
     
-    func recordingIsAvailable() -> Bool {
-//        return (_mixerOutputFileURL != nil);
-  
+    func getRecordingIsAvailable() -> Bool {
+        
+        var result: Bool
+        
+        if mixerOutputFile != nil {
+          result = true
+        } else {
+            result = false
+        }
+        return result
     }
     
     
@@ -708,7 +737,7 @@ class SCAudioController {
         // set the session category
         
         do {
-            try sessionInstance.setCategory( AVAudioSessionCategoryPlayback)
+            try sessionInstance.setCategory(AVAudioSessionCategoryPlayback)
         } catch let error {
             print("Error setting AVAudioSession category, \(error.localizedDescription)")
         }
@@ -729,12 +758,21 @@ class SCAudioController {
         }
         
         // add interruption handler
-        NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(notification:)), name: AVAudioSessionInterruptionNotification, object: sessionInstance)
+        let nc = NotificationCenter.default
+        nc.addObserver(self, selector: #selector(handleInterruption(notification:)), name: NSNotification.Name.AVAudioSessionInterruption, object: sessionInstance)
+        nc.addObserver(self, selector: #selector(handleRouteChange(notification:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: sessionInstance)
+        nc.addObserver(self, selector: #selector(handleMediaServicesReset(notification:)), name: NSNotification.Name.AVAudioSessionMediaServicesWereReset, object: sessionInstance)
+
+//
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.handleInterruption(_:)), name: AVAudioSessionInterruptionNotification, object: theSession)
+
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: NSNotification.Name.AVAu
+// dioSessionInterruptionNotification, object: sessionInstance)
         
         // we don't do anything special in the route change notification
-        NotificationCenter.default.addObserver(self, selector: #selector(handleRouteChange(notification:)), name: AVAudioSessionRouteChanggeNotification, object: sessionInstance)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleMediaServicesReset(notification:)), name: AVAudioAudioSessionMediaServicesResetNotification, object: sessionInstance)
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleRouteChange), name: NSNotification.Name.AVAudioSessionRouteChange, object: sessionInstance)
+//        
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleMediaServicesReset), name: NSNotification.Name.AVAudioAudioSessionMediaServicesReset, object: sessionInstance)
         
         // activate the audio session
         do {
@@ -745,18 +783,21 @@ class SCAudioController {
     }
     
     
-    @objc private func handleInterruption(notification: Notification) {
-        let theInterruptionType = notification.userInfo?[AVAudioSessionInterruptionTypeKey]
+    @objc func handleInterruption(notification: NSNotification) {
         
-        switch theInterruptionType {
-        case AVAudioSessionInterruptionTypeBegan:
+        let interruptionDict = notification.userInfo
+        let interruptionType = interruptionDict?[AVAudioSessionInterruptionTypeKey] as! AVAudioSessionInterruptionType
+        
+        switch interruptionType {
+            
+        case .began:
             print("Session interrupted > --- Begin Interruption ---\n")
             isSessionInterrupted = true
-            player.stop()
-            sequencer.stop()
+            player?.stop()
+            sequencer?.stop()
             stopRecordingMixerOutput()
             self.delegate?.engineWasInterrupted()
-        case AVAudioSessionInterruptionTypeEnded:
+        case .ended:
             print("Session interrupted > --- End Interruption ---\n")
             // make sure to activate the session
             do {
@@ -776,48 +817,47 @@ class SCAudioController {
     
     
     
-    private func handleRouteChange(notification: Notification) {
-        let reasonValue: UInt8 = UInt8(notification.userInfo[AVAudioSessionRouteChangeReasonKey])
-        let routeDescription: AVAudioSessionRouteDescription = notification.userInfo[AVAudioSessionRouteChangePreviousRouteKey]
+    @objc func handleRouteChange(notification: NSNotification) {
+        
+        let reasonDict = notification.userInfo
+        let reason = reasonDict?[AVAudioSessionRouteChangeReasonKey] as! AVAudioSessionRouteChangeReason
         
         print("Route change:")
-        switch (reasonValue) {
-        case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
+        switch reason {
+            
+        case .newDeviceAvailable:
             print("     NewDeviceAvailable")
             break
-        case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
+        case .oldDeviceUnavailable:
             print("     OldDeviceUnavailable")
             break
-        case AVAudioSessionRouteChangeReasonCategoryChange:
+        case .categoryChange:
             print("     CategoryChange")
             print("     New Category: \(AVAudioSession.sharedInstance().category)")
             break
-        case AVAudioSessionRouteChangeReasonOverride:
-           print("     Override")
+        case .override:
+            print("     Override")
             break
-        case AVAudioSessionRouteChangeReasonWakeFromSleep:
+        case .wakeFromSleep:
             print("     WakeFromSleep")
             break
-        case AVAudioSessionRouteChangeReasonNoSuitableRouteForCategory:
+        case .noSuitableRouteForCategory:
             print("     NoSuitableRouteForCategory")
             break
         default:
             print("     ReasonUnknown")
         }
-        
-        print("Previous route:\n")
-        print("\(routeDescription)")
- 
     }
+
     
     
-    private func handleMediaServicesReset(notification: Notification) {
+    @objc func handleMediaServicesReset(notification: NSNotification) {
         // if we've received this notification, the media server has been reset
         // re-wire all the connections and start the engine
         print("Media services have been reset!")
         print("Re-wiring connections")
         
-        sequencer = nil  // remove this sequencer since it's linked to the old AVAudioEngine
+        self.sequencer = nil  // remove this sequencer since it's linked to the old AVAudioEngine
         
         // Re-configure the audio session per QA1749
         let sessionInstance = AVAudioSession.sharedInstance()
