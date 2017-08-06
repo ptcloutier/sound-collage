@@ -123,7 +123,7 @@ class SCGAudioController {
                                                  When your app does not need to play audio, you should pause or stop the engine (as applicable), to minimize power consumption.
                                                  */
                                                 if !self.isSessionInterrupted && !self.isConfigChangePending {
-                                                    if self.playerIsPlaying || self.sequencerIsPlaying || self.isRecording {
+                                                    if self.playerIsPlaying == true || self.sequencerIsPlaying == true  || self.isRecording == true {
                                                         
                                                         print("Pausing engine.")
                                                         self.engine?.pause()
@@ -550,10 +550,6 @@ class SCGAudioController {
     
     //MARK: Player Methods
     
-    private func playerIsPLaying() -> Bool {
-        return player!.isPlaying
-    }
-    
     
     private func setPlayerVolume(playerVolume: Float) {
         player?.volume = playerVolume
@@ -564,15 +560,6 @@ class SCGAudioController {
         player?.pan = playerPan
     }
     
-    
-    func getPlayerVolume() -> Float {
-        return player!.volume;
-    }
-    
-    
-    func getPlayerPan() -> Float {
-        return player!.pan
-    }
     
     func togglePlayer(){
         switch self.playerIsPlaying {
