@@ -115,10 +115,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     
-    func getAudioFileForPath(path: String) -> AVAudioFile? {
+    func getAudioFileForPath(path: String) { // -> AVAudioFile? {
         
-        var audioFile: AVAudioFile
-       
+        /*
         let url = URL.init(fileURLWithPath: path )
         
         do {
@@ -127,7 +126,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         } catch let error {
             print("Could not play sound file. \(error.localizedDescription)")
             return nil
-        }
+        } */
     }
 
     
@@ -143,9 +142,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         */
         
         guard let path = getPathForSampleIndex(sampleIndex: sampleIndex) else { return }
-        guard let audioFile = getAudioFileForPath(path: path) else { return }
-        
-        self.audioController?.togglePlayer()
+        let url = URL.init(fileURLWithPath: path)
+        self.audioController?.playSample(sampleURL: url)
         /*
         let audioFormat = audioFile.processingFormat
         
@@ -365,6 +363,29 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
+    /* //MARK: TODO: EQ 
+     func setupEQ() ->eq {
+     var EQNode:AVAudioUnitEQ!
+     
+     EQNode = AVAudioUnitEQ(numberOfBands: 2)
+     engine.attach(EQNode)
+     
+     var filterParams = EQNode.bands[0] as AVAudioUnitEQFilterParameters
+     filterParams.filterType = .highPass
+     filterParams.frequency = 80.0
+     
+     filterParams = EQNode.bands[1] as AVAudioUnitEQFilterParameters
+     filterParams.filterType = .parametric
+     filterParams.frequency = 500.0
+     filterParams.bandwidth = 2.0
+     filterParams.gain = 4.0
+     
+     let format = mixer.outputFormat(forBus: 0)
+     engine.connect(playerNode, to: EQNode, format: format )
+     engine.connect(EQNode, to: engine.mainMixerNode, format: format)
+     }
+     */
+    
     
     func effectsParametersDidChange(values: [Int], sliderValue: Float) {
         
@@ -410,9 +431,16 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func recordNew() {
         
-        if audioRecorder == nil {
+        
+      
+        isRecording = true
+        setupNewSoundCollage()
+        startRecordingSoundCollage()
+        /*
+         if audioRecorder == nil {
             setupRecordingSession()
         }
+         */
     }
     
     
@@ -443,21 +471,19 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         
      
         isRecording = true
-
-        // TODO: there are many different names for the same thing throughout the app, audioFilepath, sampleURl, titleURL, just need to pick the most descriptive name
-        guard let currentSampleBankID = SCDataManager.shared.user?.currentSampleBank?.id else {
+     
+        guard let id = SCDataManager.shared.user?.currentSampleBank?.id else {
             print("current sample bank id not found.")
             return
         }
         
-        let samplePadIndex = selectedSampleIndex         
-        let sampleID = getSampleID(samplePadIndex: samplePadIndex)
+        let sampleID = getSampleID(samplePadIndex: selectedSampleIndex)
         let audioType = ".aac"
-        let newPath = "sampleBank_\(currentSampleBankID)_pad_\(samplePadIndex)_id_\(sampleID)\(audioType)"
-        let newFullPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! as String
-        SCDataManager.shared.currentSampleTitle = newFullPath
-        self.replaceableFilePath = "sampleBank_\(currentSampleBankID)_pad_\(samplePadIndex)_id_\(sampleID-1)\(audioType)"
-        self.audioFilePath = URL.init(string: newFullPath)
+        let filePath = "sampleBank_\(id)_pad_\(selectedSampleIndex)_id_\(sampleID)\(audioType)"
+        let fullURL = getDocumentsDirectory().appendingPathComponent(filePath)
+        SCDataManager.shared.currentSampleTitle = fullURL.absoluteString
+        self.replaceableFilePath = "sampleBank_\(id)_pad_\(selectedSampleIndex)_id_\(sampleID-1)\(audioType)"
+        self.audioFilePath = fullURL
         
         let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
 
@@ -465,10 +491,11 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             audioRecorder = try AVAudioRecorder(url: self.audioFilePath!, format: stereoFormat)
             audioRecorder.delegate = self
             audioRecorder.record()
-        } catch {
+        } catch let error {
             finishRecording(success: false)
-            isRecording = false
-            isRecordingModeEnabled = false
+            print("Recording failed, \(error.localizedDescription)")
+            SCAudioManager.shared.isRecording = false
+            SCAudioManager.shared.isRecordingModeEnabled = false
         }
     }
     
@@ -490,6 +517,15 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         return sampleID+1
     }
     
+    
+    
+    private func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+
     
     
     private func removeAudioFile(at path: String?) {
@@ -514,6 +550,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if !flag {
             finishRecording(success: false)
+            SCAudioManager.shared.isRecordingModeEnabled = false
         }
     }
     
@@ -637,75 +674,106 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func setupNewSoundCollage(){
         
-//        if isSpeakerEnabled == true {
-//            setAudioPlaybackSource()
-//        }
-//        recordingEngine.stop()
-//        recordingEngine.reset()
-//        recordingEngine = AVAudioEngine()
-//        
-//        do {
-//            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-//            
+        if isSpeakerEnabled == true {
+            setAudioPlaybackSource()
+        }
+        recordingEngine.stop()
+        recordingEngine.reset()
+        recordingEngine = AVAudioEngine()
+        
+        do {
+            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            
 //            let ioBufferDuration = 128.0 / 44100.0
 //            
 //            try audioSession.setPreferredIOBufferDuration(ioBufferDuration)
-//            
-//        } catch {
-//            
-//            assertionFailure("AVAudioSession setup error: \(error)")
-//        }
-//        
-//        let newPath = "newRecording"+".caf"
-//        self.outputFileURL = getDocumentsDirectory().appendingPathComponent(newPath)
-//        guard let outputFileURL = self.outputFileURL else { return }
-//        print(outputFileURL)
-//        do {
-//            
-//            try self.outputFile = AVAudioFile(forWriting: outputFileURL, settings: recordingEngine.mainMixerNode.outputFormat(forBus: 0).settings)
-//        }
-//        catch {
-//            print("Error setting up audio file")
-//        }
-//        
-//        let input = recordingEngine.inputNode!
-//        let format = input.inputFormat(forBus: 0)
-//        
-//        recordingEngine.connect(input, to: recordingEngine.mainMixerNode, format: format)
-//        assert(recordingEngine.inputNode != nil)
-//        
-//        try! recordingEngine.start()
-//        //save url to property
+            
+        } catch {
+            
+            assertionFailure("AVAudioSession setup error: \(error)")
+        }
+        
+        /*
+        let newPath = "newRecording"+".caf"
+        self.outputFileURL = getDocumentsDirectory().appendingPathComponent(newPath)
+        guard let outputFileURL = self.outputFileURL else { return }
+        print(outputFileURL)
+        */
+        
+        isRecording = true
+        
+        guard let id = SCDataManager.shared.user?.currentSampleBank?.id else {
+            print("current sample bank id not found.")
+            return
+        }
+        
+        let sampleID = getSampleID(samplePadIndex: selectedSampleIndex)
+        let audioType = ".aac"
+        let filePath = "sampleBank_\(id)_pad_\(selectedSampleIndex)_id_\(sampleID)\(audioType)"
+        let fullURL = getDocumentsDirectory().appendingPathComponent(filePath)
+        SCDataManager.shared.currentSampleTitle = fullURL.absoluteString
+        self.replaceableFilePath = "sampleBank_\(id)_pad_\(selectedSampleIndex)_id_\(sampleID-1)\(audioType)"
+        self.audioFilePath = fullURL
+        
+        /* 
+        let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
+         */
+        let settings = [
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: 44100,
+            AVNumberOfChannelsKey: 2,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
+            AVLinearPCMIsNonInterleaved: true
+            ] as [String : Any]
+
+        do {
+            
+            try self.audioFile = AVAudioFile(forWriting: fullURL, settings: settings)
+            //recordingEngine.mainMixerNode.outputFormat(forBus: 0).settings)
+        }
+        catch {
+            print("Error setting up audio file")
+        }
+        
+        let input = recordingEngine.inputNode!
+        let format = input.inputFormat(forBus: 0)
+        
+        recordingEngine.connect(input, to: recordingEngine.mainMixerNode, format: format)
+        assert(recordingEngine.inputNode != nil)
+        
+        try! recordingEngine.start()
+        //save url to property
     }
     
     
     func startRecordingSoundCollage() {
         
-//        let mixer = recordingEngine.mainMixerNode
-//        let format = mixer.outputFormat(forBus: 0)
-//        
-//        mixer.installTap(onBus: 0, bufferSize: 1024, format: format, block:
-//            { (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-//                
-//                print(NSString(string: "writing"))
-//                do{
-//                    try self.outputFile.write(from: buffer)
-//                }
-//                catch {
-//                    print(NSString(string: "Write failed"));
-//                }
-//        })
+        let mixer = recordingEngine.mainMixerNode
+        let format = mixer.outputFormat(forBus: 0)
+        
+        mixer.installTap(onBus: 0, bufferSize: 1024, format: format, block:
+            { (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+                
+                print(NSString(string: "writing"))
+                do {
+                    try self.audioFile.write(from: buffer)
+                }
+                catch {
+                    print(NSString(string: "Write failed"));
+                }
+        })
     }
     
     
     
     func stopRecordingSoundCollage() {
-//
-//        recordingEngine.mainMixerNode.removeTap(onBus: 0)
-//        recordingEngine.stop()
-//        setAudioPlaybackSource()
-//        guard let url = self.outputFileURL else { return }
-//        print("file recorded at \(String(describing: url.absoluteString))")
+
+        recordingEngine.mainMixerNode.removeTap(onBus: 0)   
+        recordingEngine.stop()
+        setAudioPlaybackSource()
+        guard let url = self.audioFilePath else { return }
+        finishRecording(success: true)
+        print("file recorded at \(String(describing: url.absoluteString))")
     }
     
     

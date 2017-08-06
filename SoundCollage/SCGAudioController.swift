@@ -45,6 +45,7 @@ protocol SCGAudioControllerDelegate: class {
 
 class SCGAudioController {
     
+    var arrayOfPlayers:                 [AVAudioPlayer] = []
     var mixerOutputFile:                AVAudioFile!
     var recordingIsAvailable:           Bool = false
     var playerIsPlaying:                Bool = false
@@ -172,7 +173,7 @@ class SCGAudioController {
         reverb = AVAudioUnitReverb.init()
         
         // load drumloop into a buffer for the playernode
-        do {
+       /* do {
             let drumLoopURL = URL.init(fileURLWithPath: Bundle.main.path(forResource: "drumLoop", ofType: "caf")!)
             let drumLoopFile = try AVAudioFile.init(forReading: drumLoopURL)
             playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: drumLoopFile.processingFormat, frameCapacity: AVAudioFrameCount(drumLoopFile.length))
@@ -183,7 +184,7 @@ class SCGAudioController {
             }
         } catch let error {
             print("Error reading audio file \(error.localizedDescription)")
-        }
+        }*/
         
         isRecording = false
         isRecordingSelected = false
@@ -615,6 +616,23 @@ class SCGAudioController {
         } catch let error {
             print("couldn't create AVAudioFile, \(error.localizedDescription)")
             return nil
+        }
+    }
+    
+    //MARK: Multiple players
+    
+    func playSample(sampleURL: URL) {
+        
+        startEngine()
+        arrayOfPlayers = arrayOfPlayers.filter(){$0.isPlaying}
+
+        do {
+            let audioPlayer = try AVAudioPlayer(contentsOf: sampleURL)
+            arrayOfPlayers.append(audioPlayer)
+            arrayOfPlayers.last?.prepareToPlay()
+            arrayOfPlayers.last?.play()
+        } catch let error {
+            print("Error, couldn't create AVAudioPlayer, \(error.localizedDescription)")
         }
     }
     

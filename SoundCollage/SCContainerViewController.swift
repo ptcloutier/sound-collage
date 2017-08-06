@@ -114,7 +114,8 @@ class SCContainerViewController: UIViewController {
     
         switch SCAudioManager.shared.isRecording {
         case true:
-            SCAudioManager.shared.finishRecording(success: true)
+            SCAudioManager.shared.stopRecordingSoundCollage()
+            /*SCAudioManager.shared.finishRecording(success: true)*/
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 recordBtn.alpha = 1

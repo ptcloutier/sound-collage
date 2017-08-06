@@ -143,11 +143,9 @@ class SCSamplerViewController: UIViewController  {
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
             SCAudioManager.shared.isRecordingModeEnabled = false
-            print("Recording mode not enabled.")
             reloadSamplerCV()
         case false:
             SCAudioManager.shared.isRecordingModeEnabled = true
-            print("Recording mode enabled.")
             self.selectedPadIndex = nil
             reloadSamplerCV()
         }
@@ -332,7 +330,7 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
         
         selectCell(cell: cell, indexPath: indexPath)
     }
-    
+
     
     
     func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
