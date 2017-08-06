@@ -675,6 +675,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     func setupNewSoundCollage(){
         
         if isSpeakerEnabled == true {
+            isSpeakerEnabled = false
             setAudioPlaybackSource()
         }
         recordingEngine.stop()
@@ -774,6 +775,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         guard let url = self.audioFilePath else { return }
         finishRecording(success: true)
         print("file recorded at \(String(describing: url.absoluteString))")
+        observeAudioIO()
     }
     
     

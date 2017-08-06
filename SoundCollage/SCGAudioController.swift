@@ -286,7 +286,7 @@ class SCGAudioController {
         self.samplerEffectVolume = 0
         
         
-        
+        /*
         if let urls: [URL] = Bundle.main.urls(forResourcesWithExtension: "wav", subdirectory: "wavs") {  // TODO: use our urls
             do {
                 try sampler?.loadAudioFiles(at: urls)
@@ -294,7 +294,7 @@ class SCGAudioController {
                 print("\(error.localizedDescription)")
             }
         }
-        
+        */
         
         /*  ------------ Original Method ---------------
          
@@ -823,34 +823,44 @@ class SCGAudioController {
     
     @objc func handleRouteChange(notification: NSNotification) {
         
-        let reasonDict = notification.userInfo
-        let reason = reasonDict?[AVAudioSessionRouteChangeReasonKey] as! AVAudioSessionRouteChangeReason
         
-        print("Route change:")
-        switch reason {
-            
-        case .newDeviceAvailable:
-            print("     NewDeviceAvailable")
-            break
-        case .oldDeviceUnavailable:
-            print("     OldDeviceUnavailable")
-            break
-        case .categoryChange:
-            print("     CategoryChange")
-            print("     New Category: \(AVAudioSession.sharedInstance().category)")
-            break
-        case .override:
-            print("     Override")
-            break
-        case .wakeFromSleep:
-            print("     WakeFromSleep")
-            break
-        case .noSuitableRouteForCategory:
-            print("     NoSuitableRouteForCategory")
-            break
-        default:
-            print("     ReasonUnknown")
+        guard let userInfo = notification.userInfo else {
+            print("No notification userInfo.")
+            return
         }
+        let routeChangedReason = userInfo[AVAudioSessionRouteChangeReasonKey] as! Int
+        if routeChangedReason == 1 || routeChangedReason == 2 {
+            SCAudioManager.shared.observeAudioIO()
+        }
+        print("reason : \(routeChangedReason)")
+        
+//        let reasonDict = notification.userInfo
+//        let reason = reasonDict?[AVAudioSessionRouteChangeReasonKey] as? Int
+//        print("Route change:")
+//        switch reason {
+//            
+//        case AVAudioSessionRouteChangeNewDeviceAvailable:
+//            print("     NewDeviceAvailable")
+//            break
+//        case .oldDeviceUnavailable:
+//            print("     OldDeviceUnavailable")
+//            break
+//        case .categoryChange:
+//            print("     CategoryChange")
+//            print("     New Category: \(AVAudioSession.sharedInstance().category)")
+//            break
+//        case .override:
+//            print("     Override")
+//            break
+//        case .wakeFromSleep:
+//            print("     WakeFromSleep")
+//            break
+//        case .noSuitableRouteForCategory:
+//            print("     NoSuitableRouteForCategory")
+//            break
+//        default:
+//            print("     ReasonUnknown")
+//        }
     }
     
     
