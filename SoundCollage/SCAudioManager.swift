@@ -43,14 +43,22 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isRecordingSoundCollage: Bool = false 
     var outputFileURL: URL?
     var sampler: AVAudioUnitSampler?
+    var audioController: SCGAudioController?
+    
+    
+    
+    
     
     func setupAudioManager(){
         
+        self.audioController = SCGAudioController.init()
+        self.audioController?.delegate = self as? SCGAudioControllerDelegate
         
-       setupEffects()
         
-        NotificationCenter.default.addObserver( self, selector: #selector(routeChanged), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
+        setupEffects()
         
+//        NotificationCenter.default.addObserver( self, selector: #selector(routeChanged), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
+//        
         
         audioSession.requestRecordPermission({ allowed in
             DispatchQueue.main.async {
@@ -65,7 +73,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
-
+    
     
     //MARK: Playback
     
@@ -112,7 +120,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
                         engine.stop()
                         self.finishedEngines.remove(at: i)
                         self.audioEngineChain.remove(at: j)
-                        print("removed at index:\(j), bye felicia")
+                        print("removed at index:\(j)")
                     }
                 }
             }
@@ -120,168 +128,197 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
-    
-    
-    func playAudio(sampleIndex: Int){
-        
-        
+    func getPathForSampleIndex(sampleIndex: Int) -> String? {
         
         guard let partialPath = getSample(selectedSampleIndex: sampleIndex) else {
             print("Playback sample not found")
-            return
+            return nil
         }
         let docsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! as String
-        
         let fullPath = docsDirectory.appending("/\(partialPath)")
-        let fullURL = URL.init(fileURLWithPath: fullPath )
         
+        return fullPath
+    }
+    
+    
+    
+    func getAudioFileForPath(path: String) -> AVAudioFile? {
+        
+        var audioFile: AVAudioFile
+       
+        let url = URL.init(fileURLWithPath: path )
+        
+        do {
+            audioFile = try AVAudioFile(forReading: url)
+            return audioFile
+        } catch let error {
+            print("Could not play sound file. \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    
+    
+    func setupReverb(sampleIndex: Int) -> AVAudioUnitReverb {
+        
+        let reverb = AVAudioUnitReverb()
+        let reverbParams = effectControls[0]
+        if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*100.0)) {
+            reverb.loadFactoryPreset(.plate) // there are thirteen possible presets
+            reverb.wetDryMix = reverbValue
+        }
+        return reverb
+    }
+    
+    
+    
+    func setupDelay(sampleIndex: Int) -> AVAudioUnitDelay {
+        
+        let delay = AVAudioUnitDelay()
+        let delayParams = effectControls[1]
+        let delayWetDryMixValue = delayParams[0].parameter[sampleIndex] * 100.0
+        delay.wetDryMix = delayWetDryMixValue
+        let delayTime = delayParams[1].parameter[sampleIndex]
+        delay.delayTime = TimeInterval(delayTime)
+        let delayFeedback = delayParams[2].parameter[sampleIndex] * 80.0
+        delay.feedback = delayFeedback
+        let delayLPCutoff = delayParams[3].parameter[sampleIndex] * 6000.0 // 10 -> (samplerate/2), default 15000
+        delay.lowPassCutoff = delayLPCutoff
+        return delay
+    }
+    
+    
+    
+    func setupPitchShift(sampleIndex: Int) -> AVAudioUnitTimePitch {
+        
+        let pitch = AVAudioUnitTimePitch()
+        let pitchParams = effectControls[2]
+        let pitchUp = pitchParams[0].parameter[sampleIndex] * 100.0
+        let pitchUpValue = pitchUp * 24.0
+        let posiPitch = pitchUpValue+1.0
+        let pitchDown = pitchParams[1].parameter[sampleIndex] * 100.0
+        let pitchDownValue = pitchDown * 24.0
+        let negiPitch = (pitchDownValue+1.0) * -1.0
+        pitch.pitch = posiPitch + negiPitch
+        return pitch
+    }
+    
+    
+    
+    func setupDistortion(sampleIndex: Int) -> AVAudioUnitDistortion {
+        
+        let distortion = AVAudioUnitDistortion()
+        let distortionParams = effectControls[4]
+        let preGainValue = distortionParams[0].parameter[sampleIndex] * 100.0// range -80.0 -> 20.0
+        distortion.preGain = Float(preGainValue - 80.0)
+        let dmix = distortionParams[1].parameter[sampleIndex] * 100.0
+        distortion.wetDryMix = dmix
+        return distortion
+    }
+    
+    
+    func setupTimeStretch(sampleIndex: Int) -> AVAudioUnitVarispeed {
+        
+        let time = AVAudioUnitVarispeed()
+        let timeParams = effectControls[3]
+        let timeRateUp = 1.0 + timeParams[0].parameter[sampleIndex] * 4.0
+        let timeRateDown = timeParams[1].parameter[sampleIndex] * 0.75
+        let rateValue = Float(timeRateUp - timeRateDown)
+        time.rate = rateValue
+        return time
+    }
+    
+    func playAudio(sampleIndex: Int){ // self.audioController.startRecording(), self.audioController.stopRecording()
+        
+        // audioManager multiple engines
         removeUsedEngines()
-        
         self.audioEngine = SCAudioEngine()
         self.audioEngineChain.append(self.audioEngine)
         
+        guard let path = getPathForSampleIndex(sampleIndex: sampleIndex) else { return }
+        guard let audioFile = getAudioFileForPath(path: path) else { return }
+        let audioFormat = audioFile.processingFormat
         
-        do {
-            let audioFile = try AVAudioFile(forReading: fullURL)
-            let audioFormat = audioFile.processingFormat
-            let audioPlayerNode = AVAudioPlayerNode()
-            audioEngine.attach(audioPlayerNode)
+        // set up nodes
+        let audioPlayerNode = AVAudioPlayerNode()
+        let reverb = setupReverb(sampleIndex: sampleIndex)
+        let delay = setupDelay(sampleIndex: sampleIndex)
+        let pitch = setupPitchShift(sampleIndex: sampleIndex)
+        let time = setupTimeStretch(sampleIndex: sampleIndex)
+        let distortion = setupDistortion(sampleIndex: sampleIndex)
+        
+        // attach nodes to engine 
+        audioEngine.attach(audioPlayerNode)
+        audioEngine.attach(reverb)
+        audioEngine.attach(delay)
+        audioEngine.attach(pitch)
+        audioEngine.attach(time)
+        audioEngine.attach(distortion)
+        
+        
+        // make engine connections
+        audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
+        audioEngine.connect(pitch, to: time, format: audioFormat)
+        audioEngine.connect(time, to: distortion, format: audioFormat)
+        audioEngine.connect(distortion, to: delay, format: audioFormat)
+        audioEngine.connect(delay, to: reverb, format: audioFormat)
+        audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: audioFormat)
+        
+        
+        
+        guard let fin = self.audioEngine else {
+            print("no engine.")
+            return
+        }
+        
+        
+        audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
             
-            // selected effect in effectControl, selectedSamplePad parameter in parameter
-            
-            let effectSettings = self.effectControls
-            let reverb = AVAudioUnitReverb()
-            let reverbParams = effectSettings[0]
-            if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*100.0)) {
-                reverb.loadFactoryPreset(.plate) // there are thirteen posible presets
-                reverb.wetDryMix = reverbValue
-            }
-            audioEngine.attach(reverb)
-            
-            
-            
-            let delay = AVAudioUnitDelay()
-            let delayParams = effectSettings[1]
-            let delayWetDryMixValue = delayParams[0].parameter[sampleIndex] * 100.0
-            delay.wetDryMix = delayWetDryMixValue
-            
-            
-            let delayTime = delayParams[1].parameter[sampleIndex]
-            delay.delayTime = TimeInterval(delayTime)
-            
-            
-            let delayFeedback = delayParams[2].parameter[sampleIndex] * 80.0
-            
-            delay.feedback = delayFeedback
-            
-            
-            let delayLPCutoff = delayParams[3].parameter[sampleIndex] * 6000.0 // 10 -> (samplerate/2), default 15000
-            delay.lowPassCutoff = delayLPCutoff
-           
-            audioEngine.attach(delay)
-            
-            
-            let pitch = AVAudioUnitTimePitch()
-            let pitchParams = effectSettings[2]
-            let pitchUp = pitchParams[0].parameter[sampleIndex] * 100.0
-            let pitchUpValue = pitchUp * 24.0
-            let posiPitch = pitchUpValue+1.0
-            
-            
-            let pitchDown = pitchParams[1].parameter[sampleIndex] * 100.0
-            let pitchDownValue = pitchDown * 24.0
-            let negiPitch = (pitchDownValue+1.0) * -1.0
-            pitch.pitch = posiPitch + negiPitch
-
-            audioEngine.attach(pitch)
-            
-            
-            
-            let distortion = AVAudioUnitDistortion()
-            let distortionParams = effectSettings[4]
-            let preGainValue = distortionParams[0].parameter[sampleIndex] * 100.0// range -80.0 -> 20.0
-            distortion.preGain = Float(preGainValue - 80.0)
-            let dmix = distortionParams[1].parameter[sampleIndex] * 100.0
-            distortion.wetDryMix = dmix
-            audioEngine.attach(distortion)
-
-            
-            
-            let time = AVAudioUnitVarispeed()
-            let timeParams = effectSettings[3]
-            let timeRateUp = 1.0 + timeParams[0].parameter[sampleIndex] * 4.0
-            let timeRateDown = timeParams[1].parameter[sampleIndex] * 0.75
-            
-            let rateValue = Float(timeRateUp - timeRateDown)
-            time.rate = rateValue
-            audioEngine.attach(time)
-            
-            
-            audioEngine.connect(audioPlayerNode, to: pitch, format: audioFormat)
-            audioEngine.connect(pitch, to: time, format: audioFormat)
-            audioEngine.connect(time, to: distortion, format: audioFormat)
-            audioEngine.connect(distortion, to: delay, format: audioFormat)
-            audioEngine.connect(delay, to: reverb, format: audioFormat)
-            audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: audioFormat)
-            
-            
-            
-            guard let fin = self.audioEngine else {
-                print("no engine.")
+            [weak self] in
+            guard let strongSelf = self else {
                 return
             }
+            // calculate audio tail based on reverb and delay parameters
             
+            var durationInt = Int(round(Double(audioFile.length)/44100))
+            if durationInt == 0 {
+                durationInt = 1
+            }
             
-            audioPlayerNode.scheduleFile(audioFile, at: nil, completionHandler: {
+            let reverbParameter = strongSelf.effectControls[0][0].parameter[sampleIndex]
+            let reverbTime = round(Float(reverbParameter * 10.0))
+            durationInt += Int(reverbTime)
+            
+            let delayParams = strongSelf.effectControls[1][2].parameter[sampleIndex]
+            let delayTime = round(Float(delayParams * 20.0))
+            durationInt += Int(delayTime)
+            
+            let duration = DispatchTimeInterval.seconds(durationInt)
+            
+            let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
+            delayQueue.asyncAfter(deadline: .now()+duration){
                 
                 [weak self] in
                 guard let strongSelf = self else {
                     return
                 }
-                // calculate audio tail based on reverb and delay parameters
+                let serialQueue = DispatchQueue(label: "myqueue")
                 
-                var durationInt = Int(round(Double(audioFile.length)/44100))
-                if durationInt == 0 {
-                    durationInt = 1
+                serialQueue.sync {
+                    strongSelf.finishedEngines.append(fin)
                 }
                 
-                let reverbParameter = strongSelf.effectControls[0][0].parameter[sampleIndex]
-                let reverbTime = round(Float(reverbParameter * 10.0))
-                durationInt += Int(reverbTime)
-                
-                let delayParams = strongSelf.effectControls[1][2].parameter[sampleIndex]
-                let delayTime = round(Float(delayParams * 20.0))
-                durationInt += Int(delayTime)
-                
-                let duration = DispatchTimeInterval.seconds(durationInt)
-               
-                let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-                delayQueue.asyncAfter(deadline: .now()+duration){
-                    
-                    [weak self] in
-                    guard let strongSelf = self else {
-                        return
-                    }
-                    let serialQueue = DispatchQueue(label: "myqueue")
-                    
-                    serialQueue.sync {
-                        strongSelf.finishedEngines.append(fin)
-                    }
-                    
-                }
-            })
-
-            audioEngine.prepare()
-            do {
-                try audioEngine.start()
-            } catch _ {
-                print("Play session Error")
             }
-            audioPlayerNode.play()
-            print("Playing audiofile at \(fullURL.absoluteString)")
-        } catch let error {
-            print("Could not play sound file! \(error.localizedDescription)")
+        })
+        
+        audioEngine.prepare()
+        do {
+            try audioEngine.start()
+        } catch _ {
+            print("Play session Error")
         }
+        audioPlayerNode.play()
+        print("Playing audiofile at \(path)")
     }
     
     
