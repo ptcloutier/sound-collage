@@ -58,17 +58,15 @@ class SCContainerViewController: UIViewController {
         toolbar.isTranslucent = true
         
         let buttonHeight = (toolbarHeight/3)*2
-//        let yPosition = toolbar.center.y-buttonHeight/2
-//        let recordingBtnYPosition = toolbar.center.y-(buttonHeight*1.5)/2
+
         self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight*1.5, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
-//        self.recordBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight*1.25, height: buttonHeight*1.25))
+
         guard let recordBtn = self.recordBtn else {
             print("No record btn.")
             return
         }
         recordBtn.setBackgroundImage(UIImage.init(named: "record"), for: .normal)
         recordBtn.addTarget(self, action: #selector(SCContainerViewController.recordBtnDidPress), for: .touchUpInside)
-//        recordBtn.center = CGPoint(x: toolbar.center.x, y: recordingBtnYPosition)
         
         let bankBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         bankBtn.setBackgroundImage(UIImage.init(named: "back"), for: .normal)
@@ -84,7 +82,7 @@ class SCContainerViewController: UIViewController {
         
         let recordNewSCBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         recordNewSCBtn.setBackgroundImage(UIImage.init(named: "lp1"), for: .normal)
-        recordNewSCBtn.addTarget(self, action: #selector(SCContainerViewController.recordNewSoundCollageBtnDidPress), for: .touchUpInside)
+        recordNewSCBtn.addTarget(self, action: #selector(SCContainerViewController.recordMixerOutputBtnDidPress), for: .touchUpInside)
         
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
@@ -93,8 +91,7 @@ class SCContainerViewController: UIViewController {
         let recordNewSCBarBtn = UIBarButtonItem.init(customView: recordNewSCBtn)
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        
-//        toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, recordBarBtn, flexibleSpace,  sequencerBarBtn, flexibleSpace]
+
         
         toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace,  libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
         self.view.addSubview(toolbar)
@@ -114,8 +111,7 @@ class SCContainerViewController: UIViewController {
     
         switch SCAudioManager.shared.isRecording {
         case true:
-            SCAudioManager.shared.stopRecordingSoundCollage()
-            /*SCAudioManager.shared.finishRecording(success: true)*/
+            SCAudioManager.shared.stopRecordingSample()
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 recordBtn.alpha = 1
@@ -153,20 +149,17 @@ class SCContainerViewController: UIViewController {
     
     
     
-    func recordNewSoundCollageBtnDidPress(){
+    func recordMixerOutputBtnDidPress(){
         
         print("new recording sound collage did press.")
         
-        switch SCAudioManager.shared.isRecordingSoundCollage {
+        switch SCAudioManager.shared.isRecordingMixerOutput {
         case true:
             SCAudioManager.shared.audioController?.stopRecordingMixerOutput()
-//            SCAudioManager.shared.stopRecordingSoundCollage()
-            SCAudioManager.shared.isRecordingSoundCollage = false
+            SCAudioManager.shared.isRecordingMixerOutput = false
         case false:
             SCAudioManager.shared.audioController?.startRecordingMixerOutput()
-//            SCAudioManager.shared.setupNewSoundCollage()
-//            SCAudioManager.shared.startRecordingSoundCollage()
-            SCAudioManager.shared.isRecordingSoundCollage = true 
+            SCAudioManager.shared.isRecordingMixerOutput = true
         }
     }
     
