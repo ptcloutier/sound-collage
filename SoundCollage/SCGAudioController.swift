@@ -723,9 +723,6 @@ class SCGAudioController {
              match that of the source node's output bus. */
             
             let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
-        
-//            let playerBuffer = AVAudioPCMBuffer.init(pcmFormat: stereoFormat, frameCapacity: 0)
-//            let playerFormat = playerBuffer.format
             let playerFormat = playerLoopBuffer?.format
         
             // establish a connection between nodes
@@ -780,13 +777,15 @@ class SCGAudioController {
          
          Only one tap may be installed on any bus. Taps may be safely installed and removed while
          the engine is running.
+         
          ---------------------------------------------------------------- */
         
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord)
             
             if mixerOutputFileURL == nil {
-                mixerOutputFileURL = URL.init(string: NSTemporaryDirectory()+"mixerOutput.aac")
+                let id = getSoundCollageID()
+                mixerOutputFileURL = URL.init(string: NSTemporaryDirectory()+"sound_collage_"+"\(id)"+".aac")
             }
             
             let mainMixer = engine?.mainMixerNode
@@ -797,21 +796,9 @@ class SCGAudioController {
                              AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue] as [String : Any]
             
             let format: AVAudioFormat = AVAudioFormat.init(settings: settings)
-            /*NSMutableDictionary *recordSettings = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-             [NSNumber numberWithFloat: 44100.], AVSampleRateKey,
-             [NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
-             [NSNumber numberWithInt: 2], AVNumberOfChannelsKey,
-             [NSNumber numberWithInt: AVAudioQualityHigh], AVEncoderAudioQualityKey, nil];
-             
-             /*set bitrate to taste*/
-             [recordSettings setObject: [NSNumber numberWithInt: 192000] forKey: AVEncoderBitRateKey];
-             
-             AVAudioFile *outputFile = [[AVAudioFile alloc] initForWriting:outputFileURL settings:recordSettings error:&error];
-         */
             
             do {
                 mixerOutputFile = try AVAudioFile.init(forWriting: mixerOutputFileURL!, settings: format.settings)
-                //(mainMixer?.outputFormat(forBus: 0).settings)!)
             } catch let error {
                 print("mixerOutputFile is nil, \(error.localizedDescription)")
             }
@@ -843,6 +830,21 @@ class SCGAudioController {
         } catch let error {
             print("Error setting avaudiosession category, \(error.localizedDescription)")
         }
+    }
+    
+    
+    
+    private func getSoundCollageID() -> Int {
+        
+        let userDefaults = UserDefaults.standard
+        
+        guard let id = userDefaults.value(forKey: "sound_collage_id") else {
+            userDefaults.set(0, forKey: "sound_collage_id")
+            return 0
+        }
+        let scID = id as! Int
+        userDefaults.set(scID+1, forKey: "sound_collage_id")
+        return scID+1
     }
     
     
