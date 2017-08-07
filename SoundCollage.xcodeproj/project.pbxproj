@@ -83,6 +83,7 @@
 		A7E117D31F278DE800041400 /* UIImage+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E117D21F278DE800041400 /* UIImage+Custom.swift */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
 		A7FD67551F3775C100B1AD74 /* bluesyRiff.mid in Resources */ = {isa = PBXBuildFile; fileRef = A7FD67541F3775C100B1AD74 /* bluesyRiff.mid */; };
+		A7FD675A1F38305300B1AD74 /* SCAudioPlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FD67591F38305300B1AD74 /* SCAudioPlayerNode.swift */; };
 		D12EE6F44C0DB1631E344924 /* Pods_SoundCollage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */; };
 /* End PBXBuildFile section */
 
@@ -206,6 +207,7 @@
 		A7FD67561F3775CA00B1AD74 /* drumLoop.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = drumLoop.caf; sourceTree = "<group>"; };
 		A7FD67571F3775EB00B1AD74 /* marimbaLoop.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = marimbaLoop.caf; sourceTree = "<group>"; };
 		A7FD67581F37761500B1AD74 /* gs_instruments.dls */ = {isa = PBXFileReference; lastKnownFileType = file; path = gs_instruments.dls; sourceTree = "<group>"; };
+		A7FD67591F38305300B1AD74 /* SCAudioPlayerNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAudioPlayerNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -329,6 +331,7 @@
 				A78C12941F2DAAE500682750 /* SCCircularView.swift */,
 				A713F50B1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift */,
 				A713F50D1F2F65A900742D1C /* SCFaderDelegate.swift */,
+				A7FD67591F38305300B1AD74 /* SCAudioPlayerNode.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -725,6 +728,7 @@
 				A791610A1F1EA86B0051113C /* SCFirstContainerCell.swift in Sources */,
 				A7264E811EAEECD700664EDE /* SCUser.swift in Sources */,
 				A791610C1F1EA8880051113C /* SCSecondContainerCell.swift in Sources */,
+				A7FD675A1F38305300B1AD74 /* SCAudioPlayerNode.swift in Sources */,
 				A7404BCD1F290884004BC4E1 /* SCMixerPanelCell.swift in Sources */,
 				A74541931F3114E8007A89B7 /* SCLibraryViewController.swift in Sources */,
 				A7A823311EA81D300061D0A0 /* SCAudioManager.swift in Sources */,

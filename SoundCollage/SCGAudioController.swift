@@ -46,7 +46,7 @@ protocol SCGAudioControllerDelegate: class {
 class SCGAudioController {
     
 //    var arrayOfPlayers:                 [AVAudioPlayer] = []
-    var arrayOfPlayers:                 [AVAudioPlayerNode] = []
+    var arrayOfPlayers:                 [SCAudioPlayerNode] = []
     var mixerOutputFile:                AVAudioFile!
     var recordingIsAvailable:           Bool = false
     var playerIsPlaying:                Bool = false
@@ -80,7 +80,7 @@ class SCGAudioController {
     var sampler:                        AVAudioUnitSampler?
     var distortion:                     AVAudioUnitDistortion?
     var reverb:                         AVAudioUnitReverb?
-    var player:                         AVAudioPlayerNode?
+    var player:                         SCAudioPlayerNode?
     
     // the sequencer
     var sequencer:                      AVAudioSequencer?
@@ -154,7 +154,7 @@ class SCGAudioController {
          or segments of audio files opened via AVAudioFile. Buffers and segments may be
          scheduled at specific points in time, or to play immediately following preceding segments. */
         
-        player = AVAudioPlayerNode.init()
+        player = SCAudioPlayerNode.init()
         
         /* The AVAudioUnitSampler class encapsulates Apple's Sampler Audio Unit.
          The sampler audio unit can be configured by loading different types of instruments such as an “.aupreset” file,
@@ -620,9 +620,15 @@ class SCGAudioController {
         }
     }
     
+    
     //MARK: Multiple players
     
+    
+    
     func playSample(sampleURL: URL) {
+        
+        let sampleIndex = SCAudioManager.shared.selectedSampleIndex
+        let effectControls = SCAudioManager.shared.effectControls
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         } catch let error {
@@ -630,45 +636,66 @@ class SCGAudioController {
         }
 
         
-//        arrayOfPlayers = arrayOfPlayers.filter(){$0.isPlaying}
+        arrayOfPlayers = arrayOfPlayers.filter(){$0.isActive}
         startEngine()
-        let player = AVAudioPlayerNode.init()
+        let player = SCAudioPlayerNode.init()
         player.volume = 1.0
         engine?.attach(player)
         makeEngineConnectionsForMultiPlayer(player: player)
         print("playing file at \(sampleURL.absoluteString)")
         do {
             let sample = try AVAudioFile.init(forReading: sampleURL)
-            player.scheduleFile(sample, at: nil, completionHandler: nil)
+            player.isActive = true
+            player.scheduleFile(sample, at: nil, completionHandler: {
+           
+            // calculate audio tail based on reverb and delay parameters
+            
+            var durationInt = Int(round(Double(sample.length)/44100))
+            if durationInt == 0 {
+                durationInt = 1
+            }
+            
+            let reverbParameter = effectControls[0][0].parameter[sampleIndex]
+            let reverbTime = round(Float(reverbParameter * 10.0))
+            durationInt += Int(reverbTime)
+            
+            let delayParams = effectControls[1][2].parameter[sampleIndex]
+            let delayTime = round(Float(delayParams * 20.0))
+            durationInt += Int(delayTime)
+            
+            let duration = DispatchTimeInterval.seconds(durationInt)
+            
+            let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
+            delayQueue.asyncAfter(deadline: .now()+duration){
+                
+               
+                let serialQueue = DispatchQueue(label: "myqueue")
+                
+                serialQueue.sync {
+                    player.isActive = false
+                    print("player is finished, marked for dealloc")
+                }
+                
+            }
+        })
+
         } catch let error {
             print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
         }
-        
-//        arrayOfPlayers = arrayOfPlayers.filter(){$0.isPlaying}
-//
-//        do {
-//            let audioPlayer = try AVAudioPlayer(contentsOf: sampleURL)
-//            arrayOfPlayers.append(audioPlayer)
-//            arrayOfPlayers.last?.prepareToPlay()
-//            arrayOfPlayers.last?.play()
-//        } catch let error {
-        
-//            print("Error, couldn't create AVAudioPlayer, \(error.localizedDescription)")
-//        }
+
         engine?.prepare()
         do {
             try engine?.start()
         } catch _ {
             print("Play session Error")
         }
-//        arrayOfPlayers.append(player)
-//        arrayOfPlayers.last?.play()
-        player.play()
+        arrayOfPlayers.append(player)
+        arrayOfPlayers.last?.play()
         print("Playing audiofile at \(sampleURL.absoluteString)")
     }
     
     
-    func makeEngineConnectionsForMultiPlayer(player: AVAudioPlayerNode){
+    func makeEngineConnectionsForMultiPlayer(player: SCAudioPlayerNode){
         
             /*  The engine will construct a singleton main mixer and connect it to the outputNode on demand,
              when this property is first accessed. You can then connect additional nodes to the mixer.
