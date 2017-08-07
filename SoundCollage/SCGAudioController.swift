@@ -661,6 +661,8 @@ class SCGAudioController {
         } catch _ {
             print("Play session Error")
         }
+//        arrayOfPlayers.append(player)
+//        arrayOfPlayers.last?.play()
         player.play()
         print("Playing audiofile at \(sampleURL.absoluteString)")
     }
@@ -695,30 +697,36 @@ class SCGAudioController {
             
             let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
         
-            let playerBuffer = AVAudioPCMBuffer.init()
-            let playerFormat = playerBuffer.format
-//            let playerFormat = playerLoopBuffer?.format
-            
+//            let playerBuffer = AVAudioPCMBuffer.init(pcmFormat: stereoFormat, frameCapacity: 0)
+//            let playerFormat = playerBuffer.format
+            let playerFormat = playerLoopBuffer?.format
+        
             // establish a connection between nodes
             
             // connect the player to the reverb
             // use the buffer format for the connection format as they must match
-            engine?.connect(player, to: reverb!, format: playerFormat)
+            /* engine?.connect(player, to: reverb!, format: playerFormat)
             
             // connect the reverb effect to mixer input bus 0
             // use the buffer format for the connection format as they must match
             engine?.connect(reverb!, to: mainMixer!, fromBus: 0,  toBus: 0, format: playerFormat)
             
             // connect the distortion effect to mixer input bus 2
-            
+ 
             engine?.connect(distortion!, to: mainMixer!, fromBus: 0, toBus: 2,  format:stereoFormat)
-            
+ 
+//            engine?.connect(player, to: mainMixer!, fromBus: 0, toBus: 2,  format: playerFormat)
+
             // fan out the sampler to mixer input 1 and distortion effect
-            let destinationNodes: [AVAudioConnectionPoint] = [ AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1), AVAudioConnectionPoint.init(node: distortion!, bus: 0)]//NSArray<AVAudioConnectionPoint *>
+            let destinationNodes: [AVAudioConnectionPoint] = [ AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1)]//, AVAudioConnectionPoint.init(node: distortion!, bus: 0)]//NSArray<AVAudioConnectionPoint *>
             
-            
+ 
+        
             
             engine?.connect( sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
+ 
+ */
+        engine?.connect(player, to: mainMixer!, format: playerFormat)
     }
     
     
