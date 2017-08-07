@@ -645,25 +645,20 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
 
         recordingEngine.mainMixerNode.removeTap(onBus: 0)   
         recordingEngine.stop()
-        setAudioPlaybackSource()
-        guard let url = self.audioFilePath else { return }
-        
-        self.postRecordingFinishedNotification()
         isRecording = false
         print("Audio recording stopped.")
         
-        guard let audioURL = audioFilePath?.lastPathComponent else {
-            print("Error: audioFilePath is nil")
-            return
-        }
-        guard let sampleBank = SCDataManager.shared.user?.currentSampleBank else{
-            print("Error: sampleBank doesn't exist.")
-            return
-        }
+        setAudioPlaybackSource()
+        guard let url = self.audioFilePath else { return }
+        self.postRecordingFinishedNotification()
+        
+        let urlPart = url.lastPathComponent
+        guard let sampleBank = SCDataManager.shared.user?.currentSampleBank else { return }
+        
         for key in sampleBank.samples.keys{
             if key == selectedSampleIndex.description {
-                sampleBank.samples[key] = audioURL as AnyObject?
-                print("Audio file recorded and saved at \(audioURL.description)")
+                sampleBank.samples[key] = urlPart as AnyObject?
+                print("Audio file recorded and saved at \(urlPart.description)")
             }
         }
         SCDataManager.shared.user?.currentSampleBank? = sampleBank

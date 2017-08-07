@@ -131,7 +131,7 @@ class SCDataManager {
         
         let user = SCDataManager.shared.user
         if let jsonString = user?.toJSONString(prettyPrint: true){
-            print(jsonString)
+//            print(jsonString)
             writeToFile(jsonString: jsonString)
         } else {
             print("Error serializing json")

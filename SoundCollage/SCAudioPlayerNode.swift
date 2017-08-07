@@ -12,4 +12,5 @@ import AVFoundation
 class SCAudioPlayerNode: AVAudioPlayerNode {
 
     var isActive: Bool = false
+    var hasPlayed: Bool = false 
 }
