@@ -159,12 +159,25 @@ class SCGAudioController {
         timeStretch = nil
         
         
-        engine = AVAudioEngine.init()
+   
+            
+        SCAudioManager.shared.removeUsedEngines()
+            
+        engine = AVAudioEngine()
+        SCAudioManager.shared.audioEngineChain.append((engine)! )
+            
+        
         isRecording = false
         isRecordingSelected = false
         
         setupPlayersAndEffects()
         
+        if SCAudioManager.shared.ouputMixer == nil {
+            SCAudioManager.shared.ouputMixer = AVAudioMixerNode.init()
+            engine?.attach(SCAudioManager.shared.ouputMixer!)
+
+        }
+
         mixer = AVAudioMixerNode.init()
         engine?.attach(mixer!)
 
@@ -715,7 +728,7 @@ class SCGAudioController {
     
     func getAudioFilesForURL(){
         
-        guard var samples = SCDataManager.shared.user?.currentSampleBank?.samples else { return }
+        guard let samples = SCDataManager.shared.user?.currentSampleBank?.samples else { return }
     
         audioFiles = samples
         
@@ -743,7 +756,9 @@ class SCGAudioController {
     func playSample(sampleURL: URL) {
         
         let sampleIdx = SCAudioManager.shared.selectedSampleIndex
-//        let effectControls = SCAudioManager.shared.effectControls
+        
+        setupAVAudioEngineAndAttachNodes()
+        //        let effectControls = SCAudioManager.shared.effectControls
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         } catch let error {
@@ -773,7 +788,7 @@ class SCGAudioController {
             
             
         
-//            let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
+            let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
             let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)//playerLoopBuffer?.format
             
          
@@ -830,9 +845,14 @@ class SCGAudioController {
             engine?.connect(delay!, to: reverb!, format: playerFormat)
             engine?.connect(reverb!, to: mixer!, format: playerFormat)
             engine?.connect(mixer!, to: (engine?.mainMixerNode)!, format: playerFormat)
+            engine?.connect((engine?.mainMixerNode)!, to: SCAudioManager.shared.ouputMixer!, format: playerFormat)//((engine?.mainMixerNode)!, to: SCAudioManager.shared.ouputMixer!, fromBus: 0, toBus: 2, format: stereoFormat)
     
+        guard let fin = self.engine else {
+            print("no engine.")
+            return
+        }
             let effectNodes = [reverb!, delay!, distortion!, timeStretch!, pitchShift!] as [Any]
-            playIt(player: player!, sample: sample, effectNodes: effectNodes)
+            playIt(player: player!, sample: sample, effectNodes: effectNodes, fin: fin)
 //        } catch let error {
 //            print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
 //        }
@@ -842,32 +862,39 @@ class SCGAudioController {
     
     
     
-    func playIt(player: SCAudioPlayerNode, sample: AVAudioFile, effectNodes: [Any]){
+        func playIt(player: SCAudioPlayerNode, sample: AVAudioFile, effectNodes: [Any], fin: AVAudioEngine){
             player.isActive = true
 //            print("playing file at \(sampleURL.absoluteString)")
             player.scheduleFile(sample, at: nil, completionHandler:{
+                
+//                [weak self] in
+//                guard let strongSelf = self else {
+//                    return
+//                }
             // calculate audio tail based on reverb and delay parameters
-            var durationInt = Int(round(Double(sample.length)/44100))
-            if durationInt == 0 {
-                durationInt = 1
-            }
-            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[SCAudioManager.shared.selectedSampleIndex]
-            let reverbTime = round(Float(reverbParameter * 10.0))
-            durationInt += Int(reverbTime)
-            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[SCAudioManager.shared.selectedSampleIndex]
-            let delayTime = round(Float(delayParams * 20.0))
-            durationInt += Int(delayTime)
-            let duration = DispatchTimeInterval.seconds(durationInt)
+//            var durationInt = Int(round(Double(sample.length)/44100))
+//            if durationInt == 0 {
+//                durationInt = 1
+//            }
+//            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[SCAudioManager.shared.selectedSampleIndex]
+//            let reverbTime = round(Float(reverbParameter * 10.0))
+//            durationInt += Int(reverbTime)
+//            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[SCAudioManager.shared.selectedSampleIndex]
+//            let delayTime = round(Float(delayParams * 20.0))
+//            durationInt += Int(delayTime)
+//            let duration = DispatchTimeInterval.seconds(durationInt)
             let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-            delayQueue.asyncAfter(deadline: .now()+duration){
+                delayQueue.asyncAfter(deadline: .now()){ // +duration){
                 let serialQueue = DispatchQueue(label: "myqueue")
                 serialQueue.sync {
-                    self.engine?.disconnectNodeInput(player)
-                    self.engine?.detach(player)
-                    for effect in effectNodes {
-                        self.engine?.disconnectNodeInput(effect as! AVAudioNode)
-                        self.engine?.detach(effect as! AVAudioNode)
-                    }
+//                    strongSelf.engine?.disconnectNodeInput(player)
+//                    strongSelf.engine?.detach(player)
+//                    for effect in effectNodes {
+//                        strongSelf.engine?.disconnectNodeInput(effect as! AVAudioNode)
+//                        strongSelf.engine?.detach(effect as! AVAudioNode)
+                        
+                        SCAudioManager.shared.finishedEngines.append(fin)
+//                    }
                
                 }}})
             engine?.prepare()
@@ -876,13 +903,13 @@ class SCGAudioController {
             } catch _ {
                 print("Play session Error")
             }
-        player.play()
+//        player.play()
             players[nodeIdx].play()
-            nodeIdx = nodeIdx+1
-            if nodeIdx==5{
-                nodeIdx = 0
-                setupPlayersAndEffects()
-            }
+//            nodeIdx = nodeIdx+1
+//            if nodeIdx==3{
+//                nodeIdx = 0
+//                setupPlayersAndEffects()
+//            }
         }
     
     
@@ -890,33 +917,33 @@ class SCGAudioController {
     func setupPlayersAndEffects(){
         
         players.removeAll()
-        while players.count<5 {
+        while players.count<3 {
             let player = SCAudioPlayerNode.init()
             player.volume = 1.0
             players.append(player)
         }
         reverbNodes.removeAll()
-        while reverbNodes.count<5 {
+        while reverbNodes.count<3 {
             let verb = AVAudioUnitReverb.init()
             reverbNodes.append(verb)
         }
         delayNodes.removeAll()
-        while delayNodes.count<5 {
+        while delayNodes.count<3 {
             let delay = AVAudioUnitDelay.init()
             delayNodes.append(delay)
         }
         distortionNodes.removeAll()
-        while distortionNodes.count<5 {
+        while distortionNodes.count<3 {
             let distortion = AVAudioUnitDistortion.init()
             distortionNodes.append(distortion)
         }
         pitchShiftNodes.removeAll()
-        while pitchShiftNodes.count < 5 {
+        while pitchShiftNodes.count < 3 {
             let pitchShift = AVAudioUnitTimePitch.init()
             pitchShiftNodes.append(pitchShift)
         }
         timeStretchNodes.removeAll()
-        while timeStretchNodes.count < 5 {
+        while timeStretchNodes.count < 3 {
             let timeStretch = AVAudioUnitVarispeed.init()
             timeStretchNodes.append(timeStretch)
         }
@@ -1059,7 +1086,9 @@ class SCGAudioController {
                 mixerOutputFileURL = URL.init(string: NSTemporaryDirectory()+"sound_collage_"+"\(id)"+".aac")
             }
             
-            let mainMixer = engine?.mainMixerNode
+
+            let mainMixer = SCAudioManager.shared.ouputMixer
+
             
             let settings  = [AVSampleRateKey: 44100,
                              AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -1120,6 +1149,8 @@ class SCGAudioController {
     
     
     func stopRecordingMixerOutput(){
+        
+        print("Recorded output to \(String(describing: mixerOutputFileURL)))")
         
         if isRecording == true {
             engine?.mainMixerNode.removeTap(onBus: 0)

@@ -18,6 +18,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     static let shared = SCAudioManager()
     
+    var ouputMixer:                     AVAudioMixerNode?
+
     var recordedOutputFile: AVAudioFile?
     var audioFile: AVAudioFile!
     let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
@@ -32,8 +34,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var audioEngine: AVAudioEngine!
     var mixerPanels: [String : [String]] = [:]
     var effectControls: [[SCEffectControl]] = []
-    var audioEngineChain: [AVAudioEngine] = []
-    var finishedEngines: [AVAudioEngine] = []
     var sequencerSettings: [[Bool]] = []
     var sequencerIsPlaying: Bool = false
     var audioBuffer = AVAudioPCMBuffer()
@@ -43,15 +43,14 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var outputFileURL: URL?
     var sampler: AVAudioUnitSampler?
     var audioController: SCGAudioController?
-    
-    
-    
+    var audioEngineChain: [AVAudioEngine] = []
+    var finishedEngines: [AVAudioEngine] = []
+     
     
     
     func setupAudioManager(){
         
         setupEffects()
-        
                 
 /*
          NotificationCenter.default.addObserver( self, selector: #selector(routeChanged), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
@@ -666,4 +665,30 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         print("file recorded at \(String(describing: url.absoluteString))")
         observeAudioIO()
     }
+    
+    
+    
+    
+    
+    func removeUsedEngines(){
+        
+        
+        if self.finishedEngines.isEmpty == false {
+            
+            for (i, fin) in self.finishedEngines.enumerated().reversed() {
+                for (j, engine) in self.audioEngineChain.enumerated().reversed() {
+                    if fin == engine {
+                        fin.stop()
+                        engine.stop()
+                        self.finishedEngines.remove(at: i)
+                        self.audioEngineChain.remove(at: j)
+                        print("removed at index:\(j), bye felicia")
+                    }
+                }
+            }
+        }
+    }
+    
+    
+        
 }
