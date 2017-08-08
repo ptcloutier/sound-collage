@@ -1108,8 +1108,8 @@ class SCGAudioController {
                 mixerOutputFileURL = URL.init(string: NSTemporaryDirectory()+"sound_collage_"+"\(id)"+".aac")
             }
             
-
-            let mainMixer = SCAudioManager.shared.ouputMixer
+            
+            let mainMixer = engine?.mainMixerNode
 
             
             let settings  = [AVSampleRateKey: 44100,
