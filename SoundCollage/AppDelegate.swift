@@ -27,6 +27,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SCAudioManager.shared.setupAudioManager()
         SCDataManager.shared.fetchCurrentUserData()
         SCAudioManager.shared.effectControls = (SCDataManager.shared.user?.currentSampleBank?.effectSettings)!
+        
+        SCAudioManager.shared.audioController = SCGAudioController.init() // new controller class, everything commented with /**/ are experiments in transitioning to handing over control to the new controller
+        SCAudioManager.shared.audioController?.delegate = SCAudioManager.shared as? SCGAudioControllerDelegate
+        
+        
+
 
         window = UIWindow(frame: UIScreen.main.bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

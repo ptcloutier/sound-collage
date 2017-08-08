@@ -19,7 +19,7 @@
  
  It connects all the nodes, loads the buffers as well as controls the AVAudioEngine object itself.
  */
-
+/*
 import Foundation
 import AVFoundation
 
@@ -45,26 +45,23 @@ protocol SCGAudioControllerDelegate: class {
 
 class SCGAudioController {
     
-    var audioFiles:                     [String : AnyObject?] = [:]
-    var player:                         SCAudioPlayerNode?
-    var pitchShift:                     AVAudioUnitTimePitch?
-    var timeStretch:                    AVAudioUnitVarispeed?
-    var distortion:                     AVAudioUnitDistortion?
-    var reverb:                         AVAudioUnitReverb?
-    var delay:                          AVAudioUnitDelay?
-    var effectControls:                 [[SCEffectControl]] = []
-    var engine:                         AVAudioEngine?
+    var playerIdx: Int = 0
     var mixer:                          AVAudioMixerNode?
-    var nodeIdx:                        Int = 0
-    var players:                        [SCAudioPlayerNode] = []
-    var reverbNodes:                    [AVAudioUnitReverb] = []
-    var distortionNodes:                [AVAudioUnitDistortion] = []
-    var delayNodes:                     [AVAudioUnitDelay] = []
-    var pitchShiftNodes:                [AVAudioUnitTimePitch] = []
-    var timeStretchNodes:               [AVAudioUnitVarispeed] = []
+    //    var arrayOfPlayers:                 [AVAudioPlayer] = []
+    var players:                 [SCAudioPlayerNode] = []
+    var reverbNodes:             [AVAudioUnitReverb] = []
+    var distortionNodes:         [AVAudioUnitDistortion] = []
+    var delayNodes:              [AVAudioUnitDelay] = []
+    var pitchShiftNodes:         [AVAudioUnitTimePitch] = []
+    var timeStretchNodes:        [AVAudioUnitVarispeed] = []
     var mixerOutputFile:                AVAudioFile!
     var recordingIsAvailable:           Bool = false
     var playerIsPlaying:                Bool = false
+    var sequencerIsPlaying:             Bool = false
+    //
+    //    var sequencerCurrentPosition:       Float?
+    //    var sequencerPlaybackRate:          Float?
+    //
     var playerVolume:                   Float? // 0.0 - 1.0
     var playerPan:                      Float? // -1.0 - 1.0
     //
@@ -86,12 +83,16 @@ class SCGAudioController {
     // private class extensions
     
     // AVAudioEngine and AVAudioNodes
+    var engine:                         AVAudioEngine?
+    var sampler:                        AVAudioUnitSampler?
+    var distortion:                     AVAudioUnitDistortion?
+    var reverb:                         AVAudioUnitReverb?
+    //    var player:                         SCAudioPlayerNode?
     
     // the sequencer
     var sequencer:                      AVAudioSequencer?
     var sequencerTrackLengthSeconds:    Double?
-    var sequencerIsPlaying:             Bool = false
-
+    
     // buffer for the player
     var playerLoopBuffer:               AVAudioPCMBuffer?
     
@@ -112,14 +113,12 @@ class SCGAudioController {
         self.isSessionInterrupted = false
         self.isConfigChangePending = false
         
-        effectControls = SCAudioManager.shared.effectControls
         initAVAudioSession()
-        
-        setupAVAudioEngineAndAttachNodes()
-        getAudioFilesForURL()
-//        makeEngineConnections()
-//        createAndSetupSequencer()
-//        setNodeDefaults()
+        initAndCreateNodes()
+        createEngineAndAttachNodes()
+        //        makeEngineConnections()
+        //        createAndSetupSequencer()
+        //        setNodeDefaults()
         
         print("\(String(describing: engine?.description))")
         
@@ -148,88 +147,146 @@ class SCGAudioController {
     
     
     //MARK: AVAudioEngine Setup
-    private func setupAVAudioEngineAndAttachNodes(){
+    private func initAndCreateNodes(){
         
         engine = nil
-        player = nil
-        reverb = nil
-        delay = nil
+        sampler = nil
         distortion = nil
-        pitchShift = nil
-        timeStretch = nil
+        reverb = nil
+        //        player = nil
+        //
+        //        // create the various nodes
+        //
+        //        /*  AVAudioPlayerNode supports scheduling the playback of AVAudioBuffer instances,
+        //         or segments of audio files opened via AVAudioFile. Buffers and segments may be
+        //         scheduled at specific points in time, or to play immediately following preceding segments. */
+        //
+        //        player = SCAudioPlayerNode.init()
+        //
+        //        /* The AVAudioUnitSampler class encapsulates Apple's Sampler Audio Unit.
+        //         The sampler audio unit can be configured by loading different types of instruments such as an “.aupreset” file,
+        //         a DLS or SF2 sound bank, an EXS24 instrument, a single audio file or with an array of audio files.
+        //         The output is a single stereo bus. */
+        //
+        //        sampler = AVAudioUnitSampler.init()
+        //
+        //        /* An AVAudioUnitEffect that implements a multi-stage distortion effect */
+        //
+        //        distortion = AVAudioUnitDistortion.init()
+        //
+        //        /*  A reverb simulates the acoustic characteristics of a particular environment.
+        //         Use the different presets to simulate a particular space and blend it in with
+        //         the original signal using the wetDryMix parameter. */
+        //
+        //        reverb = AVAudioUnitReverb.init()
+        //
         
-        
-        engine = AVAudioEngine.init()
         isRecording = false
         isRecordingSelected = false
         
-        setupPlayersAndEffects()
+    }
+    
+    private func createEngineAndAttachNodes(){
+        
+        engine = AVAudioEngine.init()
+        
+        /*  An AVAudioEngine contains a group of connected AVAudioNodes ("nodes"), each of which performs
+         an audio signal generation, processing, or input/output task.
+         
+         Nodes are created separately and attached to the engine.
+         
+         The engine supports dynamic connection, disconnection and removal of nodes while running,
+         with only minor limitations:
+         - all dynamic reconnections must occur upstream of a mixer
+         - while removals of effects will normally result in the automatic connection of the adjacent
+         nodes, removal of a node which has differing input vs. output channel counts, or which
+         is a mixer, is likely to result in a broken graph. */
+        //
+        //        reverb = AVAudioUnitReverb.init()
+        //
+        //        let reverbValue: Float = 0.5*100.0
+        //            reverb?.loadFactoryPreset(.plate) // there are thirteen possible presets
+        //            reverb?.wetDryMix = reverbValue
+        //
+        //
+        //        distortion = AVAudioUnitDistortion.init()
+        //
+        //
+        //        sampler = AVAudioUnitSampler.init()
+        //        //            setSamplerDirectVolume(sampler: samplerA, samplerDirectVolume: 1.0)
+        //        //            setSamplerEffectVolume(sampler: samplerA, distortion: distortionA, samplerEffectVolume: 0.5)
+        //        engine?.attach(sampler!)
+        //        engine?.attach(distortion!)
+        //        engine?.attach(reverb!)
+        
+        reupPlayersAndEffects()
+        
         
         mixer = AVAudioMixerNode.init()
         engine?.attach(mixer!)
-
+        
         /*  To support the instantiation of arbitrary AVAudioNode subclasses, instances are created
          externally to the engine, but are not usable until they are attached to the engine via
          the attachNode method. */
-//        
-//        engine?.attach(sampler!)
-//        engine?.attach(distortion!)
-//        engine?.attach(reverb!)
-//        engine?.attach(player!)
+        //
+        //        engine?.attach(sampler!)
+        //        engine?.attach(distortion!)
+        //        engine?.attach(reverb!)
+        //        engine?.attach(player!)
         
     }
     
     
     private func makeEngineConnections(){
         
-//        /*  The engine will construct a singleton main mixer and connect it to the outputNode on demand,
-//         when this property is first accessed. You can then connect additional nodes to the mixer.
-//         
-//         By default, the mixer's output format (sample rate and channel count) will track the format
-//         of the output node. You may however make the connection explicitly with a different format. */
-//        
-//        // get the engine's optional singleton main mixer node
-//        let mainMixer = engine?.mainMixerNode
-//        
-//        /*  Nodes have input and output buses (AVAudioNodeBus). Use connect:to:fromBus:toBus:format: to
-//         establish connections betweeen nodes. Connections are always one-to-one, never one-to-many or
-//         many-to-one.
-//         
-//         Note that any pre-existing connection(s) involving the source's output bus or the
-//         destination's input bus will be broken.
-//         
-//         @method connect:to:fromBus:toBus:format:
-//         @param node1 the source node
-//         @param node2 the destination node
-//         @param bus1 the output bus on the source node
-//         @param bus2 the input bus on the destination node
-//         @param format if non-null, the format of the source node's output bus is set to this
-//         format. In all cases, the format of the destination node's input bus is set to
-//         match that of the source node's output bus. */
-//        
-//        let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
-//        let playerFormat = playerLoopBuffer?.format
-//        
-//        // establish a connection between nodes
-//        
-//        // connect the player to the reverb
-//        // use the buffer format for the connection format as they must match
-//        engine?.connect(player!, to: reverb!, format: playerFormat)
-//        
-//        // connect the reverb effect to mixer input bus 0
-//        // use the buffer format for the connection format as they must match
-//        engine?.connect(reverb!, to: mainMixer!, fromBus: 0,  toBus: 0, format: playerFormat)
-//        
-//        // connect the distortion effect to mixer input bus 2
-//        
-//        engine?.connect(distortion!, to: mainMixer!, fromBus: 0, toBus: 2,  format:stereoFormat)
-//        
-//        // fan out the sampler to mixer input 1 and distortion effect
-//        let destinationNodes: [AVAudioConnectionPoint] = [ AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1), AVAudioConnectionPoint.init(node: distortion!, bus: 0)]//NSArray<AVAudioConnectionPoint *>
-//        
-//        
-//        
-//        engine?.connect( sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
+        //        /*  The engine will construct a singleton main mixer and connect it to the outputNode on demand,
+        //         when this property is first accessed. You can then connect additional nodes to the mixer.
+        //
+        //         By default, the mixer's output format (sample rate and channel count) will track the format
+        //         of the output node. You may however make the connection explicitly with a different format. */
+        //
+        //        // get the engine's optional singleton main mixer node
+        //        let mainMixer = engine?.mainMixerNode
+        //
+        //        /*  Nodes have input and output buses (AVAudioNodeBus). Use connect:to:fromBus:toBus:format: to
+        //         establish connections betweeen nodes. Connections are always one-to-one, never one-to-many or
+        //         many-to-one.
+        //
+        //         Note that any pre-existing connection(s) involving the source's output bus or the
+        //         destination's input bus will be broken.
+        //
+        //         @method connect:to:fromBus:toBus:format:
+        //         @param node1 the source node
+        //         @param node2 the destination node
+        //         @param bus1 the output bus on the source node
+        //         @param bus2 the input bus on the destination node
+        //         @param format if non-null, the format of the source node's output bus is set to this
+        //         format. In all cases, the format of the destination node's input bus is set to
+        //         match that of the source node's output bus. */
+        //
+        //        let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
+        //        let playerFormat = playerLoopBuffer?.format
+        //
+        //        // establish a connection between nodes
+        //
+        //        // connect the player to the reverb
+        //        // use the buffer format for the connection format as they must match
+        //        engine?.connect(player!, to: reverb!, format: playerFormat)
+        //
+        //        // connect the reverb effect to mixer input bus 0
+        //        // use the buffer format for the connection format as they must match
+        //        engine?.connect(reverb!, to: mainMixer!, fromBus: 0,  toBus: 0, format: playerFormat)
+        //
+        //        // connect the distortion effect to mixer input bus 2
+        //
+        //        engine?.connect(distortion!, to: mainMixer!, fromBus: 0, toBus: 2,  format:stereoFormat)
+        //
+        //        // fan out the sampler to mixer input 1 and distortion effect
+        //        let destinationNodes: [AVAudioConnectionPoint] = [ AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1), AVAudioConnectionPoint.init(node: distortion!, bus: 0)]//NSArray<AVAudioConnectionPoint *>
+        //
+        //
+        //
+        //        engine?.connect( sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
     }
     
     
@@ -237,41 +294,41 @@ class SCGAudioController {
     
     private func setNodeDefaults(){
         
-//        
-//        // settings for effects units
-//        reverb?.wetDryMix = 40.0
-//        reverb?.loadFactoryPreset( AVAudioUnitReverbPreset.mediumHall)
-//        
-//        distortion?.loadFactoryPreset( AVAudioUnitDistortionPreset.drumsBitBrush)
-//        distortion?.wetDryMix = 100
-//        self.samplerEffectVolume = 0
-//        
-//        
-//        /*
-//        if let urls: [URL] = Bundle.main.urls(forResourcesWithExtension: "wav", subdirectory: "wavs") {  // TODO: use our urls
-//            do {
-//                try sampler?.loadAudioFiles(at: urls)
-//            } catch let error as NSError {
-//                print("\(error.localizedDescription)")
-//            }
-//        }
-//        */
-//        
-//        /*  ------------ Original Method ---------------
-//         
-//         guard let bankURL: URL = URL.init(string: Bundle.main.path(forResource: "gs_instruments", ofType: "dls")!) else {
-//         print("could not load sound files")
-//         return
-//         }
-//         
-//         do {
-//         try self.sampler?.loadSoundBankInstrument(at: bankURL,
-//         program: 0,
-//         bankMSB: 0x79,
-//         bankLSB: 0)
-//         } catch {
-//         print("error loading sound bank instrument")
-//         } */
+        //
+        //        // settings for effects units
+        //        reverb?.wetDryMix = 40.0
+        //        reverb?.loadFactoryPreset( AVAudioUnitReverbPreset.mediumHall)
+        //
+        //        distortion?.loadFactoryPreset( AVAudioUnitDistortionPreset.drumsBitBrush)
+        //        distortion?.wetDryMix = 100
+        //        self.samplerEffectVolume = 0
+        //
+        //
+        //        /*
+        //        if let urls: [URL] = Bundle.main.urls(forResourcesWithExtension: "wav", subdirectory: "wavs") {  // TODO: use our urls
+        //            do {
+        //                try sampler?.loadAudioFiles(at: urls)
+        //            } catch let error as NSError {
+        //                print("\(error.localizedDescription)")
+        //            }
+        //        }
+        //        */
+        //
+        //        /*  ------------ Original Method ---------------
+        //
+        //         guard let bankURL: URL = URL.init(string: Bundle.main.path(forResource: "gs_instruments", ofType: "dls")!) else {
+        //         print("could not load sound files")
+        //         return
+        //         }
+        //
+        //         do {
+        //         try self.sampler?.loadSoundBankInstrument(at: bankURL,
+        //         program: 0,
+        //         bankMSB: 0x79,
+        //         bankLSB: 0)
+        //         } catch {
+        //         print("error loading sound bank instrument")
+        //         } */
     }
     
     
@@ -472,216 +529,99 @@ class SCGAudioController {
     
     
     //MARK: Effect Methods
-    
-    
-    
-    
-    
-    func setupReverb(sampleIndex: Int) -> AVAudioUnitReverb {
-        
-        let reverb = AVAudioUnitReverb()
-        let reverbParams = effectControls[0]
-        
-        if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*100.0)) {
-            reverb.loadFactoryPreset(.plate) // there are thirteen possible presets
-            reverb.wetDryMix = reverbValue
-        }
-        return reverb
-    }
-    
-    
-    
-    
-    func setupDelay(sampleIndex: Int) -> AVAudioUnitDelay {
-        
-        let delay = AVAudioUnitDelay()
-        let delayParams = effectControls[1]
-        
-        let delayWetDryMixValue = delayParams[0].parameter[sampleIndex] * 100.0
-        delay.wetDryMix = delayWetDryMixValue
-        
-        let delayTime = delayParams[1].parameter[sampleIndex]
-        delay.delayTime = TimeInterval(delayTime)
-        
-        let delayFeedback = delayParams[2].parameter[sampleIndex] * 80.0
-        delay.feedback = delayFeedback
-        
-        let delayLPCutoff = delayParams[3].parameter[sampleIndex] * 6000.0 // 10 -> (samplerate/2), default 15000
-        delay.lowPassCutoff = delayLPCutoff
-        
-        return delay
-    }
-    
-    
-    
-    func setupPitchShift(sampleIndex: Int) -> AVAudioUnitTimePitch {
-        
-        let pitch = AVAudioUnitTimePitch()
-        let pitchParams = effectControls[2]
-        
-        let pitchUp = pitchParams[0].parameter[sampleIndex] * 100.0
-        let pitchUpValue = pitchUp * 24.0
-        let posiPitch = pitchUpValue+1.0
-        
-        let pitchDown = pitchParams[1].parameter[sampleIndex] * 100.0
-        let pitchDownValue = pitchDown * 24.0
-        let negiPitch = (pitchDownValue+1.0) * -1.0
-        
-        pitch.pitch = posiPitch + negiPitch
-        
-        return pitch
-    }
-    
-    
-    
-    func setupDistortion(sampleIndex: Int) -> AVAudioUnitDistortion {
-        
-        let distortion = AVAudioUnitDistortion()
-        let distortionParams = effectControls[4]
-        
-        let preGainValue = distortionParams[0].parameter[sampleIndex] * 100.0// range -80.0 -> 20.0
-        distortion.preGain = Float(preGainValue - 80.0)
-        
-        let dmix = distortionParams[1].parameter[sampleIndex] * 100.0
-        distortion.wetDryMix = dmix
-        
-        return distortion
-    }
-    
-    
-    
-    
-    func setupTimeStretch(sampleIndex: Int) -> AVAudioUnitVarispeed {
-        
-        let time = AVAudioUnitVarispeed()
-        let timeParams = effectControls[3]
-        
-        let timeRateUp = 1.0 + timeParams[0].parameter[sampleIndex] * 4.0
-        let timeRateDown = timeParams[1].parameter[sampleIndex] * 0.75
-        
-        let rateValue = Float(timeRateUp - timeRateDown)
-        time.rate = rateValue
-        
-        return time
-    }
-    
-    
-    /* //MARK: TODO: EQ
-     func setupEQ() ->eq {
-     var EQNode:AVAudioUnitEQ!
-     
-     EQNode = AVAudioUnitEQ(numberOfBands: 2)
-     engine.attach(EQNode)
-     
-     var filterParams = EQNode.bands[0] as AVAudioUnitEQFilterParameters
-     filterParams.filterType = .highPass
-     filterParams.frequency = 80.0
-     
-     filterParams = EQNode.bands[1] as AVAudioUnitEQFilterParameters
-     filterParams.filterType = .parametric
-     filterParams.frequency = 500.0
-     filterParams.bandwidth = 2.0
-     filterParams.gain = 4.0
-     
-     let format = mixer.outputFormat(forBus: 0)
-     engine.connect(playerNode, to: EQNode, format: format )
-     engine.connect(EQNode, to: engine.mainMixerNode, format: format)
-     }
-     */
-    
-//    
-//    private func setDistortionWetDryMix(distortionWetDryMix: Float){
-//        distortion?.wetDryMix = distortionWetDryMix * 100.0
-//        
-//    }
-//    
-//    
-//    private func distortionWetDryMix() -> Float {
-//        return distortion!.wetDryMix/100.0
-//    }
-//    
-//    
-//    private func setDistortionPreset(distortionPreset: Int) {
-//        if distortion != nil {
-//            distortion?.loadFactoryPreset(AVAudioUnitDistortionPreset(rawValue: distortionPreset)!)
-//        }
-//    }
-//    
-//    
-//    private func setReverbWetDryMix(reverbWetDryMix: Float) {
-//        reverb?.wetDryMix = reverbWetDryMix * 100.0
-//        
-//    }
-//    
-//    
-//    func reverbWetDryMix() -> Float {
-//        return reverb!.wetDryMix/100.0
-//    }
-//    
-//    
-//    
-//    private func setReverbPreset(reverbPreset: Int){
-//        if reverb != nil {
-//            reverb?.loadFactoryPreset(AVAudioUnitReverbPreset(rawValue: reverbPreset)!)
-//        }
-//    }
-//    
-//    
-//    //MARK: Player Methods
-//    
-//    
-//    private func setPlayerVolume(playerVolume: Float) {
-//        player?.volume = playerVolume
-//    }
-//    
-//    
-//    private func setPlayerPan(playerPan: Float){
-//        player?.pan = playerPan
-//    }
-//    
-//    
-//    func togglePlayer(){
-//        switch self.playerIsPlaying {
-//        case true:
-//            player?.stop()
-//            NotificationCenter.default.post(name: SCConstants.ShouldEnginePauseNotification, object: nil)
-//        case false:
-//            startEngine()
-//            schedulePlayerContent()
-//            player?.play()
-//        }
-//    }
-//    
-//    
-//    
-//    func toggleBuffer(recordBuffer: Bool) {
-//        
-//        isRecordingSelected = recordBuffer
-//        
-//        switch self.playerIsPlaying {
-//        case true:
-//            player?.stop()
-//            startEngine() // start the engine if it's not already started
-//            schedulePlayerContent()
-//            player?.play()
-//        case false:
-//            schedulePlayerContent()
-//        }
-//    }
-//    
-//    
-//    
-//    private func schedulePlayerContent(){
-//        
-//        // schedule the appropriate content
-//        switch isRecordingSelected {
-//        case true:
-//            let recording: AVAudioFile = createAudioFileForPlayback()!
-//            player?.scheduleFile(recording, at: nil, completionHandler: nil)
-//        case false:
-//            player?.scheduleBuffer(playerLoopBuffer!, at: nil, options: .loops, completionHandler: nil)
-//        }
-//    }
+    //
+    //    private func setDistortionWetDryMix(distortionWetDryMix: Float){
+    //        distortion?.wetDryMix = distortionWetDryMix * 100.0
+    //
+    //    }
+    //
+    //
+    //    private func distortionWetDryMix() -> Float {
+    //        return distortion!.wetDryMix/100.0
+    //    }
+    //
+    //
+    //    private func setDistortionPreset(distortionPreset: Int) {
+    //        if distortion != nil {
+    //            distortion?.loadFactoryPreset(AVAudioUnitDistortionPreset(rawValue: distortionPreset)!)
+    //        }
+    //    }
+    //
+    //
+    //    private func setReverbWetDryMix(reverbWetDryMix: Float) {
+    //        reverb?.wetDryMix = reverbWetDryMix * 100.0
+    //
+    //    }
+    //
+    //
+    //    func reverbWetDryMix() -> Float {
+    //        return reverb!.wetDryMix/100.0
+    //    }
+    //
+    //
+    //
+    //    private func setReverbPreset(reverbPreset: Int){
+    //        if reverb != nil {
+    //            reverb?.loadFactoryPreset(AVAudioUnitReverbPreset(rawValue: reverbPreset)!)
+    //        }
+    //    }
+    //
+    //
+    //    //MARK: Player Methods
+    //
+    //
+    //    private func setPlayerVolume(playerVolume: Float) {
+    //        player?.volume = playerVolume
+    //    }
+    //
+    //
+    //    private func setPlayerPan(playerPan: Float){
+    //        player?.pan = playerPan
+    //    }
+    //
+    //
+    //    func togglePlayer(){
+    //        switch self.playerIsPlaying {
+    //        case true:
+    //            player?.stop()
+    //            NotificationCenter.default.post(name: SCConstants.ShouldEnginePauseNotification, object: nil)
+    //        case false:
+    //            startEngine()
+    //            schedulePlayerContent()
+    //            player?.play()
+    //        }
+    //    }
+    //
+    //
+    //
+    //    func toggleBuffer(recordBuffer: Bool) {
+    //
+    //        isRecordingSelected = recordBuffer
+    //
+    //        switch self.playerIsPlaying {
+    //        case true:
+    //            player?.stop()
+    //            startEngine() // start the engine if it's not already started
+    //            schedulePlayerContent()
+    //            player?.play()
+    //        case false:
+    //            schedulePlayerContent()
+    //        }
+    //    }
+    //
+    //
+    //
+    //    private func schedulePlayerContent(){
+    //
+    //        // schedule the appropriate content
+    //        switch isRecordingSelected {
+    //        case true:
+    //            let recording: AVAudioFile = createAudioFileForPlayback()!
+    //            player?.scheduleFile(recording, at: nil, completionHandler: nil)
+    //        case false:
+    //            player?.scheduleBuffer(playerLoopBuffer!, at: nil, options: .loops, completionHandler: nil)
+    //        }
+    //    }
     
     
     
@@ -700,161 +640,100 @@ class SCGAudioController {
     
     //MARK: Multiple players
     
-    func getSample(samplePath: String) -> AVAudioFile? {
-        do {
-            let url = URL.init(string: samplePath)
-            let sample = try AVAudioFile.init(forReading: url!)
-            return sample
-        } catch let error {
-            print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
-            return nil
-        }
-    }
-    
-    
-    
-    func getAudioFilesForURL(){
-        
-        guard var samples = SCDataManager.shared.user?.currentSampleBank?.samples else { return }
-    
-        audioFiles = samples
-        
-        for (key, value) in audioFiles {
-            print("AudioFiles key : \(key), val: \(String(describing: value))")
-            
-            let path = SCAudioManager.shared.getPathForSampleIndex(sampleIndex: Int(key)!)
-            if let audioFile: AVAudioFile = getSample(samplePath: path!) {
-                
-            
-            print("Audiofile: \(String(describing: audioFile))")
-            audioFiles.updateValue(audioFile, forKey: key)
-            print("AudioFiles key : \(key), new val : \(String(describing: value))")
-            }
-        }
-        
-        
-        
-        
-    }
-    
-    
     
     
     func playSample(sampleURL: URL) {
         
-        let sampleIdx = SCAudioManager.shared.selectedSampleIndex
-//        let effectControls = SCAudioManager.shared.effectControls
+        let sampleIndex = SCAudioManager.shared.selectedSampleIndex
+        let effectControls = SCAudioManager.shared.effectControls
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         } catch let error {
             print("Error setting avaudiosession category, \(error.localizedDescription)")
         }
-        let key = "\(sampleIdx)"
-        guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {
-            print("No audiofile")
-            return
-        }
         
-//        getAudioFilesForURL()
-//        guard let sample = getSample(sampleURL: sampleURL) else {
-//            print("No sample at path.")
-//            return
-//        }
-//        arrayOfPlayers = arrayOfPlayers.filter(){$0.isActive}
         
-//        do {
-//            let sample = try AVAudioFile.init(forReading: sampleURL)
-//            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat, frameCapacity: AVAudioFrameCount(sample.length))
-//            do {
-//                try sample.read(into: playerLoopBuffer!)
-//            } catch let error {
-//                print("Error reading buffer from file\(error.localizedDescription)")
-//            }
+        //        arrayOfPlayers = arrayOfPlayers.filter(){$0.isActive}
+        
+        do {
+            let sample = try AVAudioFile.init(forReading: sampleURL)
+            //            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat, frameCapacity: AVAudioFrameCount(sample.length))
+            //            do {
+            //                try sample.read(into: playerLoopBuffer!)
+            //            } catch let error {
+            //                print("Error reading buffer from file\(error.localizedDescription)")
+            //            }
             
             
-        
-//            let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
+            
+            let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
             let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)//playerLoopBuffer?.format
             
-         
-
+            
+            
             
             // establish a connection between nodes
             
             
             // connect the player to the reverb
             // use the buffer format for the connection format as they must match
-//            engine?.connect(player, to: reverb!, format: playerFormat)
-//            
-//            // connect the reverb effect to mixer input bus 0
-//            // use the buffer format for the connection format as they must match
-//            engine?.connect(reverb!, to: (engine?.mainMixerNode)!, fromBus: 0,  toBus: 0, format: playerFormat)
-//            
-//            // connect the distortion effect to mixer input bus 2
-//            
-//            engine?.connect(distortion!, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 2,  format:stereoFormat)
+            //            engine?.connect(player, to: reverb!, format: playerFormat)
+            //
+            //            // connect the reverb effect to mixer input bus 0
+            //            // use the buffer format for the connection format as they must match
+            //            engine?.connect(reverb!, to: (engine?.mainMixerNode)!, fromBus: 0,  toBus: 0, format: playerFormat)
+            //
+            //            // connect the distortion effect to mixer input bus 2
+            //
+            //            engine?.connect(distortion!, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 2,  format:stereoFormat)
             
-//            engine?.connect(player, to:  (engine?.mainMixerNode)!, fromBus: 0, toBus: 2,  format: playerFormat)//
+            //            engine?.connect(player, to:  (engine?.mainMixerNode)!, fromBus: 0, toBus: 2,  format: playerFormat)//
             
             // fan out the sampler to mixer input 1 and distortion effect
-//            
-//            let destinationNodes = [
-//                AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1),
-//                AVAudioConnectionPoint.init(node: distortion!, bus: 0)
-//            ]
-//
-//            
-//            engine?.connect(sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
-//
+            //
+            //            let destinationNodes = [
+            //                AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1),
+            //                AVAudioConnectionPoint.init(node: distortion!, bus: 0)
+            //            ]
+            //
+            //
+            //            engine?.connect(sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
+            //
             
-//            engine?.connect(player, to:  (engine?.mainMixerNode)!, format: playerFormat)//
+            //            engine?.connect(player, to:  (engine?.mainMixerNode)!, format: playerFormat)//
             
-            player = players[nodeIdx]
-            reverb = reverbNodes[nodeIdx]
-            delay = delayNodes[nodeIdx]
-            distortion = distortionNodes[nodeIdx]
-            pitchShift = pitchShiftNodes[nodeIdx]
-            timeStretch = timeStretchNodes[nodeIdx]
+            let player = arrayOfPlayers[playerIdx]
+            let reverb = arrayOfEffects[playerIdx]
+            engine?.attach(player)
+            engine?.attach(reverb)
             
-            engine?.attach(player!)
-            engine?.attach(reverb!)
-            engine?.attach(delay!)
-            engine?.attach(pitchShift!)
-            engine?.attach(timeStretch!)
-            engine?.attach(distortion!)
-            
-            engine?.connect(player!, to: pitchShift!, format: playerFormat)
-            engine?.connect(pitchShift!, to: timeStretch!, format: playerFormat)
-            engine?.connect(timeStretch!, to: distortion!, format: playerFormat)
-            engine?.connect(distortion!, to: delay!, format: playerFormat)
-            engine?.connect(delay!, to: reverb!, format: playerFormat)
-            engine?.connect(reverb!, to: mixer!, format: playerFormat)
+            engine?.connect(player, to: reverb, format: playerFormat)
+            engine?.connect(reverb, to: mixer!, format: playerFormat)
             engine?.connect(mixer!, to: (engine?.mainMixerNode)!, format: playerFormat)
-    
-            let effectNodes = [reverb!, delay!, distortion!, timeStretch!, pitchShift!] as [Any]
-            playIt(player: player!, sample: sample, effectNodes: effectNodes)
-//        } catch let error {
-//            print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
-//        }
+            
+            playerPlay(player: player, sample: sample)
+        } catch let error {
+            print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
+        }
         
-    
+        
     }
     
     
     
-    func playIt(player: SCAudioPlayerNode, sample: AVAudioFile, effectNodes: [Any]){
-            player.isActive = true
-//            print("playing file at \(sampleURL.absoluteString)")
-            player.scheduleFile(sample, at: nil, completionHandler:{
+    func playerPlay(player: SCAudioPlayerNode, sample: AVAudioFile){
+        player.isActive = true
+        //            print("playing file at \(sampleURL.absoluteString)")
+        player.scheduleFile(sample, at: nil, completionHandler:{
             // calculate audio tail based on reverb and delay parameters
             var durationInt = Int(round(Double(sample.length)/44100))
             if durationInt == 0 {
                 durationInt = 1
             }
-            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[SCAudioManager.shared.selectedSampleIndex]
+            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[1]
             let reverbTime = round(Float(reverbParameter * 10.0))
             durationInt += Int(reverbTime)
-            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[SCAudioManager.shared.selectedSampleIndex]
+            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[1]
             let delayTime = round(Float(delayParams * 20.0))
             durationInt += Int(delayTime)
             let duration = DispatchTimeInterval.seconds(durationInt)
@@ -862,63 +741,44 @@ class SCGAudioController {
             delayQueue.asyncAfter(deadline: .now()+duration){
                 let serialQueue = DispatchQueue(label: "myqueue")
                 serialQueue.sync {
-                    self.engine?.disconnectNodeInput(player)
-                    self.engine?.detach(player)
-                    for effect in effectNodes {
-                        self.engine?.disconnectNodeInput(effect as! AVAudioNode)
-                        self.engine?.detach(effect as! AVAudioNode)
-                    }
-               
+                    player.isActive = false
+                    player.hasPlayed = true
+                    print("player is finished, marked for dealloc")
                 }}})
-            engine?.prepare()
-            do {
-                try engine?.start()
-            } catch _ {
-                print("Play session Error")
-            }
-        player.play()
-            players[nodeIdx].play()
-            nodeIdx = nodeIdx+1
-            if nodeIdx==5{
-                nodeIdx = 0
-                setupPlayersAndEffects()
-            }
+        engine?.prepare()
+        do {
+            try engine?.start()
+        } catch _ {
+            print("Play session Error")
         }
-    
-    
-    
-    func setupPlayersAndEffects(){
+        arrayOfPlayers[playerIdx].play()
+        playerIdx = playerIdx+1
+        if playerIdx>=23{
+            playerIdx = 0
+            reupPlayersAndEffects()
+            
+        }
+        //            arrayOfPlayers.append(player)
+        //            arrayOfPlayers.last?.play()
         
-        players.removeAll()
-        while players.count<5 {
+        //            print("Playing audiofile at \(sampleURL.absoluteString)")
+    }
+    
+    
+    
+    func reupPlayersAndEffects(){
+        arrayOfPlayers.removeAll()
+        arrayOfEffects.removeAll()
+        while arrayOfPlayers.count<25{
             let player = SCAudioPlayerNode.init()
             player.volume = 1.0
-            players.append(player)
+            arrayOfPlayers.append(player)
         }
-        reverbNodes.removeAll()
-        while reverbNodes.count<5 {
+        while arrayOfEffects.count<25{
             let verb = AVAudioUnitReverb.init()
-            reverbNodes.append(verb)
-        }
-        delayNodes.removeAll()
-        while delayNodes.count<5 {
-            let delay = AVAudioUnitDelay.init()
-            delayNodes.append(delay)
-        }
-        distortionNodes.removeAll()
-        while distortionNodes.count<5 {
-            let distortion = AVAudioUnitDistortion.init()
-            distortionNodes.append(distortion)
-        }
-        pitchShiftNodes.removeAll()
-        while pitchShiftNodes.count < 5 {
-            let pitchShift = AVAudioUnitTimePitch.init()
-            pitchShiftNodes.append(pitchShift)
-        }
-        timeStretchNodes.removeAll()
-        while timeStretchNodes.count < 5 {
-            let timeStretch = AVAudioUnitVarispeed.init()
-            timeStretchNodes.append(timeStretch)
+            verb.loadFactoryPreset(.plate) // there are thirteen possible presets
+            verb.wetDryMix = Float(0.5*100.0)
+            arrayOfEffects.append(verb)
         }
     }
     
@@ -934,94 +794,108 @@ class SCGAudioController {
      print("oops \(error)")
      print("could not start audio engine")
      }
-*/
+     */
     
     
     
-//    func setupReverb(sampleIndex: Int) -> AVAudioUnitReverb {
-//        
-//        let reverb = AVAudioUnitReverb()
-//        let reverbParams = SCAudioManager.shared.effectControls[0]
-//        
-//        if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*100.0)) {
-//            reverb.loadFactoryPreset(.plate) // there are thirteen possible presets
-//            reverb.wetDryMix = reverbValue
-//        }
-//        return reverb
-//    }
-//    
-
+    //    func setupReverb(sampleIndex: Int) -> AVAudioUnitReverb {
+    //
+    //        let reverb = AVAudioUnitReverb()
+    //        let reverbParams = SCAudioManager.shared.effectControls[0]
+    //
+    //        if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*100.0)) {
+    //            reverb.loadFactoryPreset(.plate) // there are thirteen possible presets
+    //            reverb.wetDryMix = reverbValue
+    //        }
+    //        return reverb
+    //    }
+    //
     
- 
+    
+    func setupDistortion(sampleIndex: Int) -> AVAudioUnitDistortion {
+        
+        let distortion = AVAudioUnitDistortion()
+        let distortionParams = SCAudioManager.shared.effectControls[4]
+        
+        let preGainValue = distortionParams[0].parameter[sampleIndex] * 100.0// range -80.0 -> 20.0
+        distortion.preGain = Float(preGainValue - 80.0)
+        
+        let dmix = distortionParams[1].parameter[sampleIndex] * 100.0
+        distortion.wetDryMix = dmix
+        
+        return distortion
+    }
+    
+    
     func makeEngineConnectionsForMultiPlayer(player: SCAudioPlayerNode){
-//
-//            /*  The engine will construct a singleton main mixer and connect it to the outputNode on demand,
-//             when this property is first accessed. You can then connect additional nodes to the mixer.
-//             
-//             By default, the mixer's output format (sample rate and channel count) will track the format
-//             of the output node. You may however make the connection explicitly with a different format. */
-//            
-//            // get the engine's optional singleton main mixer node
-//            let mainMixer = engine?.mainMixerNode
-//            
-//            /*  Nodes have input and output buses (AVAudioNodeBus). Use connect:to:fromBus:toBus:format: to
-//             establish connections betweeen nodes. Connections are always one-to-one, never one-to-many or
-//             many-to-one.
-//             
-//             Note that any pre-existing connection(s) involving the source's output bus or the
-//             destination's input bus will be broken.
-//             
-//             @method connect:to:fromBus:toBus:format:
-//             @param node1 the source node
-//             @param node2 the destination node
-//             @param bus1 the output bus on the source node
-//             @param bus2 the input bus on the destination node
-//             @param format if non-null, the format of the source node's output bus is set to this
-//             format. In all cases, the format of the destination node's input bus is set to
-//             match that of the source node's output bus. */
-//            
-//            let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
-//            let playerFormat = playerLoopBuffer?.format
-//        
-//        
-//            let reverbA = setupReverb(sampleIndex: SCAudioManager.shared.selectedSampleIndex)
-//            let distortionA = setupDistortion(sampleIndex: SCAudioManager.shared.selectedSampleIndex)
-//        
-//            let samplerA = AVAudioUnitSampler.init()
-//            setSamplerDirectVolume(samplerDirectVolume: 1.0)
-//            setSamplerEffectVolume(samplerEffectVolume: 1.0)
-//            engine?.attach(samplerA)
-//            engine?.attach(distortionA)
-//            engine?.attach(reverbA)
-//        
-//        
-//            // establish a connection between nodes
-//        
-//            
-//            // connect the player to the reverb
-//            // use the buffer format for the connection format as they must match
-//             engine?.connect(player, to: reverbA, format: playerFormat)
-//            
-//            // connect the reverb effect to mixer input bus 0
-//            // use the buffer format for the connection format as they must match
-//            engine?.connect(reverbA, to: mainMixer!, fromBus: 0,  toBus: 0, format: playerFormat)
-//            
-//            // connect the distortion effect to mixer input bus 2
-// 
-//            engine?.connect(distortionA, to: mainMixer!, fromBus: 0, toBus: 2,  format:stereoFormat)
-// 
-////            engine?.connect(player, to: mainMixer!, fromBus: 0, toBus: 2,  format: playerFormat)
-//
-//            // fan out the sampler to mixer input 1 and distortion effect
-//            let destinationNodes: [AVAudioConnectionPoint] = [AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1), AVAudioConnectionPoint.init(node: distortionA, bus: 0)]//
-//            
-// 
-//        
-//            
-//            engine?.connect( samplerA, to: destinationNodes, fromBus: 0, format: stereoFormat)
-// 
-// 
-////        engine?.connect(player, to: mainMixer!, format: playerFormat)
+        //
+        //            /*  The engine will construct a singleton main mixer and connect it to the outputNode on demand,
+        //             when this property is first accessed. You can then connect additional nodes to the mixer.
+        //
+        //             By default, the mixer's output format (sample rate and channel count) will track the format
+        //             of the output node. You may however make the connection explicitly with a different format. */
+        //
+        //            // get the engine's optional singleton main mixer node
+        //            let mainMixer = engine?.mainMixerNode
+        //
+        //            /*  Nodes have input and output buses (AVAudioNodeBus). Use connect:to:fromBus:toBus:format: to
+        //             establish connections betweeen nodes. Connections are always one-to-one, never one-to-many or
+        //             many-to-one.
+        //
+        //             Note that any pre-existing connection(s) involving the source's output bus or the
+        //             destination's input bus will be broken.
+        //
+        //             @method connect:to:fromBus:toBus:format:
+        //             @param node1 the source node
+        //             @param node2 the destination node
+        //             @param bus1 the output bus on the source node
+        //             @param bus2 the input bus on the destination node
+        //             @param format if non-null, the format of the source node's output bus is set to this
+        //             format. In all cases, the format of the destination node's input bus is set to
+        //             match that of the source node's output bus. */
+        //
+        //            let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
+        //            let playerFormat = playerLoopBuffer?.format
+        //
+        //
+        //            let reverbA = setupReverb(sampleIndex: SCAudioManager.shared.selectedSampleIndex)
+        //            let distortionA = setupDistortion(sampleIndex: SCAudioManager.shared.selectedSampleIndex)
+        //
+        //            let samplerA = AVAudioUnitSampler.init()
+        //            setSamplerDirectVolume(samplerDirectVolume: 1.0)
+        //            setSamplerEffectVolume(samplerEffectVolume: 1.0)
+        //            engine?.attach(samplerA)
+        //            engine?.attach(distortionA)
+        //            engine?.attach(reverbA)
+        //
+        //
+        //            // establish a connection between nodes
+        //
+        //
+        //            // connect the player to the reverb
+        //            // use the buffer format for the connection format as they must match
+        //             engine?.connect(player, to: reverbA, format: playerFormat)
+        //
+        //            // connect the reverb effect to mixer input bus 0
+        //            // use the buffer format for the connection format as they must match
+        //            engine?.connect(reverbA, to: mainMixer!, fromBus: 0,  toBus: 0, format: playerFormat)
+        //
+        //            // connect the distortion effect to mixer input bus 2
+        //
+        //            engine?.connect(distortionA, to: mainMixer!, fromBus: 0, toBus: 2,  format:stereoFormat)
+        //
+        ////            engine?.connect(player, to: mainMixer!, fromBus: 0, toBus: 2,  format: playerFormat)
+        //
+        //            // fan out the sampler to mixer input 1 and distortion effect
+        //            let destinationNodes: [AVAudioConnectionPoint] = [AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1), AVAudioConnectionPoint.init(node: distortionA, bus: 0)]//
+        //
+        //
+        //
+        //
+        //            engine?.connect( samplerA, to: destinationNodes, fromBus: 0, format: stereoFormat)
+        //
+        //
+        ////        engine?.connect(player, to: mainMixer!, format: playerFormat)
     }
     
     
@@ -1203,7 +1077,7 @@ class SCGAudioController {
         case .began:
             print("Session interrupted > --- Begin Interruption ---\n")
             isSessionInterrupted = true
-//            player?.stop()
+            //            player?.stop()
             sequencer?.stop()
             stopRecordingMixerOutput()
             self.delegate?.engineWasInterrupted()
@@ -1240,33 +1114,33 @@ class SCGAudioController {
         }
         print("reason : \(routeChangedReason)")
         
-//        let reasonDict = notification.userInfo
-//        let reason = reasonDict?[AVAudioSessionRouteChangeReasonKey] as? Int
-//        print("Route change:")
-//        switch reason {
-//            
-//        case AVAudioSessionRouteChangeNewDeviceAvailable:
-//            print("     NewDeviceAvailable")
-//            break
-//        case .oldDeviceUnavailable:
-//            print("     OldDeviceUnavailable")
-//            break
-//        case .categoryChange:
-//            print("     CategoryChange")
-//            print("     New Category: \(AVAudioSession.sharedInstance().category)")
-//            break
-//        case .override:
-//            print("     Override")
-//            break
-//        case .wakeFromSleep:
-//            print("     WakeFromSleep")
-//            break
-//        case .noSuitableRouteForCategory:
-//            print("     NoSuitableRouteForCategory")
-//            break
-//        default:
-//            print("     ReasonUnknown")
-//        }
+        //        let reasonDict = notification.userInfo
+        //        let reason = reasonDict?[AVAudioSessionRouteChangeReasonKey] as? Int
+        //        print("Route change:")
+        //        switch reason {
+        //            
+        //        case AVAudioSessionRouteChangeNewDeviceAvailable:
+        //            print("     NewDeviceAvailable")
+        //            break
+        //        case .oldDeviceUnavailable:
+        //            print("     OldDeviceUnavailable")
+        //            break
+        //        case .categoryChange:
+        //            print("     CategoryChange")
+        //            print("     New Category: \(AVAudioSession.sharedInstance().category)")
+        //            break
+        //        case .override:
+        //            print("     Override")
+        //            break
+        //        case .wakeFromSleep:
+        //            print("     WakeFromSleep")
+        //            break
+        //        case .noSuitableRouteForCategory:
+        //            print("     NoSuitableRouteForCategory")
+        //            break
+        //        default:
+        //            print("     ReasonUnknown")
+        //        }
     }
     
     
@@ -1297,13 +1171,13 @@ class SCGAudioController {
         }
         
         // rebuild the world
-//        initAndCreateNodes()
-//        createEngineAndAttachNodes()
-//        makeEngineConnections()
-//        createAndSetupSequencer() // recreate the sequencer with the new AVAudioEngine
-//        setNodeDefaults()
-//        
+        //        initAndCreateNodes()
+        //        createEngineAndAttachNodes()
+        //        makeEngineConnections()
+        //        createAndSetupSequencer() // recreate the sequencer with the new AVAudioEngine
+        //        setNodeDefaults()
+        //        
         // notify the delegate
         self.delegate?.engineConfigurationHasChanged()
     }
-}
+} */

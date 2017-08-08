@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A70317A21F3200E2004A053C /* SCAudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70317A11F3200E2004A053C /* SCAudioEngine.swift */; };
 		A7054EC61EA82D7700BBC34E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7054EC51EA82D7700BBC34E /* Foundation.framework */; };
 		A70814351F01B54600A8AE92 /* A DAY WITHOUT SUN.otf in Resources */ = {isa = PBXBuildFile; fileRef = A70814321F01B54600A8AE92 /* A DAY WITHOUT SUN.otf */; };
 		A70814391F01C46400A8AE92 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = A70814381F01C46400A8AE92 /* plus.png */; };
@@ -54,6 +53,7 @@
 		A79170CC1F2D211F00B38D16 /* stars.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A79170CB1F2D211F00B38D16 /* stars.jpg */; };
 		A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */; };
 		A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */; };
+		A79C9C911F393F72000DA04C /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79C9C901F393F72000DA04C /* Ref.swift */; };
 		A79F5C8A1F1551CE00A89492 /* spinner.png in Resources */ = {isa = PBXBuildFile; fileRef = A79F5C891F1551CE00A89492 /* spinner.png */; };
 		A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A21CB21EFAEFF300161DF3 /* UIButton+Custom.swift */; };
 		A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A822F71EA81BEC0061D0A0 /* AppDelegate.swift */; };
@@ -121,7 +121,6 @@
 		31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoundCollage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75D104676F45F32E670413F6 /* Pods-SoundCollage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.debug.xcconfig"; sourceTree = "<group>"; };
 		9BEF22D19B1F94FC5200561F /* Pods-SoundCollage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.release.xcconfig"; sourceTree = "<group>"; };
-		A70317A11F3200E2004A053C /* SCAudioEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAudioEngine.swift; sourceTree = "<group>"; };
 		A7054EC51EA82D7700BBC34E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A70814321F01B54600A8AE92 /* A DAY WITHOUT SUN.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "A DAY WITHOUT SUN.otf"; sourceTree = "<group>"; };
 		A70814381F01C46400A8AE92 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
@@ -169,6 +168,7 @@
 		A79170CB1F2D211F00B38D16 /* stars.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stars.jpg; sourceTree = "<group>"; };
 		A79727CC1EADA35200BBD45F /* SCSampleBankFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankFlowLayout.swift; sourceTree = "<group>"; };
 		A79727CE1EADA46E00BBD45F /* SCSampleBankCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankCell.swift; sourceTree = "<group>"; };
+		A79C9C901F393F72000DA04C /* Ref.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ref.swift; sourceTree = "<group>"; };
 		A79F5C891F1551CE00A89492 /* spinner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spinner.png; sourceTree = "<group>"; };
 		A7A21CB21EFAEFF300161DF3 /* UIButton+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Custom.swift"; sourceTree = "<group>"; };
 		A7A822F41EA81BEC0061D0A0 /* SoundCollage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoundCollage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -316,7 +316,6 @@
 			isa = PBXGroup;
 			children = (
 				A7264E801EAEECD700664EDE /* SCUser.swift */,
-				A70317A11F3200E2004A053C /* SCAudioEngine.swift */,
 				A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */,
 				A7A8232E1EA81D280061D0A0 /* AlertManager.swift */,
 				A7A823421EA81F6C0061D0A0 /* SCStackView.swift */,
@@ -365,6 +364,7 @@
 				A76A886A1EB0445200FEDED0 /* SCDataManager.swift */,
 				A7A823301EA81D300061D0A0 /* SCAudioManager.swift */,
 				A74AA8B51F36FE1C00BCB5F0 /* SCGAudioController.swift */,
+				A79C9C901F393F72000DA04C /* Ref.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -707,6 +707,7 @@
 				A7A8233F1EA81F500061D0A0 /* SCSamplerFlowLayout.swift in Sources */,
 				A75D4EBC1F25BFF300C304D8 /* SCSequencerSettings.swift in Sources */,
 				A74541961F31153E007A89B7 /* SCLibraryCell.swift in Sources */,
+				A79C9C911F393F72000DA04C /* Ref.swift in Sources */,
 				A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */,
 				A7E117D31F278DE800041400 /* UIImage+Custom.swift in Sources */,
 				A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */,
@@ -733,7 +734,6 @@
 				A74541931F3114E8007A89B7 /* SCLibraryViewController.swift in Sources */,
 				A7A823311EA81D300061D0A0 /* SCAudioManager.swift in Sources */,
 				A78C12951F2DAAE500682750 /* SCCircularView.swift in Sources */,
-				A70317A21F3200E2004A053C /* SCAudioEngine.swift in Sources */,
 				A7D7CDC01F27BDD9000EE8DA /* SCMixerViewController.swift in Sources */,
 				A7D7CDC71F27E115000EE8DA /* SCSlider.swift in Sources */,
 				A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */,

@@ -29,11 +29,11 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     var isSpeakerEnabled: Bool = false
     var isRecording: Bool = false
     var replaceableFilePath: String?
-    var audioEngine: SCAudioEngine!
+    var audioEngine: AVAudioEngine!
     var mixerPanels: [String : [String]] = [:]
     var effectControls: [[SCEffectControl]] = []
-    var audioEngineChain: [SCAudioEngine] = []
-    var finishedEngines: [SCAudioEngine] = []
+    var audioEngineChain: [AVAudioEngine] = []
+    var finishedEngines: [AVAudioEngine] = []
     var sequencerSettings: [[Bool]] = []
     var sequencerIsPlaying: Bool = false
     var audioBuffer = AVAudioPCMBuffer()
@@ -50,11 +50,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func setupAudioManager(){
         
-        self.audioController = SCGAudioController.init() // new controller class, everything commented with /**/ are experiments in transitioning to handing over control to the new controller
-        self.audioController?.delegate = self as? SCGAudioControllerDelegate
-        
         setupEffects()
         
+                
 /*
          NotificationCenter.default.addObserver( self, selector: #selector(routeChanged), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
 */
@@ -286,121 +284,121 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
-    
-    
-    
-    func setupReverb(sampleIndex: Int) -> AVAudioUnitReverb {
-        
-        let reverb = AVAudioUnitReverb()
-        let reverbParams = effectControls[0]
-       
-        if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*100.0)) {
-            reverb.loadFactoryPreset(.plate) // there are thirteen possible presets
-            reverb.wetDryMix = reverbValue
-        }
-        return reverb
-    }
-    
-    
-    
-    
-    func setupDelay(sampleIndex: Int) -> AVAudioUnitDelay {
-        
-        let delay = AVAudioUnitDelay()
-        let delayParams = effectControls[1]
-        
-        let delayWetDryMixValue = delayParams[0].parameter[sampleIndex] * 100.0
-        delay.wetDryMix = delayWetDryMixValue
-        
-        let delayTime = delayParams[1].parameter[sampleIndex]
-        delay.delayTime = TimeInterval(delayTime)
-        
-        let delayFeedback = delayParams[2].parameter[sampleIndex] * 80.0
-        delay.feedback = delayFeedback
-        
-        let delayLPCutoff = delayParams[3].parameter[sampleIndex] * 6000.0 // 10 -> (samplerate/2), default 15000
-        delay.lowPassCutoff = delayLPCutoff
-       
-        return delay
-    }
-    
-    
-    
-    func setupPitchShift(sampleIndex: Int) -> AVAudioUnitTimePitch {
-        
-        let pitch = AVAudioUnitTimePitch()
-        let pitchParams = effectControls[2]
-        
-        let pitchUp = pitchParams[0].parameter[sampleIndex] * 100.0
-        let pitchUpValue = pitchUp * 24.0
-        let posiPitch = pitchUpValue+1.0
-       
-        let pitchDown = pitchParams[1].parameter[sampleIndex] * 100.0
-        let pitchDownValue = pitchDown * 24.0
-        let negiPitch = (pitchDownValue+1.0) * -1.0
-        
-        pitch.pitch = posiPitch + negiPitch
-       
-        return pitch
-    }
-    
-    
-    
-    func setupDistortion(sampleIndex: Int) -> AVAudioUnitDistortion {
-        
-        let distortion = AVAudioUnitDistortion()
-        let distortionParams = effectControls[4]
-        
-        let preGainValue = distortionParams[0].parameter[sampleIndex] * 100.0// range -80.0 -> 20.0
-        distortion.preGain = Float(preGainValue - 80.0)
-       
-        let dmix = distortionParams[1].parameter[sampleIndex] * 100.0
-        distortion.wetDryMix = dmix
-       
-        return distortion
-    }
-    
-    
-    
-    
-    func setupTimeStretch(sampleIndex: Int) -> AVAudioUnitVarispeed {
-        
-        let time = AVAudioUnitVarispeed()
-        let timeParams = effectControls[3]
-        
-        let timeRateUp = 1.0 + timeParams[0].parameter[sampleIndex] * 4.0
-        let timeRateDown = timeParams[1].parameter[sampleIndex] * 0.75
-     
-        let rateValue = Float(timeRateUp - timeRateDown)
-        time.rate = rateValue
-        
-        return time
-    }
-    
-    
-    /* //MARK: TODO: EQ 
-     func setupEQ() ->eq {
-     var EQNode:AVAudioUnitEQ!
-     
-     EQNode = AVAudioUnitEQ(numberOfBands: 2)
-     engine.attach(EQNode)
-     
-     var filterParams = EQNode.bands[0] as AVAudioUnitEQFilterParameters
-     filterParams.filterType = .highPass
-     filterParams.frequency = 80.0
-     
-     filterParams = EQNode.bands[1] as AVAudioUnitEQFilterParameters
-     filterParams.filterType = .parametric
-     filterParams.frequency = 500.0
-     filterParams.bandwidth = 2.0
-     filterParams.gain = 4.0
-     
-     let format = mixer.outputFormat(forBus: 0)
-     engine.connect(playerNode, to: EQNode, format: format )
-     engine.connect(EQNode, to: engine.mainMixerNode, format: format)
-     }
-     */
-    
+//    
+//    
+//    
+//    func setupReverb(sampleIndex: Int) -> AVAudioUnitReverb {
+//        
+//        let reverb = AVAudioUnitReverb()
+//        let reverbParams = effectControls[0]
+//       
+//        if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*100.0)) {
+//            reverb.loadFactoryPreset(.plate) // there are thirteen possible presets
+//            reverb.wetDryMix = reverbValue
+//        }
+//        return reverb
+//    }
+//    
+//    
+//    
+//    
+//    func setupDelay(sampleIndex: Int) -> AVAudioUnitDelay {
+//        
+//        let delay = AVAudioUnitDelay()
+//        let delayParams = effectControls[1]
+//        
+//        let delayWetDryMixValue = delayParams[0].parameter[sampleIndex] * 100.0
+//        delay.wetDryMix = delayWetDryMixValue
+//        
+//        let delayTime = delayParams[1].parameter[sampleIndex]
+//        delay.delayTime = TimeInterval(delayTime)
+//        
+//        let delayFeedback = delayParams[2].parameter[sampleIndex] * 80.0
+//        delay.feedback = delayFeedback
+//        
+//        let delayLPCutoff = delayParams[3].parameter[sampleIndex] * 6000.0 // 10 -> (samplerate/2), default 15000
+//        delay.lowPassCutoff = delayLPCutoff
+//       
+//        return delay
+//    }
+//    
+//    
+//    
+//    func setupPitchShift(sampleIndex: Int) -> AVAudioUnitTimePitch {
+//        
+//        let pitch = AVAudioUnitTimePitch()
+//        let pitchParams = effectControls[2]
+//        
+//        let pitchUp = pitchParams[0].parameter[sampleIndex] * 100.0
+//        let pitchUpValue = pitchUp * 24.0
+//        let posiPitch = pitchUpValue+1.0
+//       
+//        let pitchDown = pitchParams[1].parameter[sampleIndex] * 100.0
+//        let pitchDownValue = pitchDown * 24.0
+//        let negiPitch = (pitchDownValue+1.0) * -1.0
+//        
+//        pitch.pitch = posiPitch + negiPitch
+//       
+//        return pitch
+//    }
+//    
+//    
+//    
+//    func setupDistortion(sampleIndex: Int) -> AVAudioUnitDistortion {
+//        
+//        let distortion = AVAudioUnitDistortion()
+//        let distortionParams = effectControls[4]
+//        
+//        let preGainValue = distortionParams[0].parameter[sampleIndex] * 100.0// range -80.0 -> 20.0
+//        distortion.preGain = Float(preGainValue - 80.0)
+//       
+//        let dmix = distortionParams[1].parameter[sampleIndex] * 100.0
+//        distortion.wetDryMix = dmix
+//       
+//        return distortion
+//    }
+//    
+//    
+//    
+//    
+//    func setupTimeStretch(sampleIndex: Int) -> AVAudioUnitVarispeed {
+//        
+//        let time = AVAudioUnitVarispeed()
+//        let timeParams = effectControls[3]
+//        
+//        let timeRateUp = 1.0 + timeParams[0].parameter[sampleIndex] * 4.0
+//        let timeRateDown = timeParams[1].parameter[sampleIndex] * 0.75
+//     
+//        let rateValue = Float(timeRateUp - timeRateDown)
+//        time.rate = rateValue
+//        
+//        return time
+//    }
+//    
+//    
+//    /* //MARK: TODO: EQ 
+//     func setupEQ() ->eq {
+//     var EQNode:AVAudioUnitEQ!
+//     
+//     EQNode = AVAudioUnitEQ(numberOfBands: 2)
+//     engine.attach(EQNode)
+//     
+//     var filterParams = EQNode.bands[0] as AVAudioUnitEQFilterParameters
+//     filterParams.filterType = .highPass
+//     filterParams.frequency = 80.0
+//     
+//     filterParams = EQNode.bands[1] as AVAudioUnitEQFilterParameters
+//     filterParams.filterType = .parametric
+//     filterParams.frequency = 500.0
+//     filterParams.bandwidth = 2.0
+//     filterParams.gain = 4.0
+//     
+//     let format = mixer.outputFormat(forBus: 0)
+//     engine.connect(playerNode, to: EQNode, format: format )
+//     engine.connect(EQNode, to: engine.mainMixerNode, format: format)
+//     }
+//     */
+//    
     
     func effectsParametersDidChange(values: [Int], sliderValue: Float) {
         
