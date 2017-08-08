@@ -609,7 +609,7 @@ class SCGAudioController {
     }
 */
     
-    
+   /*
     private func createAudioFileForPlayback() -> AVAudioFile? {
         
         var recording: AVAudioFile
@@ -639,13 +639,86 @@ class SCGAudioController {
         
         do {
             let sample = try AVAudioFile.init(forReading: sampleURL)
-      
-            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat, frameCapacity: AVAudioFrameCount(sample.length))
-            do {
-                try sample.read(into: playerLoopBuffer!)
-            } catch let error {
-                print("Error reading buffer from file\(error.localizedDescription)")
+            */
+    
+    
+    
+    private func createAudioFileForPlayback() -> AVAudioFile? {
+        
+        var recording: AVAudioFile
+        do {
+            recording = try AVAudioFile.init(forReading: mixerOutputFileURL!)
+            return recording
+        } catch let error {
+            print("couldn't create AVAudioFile, \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    
+    //MARK: Multiple players
+    
+    func getSample(samplePath: String) -> AVAudioFile? {
+        do {
+            let url = URL.init(string: samplePath)
+            let sample = try AVAudioFile.init(forReading: url!)
+            return sample
+        } catch let error {
+            print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    
+    
+    func getAudioFilesForURL(){
+        
+        guard let samples = SCDataManager.shared.user?.currentSampleBank?.samples else { return }
+        
+        audioFiles = samples
+        
+        for (key, value) in audioFiles {
+            print("AudioFiles key : \(key), val: \(String(describing: value))")
+            
+            let path = SCAudioManager.shared.getPathForSampleIndex(sampleIndex: Int(key)!)
+            if let audioFile: AVAudioFile = getSample(samplePath: path!) {
+                
+                
+                print("Audiofile: \(String(describing: audioFile))")
+                audioFiles.updateValue(audioFile, forKey: key)
+                print("AudioFiles key : \(key), new val : \(String(describing: value))")
             }
+        }
+        
+        
+        
+        
+    }
+    
+    
+    
+    
+    func playSample(sampleURL: URL) {
+        
+        let sampleIdx = SCAudioManager.shared.selectedSampleIndex
+        //        let effectControls = SCAudioManager.shared.effectControls
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+        } catch let error {
+            print("Error setting avaudiosession category, \(error.localizedDescription)")
+        }
+        let key = "\(sampleIdx)"
+        guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {
+            print("No audiofile")
+            return
+        }
+
+//            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat, frameCapacity: AVAudioFrameCount(sample.length))
+//            do {
+//                try sample.read(into: playerLoopBuffer!)
+//            } catch let error {
+//                print("Error reading buffer from file\(error.localizedDescription)")
+//            }
 /*
             let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
             
@@ -698,9 +771,9 @@ class SCGAudioController {
 
             let nodes = [player, reverb, delay, distortion, timeStretch, pitchShift]
             playIt(player: player, sample: sample, audioNodes: nodes)
-        } catch let error {
-            print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
-        }
+//        } catch let error {
+//            print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
+//        }
     }
     
     
