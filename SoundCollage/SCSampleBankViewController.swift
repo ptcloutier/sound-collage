@@ -19,7 +19,6 @@ class SCSampleBankViewController: UIViewController {
     var images: [UIImage] = []
     var window: UIWindow?
     var timer = Timer()
-
     
     //MARK: vc life cycle 
     
@@ -35,12 +34,41 @@ class SCSampleBankViewController: UIViewController {
         let img5 = UIImage.init(named: "l7")
         let img6 = UIImage.init(named: "l8")
         images = [img1!, img2!, img3!, img4!, img5!, img6!]
-    
+        
         setupCollectionView()
+        
+      
+        
 //        setupTitle(xConstant: 0, yConstant:  0, textColor: UIColor.white)
-        setupTitle(xConstant: 2, yConstant: 2, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral, alpha: 0.8 )
-        setupTitle(xConstant: 5, yConstant: 5, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, alpha: 0.8)
-        setupTitle(xConstant: 8, yConstant: 8, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua, alpha: 0.9)
+//        let ta1 = [CGFloat(50.0), CGFloat(17.0), CGFloat(8.0), CGFloat(2.0), SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral, SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueShade] as [Any]
+//        let ta2 = [CGFloat(45.0), CGFloat(18.0), CGFloat(7.0), CGFloat(2.0), SCColor.Custom.PsychedelicIceCreamShoppe.medRose, SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet] as [Any]
+//        let ta3 = [CGFloat(40.0), CGFloat(19.0), CGFloat(6.0), CGFloat(3.0), SCColor.Custom.PsychedelicIceCreamShoppe.darkRose, SCColor.Custom.PsychedelicIceCreamShoppe.lightRose] as [Any]
+        let ta4 = [CGFloat(45.0), CGFloat(50.0), CGFloat(8.0), CGFloat(1.0), SCColor.Custom.PsychedelicIceCreamShoppe.rose, SCColor.Custom.PsychedelicIceCreamShoppe.rose] as [Any]
+//        let ta5 = [CGFloat(35.0), CGFloat(35.0), CGFloat(3.0), CGFloat(3.0), SCColor.Custom.PsychedelicIceCreamShoppe.lightCoral, SCColor.Custom.PsychedelicIceCreamShoppe.lightCoral] as [Any]
+//        let ta6 = [CGFloat(30.0), CGFloat(45.0), CGFloat(1.0), CGFloat(8.0), SCColor.Custom.PsychedelicIceCreamShoppe.medRose, SCColor.Custom.PsychedelicIceCreamShoppe.rose] as [Any]
+//        let ta7 = [CGFloat(20.0), CGFloat(35.0), CGFloat(2.0), CGFloat(8.0), SCColor.Custom.PsychedelicIceCreamShoppe.lightRose, SCColor.Custom.PsychedelicIceCreamShoppe.medRose] as [Any]
+//        let ta8 = [CGFloat(19.0), CGFloat(40.0), CGFloat(2.0), CGFloat(9.0), SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet, SCColor.Custom.PsychedelicIceCreamShoppe.darkRose] as [Any]
+//        let ta9 = [CGFloat(18.0), CGFloat(45.0), CGFloat(2.0), CGFloat(9.0), SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueShade, SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral] as [Any]
+//        let ta10 = [CGFloat(17.0), CGFloat(50.0), CGFloat(2.0), CGFloat(9.0), SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet, SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral] as [Any]
+
+        // label1 fontSize, label2 fontSize, label1 alpha, label2 alpha , label1textColor, label2textColor
+//        setupTitle(xConstant: -50, yConstant: 0, textAttributes: ta1)
+//        setupTitle(xConstant: -35, yConstant: 20, textAttributes: ta2)
+//        setupTitle(xConstant: -20, yConstant: 40, textAttributes: ta3)
+        setupTitle(xConstant: 0, yConstant: 0, textAttributes: ta4)
+//        setupTitle(xConstant:  10, yConstant: 20, textAttributes: ta5)
+//        setupTitle(xConstant: 25, yConstant: 40, textAttributes: ta6)
+//        setupTitle(xConstant: 40, yConstant: 120, textAttributes: ta7)
+//        setupTitle(xConstant: 55, yConstant: 140, textAttributes: ta8)
+//        setupTitle(xConstant: 60, yConstant: 160, textAttributes: ta9)
+//        setupTitle(xConstant: 75, yConstant: 180, textAttributes: ta10)
+//        setupTitle(xConstant: 34, yConstant: 120, textAttributes: ta7, alpha: 0.5)
+//        setupTitle(xConstant: 30, yConstant: 140, textAttributes: ta8, alpha: 0.4)
+//        setupTitle(xConstant: 25, yConstant: 160, textAttributes: ta9, alpha: 0.7)
+//        setupTitle(xConstant: 20, yConstant: 120, textAttributes: ta10, alpha: 0.5)
+//        setupTitle(xConstant: 15, yConstant: 140, textAttributes: ta11, alpha: 0.4)
+//        setupTitle(xConstant: 10, yConstant: 160, textAttributes: ta12, alpha: 0.7)
+
     }
     
     
@@ -54,35 +82,44 @@ class SCSampleBankViewController: UIViewController {
     
     //MARK: ui setup
     
-    private func setupTitle(xConstant: CGFloat, yConstant: CGFloat, textColor: UIColor, alpha: CGFloat){
+    private func setupTitle(xConstant: CGFloat, yConstant: CGFloat, textAttributes: [Any]){
     
+        let label1fontSize = textAttributes[0] as! CGFloat
+        let label2fontSize = textAttributes[1] as! CGFloat
+        let label1Alpha = textAttributes[2] as! CGFloat
+        let label2Alpha = textAttributes[3] as! CGFloat
+        let label1textColor = textAttributes[4] as! UIColor
+        let label2textColor = textAttributes[5] as! UIColor
+        
+        
         let margin: CGFloat = 20.0
         let titleLabel1 = UILabel.init(frame: .zero)
         titleLabel1.text = "S O U N D"
-        titleLabel1.font = UIFont.init(name: "Futura", size: 40.0)
-        titleLabel1.textColor = textColor
+        titleLabel1.font = UIFont.init(name: "Futura", size: label1fontSize)
+        titleLabel1.textColor = label1textColor
         titleLabel1.textAlignment = NSTextAlignment.center
-        titleLabel1.addGlow(color: textColor)
-        titleLabel1.alpha = alpha
+        titleLabel1.addGlow(color: label2textColor)
+        titleLabel1.alpha = label1Alpha
         self.collectionView.addSubview(titleLabel1)
         titleLabel1.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))
         self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.1, constant: 0))
         self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: xConstant))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: yConstant+(margin*2.0)))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: (yConstant+(margin*2.0))))
         
         let titleLabel2 = UILabel.init(frame: .zero)
         titleLabel2.text = "C O L L A G E"
-        titleLabel2.font = UIFont.init(name: "Futura", size: 40.0)
-        titleLabel2.textColor = textColor
+        titleLabel2.font = UIFont.init(name: "Futura", size: label2fontSize)
+        titleLabel2.textColor = label2textColor
         titleLabel2.textAlignment = NSTextAlignment.center
-        titleLabel2.addGlow(color: textColor)
+        titleLabel2.addGlow(color: label2textColor)
+        titleLabel2.alpha = label2Alpha
         self.collectionView.addSubview(titleLabel2)
         titleLabel2.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))
         self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.1, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: xConstant))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .top, relatedBy: .equal, toItem: titleLabel1, attribute: .bottom, multiplier: 1.0, constant: margin/2))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .top, relatedBy: .equal, toItem: titleLabel1, attribute: .bottom, multiplier: 1.0, constant: 0))// 100+yConstant))
     }
     
     
@@ -93,7 +130,7 @@ class SCSampleBankViewController: UIViewController {
         collectionView.register(SCSampleBankCell.self, forCellWithReuseIdentifier: "SCSampleBankCell")
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = UIColor.black//Custom.PsychedelicIceCreamShoppe.ice
+        collectionView.backgroundColor = SCColor.Custom.Gray.dark//SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet //UIColor.black//Custom.PsychedelicIceCreamShoppe.ice
         view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0))

@@ -27,6 +27,7 @@ class SCScoreViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = SCColor.Custom.Gray.dark
         setupCollectionView()
         setupSequencerBarUI()
         NotificationCenter.default.addObserver(self, selector: #selector(SCScoreViewController.playback), name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
@@ -54,8 +55,7 @@ class SCScoreViewController: UIViewController {
         
         sequencerBar.isHidden = true
         sequencerBar.frame = CGRect(x: 0, y: 0 , width: 3.0, height: view.frame.height)
-        sequencerBar.backgroundColor = UIColor.black
-        sequencerBar.alpha = 0.6
+        sequencerBar.backgroundColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
         guard let scoreCV = self.scoreCV else { return }
         scoreCV.addSubview(sequencerBar)
         

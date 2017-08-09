@@ -22,7 +22,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var touchTimer: Timer? = nil
     var isTouchDelayed: Bool = false
     var padLabel: UILabel = UILabel()
-    let colors = [[UIColor.black.cgColor, UIColor.purple.cgColor, UIColor.black.cgColor], [UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor]]
+    var colors = [[SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor, SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor, SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor ]]//[[UIColor.black.cgColor, UIColor.purple.cgColor, UIColor.black.cgColor]]// [UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor]]
     var gradientColors: SCColor?
     
     override init(frame: CGRect) {
@@ -42,25 +42,28 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     func setupLabel() {
 
+        padLabel.addGlow(color: self.cellColor!)
         padLabel.isUserInteractionEnabled = false
-        padLabel.frame = .zero
+        padLabel.frame = self.contentView.frame
         padLabel.text = "\(self.idx+1)"
         padLabel.textAlignment = NSTextAlignment.center
         padLabel.font = UIFont.init(name: "Futura", size: 20.0)
         self.layer.borderWidth = 1.0
         self.layer.masksToBounds = true
-        self.layer.cornerRadius = 10.0
+        self.layer.cornerRadius = 25.0
         
         contentView.addSubview(padLabel)
-        padLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .height, relatedBy: .equal, toItem: self.contentView, attribute: .height, multiplier: 0.75, constant: 0))
-        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .centerX, relatedBy: .equal, toItem: self.contentView, attribute: .centerX, multiplier: 1.0, constant: 0))
-        let centerY = ((contentView.frame.height/4)*3)/4
-        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: centerY))
+//        padLabel.translatesAutoresizingMaskIntoConstraints = false
+//        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .height, relatedBy: .equal, toItem: self.contentView, attribute: .height, multiplier: 1.0, constant: 0))
+//        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .centerX, relatedBy: .equal, toItem: self.contentView, attribute: .centerX, multiplier: 1.0, constant: 0))
+//        let centerY = ((contentView.frame.height/4)*3)/4
+//        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: centerY))
         
+        self.colors.append([(cellColor?.cgColor)!, (cellColor?.cgColor)!, (cellColor?.cgColor)!])
+
         gradientColors = SCColor.init(colors: colors)
         guard let gradientColors = self.gradientColors else { return }
-        gradientColors.configureGradientLayer(in: self.contentView, from: CGPoint.init(x: 0, y: 0), to: CGPoint.init(x: 1, y: 1))
+        gradientColors.configureGradientLayer(in: self.contentView, from: self.contentView.center, to: CGPoint.init(x: 1, y: 1))
     }
     
 

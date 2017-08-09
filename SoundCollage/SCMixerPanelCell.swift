@@ -29,7 +29,7 @@ class SCMixerPanelCell: UICollectionViewCell {
     var selectedPadNumberLabel = UILabel()
     var selectedPadCircle = SCCircularImageView()
     weak var faderDelegate: SCFaderDelegate?
-
+    var color: UIColor = UIColor.white
     
     
     override init(frame: CGRect) {
@@ -61,9 +61,9 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     func setupNameLabel() {
         
-        nameLabel.addGlow(color: UIColor.white)
+        nameLabel.textColor = color
+        nameLabel.addGlow(color: color)
         nameLabel.font = UIFont.init(name: "Futura", size: 30.0)
-        nameLabel.textColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua
         nameLabel.textAlignment = NSTextAlignment.center
         self.contentView.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -76,23 +76,23 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     func setupSelectedCellLabel(number: Int){
         
-        selectedPadTextLabel.addGlow(color: UIColor.white)
+        selectedPadTextLabel.addGlow(color: color)//UIColor.white)
         selectedPadTextLabel.text = "Selected"
         selectedPadTextLabel.font = UIFont.init(name: "Futura", size: 12)
-        selectedPadTextLabel.textColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
+        selectedPadTextLabel.textColor = color//UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
         self.contentView.addSubview(selectedPadTextLabel)
         selectedPadTextLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        selectedPadNumberLabel.addGlow(color: UIColor.white)
+        selectedPadNumberLabel.addGlow(color: color)
         selectedPadNumberLabel.text = "\(number+1)"
         selectedPadNumberLabel.font = UIFont.init(name: "Futura", size: 25)
-        selectedPadNumberLabel.textColor = UIColor.white// SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
+        selectedPadNumberLabel.textColor = color//UIColor.white// SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
         self.contentView.addSubview(selectedPadNumberLabel)
         selectedPadNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        selectedPadCircle.addGlow(color: UIColor.white)
+        selectedPadCircle.addGlow(color: color)//UIColor.white)
         selectedPadCircle.layer.borderWidth = 1.0
-        selectedPadCircle.layer.borderColor = UIColor.white.cgColor
+        selectedPadCircle.layer.borderColor = color.cgColor//UIColor.white.cgColor
         selectedPadCircle.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(selectedPadCircle)
         
@@ -107,6 +107,18 @@ class SCMixerPanelCell: UICollectionViewCell {
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: .height, relatedBy: .equal, toItem: selectedPadCircle, attribute: .width,  multiplier: 1.0, constant: 0))
         
         self.contentView.addConstraint(NSLayoutConstraint(item: selectedPadCircle, attribute: NSLayoutAttribute.centerX, relatedBy: .equal, toItem: self.selectedPadNumberLabel, attribute: .centerX, multiplier: 1.0, constant: 0))
+        
+        
+        
+//        
+//        
+//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
+//        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeft))
+//        tapGestureRecognizer.delegate = self
+//        selectedPadTextLabel.addGestureRecognizer(tapGestureRecognizer)
+//        selectedPadNumberLabel.addGestureRecognizer(tapGestureRecognizer)
+//        selectedPadCircle.addGestureRecognizer(tapGestureRecognizer)
+
     }
     
 
@@ -115,7 +127,7 @@ class SCMixerPanelCell: UICollectionViewCell {
         
         parameterLabel.frame = CGRect(x: slider.frame.origin.x, y: slider.frame.origin.y, width: 100.0, height: 20.0)
         parameterLabel.text = name
-        parameterLabel.textColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueShade
+        parameterLabel.textColor = color//UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueShade
         parameterLabel.font = UIFont.init(name: "Futura", size: 17.0)
         parameterLabel.textAlignment = NSTextAlignment.left
         parameterLabel.sizeToFit()
@@ -285,10 +297,11 @@ class SCMixerPanelCell: UICollectionViewCell {
         slider.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi/2))
         slider.isContinuous = false
         addSliderTarget(slider: slider)
-        slider.minimumTrackTintColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
-        slider.maximumTrackTintColor = UIColor.white
-        let image = UIImage.imageWithImage(image: UIImage.init(named: "rectWhite")!, newSize: CGSize(width: 40.0, height: 70.0))
-        slider.setThumbImage(image, for: .normal)
+        slider.minimumTrackTintColor = color//SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
+        slider.maximumTrackTintColor = color
+        slider.thumbTintColor = color
+//        let image = UIImage.imageWithImage(image: UIImage.init(named: "rectWhite")!, newSize: CGSize(width: 40.0, height: 70.0))
+//        slider.setThumbImage(image, for: .normal)
         self.contentView.addSubview(slider)
     }
     
@@ -320,3 +333,52 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     
 }
+
+//
+//extension SCSamplerViewController: UIGestureRecognizerDelegate {
+//    
+//    
+//    
+//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        return true
+//    }
+//    
+//    
+//    
+//    func tap(gestureRecognizer: UIGestureRecognizer) {
+//        
+//        if SCAudioManager.shared.isRecording == true {
+//            print("Recording in progress")
+//            return
+//        }
+//        
+//        
+//        let tapLocation = gestureRecognizer.location(in: self.samplerCV)
+//        
+//        guard let indexPath = self.samplerCV?.indexPathForItem(at: tapLocation) else {
+//            print("IndexPath not found.")
+//            return
+//        }
+//        
+//        guard let cell = self.samplerCV?.cellForItem(at: indexPath) else {
+//            print("Cell not found.")
+//            return
+//        }
+//        
+//        selectCell(cell: cell, indexPath: indexPath)
+//    }
+//    
+//    
+//    
+//    func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
+//        
+//        print("selected cell at \(indexPath.row)")
+//        if SCAudioManager.shared.isRecordingModeEnabled == true {
+//            self.selectedPadIndex = indexPath.row
+//        }
+//        self.collectionView(samplerCV!, didSelectItemAt: indexPath)
+//    }
+//}
+
+
+

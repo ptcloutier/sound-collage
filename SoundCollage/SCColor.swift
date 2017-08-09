@@ -24,6 +24,21 @@ class SCColor {
         
     }
     
+    // Color index
+    
+    class func findColorIndex(indexPath: IndexPath, colors: [UIColor])-> Int{
+        
+        var colorIdx: Int
+        if indexPath.row > colors.count-1 {
+            colorIdx = indexPath.row-colors.count
+            if colorIdx > colors.count-1 {
+                colorIdx -= colors.count
+            }
+        } else {
+            colorIdx = indexPath.row
+        }
+        return colorIdx
+    }
 
     //MARK: Gradient color
     
@@ -61,6 +76,10 @@ class SCColor {
     //MARK: Custom colors
     
     struct Custom {
+        
+        struct Gray {
+            static let dark = UIColor.init(red: 49.0/255.0, green: 36.0/255.0, blue: 32.0/255.0, alpha: 1.0)
+        }
         struct PsychedelicIceCreamShoppe {
             static let medViolet = UIColor.init(red: 180.0/255.0, green: 172.0/255.0, blue: 216.0/255.0, alpha: 1.0)
             static let lightViolet = UIColor.init(red: 213.0/255.0, green: 201.0/255.0, blue: 223.0/255.0, alpha: 1.0)
@@ -154,7 +173,7 @@ class SCColor {
         let neonAqua = UIColor.init(red: 0/255.0, green: 205.0/255.0, blue: 210.0/255.0, alpha: 1.0)
         
         
-        let psyUIColors = [neonAqua, brightCoral, deepBlue, medRose, medViolet, lightViolet, lightRose, rose, medRose, darkRose, lightCoral, darkViolet, lightestBlueSky, lighterBlueSky, lighterBlue, lightBlueSky,  deepBlueShade, deepBlueDark]
+        let psyUIColors = [neonAqua, lightCoral, lightViolet, darkViolet, lightestBlueSky, brightCoral,  lightRose, rose, deepBlueDark, medRose, darkRose,  medRose,  deepBlue, lighterBlueSky, lighterBlue, lightBlueSky, deepBlueShade]
         
         return psyUIColors
     }

@@ -29,7 +29,7 @@ class SCSamplerViewController: UIViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.clear //SCColor.Custom.PsychedelicIceCreamShoppe.ice
+        view.backgroundColor = SCColor.Custom.Gray.dark //SCColor.Custom.PsychedelicIceCreamShoppe.ice
         vintageColors = SCColor.getVintageColors()
         iceCreamColors = SCColor.getPsychedelicIceCreamShopColors()
         
@@ -117,20 +117,7 @@ class SCSamplerViewController: UIViewController  {
     
     
     
-        
-    func findColorIndex(indexPath: IndexPath, colors: [UIColor])-> Int{
-        
-        var colorIdx: Int
-        if indexPath.row > colors.count-1 {
-            colorIdx = indexPath.row-colors.count
-            if colorIdx > colors.count-1 {
-                colorIdx -= colors.count
-            }
-        } else {
-            colorIdx = indexPath.row
-        }
-        return colorIdx
-    }
+   
     
     
     
@@ -202,20 +189,20 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         
         // ui
         cell.idx = indexPath.row
-//        let colorIdx = findColorIndex(indexPath: indexPath, colors: iceCreamColors)
-        cell.cellColor = UIColor.white//iceCreamColors[colorIdx]
+        let colorIdx = SCColor.findColorIndex(indexPath: indexPath, colors: iceCreamColors)
+        cell.cellColor = iceCreamColors[colorIdx]
         
         cell.setupLabel()
+       
         
         if indexPath.row == self.selectedPadIndex {
-            cell.backgroundColor = UIColor.white//cell.cellColor
-            cell.padLabel.textColor = UIColor.black
-            cell.layer.borderColor = UIColor.black.cgColor
+            cell.backgroundColor = cell.cellColor
+            cell.padLabel.textColor = UIColor.white
+            cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor// UIColor.black.cgColor
         } else {
-            cell.backgroundColor = UIColor.black
-            cell.padLabel.textColor = UIColor.white// cell.cellColor
-            cell.layer.borderColor = UIColor.white.cgColor//cell.cellColor?.cgColor
-            cell.contentView.addGlow(color: UIColor.white)
+//            cell.backgroundColor = UIColor.black
+            cell.padLabel.textColor = UIColor.white //cell.cellColor
+            cell.layer.borderColor = cell.cellColor?.cgColor
 
         }
         

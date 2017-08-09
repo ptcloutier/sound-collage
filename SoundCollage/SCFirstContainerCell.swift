@@ -39,6 +39,7 @@ class SCFirstContainerCell: UICollectionViewCell {
         cv.register(SCMusicInterfaceCell.self, forCellWithReuseIdentifier: "SCMusicInterfaceCell")
         cv.isScrollEnabled = true
         cv.showsHorizontalScrollIndicator = false
+        cv.bounces = false 
         cv.frame = self.contentView.frame
         self.contentView.addSubview(cv)
         

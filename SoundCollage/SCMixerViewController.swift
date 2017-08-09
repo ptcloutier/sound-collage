@@ -14,7 +14,6 @@ class SCMixerViewController: UIViewController {
     let toolbarHeight: CGFloat = 125.0
     var selectedMixerPanel: Int = 0
     var selectedSamplePad: Int = 0
-
     
     
     //MARK: VC lifecycle
@@ -45,18 +44,18 @@ class SCMixerViewController: UIViewController {
         mixerCV.delegate = self
         mixerCV.dataSource = self
         mixerCV.isScrollEnabled = true
+        mixerCV.showsHorizontalScrollIndicator = false
         mixerCV.register(SCMixerPanelCell.self, forCellWithReuseIdentifier: "MixerPanelCell")
      
-        mixerCV.backgroundColor = UIColor.clear
+        mixerCV.backgroundColor = SCColor.Custom.Gray.dark
         self.view.addSubview(mixerCV)
         
         mixerCV.translatesAutoresizingMaskIntoConstraints = false
         
-        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: -5))
+        self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 5))
         self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0))
         self.view.addConstraint(NSLayoutConstraint.init(item: mixerCV, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: -toolbarHeight))
-
     }
     
    
@@ -118,6 +117,11 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MixerPanelCell", for: indexPath) as! SCMixerPanelCell
         
+        let iceCreamColors = SCColor.getPsychedelicIceCreamShopColors()
+        let colorIdx = SCColor.findColorIndex(indexPath: indexPath, colors: iceCreamColors)
+        let cellColor = iceCreamColors[colorIdx]
+        
+        cell.color = cellColor
         cell.mixerPanelIdx = indexPath.row
         cell.setupFaderDelegate(delegate: self)
         let xPos = cell.contentView.frame.width/12.0
@@ -150,8 +154,8 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         
         //TODO: should scroll to last selected mixer panel
-        self.selectedMixerPanel = getSelectedMixerPanelIndex()
         
+        self.selectedMixerPanel = getSelectedMixerPanelIndex()
         cell.setupNameLabel()
         cell.nameLabel.text = keys[indexPath.row]
         cell.setupSelectedCellLabel(number: SCAudioManager.shared.selectedSampleIndex)

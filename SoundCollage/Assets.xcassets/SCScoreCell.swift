@@ -29,7 +29,7 @@ class SCScoreCell: UICollectionViewCell {
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: CGFloat(cellCount))
         sequencerCV = UICollectionView.init(frame: self.contentView.frame, collectionViewLayout: flowLayout)
         guard let sequencerCV = self.sequencerCV else { return }
-        sequencerCV.backgroundColor = UIColor.white 
+        sequencerCV.backgroundColor = UIColor.black
         sequencerCV.register(SCSequencerCell.self, forCellWithReuseIdentifier: "SCSequencerCell")
         sequencerCV.delegate = self
         sequencerCV.dataSource = self

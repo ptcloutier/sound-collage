@@ -34,7 +34,7 @@ class SCLibraryViewController: UIViewController {
         let frame = CGRect(x: self.view.frame.width/3.0, y: 10.0, width: self.view.frame.width/3.0, height: self.view.frame.height)
         libraryCV = UICollectionView.init(frame: frame, collectionViewLayout: flowLayout)
         guard let libraryCV = self.libraryCV else { return }
-        libraryCV.backgroundColor = UIColor.black
+        libraryCV.backgroundColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet//UIColor.black
         libraryCV.delegate = self
         libraryCV.dataSource = self
         libraryCV.allowsMultipleSelection = false

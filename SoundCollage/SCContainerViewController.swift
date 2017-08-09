@@ -22,7 +22,7 @@ class SCContainerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-       
+    
         setupCollectionView()
         setupControls()
     }
@@ -57,32 +57,39 @@ class SCContainerViewController: UIViewController {
         toolbar.setShadowImage(transparentPixel, forToolbarPosition: .any)
         toolbar.isTranslucent = true
         
+        
+        
         let buttonHeight = (toolbarHeight/3)*2
 
-        self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight*1.5, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
+        self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
 
         guard let recordBtn = self.recordBtn else {
             print("No record btn.")
             return
         }
+        recordBtn.addGlow(color: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral)
         recordBtn.setBackgroundImage(UIImage.init(named: "record"), for: .normal)
         recordBtn.addTarget(self, action: #selector(SCContainerViewController.recordBtnDidPress), for: .touchUpInside)
         
         let bankBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         bankBtn.setBackgroundImage(UIImage.init(named: "back"), for: .normal)
         bankBtn.addTarget(self, action: #selector(SCContainerViewController.bankBtnDidPress), for: .touchUpInside)
+        bankBtn.addGlow(color: UIColor.white)
         
         let sequencerBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         sequencerBtn.setBackgroundImage(UIImage.init(named: "play"), for: .normal)
         sequencerBtn.addTarget(self, action: #selector(SCContainerViewController.postSequencerPlaybackDidPressNotification), for: .touchUpInside)
+        sequencerBtn.addGlow(color: UIColor.white)
         
         let libraryBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         libraryBtn.setBackgroundImage(UIImage.init(named: "playlist"), for: .normal)
         libraryBtn.addTarget(self, action: #selector(SCContainerViewController.libraryBtnDidPress), for: .touchUpInside)
+        libraryBtn.addGlow(color: UIColor.white)
         
         let recordNewSCBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         recordNewSCBtn.setBackgroundImage(UIImage.init(named: "lp1"), for: .normal)
         recordNewSCBtn.addTarget(self, action: #selector(SCContainerViewController.recordMixerOutputBtnDidPress), for: .touchUpInside)
+        recordNewSCBtn.addGlow(color: UIColor.white)
         
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
@@ -95,6 +102,8 @@ class SCContainerViewController: UIViewController {
         
         toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace,  libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
         self.view.addSubview(toolbar)
+        toolbar.backgroundColor = SCColor.Custom.Gray.dark
+
     }
     
     

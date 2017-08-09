@@ -88,7 +88,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         cell.sequencerIdx = self.idx-1
         cell.idx = indexPath.row
         cell.layer.borderWidth = 1.0
-        cell.layer.borderColor = UIColor.black.cgColor //purple.cgColor
+        cell.layer.borderColor = UIColor.black.cgColor
         let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
         
         var colorIdx: Int
@@ -104,7 +104,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         if self.idx == 0 {
             cell.padLabel.text = "\(cell.idx+1)"
             cell.isUserInteractionEnabled = false
-            cell.backgroundColor = UIColor.black //iceCreamColors[colorIdx]
+            cell.backgroundColor = SCColor.Custom.Gray.dark //UIColor.black //iceCreamColors[colorIdx]
         } else {
             cell.padLabel.isHidden = true
             
@@ -116,11 +116,10 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             switch cell.isPlaybackEnabled {
             case true:
                 //TODO: This not DRY
-                cell.backgroundColor = UIColor.black // iceCreamColors[colorIdx]
-                
+                cell.backgroundColor = iceCreamColors[colorIdx]
             case false:
-                cell.backgroundColor = UIColor.clear
-                
+                cell.backgroundColor = SCColor.Custom.Gray.dark
+//                cell.addGlow(color: iceCreamColors[colorIdx])
             }
         }
         
@@ -150,14 +149,14 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         case true:
             cell.isPlaybackEnabled = false
             SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = false
-            cell.backgroundColor = UIColor.white
+            cell.backgroundColor = SCColor.Custom.Gray.dark
         case false:
             cell.isPlaybackEnabled = true
             SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = true
-//            let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
-//            var colorIdx: Int
-//            colorIdx = Int(arc4random_uniform(UInt32(iceCreamColors.count)))
-            cell.backgroundColor =  UIColor.black //iceCreamColors[colorIdx]
+            let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
+            var colorIdx: Int
+            colorIdx = Int(arc4random_uniform(UInt32(iceCreamColors.count)))
+            cell.backgroundColor = iceCreamColors[colorIdx]
             
             if SCAudioManager.shared.sequencerIsPlaying == false {
 //                SCAudioManager.shared.selectedSampleIndex = cell.idx

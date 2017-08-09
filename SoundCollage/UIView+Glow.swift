@@ -13,8 +13,8 @@ extension UIView {
     
     func addGlow(color: UIColor){
         self.layer.shadowColor = color.cgColor
-        self.layer.shadowRadius = 4.0
-        self.layer.shadowOpacity = 0.9
+        self.layer.shadowRadius = 5.0
+        self.layer.shadowOpacity = 0.8
         self.layer.shadowOffset = .zero
         self.layer.masksToBounds = false
     }
