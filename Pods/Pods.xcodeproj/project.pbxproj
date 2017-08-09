@@ -69,9 +69,9 @@
 		03D814ADFCACC5CF5716CEBF578DA9F7 /* URLTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = URLTransform.swift; path = Sources/URLTransform.swift; sourceTree = "<group>"; };
 		04BBC1997C26AB0BF5007F76F8774786 /* DataTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DataTransform.swift; path = Sources/DataTransform.swift; sourceTree = "<group>"; };
 		05003C5FCD61F1C9E6AE4AE07B803E78 /* DateTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DateTransform.swift; path = Sources/DateTransform.swift; sourceTree = "<group>"; };
-		05AC400E8E6DAB67BCEDBAFA5847513F /* ObjectMapper.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = ObjectMapper.modulemap; sourceTree = "<group>"; };
+		05AC400E8E6DAB67BCEDBAFA5847513F /* ObjectMapper.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = ObjectMapper.modulemap; sourceTree = "<group>"; };
 		0820E174B03E5CAF00397871DB028595 /* Operators.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Operators.swift; path = Sources/Operators.swift; sourceTree = "<group>"; };
-		08AB6BC0971833E088B6EB4F00B4AF50 /* SCWaveformView.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = SCWaveformView.modulemap; sourceTree = "<group>"; };
+		08AB6BC0971833E088B6EB4F00B4AF50 /* SCWaveformView.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = SCWaveformView.modulemap; sourceTree = "<group>"; };
 		09EB5476C297DF51487E380FD92FD48C /* SCWaveformView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SCWaveformView.h; path = Sources/SCWaveformView.h; sourceTree = "<group>"; };
 		116A5AD3C80A008AB2C1A4002027B5FC /* SCWaveformCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SCWaveformCache.m; path = Sources/SCWaveformCache.m; sourceTree = "<group>"; };
 		14F902D8F353093BB03692D3D524016F /* SCScrollableWaveformView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SCScrollableWaveformView.m; path = Sources/SCScrollableWaveformView.m; sourceTree = "<group>"; };
@@ -85,7 +85,7 @@
 		3256AD5D0F93CCE0CC6914E1B41C6D7C /* SCWaveformView.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SCWaveformView.xcconfig; sourceTree = "<group>"; };
 		347A436A281A4A91E74D2C073D055DED /* HexColorTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HexColorTransform.swift; path = Sources/HexColorTransform.swift; sourceTree = "<group>"; };
 		3A2E1BE24011DBE9688C214535DF2332 /* ISO8601DateTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ISO8601DateTransform.swift; path = Sources/ISO8601DateTransform.swift; sourceTree = "<group>"; };
-		3F56A9546982798DD94C0DA49232B672 /* Pods_SoundCollage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoundCollage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F56A9546982798DD94C0DA49232B672 /* Pods_SoundCollage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_SoundCollage.framework; path = "Pods-SoundCollage.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53C8B93FD09C5FFC696EE8A7EC5606CA /* Pods-SoundCollage-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SoundCollage-dummy.m"; sourceTree = "<group>"; };
 		58CCAC296766A545C1251CEAC33B328E /* ToJSON.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ToJSON.swift; path = Sources/ToJSON.swift; sourceTree = "<group>"; };
 		5A0F07298863D1FB28E675A8FC1F85C4 /* Pods-SoundCollage-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SoundCollage-frameworks.sh"; sourceTree = "<group>"; };
@@ -101,7 +101,7 @@
 		89C9E5FE204B9BA1D5222BDFB5A747E6 /* EnumTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EnumTransform.swift; path = Sources/EnumTransform.swift; sourceTree = "<group>"; };
 		8AE06D9DFDC8A398625CAB188F28B1BF /* Pods-SoundCollage-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SoundCollage-umbrella.h"; sourceTree = "<group>"; };
 		8CED80F36050B7918466C5B244064EAB /* SCScrollableWaveformView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SCScrollableWaveformView.h; path = Sources/SCScrollableWaveformView.h; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		976B9D2191E1834C2EE8B2099A5225A6 /* DictionaryTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DictionaryTransform.swift; path = Sources/DictionaryTransform.swift; sourceTree = "<group>"; };
 		9CDDA1237945B6814DC69B9DE3E2CDD4 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A02C2D70D661C935E616966938AF56FD /* TransformType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TransformType.swift; path = Sources/TransformType.swift; sourceTree = "<group>"; };
@@ -110,12 +110,12 @@
 		A9B82D3934A242618F15655C051C2DCB /* SCWaveformView-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SCWaveformView-umbrella.h"; sourceTree = "<group>"; };
 		B1A5A6A033CF7ED56D814DBD14B5E51D /* EnumOperators.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EnumOperators.swift; path = Sources/EnumOperators.swift; sourceTree = "<group>"; };
 		B588B155C5757B4CF0CFB01F4E29B113 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B9D93FAFA9068CEB9AFE6C9DE15F7597 /* ObjectMapper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjectMapper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9D93FAFA9068CEB9AFE6C9DE15F7597 /* ObjectMapper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ObjectMapper.framework; path = ObjectMapper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB74C33354C6738F3934624C3CAE402B /* ObjectMapper-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ObjectMapper-umbrella.h"; sourceTree = "<group>"; };
 		BCF6033D23F665697A20EEEACA81358F /* Pods-SoundCollage-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SoundCollage-resources.sh"; sourceTree = "<group>"; };
 		C36E1CD8940C0FEFD52CB4CEA85555B8 /* IntegerOperators.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IntegerOperators.swift; path = Sources/IntegerOperators.swift; sourceTree = "<group>"; };
-		C848B569404722E08F16D7EDEAA4AA3D /* Pods-SoundCollage.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-SoundCollage.modulemap"; sourceTree = "<group>"; };
-		CAA8973975EAE3A7EAC5EAD1ED94E5ED /* SCWaveformView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCWaveformView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C848B569404722E08F16D7EDEAA4AA3D /* Pods-SoundCollage.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-SoundCollage.modulemap"; sourceTree = "<group>"; };
+		CAA8973975EAE3A7EAC5EAD1ED94E5ED /* SCWaveformView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SCWaveformView.framework; path = SCWaveformView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D766CF509FF3B6803612755219380662 /* SCWaveformCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SCWaveformCache.h; path = Sources/SCWaveformCache.h; sourceTree = "<group>"; };
 		E7A8D6B819BC0478F56AC4981AB30C4F /* TransformOf.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TransformOf.swift; path = Sources/TransformOf.swift; sourceTree = "<group>"; };
 		EBE464DCF9B8DDC9DB205CD9794C7413 /* Mappable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Mappable.swift; path = Sources/Mappable.swift; sourceTree = "<group>"; };
@@ -211,6 +211,7 @@
 				03D814ADFCACC5CF5716CEBF578DA9F7 /* URLTransform.swift */,
 				430B8856D84022C0830834CE32A68A8A /* Support Files */,
 			);
+			name = ObjectMapper;
 			path = ObjectMapper;
 			sourceTree = "<group>";
 		};
@@ -244,6 +245,7 @@
 				F6AAAA5A0AC7804C7547D24706970D2C /* SCWaveformView.m */,
 				FCB17BFB9FD5C3E5637643A84444209F /* Support Files */,
 			);
+			name = SCWaveformView;
 			path = SCWaveformView;
 			sourceTree = "<group>";
 		};
