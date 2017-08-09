@@ -61,6 +61,7 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     func setupNameLabel() {
         
+        nameLabel.addGlow(color: UIColor.white)
         nameLabel.font = UIFont.init(name: "Futura", size: 30.0)
         nameLabel.textColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua
         nameLabel.textAlignment = NSTextAlignment.center
@@ -75,19 +76,21 @@ class SCMixerPanelCell: UICollectionViewCell {
     
     func setupSelectedCellLabel(number: Int){
         
+        selectedPadTextLabel.addGlow(color: UIColor.white)
         selectedPadTextLabel.text = "Selected"
         selectedPadTextLabel.font = UIFont.init(name: "Futura", size: 12)
         selectedPadTextLabel.textColor = UIColor.white//SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
         self.contentView.addSubview(selectedPadTextLabel)
         selectedPadTextLabel.translatesAutoresizingMaskIntoConstraints = false
         
+        selectedPadNumberLabel.addGlow(color: UIColor.white)
         selectedPadNumberLabel.text = "\(number+1)"
         selectedPadNumberLabel.font = UIFont.init(name: "Futura", size: 25)
         selectedPadNumberLabel.textColor = UIColor.white// SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue
         self.contentView.addSubview(selectedPadNumberLabel)
         selectedPadNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        
+        selectedPadCircle.addGlow(color: UIColor.white)
         selectedPadCircle.layer.borderWidth = 1.0
         selectedPadCircle.layer.borderColor = UIColor.white.cgColor
         selectedPadCircle.translatesAutoresizingMaskIntoConstraints = false

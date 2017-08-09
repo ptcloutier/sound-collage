@@ -31,6 +31,7 @@
 		A74541911F3112C3007A89B7 /* lp1.png in Resources */ = {isa = PBXBuildFile; fileRef = A74541901F3112C3007A89B7 /* lp1.png */; };
 		A74541931F3114E8007A89B7 /* SCLibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74541921F3114E8007A89B7 /* SCLibraryViewController.swift */; };
 		A74541961F31153E007A89B7 /* SCLibraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74541951F31153E007A89B7 /* SCLibraryCell.swift */; };
+		A748E2CC1F3AB1AF00507DF8 /* UIView+Glow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A748E2CB1F3AB1AF00507DF8 /* UIView+Glow.swift */; };
 		A74AA8B61F36FE1C00BCB5F0 /* SCGAudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74AA8B51F36FE1C00BCB5F0 /* SCGAudioController.swift */; };
 		A74B368E1F3105D7000E8DEA /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = A74B368D1F3105D7000E8DEA /* play.png */; };
 		A75D4EBC1F25BFF300C304D8 /* SCSequencerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */; };
@@ -145,6 +146,7 @@
 		A74541901F3112C3007A89B7 /* lp1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lp1.png; sourceTree = "<group>"; };
 		A74541921F3114E8007A89B7 /* SCLibraryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLibraryViewController.swift; sourceTree = "<group>"; };
 		A74541951F31153E007A89B7 /* SCLibraryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLibraryCell.swift; sourceTree = "<group>"; };
+		A748E2CB1F3AB1AF00507DF8 /* UIView+Glow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Glow.swift"; sourceTree = "<group>"; };
 		A74AA8B51F36FE1C00BCB5F0 /* SCGAudioController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCGAudioController.swift; sourceTree = "<group>"; };
 		A74B368D1F3105D7000E8DEA /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerSettings.swift; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 				A70814381F01C46400A8AE92 /* plus.png */,
 				A79160F31F1EA2B50051113C /* quicksand */,
 				A70814301F01B54600A8AE92 /* zetafonts_a-day-without-sun */,
+				A79C9C901F393F72000DA04C /* Ref.swift */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				A713F50B1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift */,
 				A713F50D1F2F65A900742D1C /* SCFaderDelegate.swift */,
 				A7FD67591F38305300B1AD74 /* SCAudioPlayerNode.swift */,
+				A748E2CB1F3AB1AF00507DF8 /* UIView+Glow.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -364,7 +368,6 @@
 				A76A886A1EB0445200FEDED0 /* SCDataManager.swift */,
 				A7A823301EA81D300061D0A0 /* SCAudioManager.swift */,
 				A74AA8B51F36FE1C00BCB5F0 /* SCGAudioController.swift */,
-				A79C9C901F393F72000DA04C /* Ref.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -723,6 +726,7 @@
 				A7BD6AB41F140D85000CDF9A /* SCScoreCell.swift in Sources */,
 				A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */,
 				A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */,
+				A748E2CC1F3AB1AF00507DF8 /* UIView+Glow.swift in Sources */,
 				A7DC3AA11F21376C006354A5 /* SCMusicInterfaceCell.swift in Sources */,
 				A713F50E1F2F65A900742D1C /* SCFaderDelegate.swift in Sources */,
 				A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */,

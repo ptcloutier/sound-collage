@@ -37,10 +37,10 @@ class SCSampleBankViewController: UIViewController {
         images = [img1!, img2!, img3!, img4!, img5!, img6!]
     
         setupCollectionView()
-        setupTitle(xConstant: 0, yConstant:  0, textColor: UIColor.white)
-//        setupTitle(xConstant: 2, yConstant: 2, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral )
-//        setupTitle(xConstant: 6, yConstant: 6, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue)
-//        setupTitle(xConstant: 10, yConstant: 10, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua)
+//        setupTitle(xConstant: 0, yConstant:  0, textColor: UIColor.white)
+        setupTitle(xConstant: 2, yConstant: 2, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral, alpha: 0.8 )
+        setupTitle(xConstant: 5, yConstant: 5, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, alpha: 0.8)
+        setupTitle(xConstant: 8, yConstant: 8, textColor: SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua, alpha: 0.9)
     }
     
     
@@ -54,7 +54,7 @@ class SCSampleBankViewController: UIViewController {
     
     //MARK: ui setup
     
-    private func setupTitle(xConstant: CGFloat, yConstant: CGFloat, textColor: UIColor){
+    private func setupTitle(xConstant: CGFloat, yConstant: CGFloat, textColor: UIColor, alpha: CGFloat){
     
         let margin: CGFloat = 20.0
         let titleLabel1 = UILabel.init(frame: .zero)
@@ -62,6 +62,8 @@ class SCSampleBankViewController: UIViewController {
         titleLabel1.font = UIFont.init(name: "Futura", size: 40.0)
         titleLabel1.textColor = textColor
         titleLabel1.textAlignment = NSTextAlignment.center
+        titleLabel1.addGlow(color: textColor)
+        titleLabel1.alpha = alpha
         self.collectionView.addSubview(titleLabel1)
         titleLabel1.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))
@@ -74,6 +76,7 @@ class SCSampleBankViewController: UIViewController {
         titleLabel2.font = UIFont.init(name: "Futura", size: 40.0)
         titleLabel2.textColor = textColor
         titleLabel2.textAlignment = NSTextAlignment.center
+        titleLabel2.addGlow(color: textColor)
         self.collectionView.addSubview(titleLabel2)
         titleLabel2.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))

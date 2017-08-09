@@ -611,38 +611,7 @@ class SCGAudioController {
     }
 */
     
-   /*
-    private func createAudioFileForPlayback() -> AVAudioFile? {
-        
-        var recording: AVAudioFile
-        do {
-            recording = try AVAudioFile.init(forReading: mixerOutputFileURL!)
-            return recording
-        } catch let error {
-            print("couldn't create AVAudioFile, \(error.localizedDescription)")
-            return nil
-        }
-    }
-    
-    
-    //MARK: Play sample
-    
-    
-    
-    func playSample(sampleURL: URL) {
-        
-        let sampleIdx = SCAudioManager.shared.selectedSampleIndex
-        
-        do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-        } catch let error {
-            print("Error setting avaudiosession category, \(error.localizedDescription)")
-        }
-        
-        do {
-            let sample = try AVAudioFile.init(forReading: sampleURL)
-            */
-    
+  
     
     
     private func createAudioFileForPlayback() -> AVAudioFile? {

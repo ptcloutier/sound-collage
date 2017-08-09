@@ -215,7 +215,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.backgroundColor = UIColor.black
             cell.padLabel.textColor = UIColor.white// cell.cellColor
             cell.layer.borderColor = UIColor.white.cgColor//cell.cellColor?.cgColor
-            
+            cell.contentView.addGlow(color: UIColor.white)
 
         }
         
