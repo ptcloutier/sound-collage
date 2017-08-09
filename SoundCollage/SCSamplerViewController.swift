@@ -132,7 +132,11 @@ class SCSamplerViewController: UIViewController  {
             SCAudioManager.shared.isRecordingModeEnabled = false
             reloadSamplerCV()
         case false:
-            SCAudioManager.shared.isRecordingModeEnabled = true
+            if SCAudioManager.shared.isRecording == true {
+                SCAudioManager.shared.isRecordingModeEnabled = false
+            } else {
+                SCAudioManager.shared.isRecordingModeEnabled = true
+            }
             self.selectedPadIndex = nil
             reloadSamplerCV()
         }
@@ -200,7 +204,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.padLabel.textColor = UIColor.white
             cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor// UIColor.black.cgColor
         } else {
-//            cell.backgroundColor = UIColor.black
+            cell.backgroundColor = SCColor.Custom.Gray.dark
             cell.padLabel.textColor = UIColor.white //cell.cellColor
             cell.layer.borderColor = cell.cellColor?.cgColor
 

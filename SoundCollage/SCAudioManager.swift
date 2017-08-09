@@ -467,6 +467,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         recordingEngine.mainMixerNode.removeTap(onBus: 0)   
         recordingEngine.stop()
         isRecording = false
+        
         print("Audio recording stopped.")
         
         setAudioPlaybackSource()

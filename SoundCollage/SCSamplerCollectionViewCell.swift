@@ -22,7 +22,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var touchTimer: Timer? = nil
     var isTouchDelayed: Bool = false
     var padLabel: UILabel = UILabel()
-    var colors = [[SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor, SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor, SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor ]]//[[UIColor.black.cgColor, UIColor.purple.cgColor, UIColor.black.cgColor]]// [UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor]]
+    var colors = [[SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor]]//[[UIColor.black.cgColor, UIColor.purple.cgColor, UIColor.black.cgColor]]// [UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor]]
     var gradientColors: SCColor?
     
     override init(frame: CGRect) {
@@ -59,8 +59,9 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
 //        let centerY = ((contentView.frame.height/4)*3)/4
 //        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: centerY))
         
-        self.colors.append([(cellColor?.cgColor)!, (cellColor?.cgColor)!, (cellColor?.cgColor)!])
-
+        if self.colors.count<2 {
+            self.colors.append([(cellColor?.cgColor)!, (cellColor?.cgColor)!, (cellColor?.cgColor)!])
+        }
         gradientColors = SCColor.init(colors: colors)
         guard let gradientColors = self.gradientColors else { return }
         gradientColors.configureGradientLayer(in: self.contentView, from: self.contentView.center, to: CGPoint.init(x: 1, y: 1))
@@ -81,6 +82,8 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     func startTimer() {
         
+        animateCell()
+
         flashTimer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: true) {
             [weak self] flashTimer in  // creates a capture group for the timer
             guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
