@@ -767,10 +767,10 @@ class SCGAudioController {
                 durationInt = 1
                 }
                 let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[SCAudioManager.shared.selectedSampleIndex]
-                let reverbTime = round(Float(reverbParameter * 10.0))
+                let reverbTime = round(Float(reverbParameter * 7.0))
                 durationInt += Int(reverbTime)
                 let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[SCAudioManager.shared.selectedSampleIndex]
-                let delayTime = round(Float(delayParams * 20.0))
+                let delayTime = round(Float(delayParams * 15.0))
                 durationInt += Int(delayTime)
                 let duration = DispatchTimeInterval.seconds(durationInt)
                 let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
@@ -985,8 +985,8 @@ class SCGAudioController {
     }
     
     
-    @objc func handleInterruption(notification: NSNotification) {// TODO: not handling this 
-        
+    @objc func handleInterruption(notification: NSNotification) {// TODO: not handling this
+     /*
         let interruptionDict = notification.userInfo
         let interruptionType = interruptionDict?[AVAudioSessionInterruptionTypeKey] as! AVAudioSessionInterruptionType
         
@@ -1014,14 +1014,14 @@ class SCGAudioController {
             } catch let error {
                 print("AVAudioSession set active failed with error, \(error.localizedDescription)")
             }
-        }
+        }*/
     }
     
     
     
     @objc func handleRouteChange(notification: NSNotification) {
         
-        
+       /*
         guard let userInfo = notification.userInfo else {
             print("No notification userInfo.")
             return
@@ -1058,13 +1058,13 @@ class SCGAudioController {
 //            break
 //        default:
 //            print("     ReasonUnknown")
-//        }
+//        }*/
     }
     
     
     
     @objc func handleMediaServicesReset(notification: NSNotification) {
-        // if we've received this notification, the media server has been reset
+    /*    // if we've received this notification, the media server has been reset
         // re-wire all the connections and start the engine
         print("Media services have been reset!")
         print("Re-wiring connections")
@@ -1096,7 +1096,7 @@ class SCGAudioController {
 //        setNodeDefaults()
 //        
         // notify the delegate
-        self.delegate?.engineConfigurationHasChanged()
+        self.delegate?.engineConfigurationHasChanged() */
     }
   
 }
