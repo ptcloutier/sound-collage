@@ -110,7 +110,7 @@ class SCGAudioController {
         
         effectControls = SCAudioManager.shared.effectControls
         initAVAudioSession()
-        
+        getAudioFilesForURL()
         setupAVAudioEngineAndAttachNodes()
 
         
@@ -689,18 +689,14 @@ class SCGAudioController {
                 print("AudioFiles key : \(key), new val : \(String(describing: value))")
             }
         }
-        
-        
-        
-        
     }
     
     
     
     
-    func playSample(sampleURL: URL) {
+    func playSample(sampleURL: URL, index: Int) {
         
-        let sampleIdx = SCAudioManager.shared.selectedSampleIndex
+        let sampleIdx = index 
         //        let effectControls = SCAudioManager.shared.effectControls
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)

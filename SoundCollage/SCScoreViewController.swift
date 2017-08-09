@@ -138,7 +138,7 @@ class SCScoreViewController: UIViewController {
         }
         for sample in playbackSamples {
             SCAudioManager.shared.selectedSequencerIndex = sample
-            SCAudioManager.shared.playAudio(sampleIndex: SCAudioManager.shared.selectedSequencerIndex)
+            SCAudioManager.shared.playAudio(senderID: 1)
         }
         if triggerCounter == 15 {
             triggerCounter = 0

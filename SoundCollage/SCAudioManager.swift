@@ -112,12 +112,33 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
 
     
-    func playAudio(sampleIndex: Int){
+    func playAudio(senderID: Int){
         
-        guard let path = getPathForSampleIndex(sampleIndex: sampleIndex) else { return }
+        guard let sampleIdx = getIndex(senderID: senderID) else {
+            print("Error getting index.")
+            return
+        }
+        guard let path = getPathForSampleIndex(sampleIndex: sampleIdx) else { return }
         let url = URL.init(fileURLWithPath: path)
-        self.audioController?.playSample(sampleURL: url)
+        self.audioController?.playSample(sampleURL: url, index: sampleIdx)
+    }
+    
+    
+    
+    func getIndex(senderID: Int)-> Int?{
+       
+        var sampleIdx: Int?
         
+        switch senderID {
+        case 0:
+            sampleIdx = SCAudioManager.shared.selectedSampleIndex
+        case 1:
+            sampleIdx = SCAudioManager.shared.selectedSequencerIndex
+        default:
+            print("Error, no index.")
+            return nil
+        }
+        return sampleIdx
     }
     
     
