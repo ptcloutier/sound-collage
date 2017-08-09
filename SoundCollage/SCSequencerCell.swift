@@ -23,44 +23,11 @@ class SCSequencerCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard let triggerCV = self.triggerCV else { return }
-        
-        while calibrateSize(height: triggerCV.frame.size.height) == false {
-            triggerCV.frame.size.height = triggerCV.frame.size.height-1.0
-        }
-        triggerCV.bounds.size = triggerCV.collectionViewLayout.collectionViewContentSize
-        
-    }
-
-    
-    func calibrateSize(height: CGFloat)-> Bool{
-        var result: Bool = false
-        
-        if height.truncatingRemainder(dividingBy: 16.0) == 0 {
-            result = true
-        }
-        
-        return result
-    }
-
-    
-    
+   
     
     
     func setupSequencer(){
-        
-//        while SCAudioManager.shared.sequencerSettings.count<=16 {
-//            var triggers: [Bool] = []
-//            while triggers.count<=16{
-//                let isPlayingEnabled = false
-//                triggers.append(isPlayingEnabled)
-//            }
-//            SCAudioManager.shared.sequencerSettings.append(triggers)
-//        }
+
         let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: CGFloat(cellCount))
         triggerCV = UICollectionView.init(frame: self.contentView.frame, collectionViewLayout: flowLayout)
         guard let triggerCV = self.triggerCV else { return }

@@ -45,6 +45,8 @@ protocol SCGAudioControllerDelegate: class {
 
 class SCGAudioController {
     
+    var usedPlayers:                    Int = 0
+    var plays:                          Int = 0
     var finishedNodes:                  [AVAudioNode] = []
     var nodeChain:                      [AnyObject] = []
     var audioFiles:                     [String : AnyObject?] = [:]
@@ -694,9 +696,10 @@ class SCGAudioController {
     
     
     
-    func playSample(sampleURL: URL, index: Int) {
+    func playSample(sampleURL: URL, senderID: Int) {
         
-        let sampleIdx = index 
+        
+        guard let sampleIdx = SCAudioManager.shared.getIndex(senderID: senderID) else { return }
         //        let effectControls = SCAudioManager.shared.effectControls
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
@@ -778,6 +781,10 @@ class SCGAudioController {
         
         var nodes = audioNodes
         player.isActive = true
+        plays = plays+1
+        usedPlayers = usedPlayers+1
+        
+        print("plays : \(plays)")
         
         player.scheduleFile(sample, at: nil, completionHandler:{
             
@@ -799,11 +806,15 @@ class SCGAudioController {
                 let duration = DispatchTimeInterval.seconds(durationInt)
                 let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
                 delayQueue.asyncAfter(deadline: .now()+duration){
+                    
+                    strongSelf.usedPlayers = strongSelf.usedPlayers-1
+                    
                     for node in nodes {
                         strongSelf.engine?.disconnectNodeInput(node)
                         strongSelf.engine?.detach(node)
                     }
                     nodes.removeAll()
+                    print("used players: \(strongSelf.usedPlayers)")
                 }
             })
         engine?.prepare()
@@ -930,7 +941,8 @@ class SCGAudioController {
     
     func stopRecordingMixerOutput(){
         
-        print("Recorded output to \(String(describing: mixerOutputFileURL)))")
+        guard let path = self.mixerOutputFileURL?.absoluteString else { return }
+        print("Recorded output to \(path)")
         
         if isRecording == true {
             engine?.mainMixerNode.removeTap(onBus: 0)

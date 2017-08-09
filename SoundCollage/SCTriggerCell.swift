@@ -44,6 +44,4 @@ class SCTriggerCell: UICollectionViewCell {
         self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: centerY))
         
     }
-
-    
   }

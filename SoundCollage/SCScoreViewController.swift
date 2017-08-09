@@ -10,6 +10,7 @@ import UIKit
 
 class SCScoreViewController: UIViewController {
     
+    var cvHeight: CGFloat = 368.0
     var scoreCV: UICollectionView?
     let toolbarHeight = CGFloat(98.0)
     var toolbar = UIToolbar()
@@ -34,10 +35,10 @@ class SCScoreViewController: UIViewController {
     
     //MARK: UI setup
     
-    func setupCollectionView(){
-        
+    func setupCollectionView() {
+        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: cvHeight)
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
-        scoreCV = UICollectionView.init(frame: self.view.frame, collectionViewLayout: flowLayout)
+        scoreCV = UICollectionView.init(frame: frame, collectionViewLayout: flowLayout)
         scoreCV?.register(SCScoreCell.self, forCellWithReuseIdentifier: "SCScoreCell")
         guard let scoreCV = self.scoreCV else { return }
         scoreCV.delegate = self
@@ -49,7 +50,8 @@ class SCScoreViewController: UIViewController {
     
     
     
-    func setupSequencerBarUI(){
+    func setupSequencerBarUI() {
+        
         sequencerBar.isHidden = true
         sequencerBar.frame = CGRect(x: 0, y: 0 , width: 3.0, height: view.frame.height)
         sequencerBar.backgroundColor = UIColor.black
@@ -79,6 +81,7 @@ class SCScoreViewController: UIViewController {
     
     
     func startPlaying(){
+        
         self.sequencerBar.isHidden = false
         SCAudioManager.shared.sequencerIsPlaying = true
         startPlayerBarTimers()
@@ -90,6 +93,7 @@ class SCScoreViewController: UIViewController {
     
     
     func stopPlaying(){
+        
         guard triggerTimer != nil else { return }
         guard sequencerTimer != nil else { return }
         triggerTimer?.invalidate()
@@ -127,7 +131,6 @@ class SCScoreViewController: UIViewController {
         var playbackSamples: [Int] = []
         print("trigger counter: \(triggerCounter)")
         
-//        let samples = SCAudioManager.shared.sequencerSettings[triggerCounter]
         guard let score = SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score else { return}
         let samples = score[triggerCounter]
         for (index,settings) in samples.enumerated() {
@@ -150,6 +153,7 @@ class SCScoreViewController: UIViewController {
     
     
     func animateSequencerBarPosition(){
+        
         DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
             let toPoint = CGPoint(x: UIScreen.main.bounds.width, y: 0)
             let fromPoint = CGPoint(x: self.view.frame.width/17, y: 0)
@@ -166,10 +170,9 @@ class SCScoreViewController: UIViewController {
 
 extension SCScoreViewController: UICollectionViewDelegateFlowLayout {
     
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let cellSize = CGSize.init(width: collectionView.frame.size.width, height: 368.0) // TODO: get this property from the samplerVC
+        let cellSize = CGSize.init(width: collectionView.frame.size.width, height: self.cvHeight)
         print("cellSize - \(cellSize.width), \(cellSize.height)")
         return cellSize
     }

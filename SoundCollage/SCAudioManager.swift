@@ -120,7 +120,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         }
         guard let path = getPathForSampleIndex(sampleIndex: sampleIdx) else { return }
         let url = URL.init(fileURLWithPath: path)
-        self.audioController?.playSample(sampleURL: url, index: sampleIdx)
+        self.audioController?.playSample(sampleURL: url, senderID: senderID)
     }
     
     

@@ -21,36 +21,7 @@ class SCScoreCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard let sequencerCV = self.sequencerCV else { return }
-        
-        while calibrateSize(width: sequencerCV.frame.size.width) == false {
-            sequencerCV.frame.size.width = sequencerCV.frame.size.width-1.0
-        }
-        sequencerCV.bounds.size = sequencerCV.collectionViewLayout.collectionViewContentSize
-        
-    }
-    
-    
-    
-    
-    func calibrateSize(width: CGFloat)-> Bool{
-        var result: Bool = false
-        
-        if width.truncatingRemainder(dividingBy: 17.0) == 0 {
-            result = true
-        }
-        
-        return result
-    }
-    
-    
-
-        
-    
+  
     
     
     func setupSequencer(){
@@ -75,7 +46,7 @@ extension SCScoreCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let result = CGSize.init(width: (collectionView.frame.width/CGFloat(cellCount))-2.0, height: collectionView.frame.height-2.0)
+        let result = CGSize.init(width: collectionView.frame.width/CGFloat(cellCount), height: collectionView.frame.height)
         return result
     }
     
