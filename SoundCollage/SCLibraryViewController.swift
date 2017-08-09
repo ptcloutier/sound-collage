@@ -154,7 +154,11 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return SCDataManager.shared.user?.soundCollages.count ?? 1
+        
+        guard let result = SCDataManager.shared.user?.soundCollages?.count else {
+            return 1
+        }
+        return result
     }
     
     

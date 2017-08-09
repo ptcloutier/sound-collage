@@ -53,6 +53,7 @@ class SCGAudioController {
     var effectControls:                 [[SCEffectControl]] = []
     var engine:                         AVAudioEngine?
     var mixer:                          AVAudioMixerNode?
+    var sampler:                        AVAudioUnitSampler?
     var nodeIdx:                        Int = 0
     var players:                        [SCAudioPlayerNode] = []
     var reverbNodes:                    [AVAudioUnitReverb] = []
@@ -153,6 +154,9 @@ class SCGAudioController {
         
         mixer = AVAudioMixerNode.init()
         engine?.attach(mixer!)
+
+//        sampler = AVAudioUnitSampler.init()
+//        engine?.attach(sampler!)
 
         /*  To support the instantiation of arbitrary AVAudioNode subclasses, instances are created
          externally to the engine, but are not usable until they are attached to the engine via
@@ -689,7 +693,7 @@ class SCGAudioController {
 //                print("Error reading buffer from file\(error.localizedDescription)")
 //            }
 /*
-            let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
+         
             
  
             // establish a connection between nodes
@@ -705,8 +709,7 @@ class SCGAudioController {
            
             engine?.connect(distortion!, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 2,  format:stereoFormat)
             
-            engine?.connect(player, to:  (engine?.mainMixerNode)!, fromBus: 0, toBus: 2,  format: playerFormat)
-            
+         
             // fan out the sampler to mixer input 1 and distortion effect
             
             let destinationNodes = [
@@ -716,6 +719,7 @@ class SCGAudioController {
             engine?.connect(sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
 */
             let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)//playerLoopBuffer?.format
+//            let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
  
             let player = SCAudioPlayerNode.init()
             let reverb = setupReverb(sampleIndex: sampleIdx)
@@ -729,7 +733,7 @@ class SCGAudioController {
             engine?.attach(pitchShift)
             engine?.attach(timeStretch)
             engine?.attach(distortion)
-            
+
             engine?.connect(player, to: pitchShift, format: playerFormat)
             engine?.connect(pitchShift, to: timeStretch, format: playerFormat)
             engine?.connect(timeStretch, to: distortion, format: playerFormat)
@@ -737,7 +741,15 @@ class SCGAudioController {
             engine?.connect(delay, to: reverb, format: playerFormat)
             engine?.connect(reverb, to: mixer!, format: playerFormat)
             engine?.connect(mixer!, to: (engine?.mainMixerNode)!, format: playerFormat)
-
+//            engine?.connect(player, to: reverb, format: playerFormat)
+//            engine?.connect(reverb, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 0, format: playerFormat)
+//            engine?.connect(distortion, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 2, format: stereoFormat)
+//            let destinationNodes = [
+//            AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1),
+//            AVAudioConnectionPoint.init(node: distortion, bus: 0)
+//            ]
+//            engine?.connect(sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
+//
             let nodes = [player, reverb, delay, distortion, timeStretch, pitchShift]
             playIt(player: player, sample: sample, audioNodes: nodes)
 //        } catch let error {
@@ -755,6 +767,17 @@ class SCGAudioController {
         usedPlayers = usedPlayers+1
         
         print("plays : \(plays)")
+        var durationInt = Int(round(Double(sample.length)/44100))
+        if durationInt == 0 {
+            durationInt = 1
+        }
+        let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[SCAudioManager.shared.selectedSampleIndex]
+        let reverbTime = round(Float(reverbParameter * 10.0))
+        durationInt += Int(reverbTime)
+        let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[SCAudioManager.shared.selectedSampleIndex]
+        let delayTime = round(Float(delayParams * 10.0))
+        durationInt += Int(delayTime)
+        let duration = DispatchTimeInterval.seconds(durationInt)
         
         player.scheduleFile(sample, at: nil, completionHandler:{
             
@@ -763,25 +786,15 @@ class SCGAudioController {
                 return
             }
             //  calculate audio tail based on reverb and delay parameters
-            var durationInt = Int(round(Double(sample.length)/44100))
-            if durationInt == 0 {
-                durationInt = 1
-                }
-                let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[SCAudioManager.shared.selectedSampleIndex]
-                let reverbTime = round(Float(reverbParameter * 7.0))
-                durationInt += Int(reverbTime)
-                let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[SCAudioManager.shared.selectedSampleIndex]
-                let delayTime = round(Float(delayParams * 15.0))
-                durationInt += Int(delayTime)
-                let duration = DispatchTimeInterval.seconds(durationInt)
+            
                 let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
                 delayQueue.asyncAfter(deadline: .now()+duration){
                     
                     strongSelf.usedPlayers = strongSelf.usedPlayers-1
-                    
                     for node in nodes {
                         strongSelf.engine?.disconnectNodeInput(node)
                         strongSelf.engine?.detach(node)
+                        
                     }
                     nodes.removeAll()
                     print("used players: \(strongSelf.usedPlayers)")
