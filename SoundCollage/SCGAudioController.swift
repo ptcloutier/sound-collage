@@ -634,8 +634,8 @@ class SCGAudioController {
             let url = URL.init(string: samplePath)
             let sample = try AVAudioFile.init(forReading: url!)
             return sample
-        } catch let error {
-            print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
+        } catch { //let error {
+//            print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
             return nil
         }
     }
@@ -649,18 +649,19 @@ class SCGAudioController {
         audioFiles = samples
         
         for (key, value) in audioFiles {
-            print("AudioFiles key : \(key), val: \(String(describing: value))")
+//            print("AudioFiles key : \(key), val: \(String(describing: value))")
             
             let path = SCAudioManager.shared.getPathForSampleIndex(sampleIndex: Int(key)!)
             if let audioFile: AVAudioFile = getSample(samplePath: path!) {
                 
                 
-                print("Audiofile: \(String(describing: audioFile))")
+//                print("Audiofile: \(String(describing: audioFile))")
                 audioFiles.updateValue(audioFile, forKey: key)
-                print("AudioFiles key : \(key), new val : \(String(describing: value))")
+                print("AudioFiles key : \(key), val : \(String(describing: value))")
             }
         }
     }
+    
     
     
     

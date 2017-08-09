@@ -481,9 +481,11 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             if key == selectedSampleIndex.description {
                 sampleBank.samples[key] = urlPart as AnyObject?
                 print("Audio file recorded and saved at \(urlPart.description)")
+                break 
             }
         }
         SCDataManager.shared.user?.currentSampleBank? = sampleBank
+        SCAudioManager.shared.audioController?.getAudioFilesForURL()
         isRecordingModeEnabled = false
         SCDataManager.shared.saveObjectToJSON()
 
