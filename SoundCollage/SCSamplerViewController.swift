@@ -132,11 +132,12 @@ class SCSamplerViewController: UIViewController  {
             SCAudioManager.shared.isRecordingModeEnabled = false
             reloadSamplerCV()
         case false:
-            if SCAudioManager.shared.isRecording == true {
-                SCAudioManager.shared.isRecordingModeEnabled = false
-            } else {
-                SCAudioManager.shared.isRecordingModeEnabled = true
-            }
+            SCAudioManager.shared.isRecordingModeEnabled = true 
+//            if SCAudioManager.shared.isRecording == true {
+//                SCAudioManager.shared.isRecordingModeEnabled = false
+//            } else {
+//                SCAudioManager.shared.isRecordingModeEnabled = true
+//            }
             self.selectedPadIndex = nil
             reloadSamplerCV()
         }
