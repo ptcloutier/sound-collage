@@ -828,74 +828,74 @@ class SCGAudioController {
     
     
     func makeEngineConnectionsForMultiPlayer(player: SCAudioPlayerNode){
-        //
-        //            /*  The engine will construct a singleton main mixer and connect it to the outputNode on demand,
-        //             when this property is first accessed. You can then connect additional nodes to the mixer.
-        //
-        //             By default, the mixer's output format (sample rate and channel count) will track the format
-        //             of the output node. You may however make the connection explicitly with a different format. */
-        //
-        //            // get the engine's optional singleton main mixer node
-        //            let mainMixer = engine?.mainMixerNode
-        //
-        //            /*  Nodes have input and output buses (AVAudioNodeBus). Use connect:to:fromBus:toBus:format: to
-        //             establish connections betweeen nodes. Connections are always one-to-one, never one-to-many or
-        //             many-to-one.
-        //
-        //             Note that any pre-existing connection(s) involving the source's output bus or the
-        //             destination's input bus will be broken.
-        //
-        //             @method connect:to:fromBus:toBus:format:
-        //             @param node1 the source node
-        //             @param node2 the destination node
-        //             @param bus1 the output bus on the source node
-        //             @param bus2 the input bus on the destination node
-        //             @param format if non-null, the format of the source node's output bus is set to this
-        //             format. In all cases, the format of the destination node's input bus is set to
-        //             match that of the source node's output bus. */
-        //
-        //            let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
-        //            let playerFormat = playerLoopBuffer?.format
-        //
-        //
-        //            let reverbA = setupReverb(sampleIndex: SCAudioManager.shared.selectedSampleIndex)
-        //            let distortionA = setupDistortion(sampleIndex: SCAudioManager.shared.selectedSampleIndex)
-        //
-        //            let samplerA = AVAudioUnitSampler.init()
-        //            setSamplerDirectVolume(samplerDirectVolume: 1.0)
-        //            setSamplerEffectVolume(samplerEffectVolume: 1.0)
-        //            engine?.attach(samplerA)
-        //            engine?.attach(distortionA)
-        //            engine?.attach(reverbA)
-        //
-        //
-        //            // establish a connection between nodes
-        //
-        //
-        //            // connect the player to the reverb
-        //            // use the buffer format for the connection format as they must match
-        //             engine?.connect(player, to: reverbA, format: playerFormat)
-        //
-        //            // connect the reverb effect to mixer input bus 0
-        //            // use the buffer format for the connection format as they must match
-        //            engine?.connect(reverbA, to: mainMixer!, fromBus: 0,  toBus: 0, format: playerFormat)
-        //
-        //            // connect the distortion effect to mixer input bus 2
-        //
-        //            engine?.connect(distortionA, to: mainMixer!, fromBus: 0, toBus: 2,  format:stereoFormat)
-        //
-        ////            engine?.connect(player, to: mainMixer!, fromBus: 0, toBus: 2,  format: playerFormat)
-        //
-        //            // fan out the sampler to mixer input 1 and distortion effect
-        //            let destinationNodes: [AVAudioConnectionPoint] = [AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1), AVAudioConnectionPoint.init(node: distortionA, bus: 0)]//
-        //
-        //
-        //
-        //
-        //            engine?.connect( samplerA, to: destinationNodes, fromBus: 0, format: stereoFormat)
-        //
-        //
-        ////        engine?.connect(player, to: mainMixer!, format: playerFormat)
+        
+                    /*  The engine will construct a singleton main mixer and connect it to the outputNode on demand,
+                     when this property is first accessed. You can then connect additional nodes to the mixer.
+        
+                     By default, the mixer's output format (sample rate and channel count) will track the format
+                     of the output node. You may however make the connection explicitly with a different format. */
+        
+                    // get the engine's optional singleton main mixer node
+                    let mainMixer = engine?.mainMixerNode
+        
+                    /*  Nodes have input and output buses (AVAudioNodeBus). Use connect:to:fromBus:toBus:format: to
+                     establish connections betweeen nodes. Connections are always one-to-one, never one-to-many or
+                     many-to-one.
+        
+                     Note that any pre-existing connection(s) involving the source's output bus or the
+                     destination's input bus will be broken.
+        
+                     @method connect:to:fromBus:toBus:format:
+                     @param node1 the source node
+                     @param node2 the destination node
+                     @param bus1 the output bus on the source node
+                     @param bus2 the input bus on the destination node
+                     @param format if non-null, the format of the source node's output bus is set to this
+                     format. In all cases, the format of the destination node's input bus is set to
+                     match that of the source node's output bus. */
+        
+                    let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
+                    let playerFormat = playerLoopBuffer?.format
+        
+        
+                    let reverbA = setupReverb(sampleIndex: SCAudioManager.shared.selectedSampleIndex)
+                    let distortionA = setupDistortion(sampleIndex: SCAudioManager.shared.selectedSampleIndex)
+        
+                    let samplerA = AVAudioUnitSampler.init()
+                    setSamplerDirectVolume(samplerDirectVolume: 1.0)
+                    setSamplerEffectVolume(samplerEffectVolume: 1.0)
+                    engine?.attach(samplerA)
+                    engine?.attach(distortionA)
+                    engine?.attach(reverbA)
+        
+        
+                    // establish a connection between nodes
+        
+        
+                    // connect the player to the reverb
+                    // use the buffer format for the connection format as they must match
+                     engine?.connect(player, to: reverbA, format: playerFormat)
+        
+                    // connect the reverb effect to mixer input bus 0
+                    // use the buffer format for the connection format as they must match
+                    engine?.connect(reverbA, to: mainMixer!, fromBus: 0,  toBus: 0, format: playerFormat)
+        
+                    // connect the distortion effect to mixer input bus 2
+        
+                    engine?.connect(distortionA, to: mainMixer!, fromBus: 0, toBus: 2,  format:stereoFormat)
+        
+        //            engine?.connect(player, to: mainMixer!, fromBus: 0, toBus: 2,  format: playerFormat)
+        
+                    // fan out the sampler to mixer input 1 and distortion effect
+                    let destinationNodes: [AVAudioConnectionPoint] = [AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1), AVAudioConnectionPoint.init(node: distortionA, bus: 0)]//
+        
+        
+        
+        
+                    engine?.connect( samplerA, to: destinationNodes, fromBus: 0, format: stereoFormat)
+        
+        
+        //        engine?.connect(player, to: mainMixer!, format: playerFormat)
     }
     
     
