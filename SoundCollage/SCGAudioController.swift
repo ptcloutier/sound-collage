@@ -639,12 +639,13 @@ class SCGAudioController {
             print("No sample at selected sample index!")
             return
         }
-
+        let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
         switch isRecordingSelected {
         case true:
             player?.scheduleFile(sample, at: nil, completionHandler: nil)
         case false:
-            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat, frameCapacity: AVAudioFrameCount(sample.length))
+            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat,
+                                                     frameCapacity: AVAudioFrameCount(sample.length))
                         do {
                             try sample.read(into: playerLoopBuffer!)
                         } catch let error {
@@ -722,11 +723,11 @@ class SCGAudioController {
         } catch let error {
             print("Error setting avaudiosession category, \(error.localizedDescription)")
         }
-        let key = "\(sampleIdx)"
-        guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {
-            print("No audiofile")
-            return
-        }
+//        let key = "\(sampleIdx)"
+//        guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {
+//            print("No audiofile")
+//            return
+//        }
 
 //            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat, frameCapacity: AVAudioFrameCount(sample.length))
 //            do {
