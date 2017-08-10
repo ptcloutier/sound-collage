@@ -214,6 +214,8 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
         tapGestureRecognizer.delegate = self
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        
         cell.addGestureRecognizer(tapGestureRecognizer)
         
         

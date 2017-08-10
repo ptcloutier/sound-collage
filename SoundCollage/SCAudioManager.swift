@@ -485,6 +485,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             }
         }
         SCDataManager.shared.user?.currentSampleBank? = sampleBank
+        SCAudioManager.shared.audioController?.loadSamples()
         SCAudioManager.shared.audioController?.getAudioFilesForURL()
         isRecordingModeEnabled = false
         SCDataManager.shared.saveObjectToJSON()

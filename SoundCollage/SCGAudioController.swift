@@ -207,16 +207,7 @@ class SCGAudioController {
         
         samplerEffectVolume = 0.0
 
-     
-        if let urls: [URL] = Bundle.main.urls(forResourcesWithExtension: "aac", subdirectory: "Documents") {
-            do {
-                try sampler?.loadAudioFiles(at: urls)
-            } catch let error {
-                print("\(error.localizedDescription)")
-            }
-        }
- 
-        
+        loadSamples()
         /*  ------------ Original Method ---------------
          
          guard let bankURL: URL = URL.init(string: Bundle.main.path(forResource: "gs_instruments", ofType: "dls")!) else {
@@ -354,6 +345,17 @@ class SCGAudioController {
     
 
     //MARK: AVAudioMixinDestination Methods
+    
+    func loadSamples() {
+        
+        if let urls: [URL] = Bundle.main.urls(forResourcesWithExtension: "aac", subdirectory: "Documents") {
+            do {
+                try sampler?.loadAudioFiles(at: urls)
+            } catch let error {
+                print("\(error.localizedDescription)")
+            }
+        }
+    }
     
     private func setSamplerDirectVolume(sampler: AVAudioUnitSampler, samplerDirectVolume: Float ){
 //         get all output connection points from sampler bus 0
@@ -601,15 +603,16 @@ class SCGAudioController {
     
     
     func togglePlayer(){
-        switch self.playerIsPlaying {
-        case true:
+//        switch self.playerIsPlaying {
+//        case true:
             player?.stop()
-            NotificationCenter.default.post(name: SCConstants.ShouldEnginePauseNotification, object: nil)
-        case false:
+//            self.playerIsPlaying = false
+//            NotificationCenter.default.post(name: SCConstants.ShouldEnginePauseNotification, object: nil)
+//        case false:
             startEngine()
             schedulePlayerContent()
             player?.play()
-        }
+//        }
     }
     
     
@@ -620,7 +623,7 @@ class SCGAudioController {
         
         switch self.playerIsPlaying {
         case true:
-            player?.stop()
+//            player?.stop()
             startEngine() // start the engine if it's not already started
             schedulePlayerContent()
             player?.play()
@@ -639,21 +642,21 @@ class SCGAudioController {
             print("No sample at selected sample index!")
             return
         }
-        let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
-        switch isRecordingSelected {
-        case true:
+//        switch isRecordingSelected {
+//        case true:
             player?.scheduleFile(sample, at: nil, completionHandler: nil)
-        case false:
-            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat,
-                                                     frameCapacity: AVAudioFrameCount(sample.length))
-                        do {
-                            try sample.read(into: playerLoopBuffer!)
-                        } catch let error {
-                            print("Error reading buffer from file\(error.localizedDescription)")
-                        }
-
-            player?.scheduleBuffer(playerLoopBuffer!, at: nil, options: .loops, completionHandler: nil)
-        }
+//            self.playerIsPlaying = true
+//        case false:
+//            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat,
+//                                                     frameCapacity: AVAudioFrameCount(sample.length))
+//                        do {
+//                            try sample.read(into: playerLoopBuffer!)
+//                        } catch let error {
+//                            print("Error reading buffer from file\(error.localizedDescription)")
+//                        }
+//
+//            player?.scheduleBuffer(playerLoopBuffer!, at: nil, options: .interrupts, completionHandler: nil)
+//        }
     }
 
     

@@ -131,8 +131,8 @@ class SCDataManager {
         
         let user = SCDataManager.shared.user
         if let jsonString = user?.toJSONString(prettyPrint: true){
-//            print(jsonString)
-            writeToFile(jsonString: jsonString)
+            print(jsonString)
+//            writeToFile(jsonString: jsonString)
         } else {
             print("Error serializing json")
         }
@@ -215,50 +215,6 @@ class SCDataManager {
     }
     
     
-    
-    
-    
-    func newDoubleSampleBank()-> [String: AnyObject] {
-        
-        let samples: [String: AnyObject] = ["0": "" as AnyObject,
-                                            "1": "" as AnyObject,
-                                            "2": "" as AnyObject,
-                                            "3": "" as AnyObject,
-                                            "4": "" as AnyObject,
-                                            "5": "" as AnyObject,
-                                            "6": "" as AnyObject,
-                                            "7": "" as AnyObject,
-                                            "8": "" as AnyObject,
-                                            "9": "" as AnyObject,
-                                            "10": "" as AnyObject,
-                                            "11": "" as AnyObject,
-                                            "12": "" as AnyObject,
-                                            "13": "" as AnyObject,
-                                            "14": "" as AnyObject,
-                                            "15": "" as AnyObject,
-                                            "16": "" as AnyObject,
-                                            "17": "" as AnyObject,
-                                            "18": "" as AnyObject,
-                                            "19": "" as AnyObject,
-                                            "20": "" as AnyObject,
-                                            "21": "" as AnyObject,
-                                            "22": "" as AnyObject,
-                                            "23": "" as AnyObject,
-                                            "24": "" as AnyObject,
-                                            "25": "" as AnyObject,
-                                            "26": "" as AnyObject,
-                                            "27": "" as AnyObject,
-                                            "28": "" as AnyObject,
-                                            "29": "" as AnyObject,
-                                            "30": "" as AnyObject,
-                                            "31": "" as AnyObject,
-                                            "32": "" as AnyObject,
-                                            "33": "" as AnyObject,
-                                            "34": "" as AnyObject,
-                                            "35": "" as AnyObject,
-                                            ]
-        return samples
-    }
     
     
     func setupScorePage()-> [[Bool]] {

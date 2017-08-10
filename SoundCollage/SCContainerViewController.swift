@@ -117,15 +117,18 @@ class SCContainerViewController: UIViewController {
             return
         }
         postRecordBtnDidPressNotification()
+        
     
         switch SCAudioManager.shared.isRecording {
         case true:
+            SCAudioManager.shared.audioController?.isRecordingSelected = false
             SCAudioManager.shared.stopRecordingSample()
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 recordBtn.alpha = 1
             }, completion: nil)
         case false:
+            SCAudioManager.shared.audioController?.isRecordingSelected = true 
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 recordBtn.alpha = 1
