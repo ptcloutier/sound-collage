@@ -116,6 +116,7 @@ class SCGAudioController {
         initAVAudioSession()
         getAudioFilesForURL()
         initAndCreateNodes()
+        setNodeDefaults()
         
         print("\(String(describing: engine?.description))")
         
@@ -182,15 +183,17 @@ class SCGAudioController {
         let playerFormat = playerLoopBuffer?.format
         let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
         
-        engine?.connect(player!, to: reverb!, format: playerFormat)
-        engine?.connect(reverb!, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 0, format: playerFormat)
-        engine?.connect(distortion!, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 2, format: stereoFormat)
-        let destinationNodes = [
+        let connections = [
             AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1),
-            AVAudioConnectionPoint.init(node: distortion!, bus: 0)
+            AVAudioConnectionPoint.init(node: distortion!, bus: 0),
+            AVAudioConnectionPoint.init(node: reverb!, bus: 0)
         ]
-        engine?.connect(sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
+        engine?.connect(sampler!, to: connections, fromBus: 0, format: stereoFormat)
+        engine?.connect(player!, to: connections, fromBus: 0,  format: stereoFormat)
+        engine?.connect(reverb!, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 0, format: stereoFormat)
+        engine?.connect(distortion!, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 0, format: stereoFormat)
         
+
 
         
     }
@@ -199,7 +202,7 @@ class SCGAudioController {
   
         // settings for effects units
         // settings for effects units
-        reverb?.wetDryMix = 40.0
+        reverb?.wetDryMix = 100.0
         reverb?.loadFactoryPreset(AVAudioUnitReverbPreset.mediumChamber)
         
         distortion?.loadFactoryPreset(AVAudioUnitDistortionPreset.drumsBitBrush)
@@ -351,8 +354,8 @@ class SCGAudioController {
         if let urls: [URL] = Bundle.main.urls(forResourcesWithExtension: "aac", subdirectory: "Documents") {
             do {
                 try sampler?.loadAudioFiles(at: urls)
-            } catch let error {
-                print("\(error.localizedDescription)")
+            } catch {
+                print("No sample\n")
             }
         }
     }
