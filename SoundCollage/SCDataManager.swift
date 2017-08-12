@@ -28,6 +28,8 @@ class SCDataManager {
                 print("Read filepath with success ")
             }
             do {
+                
+                // mappedIfSafe might be better 
                 let data = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: .alwaysMapped)
                 let jsonString = String(data: data, encoding: .utf8)
                 print(jsonString!)

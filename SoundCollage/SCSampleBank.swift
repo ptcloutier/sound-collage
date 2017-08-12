@@ -11,9 +11,14 @@ import ObjectMapper
 
 class SCSampleBank: Mappable {
     
-    var samples: [String: AnyObject] = [:]
-    var name: String? 
+    enum SamplerType {
+        case standard
+        case double
+    }
+    
+    var name: String?
     var id: Int?
+    var samples: [String: AnyObject] = [:]
     var type: SamplerType?
     var effectSettings: [[SCEffectControl]] = []
     var sequencerSettings: SCSequencerSettings?
@@ -29,26 +34,20 @@ class SCSampleBank: Mappable {
     }
     
     required init?(map: Map) {
-        samples     <- map["samples"]
-        name        <- map["name"]
-        id          <- map["id"]
-        type        <- map["type"]
-        effectSettings  <- map["effectSettings"]
+        name                <- map["name"]
+        id                  <- map["id"]
+        samples             <- map["samples"]
+        type                <- map["type"]
+        effectSettings      <- map["effectSettings"]
         sequencerSettings   <- map["sequencerSettings"]
     }
     
     func mapping(map: Map) {
-        samples     <- map["samples"]
-        name        <- map["name"]
-        id          <- map["id"]
-        type        <- map["type"]
-        effectSettings  <- map["effectSettings"]
+        name                <- map["name"]
+        id                  <- map["id"]
+        samples             <- map["samples"]
+        type                <- map["type"]
+        effectSettings      <- map["effectSettings"]
         sequencerSettings   <- map["sequencerSettings"]
     }
-    
-    enum SamplerType {
-        case standard
-        case double
-    }
-
 }

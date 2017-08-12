@@ -11,7 +11,6 @@ import AVFoundation
 import ObjectMapper
 
 
-
 class SCEffectControl: Mappable {
 
     var parameter: [Float] = []
@@ -20,14 +19,16 @@ class SCEffectControl: Mappable {
         self.parameter = []
         
         while self.parameter.count < 16 {
-            let value: Float = 0
+            let value: Float = 0.0
             self.parameter.append(value)
         }
     }
     
+    
     required init?(map: Map) {
         parameter     <- map["parameter"]
     }
+    
     
     func mapping(map: Map) {
         parameter     <- map["parameter"]

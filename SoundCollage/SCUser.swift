@@ -23,18 +23,18 @@ class SCUser: Mappable {
     }
     
     required init?(map: Map) {
+        userName            <- map["userName"]
         sampleBanks         <- map["sampleBanks"]
         currentSampleBank   <- map["currentSampleBank"]
-        userName            <- map["userName"]
         soundCollages       <- map["soundCollages"]
     }
     
     
     // Mappable
     func mapping(map: Map) {
+        userName            <- map["userName"]
         sampleBanks         <- map["sampleBanks"]
         currentSampleBank   <- map["currentSampleBank"]
-        userName            <- map["userName"]
         soundCollages       <- map["soundCollages"]
     }    
 }

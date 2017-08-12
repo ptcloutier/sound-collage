@@ -17,7 +17,9 @@ class SCSequencerSettings: Mappable {
         case fourFour
     }
     
+    
     var timeSignature = TimeSignature.fourFour
+   
     var score: [[Bool]] = []
     
     init(score: [[Bool]]) {
