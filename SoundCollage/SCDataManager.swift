@@ -24,24 +24,24 @@ class SCDataManager {
 
         if let filePath = getFileURL(filePath: "SoundCollageUser.json") {
             print("SoundCollage.user json file exists at path: \(filePath)")
-            if FileManager.default.fileExists(atPath: filePath.path){
+            if FileManager.default.fileExists(atPath: filePath.path) {
                 print("Read filepath with success ")
             }
             do {
-                
                 // mappedIfSafe might be better 
                 let data = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: .alwaysMapped)
-                let jsonString = String(data: data, encoding: .utf8)
-                print(jsonString!)
-                let user = SCUser(JSONString: jsonString!)
-                print(user!) 
-                self.user = user
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
+                guard let scUser = Mapper<SCUser>().map(JSON: json!) else {
+                    print("Error, unable to instantiate user from json.")
+                    return
+                }
+                self.user = scUser
                 printAudioFilePaths()
             } catch let error {
-                print(error.localizedDescription)
+                print("Error, \(error.localizedDescription)")
             }
         } else {
-            print("Invalid filename/path or first run, no file to read until first save.")
+            print("Invalid filename/path or first run, no file to read until we create one.")
         }
     }
     
@@ -100,7 +100,7 @@ class SCDataManager {
             let sequencerSettings = SCSequencerSettings.init(score: score)
             let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: .standard, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
             sampleBanks.append(sampleBank)
-            let soundCollages: [URL] = []
+            let soundCollages: [String] = []
             let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: sampleBank, soundCollages: soundCollages)
             self.user = newUser
             printAudioFilePaths()
@@ -132,6 +132,7 @@ class SCDataManager {
     func saveObjectToJSON(){
         
         let user = SCDataManager.shared.user
+        
         if let jsonString = user?.toJSONString(prettyPrint: true){
             print(jsonString)
             writeToFile(jsonString: jsonString)

@@ -157,7 +157,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
 
     func playbackSample() {
         
-        SCAudioManager.shared.audioController?.togglePlayer()
+        SCAudioManager.shared.audioController?.togglePlayer(index: self.idx)
 //        SCAudioManager.shared.playAudio(senderID: 0)
         playbackTouchDelay()
     }

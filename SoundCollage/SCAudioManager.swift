@@ -227,12 +227,58 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         let mixerPanelIdx = Int(values[0])
         let sliderIdx = Int(values[1])
         let selectedSamplePad = Int(values[2])
-        
+        guard let ac = SCAudioManager.shared.audioController else { return }
         
         self.effectControls[mixerPanelIdx][sliderIdx].parameter[selectedSamplePad] = sliderValue
-        self.audioController?.effectControls = self.effectControls
+        SCAudioManager.shared.audioController?.effectControls = self.effectControls
         SCDataManager.shared.user?.currentSampleBank?.effectSettings = self.effectControls
+        
+        
+//        switch mixerPanelIdx {
+//        case 0:
+//            print("reverb changed")
+//            break
+//        case 1:
+//            print("delay changed")
+//            break
+//        case 2:
+//            print("pitch changed")
+//            break
+//        case 3:
+//            print("time changed")
+//            break
+//        case 4:
+//            print("distortion changed ")
+//            break
+//        default:
+//            print("default .... ")
+//            break
+//        }
+
+        // write to file
         SCDataManager.shared.saveObjectToJSON()
+        
+        switch mixerPanelIdx {
+        case 0:
+            print("reverb changed")
+            break
+        case 1:
+            print("delay changed")
+            break
+        case 2:
+            print("pitch changed")
+            break
+        case 3:
+            print("time changed")
+            break
+        case 4:
+            print("distortion changed ")
+            break
+        default:
+            print("default .... ")
+            break
+        }
+
     }
    
     
