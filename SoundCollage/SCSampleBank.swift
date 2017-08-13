@@ -10,25 +10,18 @@ import Foundation
 import ObjectMapper
 
 class SCSampleBank: Mappable {
-    
-    enum SamplerType {
-        case standard
-        case double
-    }
-    
+   
     var name: String?
     var id: Int?
     var samples: [String: AnyObject] = [:]
-    var type: SamplerType?
     var effectSettings: [[SCEffectControl]] = []
     var sequencerSettings: SCSequencerSettings?
     
     
-    init(name: String?, id: Int?, samples: [String: AnyObject], type: SamplerType?, effectSettings: [[SCEffectControl]] , sequencerSettings: SCSequencerSettings? ) {
+    init(name: String?, id: Int?, samples: [String: AnyObject], effectSettings: [[SCEffectControl]] , sequencerSettings: SCSequencerSettings? ) {
         self.name = name
         self.id = id
         self.samples = samples
-        self.type = type
         self.effectSettings = effectSettings
         self.sequencerSettings = sequencerSettings
     }
@@ -37,7 +30,6 @@ class SCSampleBank: Mappable {
         name                <- map["name"]
         id                  <- map["id"]
         samples             <- map["samples"]
-        type                <- map["type"]
         effectSettings      <- map["effectSettings"]
         sequencerSettings   <- map["sequencerSettings"]
     }
@@ -46,7 +38,6 @@ class SCSampleBank: Mappable {
         name                <- map["name"]
         id                  <- map["id"]
         samples             <- map["samples"]
-        type                <- map["type"]
         effectSettings      <- map["effectSettings"]
         sequencerSettings   <- map["sequencerSettings"]
     }

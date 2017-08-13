@@ -52,9 +52,8 @@ class SCSamplerViewController: UIViewController  {
         while calibrateSize(samplerCVWidth: samplerCV.frame.size.width) == false {
             samplerCV.frame.size.width = samplerCV.frame.size.width-1.0
         }
-        if SCDataManager.shared.user?.currentSampleBank?.type == SCSampleBank.SamplerType.standard {
-            samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
-        }
+        samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
+        
         
         print("sampler size - \(samplerCV.frame.width), \(samplerCV.frame.height)")
     }
@@ -80,14 +79,8 @@ class SCSamplerViewController: UIViewController  {
     
     private func setupSampler() {
  
-        var numberOfColumns: CGFloat
         
-        if SCDataManager.shared.user?.currentSampleBank?.type == SCSampleBank.SamplerType.double {
-            numberOfColumns = 6
-        } else {
-            numberOfColumns = 4
-        }
-        samplerFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: numberOfColumns)
+        samplerFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 4)
         guard let samplerFlowLayout = self.samplerFlowLayout else {
             print("No sampler flow layout.")
             return

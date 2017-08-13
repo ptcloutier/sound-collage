@@ -16,12 +16,7 @@ class SCEffectControl: Mappable {
     var parameter: [Float] = []
     
     init() {
-        self.parameter = []
-        
-        while self.parameter.count < 16 {
-            let value: Float = 0.0
-            self.parameter.append(value)
-        }
+        self.parameter = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     }
     
     

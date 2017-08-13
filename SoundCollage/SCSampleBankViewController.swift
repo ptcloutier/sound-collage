@@ -151,14 +151,14 @@ class SCSampleBankViewController: UIViewController {
         toolbar.setShadowImage(transparentPixel, forToolbarPosition: .any)
         toolbar.isTranslucent = true
         
-        let newStandardSamplerBtn = UIButton()
-        newStandardSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newStandardSamplerDidPress), for: .touchUpInside)
+        let newSamplerBtn = UIButton()
+        newSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newSamplerDidPress), for: .touchUpInside)
         
-        let standardSamplerBarBtn = setupToolbarButton(btn: newStandardSamplerBtn)
+        let samplerBarBtn = setupToolbarButton(btn: newSamplerBtn)
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        toolbar.items = [flexibleSpace, standardSamplerBarBtn, flexibleSpace]
+        toolbar.items = [flexibleSpace, samplerBarBtn, flexibleSpace]
         self.view.addSubview(toolbar)
     }
     
@@ -189,25 +189,25 @@ class SCSampleBankViewController: UIViewController {
 
     
     
-    func newStandardSamplerDidPress(){
+    func newSamplerDidPress(){
       
-        let samplerType = SCSampleBank.SamplerType.standard
-        newSampler(samplerType: samplerType)
+        newSampler()
     }
     
     
     
     
     
-    private func newSampler(samplerType: SCSampleBank.SamplerType){
+    private func newSampler(){
         
-        let samples = SCDataManager.shared.newStandardSampleBank()
+        let samples = SCDataManager.shared.newSampleBank()
         let sampleBankID = SCDataManager.shared.getSampleBankID()
-        
         let score: [[Bool]] = SCDataManager.shared.setupScorePage()
         let sequencerSettings = SCSequencerSettings.init(score: score)
         let effectSettings: [[SCEffectControl]] = SCDataManager.shared.setupEffectSettings()
-        let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: samplerType, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
+        let uuid = UUID().uuidString
+        let name = "\(uuid)_sampleBank_id_\(sampleBankID)"
+        let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
         SCDataManager.shared.user?.sampleBanks?.append(sampleBank)
         SCDataManager.shared.user?.currentSampleBank = SCDataManager.shared.user?.sampleBanks?.last
         presentSampler()

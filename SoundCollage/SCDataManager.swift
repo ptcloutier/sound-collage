@@ -91,17 +91,18 @@ class SCDataManager {
         readJSONFromFile()
         
         guard let user = SCDataManager.shared.user else {
-            let userName = "Perrin"
             var sampleBanks: [SCSampleBank] = []
-            let samples = newStandardSampleBank()
+            let samples = newSampleBank()
             let sampleBankID = getSampleBankID()
             let effectSettings: [[SCEffectControl]] = setupEffectSettings()
             let score: [[Bool]] = SCDataManager.shared.setupScorePage()
             let sequencerSettings = SCSequencerSettings.init(score: score)
-            let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, type: .standard, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
+            let uuid = UUID().uuidString
+            let name = "\(uuid)_sampleBank_id_\(sampleBankID)"
+            let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples,effectSettings: effectSettings, sequencerSettings: sequencerSettings)
             sampleBanks.append(sampleBank)
             let soundCollages: [String] = []
-            let newUser = SCUser.init(userName: userName, sampleBanks: sampleBanks, currentSampleBank: sampleBank, soundCollages: soundCollages)
+            let newUser = SCUser.init(userName: "Perrin", sampleBanks: sampleBanks, currentSampleBank: sampleBank, soundCollages: soundCollages)
             self.user = newUser
             printAudioFilePaths()
             print("Created new user")
@@ -196,7 +197,7 @@ class SCDataManager {
     
     
     
-    func newStandardSampleBank() -> [String: AnyObject]{
+    func newSampleBank() -> [String: AnyObject]{
         let samples: [String: AnyObject] = ["0": "" as AnyObject,
                                             "1": "" as AnyObject,
                                             "2": "" as AnyObject,

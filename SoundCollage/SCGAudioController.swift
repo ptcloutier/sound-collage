@@ -753,9 +753,8 @@ class SCGAudioController {
             let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
             delayQueue.asyncAfter(deadline: .now()+duration){
                 for x in nodes {
-                    strongSelf.engine?.disconnectNodeInput(x )
+                    strongSelf.engine?.disconnectNodeInput(x)
                     strongSelf.engine?.detach(x)
-                    //                    }
                     
                 }
                 nodes.removeAll()
