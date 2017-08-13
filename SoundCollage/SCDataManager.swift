@@ -29,9 +29,9 @@ class SCDataManager {
             }
             do {
                 // mappedIfSafe might be better 
-                let data = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: .alwaysMapped)
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
-                guard let scUser = Mapper<SCUser>().map(JSON: json!) else {
+                let urlContent = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: [])
+                let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options: []) as? [String: Any]
+                guard let scUser = Mapper<SCUser>().map(JSON: jsonResult!) else {
                     print("Error, unable to instantiate user from json.")
                     return
                 }

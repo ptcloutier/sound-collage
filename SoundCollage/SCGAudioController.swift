@@ -374,7 +374,7 @@ class SCGAudioController {
         let reverbParams = effectControls[0]
         
         if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*50.0)) {
-            reverb.loadFactoryPreset(.plate) // there are thirteen possible presets
+            reverb.loadFactoryPreset(.cathedral) // there are thirteen possible presets
             reverb.wetDryMix = reverbValue
         }
         return reverb
