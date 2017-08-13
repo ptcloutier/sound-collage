@@ -110,7 +110,13 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             
             let seqIdx = cell.sequencerIdx
             let idx = cell.idx
-            if let playbackEnabled = SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[seqIdx][idx] {
+           
+            guard let currentSB = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!]  else {
+            print("Error, no current sample bank.")
+            return cell
+            }
+            
+            if let playbackEnabled = currentSB.sequencerSettings?.score[seqIdx][idx] {
                 cell.isPlaybackEnabled = playbackEnabled
             }
             switch cell.isPlaybackEnabled {
@@ -144,25 +150,28 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             return
         }
         
+        guard let currentSB = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!]  else {
+            print("Error, no current sample bank.")
+            return
+        }
+        
         switch cell.isPlaybackEnabled {
         
         case true:
             cell.isPlaybackEnabled = false
-            SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = false
+            currentSB.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = false
             cell.backgroundColor = SCColor.Custom.Gray.dark
         case false:
             cell.isPlaybackEnabled = true
-            SCDataManager.shared.user?.currentSampleBank?.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = true
+            currentSB.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = true
             let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
             var colorIdx: Int
             colorIdx = Int(arc4random_uniform(UInt32(iceCreamColors.count)))
             cell.backgroundColor = iceCreamColors[colorIdx]
             
             if SCAudioManager.shared.sequencerIsPlaying == false {
-//                SCAudioManager.shared.selectedSampleIndex = cell.idx
-//                SCAudioManager.shared.playAudio(sampleIndex: cell.idx)
                 SCAudioManager.shared.selectedSequencerIndex = cell.idx
-                SCAudioManager.shared.playAudio(senderID: 1)
+    
                 NotificationCenter.default.post(name: Notification.Name.init("selectedSamplePadDidChangeNotification"), object: nil)
             }
         }

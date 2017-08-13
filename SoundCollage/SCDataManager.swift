@@ -16,7 +16,7 @@ class SCDataManager {
     static let shared = SCDataManager.init()
     
     var user: SCUser?
-    var currentSampleTitle: String?
+    var currentSamplePath: String?
     
    
     
@@ -93,7 +93,9 @@ class SCDataManager {
         guard let user = SCDataManager.shared.user else {
             var sampleBanks: [SCSampleBank] = []
             let samples = newSampleBank()
-            let sampleBankID = getSampleBankID()
+            let sampleBankID = 0
+            let userDefaults = UserDefaults.standard
+            userDefaults.set(0, forKey: "sampleBankID")
             let effectSettings: [[SCEffectControl]] = setupEffectSettings()
             let score: [[Bool]] = SCDataManager.shared.setupScorePage()
             let sequencerSettings = SCSequencerSettings.init(score: score)
@@ -102,10 +104,10 @@ class SCDataManager {
             let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples,effectSettings: effectSettings, sequencerSettings: sequencerSettings)
             sampleBanks.append(sampleBank)
             let soundCollages: [String] = []
-            let newUser = SCUser.init(userName: "Perrin", sampleBanks: sampleBanks, currentSampleBank: sampleBank, soundCollages: soundCollages)
+            let newUser = SCUser.init(userName: "Perrin", sampleBanks: sampleBanks, currentSampleBank: sampleBankID, soundCollages: soundCollages)
             self.user = newUser
             printAudioFilePaths()
-            print("Created new user")
+            print("Created user")
             return
         }
         print("Fetched user data from file with success")
@@ -114,7 +116,7 @@ class SCDataManager {
     
     
     
-    func getSampleBankID() -> Int {
+    func getNewSampleBankID() -> Int {
         
         let userDefaults = UserDefaults.standard
         
@@ -194,7 +196,19 @@ class SCDataManager {
     }
     
     
-    
+    func createNewSampleBank(){
+        
+        let samples = SCDataManager.shared.newSampleBank()
+        let sampleBankID = SCDataManager.shared.getNewSampleBankID()
+        let score: [[Bool]] = SCDataManager.shared.setupScorePage()
+        let sequencerSettings = SCSequencerSettings.init(score: score)
+        let effectSettings: [[SCEffectControl]] = SCDataManager.shared.setupEffectSettings()
+        let uuid = UUID().uuidString
+        let name = "\(uuid)_sampleBank_id_\(sampleBankID)"
+        let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
+        SCDataManager.shared.user?.sampleBanks?.append(sampleBank)
+        SCDataManager.shared.user?.currentSampleBank = SCDataManager.shared.user?.sampleBanks?.last?.id
+    }
     
     
     func newSampleBank() -> [String: AnyObject]{

@@ -21,24 +21,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(true, forKey: "hideAddBtn")
-        // get user and sample banks
-        SCAudioManager.shared.setupAudioManager()
-        SCDataManager.shared.fetchCurrentUserData()
-        SCAudioManager.shared.effectControls = (SCDataManager.shared.user?.currentSampleBank?.effectSettings)!
-        
-        SCAudioManager.shared.audioController = SCGAudioController.init() // new controller class, everything commented with /**/ are experiments in transitioning to handing over control to the new controller
-        SCAudioManager.shared.audioController?.delegate = SCAudioManager.shared as? SCGAudioControllerDelegate
         
         
-
-
         window = UIWindow(frame: UIScreen.main.bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let initialViewController = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController
         window?.rootViewController = initialViewController
         window?.makeKeyAndVisible()
+        
+
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(true, forKey: "hideAddBtn")
+        // get user and sample banks
+        SCAudioManager.shared.setupAudioManager()
+        SCDataManager.shared.fetchCurrentUserData()
+        
+        let u = SCDataManager.shared.user
+        
+        if let currentSBEffectSettings = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!].effectSettings {
+            SCAudioManager.shared.effectControls = currentSBEffectSettings
+        }
+        SCAudioManager.shared.audioController = SCGAudioController.init()
+        SCAudioManager.shared.audioController?.delegate = SCAudioManager.shared as? SCGAudioControllerDelegate
+        
         
         return true
     }

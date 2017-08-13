@@ -12,10 +12,10 @@ class SCUser: Mappable {
     
     var userName: String?
     var sampleBanks: [SCSampleBank]?
-    var currentSampleBank: SCSampleBank?
+    var currentSampleBank: Int?
     var soundCollages: [String]?
     
-    init(userName: String?, sampleBanks: [SCSampleBank]?, currentSampleBank: SCSampleBank?, soundCollages: [String]?) {
+    init(userName: String?, sampleBanks: [SCSampleBank]?, currentSampleBank: Int?, soundCollages: [String]?) {
         self.userName = userName
         self.sampleBanks = sampleBanks
         self.currentSampleBank = currentSampleBank

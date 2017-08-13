@@ -79,7 +79,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         
         var selectedSample: String?
         
-        guard let sampleBank = SCDataManager.shared.user?.currentSampleBank else {
+        guard let sampleBank = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!] else {
             print("Error retrieving sampleBank for playback")
             return nil
         }
@@ -112,16 +112,16 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
 
     
-    func playAudio(senderID: Int){
-        
-        guard let sampleIdx = getIndex(senderID: senderID) else {
-            print("Error getting index.")
-            return
-        }
-        guard let path = getPathForSampleIndex(sampleIndex: sampleIdx) else { return }
-        let url = URL.init(fileURLWithPath: path)
-        self.audioController?.playSample(sampleURL: url, senderID: senderID)
-    }
+//    func playAudio(senderID: Int){
+//        
+//        guard let sampleIdx = getIndex(senderID: senderID) else {
+//            print("Error getting index.")
+//            return
+//        }
+//        guard let path = getPathForSampleIndex(sampleIndex: sampleIdx) else { return }
+//        let url = URL.init(fileURLWithPath: path)
+////        self.audioController?.playSample(sampleURL: url, senderID: senderID)
+//    }
     
     
     
@@ -227,11 +227,10 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         let mixerPanelIdx = Int(values[0])
         let sliderIdx = Int(values[1])
         let selectedSamplePad = Int(values[2])
-        guard let ac = SCAudioManager.shared.audioController else { return }
         
         self.effectControls[mixerPanelIdx][sliderIdx].parameter[selectedSamplePad] = sliderValue
         SCAudioManager.shared.audioController?.effectControls = self.effectControls
-        SCDataManager.shared.user?.currentSampleBank?.effectSettings = self.effectControls
+        SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!].effectSettings = self.effectControls
         
         
 //        switch mixerPanelIdx {
@@ -445,7 +444,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     func setupAudioFileForSample(){
         
-        guard let id = SCDataManager.shared.user?.currentSampleBank?.id else {
+        
+        guard let id = SCDataManager.shared.user?.currentSampleBank else {
             print("current sample bank id not found.")
             return
         }
@@ -454,7 +454,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         let audioType = ".aac"
         let filePath = "sampleBank_\(id)_pad_\(selectedSampleIndex)_id_\(sampleID)\(audioType)"
         let fullURL = getDocumentsDirectory().appendingPathComponent(filePath)
-        SCDataManager.shared.currentSampleTitle = fullURL.absoluteString
+        SCDataManager.shared.currentSamplePath = fullURL.absoluteString
         self.replaceableFilePath = "sampleBank_\(id)_pad_\(selectedSampleIndex)_id_\(sampleID-1)\(audioType)"
         self.audioFilePath = fullURL
         
@@ -521,16 +521,19 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         self.postRecordingFinishedNotification()
         
         let urlPart = url.lastPathComponent
-        guard let sampleBank = SCDataManager.shared.user?.currentSampleBank else { return }
-        
-        for key in sampleBank.samples.keys{
+       
+        guard let currentSB = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!]  else {
+            print("Error, no current sample bank.")
+            return
+        }
+        for key in currentSB.samples.keys{
             if key == selectedSampleIndex.description {
-                sampleBank.samples[key] = urlPart as AnyObject?
+                currentSB.samples[key] = urlPart as AnyObject?
                 print("Audio file recorded and saved at \(urlPart.description)")
                 break 
             }
         }
-        SCDataManager.shared.user?.currentSampleBank? = sampleBank
+        SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!] = currentSB
         SCAudioManager.shared.audioController?.loadSamples()
         SCAudioManager.shared.audioController?.getAudioFilesForURL()
         isRecordingModeEnabled = false

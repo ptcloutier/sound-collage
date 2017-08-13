@@ -33,7 +33,6 @@ class SCSamplerViewController: UIViewController  {
         vintageColors = SCColor.getVintageColors()
         iceCreamColors = SCColor.getPsychedelicIceCreamShopColors()
         
-        
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: Notification.Name.init("recordingDidFinish"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.toggleRecordingMode), name: Notification.Name.init("recordBtnDidPress"), object: nil)
         
@@ -59,7 +58,9 @@ class SCSamplerViewController: UIViewController  {
     }
     
     
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     func calibrateSize(samplerCVWidth: CGFloat)-> Bool{
         var result: Bool = false
@@ -119,7 +120,7 @@ class SCSamplerViewController: UIViewController  {
     
     func toggleRecordingMode() {
         
-
+        print("go on")
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
             SCAudioManager.shared.isRecordingModeEnabled = false
@@ -172,8 +173,8 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let numberOfItems = SCDataManager.shared.user?.currentSampleBank?.samples.count else {
-            print("No samples found.")
+        guard let numberOfItems = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!].samples.count  else {
+            print("Error, no current sample bank.")
             return 0
         }
         return numberOfItems
@@ -295,7 +296,7 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
     
     
     
-    func tap(gestureRecognizer: UIGestureRecognizer) {
+    func tap(gestureRecognizer: UITapGestureRecognizer) {
         
         if SCAudioManager.shared.isRecording == true {
             print("Recording in progress")

@@ -128,7 +128,8 @@ class SCContainerViewController: UIViewController {
                 recordBtn.alpha = 1
             }, completion: nil)
         case false:
-            SCAudioManager.shared.audioController?.isRecordingSelected = true 
+            SCAudioManager.shared.audioController?.engine?.pause()
+            SCAudioManager.shared.audioController?.isRecordingSelected = true
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 recordBtn.alpha = 1
@@ -141,6 +142,9 @@ class SCContainerViewController: UIViewController {
     
     func bankBtnDidPress(){
         
+        SCAudioManager.shared.audioController?.engine?.pause()
+        SCAudioManager.shared.audioController?.engine?.reset()
+
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController else {
             print("SampleBank vc not found.")
@@ -181,9 +185,9 @@ class SCContainerViewController: UIViewController {
     
     
     func postRecordBtnDidPressNotification(){
-        
+        print("sup")
         NotificationCenter.default.post(name: Notification.Name.init("recordBtnDidPress"), object: nil)
-        
+        NotificationCenter.default.post(name: Notification.Name.init("ScrollToSamplerNotification"), object: nil)
     }
     
 

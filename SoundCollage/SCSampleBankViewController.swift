@@ -200,16 +200,7 @@ class SCSampleBankViewController: UIViewController {
     
     private func newSampler(){
         
-        let samples = SCDataManager.shared.newSampleBank()
-        let sampleBankID = SCDataManager.shared.getSampleBankID()
-        let score: [[Bool]] = SCDataManager.shared.setupScorePage()
-        let sequencerSettings = SCSequencerSettings.init(score: score)
-        let effectSettings: [[SCEffectControl]] = SCDataManager.shared.setupEffectSettings()
-        let uuid = UUID().uuidString
-        let name = "\(uuid)_sampleBank_id_\(sampleBankID)"
-        let sampleBank = SCSampleBank.init(name: nil, id: sampleBankID, samples: samples, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
-        SCDataManager.shared.user?.sampleBanks?.append(sampleBank)
-        SCDataManager.shared.user?.currentSampleBank = SCDataManager.shared.user?.sampleBanks?.last
+        SCDataManager.shared.createNewSampleBank()
         presentSampler()
     }
     
@@ -217,6 +208,8 @@ class SCSampleBankViewController: UIViewController {
     
     
     func presentSampler(){
+        SCAudioManager.shared.audioController?.getAudioFilesForURL()
+        SCAudioManager.shared.audioController?.effectControls = SCAudioManager.shared.effectControls
         let vc: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
         SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
     }
@@ -268,16 +261,17 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        guard let sampleBanks = SCDataManager.shared.user?.sampleBanks else {
-            print("Error: could not load sampler, sample bank not found")
-            return
-        }
+        SCDataManager.shared.user?.currentSampleBank = indexPath.row
         
-        SCDataManager.shared.user?.currentSampleBank = sampleBanks[indexPath.row]
-        guard let effectSettings = SCDataManager.shared.user?.currentSampleBank?.effectSettings else {
+        guard let current = SCDataManager.shared.user?.currentSampleBank else { return }
+
+        guard let currentSB = SCDataManager.shared.user?.sampleBanks?[current]  else {
+            print("Error, no current sample bank.")
             return
         }
-        SCAudioManager.shared.effectControls = effectSettings
+        print("Current sample bank \(current)")
+        
+        SCAudioManager.shared.effectControls =  currentSB.effectSettings
         self.presentSampler()
     }
 }

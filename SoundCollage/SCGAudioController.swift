@@ -8,7 +8,7 @@
  
  Abstract:
  SCGAudioController is the main controller class that creates the following objects:
- AVAudioEngine               *_engine;
+ AVAudioEngine               *engine;
  AVAudioUnitSampler          *_sampler;
  AVAudioUnitDistortion       *_distortion;
  AVAudioUnitReverb           *_reverb;
@@ -26,13 +26,6 @@ import AVFoundation
 // Other nodes/objects can listen to this to determine when the user finishes a recording
 
 
-struct SCConstants{
-    
-    static let RecordingCompletedNotification: NSNotification.Name = Notification.Name(rawValue: "RecordingCompletedNotification")
-    static let ShouldEnginePauseNotification: NSNotification.Name = Notification.Name(rawValue: "ShouldEnginePauseNotification")
-}
-
-
 
 protocol SCGAudioControllerDelegate: class {
     
@@ -45,7 +38,8 @@ protocol SCGAudioControllerDelegate: class {
 
 class SCGAudioController {
     
-    var usedPlayers:                    Int = 0
+    var activePlayers:                  Int = 0
+    let maxPlayers:                     Int = 16
     var plays:                          Int = 0
     var finishedNodes:                  [AVAudioNode] = []
     var nodeChain:                      [AnyObject] = []
@@ -82,11 +76,6 @@ class SCGAudioController {
     weak var delegate:                  SCGAudioControllerDelegate?
     
     
-    
-    // private class extensions
-    
-    // AVAudioEngine and AVAudioNodes
-    
     // the sequencer
     var sequencer:                      AVAudioSequencer?
     var sequencerTrackLengthSeconds:    Double?
@@ -114,20 +103,16 @@ class SCGAudioController {
         
         effectControls = SCAudioManager.shared.effectControls
         initAVAudioSession()
+        loadSamples()
         getAudioFilesForURL()
         engine = AVAudioEngine.init()
         
         isRecording = false
         isRecordingSelected = false
         
-
-
-//        initAndCreateNodes()
-//        setNodeDefaults()
-        
         print("\(String(describing: engine?.description))")
         
-        NotificationCenter.default.addObserver(forName: SCConstants.ShouldEnginePauseNotification,
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: "ShouldEnginePauseNotification"),
                                                object: nil,
                                                queue: OperationQueue.main,
                                                using: {
@@ -150,93 +135,15 @@ class SCGAudioController {
         })
     }
     
-    
-    //MARK: AVAudioEngine Setup
-    private func initAndCreateNodes(){
-//        
-////        engine = nil
-////        player = nil
-////        reverb = nil
-////        delay = nil
-////        pitchShift = nil
-////        timeStretch = nil
-////        distortion = nil
-//        
-//        
-//        engine = AVAudioEngine.init()
-//        let sampler = AVAudioUnitSampler.init()
-//        let player = AVAudioPlayerNode.init()
-//        let reverb = AVAudioUnitReverb.init()
-//        
-//        let delay = AVAudioUnitDelay.init()
-//        let pitchShift = AVAudioUnitTimePitch.init()
-//        let timeStretch = AVAudioUnitVarispeed.init()
-//        let distortion = AVAudioUnitDistortion.init()
-//        
-//       
-//        isRecording = false
-//        isRecordingSelected = false
-//    
-//        
-//        engine?.attach(sampler)
-//        engine?.attach(player)
-//        engine?.attach(reverb)
-//        engine?.attach(delay)
-//        engine?.attach(pitchShift)
-//        engine?.attach(timeStretch)
-//        engine?.attach(distortion)
-//        
-//        let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)//playerLoopBuffer?.format
-////        let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
-//        let mixer = (engine?.mainMixerNode)!
-//        
-//        engine?.connect(player, to: reverb, format: playerFormat)
-//        engine?.connect(reverb, to: distortion, format: playerFormat)
-//        engine?.connect(distortion, to: mixer, format: playerFormat)
-//      
-//        let connections: [AVAudioConnectionPoint] = [
-//            AVAudioConnectionPoint.init(node: mixer, bus: 0)
-//            AVAudioConnectionPoint.init(node: reverb, bus: <#T##AVAudioNodeBus#>)
-//            AVAudioConnectionPoint.init(node: <#T##AVAudioNode#>, bus: <#T##AVAudioNodeBus#>)
-//
-//            ]
-//        engine?.connect(sampler, to: connections, format: playerFormat)
-//    }
-    }
-    
-    
-    private func setNodeDefaults(){
-        
-  
-        // settings for effects units
-        // settings for effects units
-        reverb?.wetDryMix = 0.0
-        reverb?.loadFactoryPreset(AVAudioUnitReverbPreset.plate)
-        
-        distortion?.loadFactoryPreset(AVAudioUnitDistortionPreset.drumsBitBrush)
-        distortion?.wetDryMix = 100.0
-        
-        samplerEffectVolume = 0.0
 
-        loadSamples()
-        /*  ------------ Original Method ---------------
-         
-         guard let bankURL: URL = URL.init(string: Bundle.main.path(forResource: "gs_instruments", ofType: "dls")!) else {
-         print("could not load sound files")
-         return
-         }
-         
-         do {
-         try self.sampler?.loadSoundBankInstrument(at: bankURL,
-         program: 0,
-         bankMSB: 0x79,
-         bankLSB: 0)
-         } catch {
-         print("error loading sound bank instrument")
-         } */
-    
-   
+    private func createEngine(){
+       
+        engine = nil
+        engine = AVAudioEngine.init()
+        print("\(String(describing: engine?.description))")
+        
     }
+    
     private func startEngine(){
         
         // start the engine
@@ -268,6 +175,7 @@ class SCGAudioController {
             print("could not start audio engine")
         }
     }
+    
     
     
     
@@ -465,7 +373,7 @@ class SCGAudioController {
         let reverb = AVAudioUnitReverb()
         let reverbParams = effectControls[0]
         
-        if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*100.0)) {
+        if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*50.0)) {
             reverb.loadFactoryPreset(.plate) // there are thirteen possible presets
             reverb.wetDryMix = reverbValue
         }
@@ -625,103 +533,51 @@ class SCGAudioController {
     
     func togglePlayer(index: Int){
         
-//        initAndCreateNodes()
-//        setNodeDefaults()
-        
-        // all this code is in crucial for playback and setup of audio in same scope 
-        
-        
-            //        engine = nil
-        //        player = nil
-        //        reverb = nil
-        //        delay = nil
-        //        pitchShift = nil
-        //        timeStretch = nil
-        //        distortion = nil
-        
-        
+
+        if activePlayers>=maxPlayers {
+            print("Error, too many active players")
+            return
+        }
         let sampler = AVAudioUnitSampler.init()
         let player = AVAudioPlayerNode.init()
         let reverb = setupReverb(sampleIndex: index)
-        
-       
         let delay = setupDelay(sampleIndex: index)
-        
         let pitchShift = setupPitchShift(sampleIndex: index)
-        
         let timeStretch = setupTimeStretch(sampleIndex: index)
-        
         let distortion = setupDistortion(sampleIndex: index)
+
+        engine?.attach(sampler)
+        engine?.attach(player)
+        engine?.attach(reverb)
+        engine?.attach(delay)
+        engine?.attach(pitchShift)
+        engine?.attach(timeStretch)
+        engine?.attach(distortion)
         
-        
-        //            isRecording = false
-//            isRecordingSelected = false
-//            
-//            
-            engine?.attach(sampler)
-            engine?.attach(player)
-            engine?.attach(reverb)
-            engine?.attach(delay)
-            engine?.attach(pitchShift)
-            engine?.attach(timeStretch)
-            engine?.attach(distortion)
-            
         let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)//playerLoopBuffer?.format
-        //                    let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
         let mixer = (engine?.mainMixerNode)!
-        
+
         engine?.connect(player, to: pitchShift, format: playerFormat)
         engine?.connect(pitchShift, to: timeStretch, format: playerFormat)
         engine?.connect(timeStretch, to: distortion, format: playerFormat)
         engine?.connect(distortion, to: delay, format: playerFormat)
         engine?.connect(delay, to: reverb, format: playerFormat)
-        
         engine?.connect(reverb, to: mixer, format: playerFormat)
-        
         engine?.connect(sampler, to: mixer, format: playerFormat)
         
         var nodes = [player, sampler , reverb, delay, pitchShift, timeStretch, distortion]
         
-        
-        
-        
-        
-        samplerEffectVolume = 0.0
         self.sampler = sampler
+        self.player = player
         
         if let urls: [URL] = Bundle.main.urls(forResourcesWithExtension: "aac", subdirectory: "Documents") {
             do {
-                try sampler.loadAudioFiles(at: urls)
+                try self.sampler?.loadAudioFiles(at: urls)
             } catch {
                 print("No sample\n")
             }
         }
-        
-        /*  ------------ Original Method ---------------
-         
-             guard let bankURL: URL = URL.init(string: Bundle.main.path(forResource: "gs_instruments", ofType: "dls")!) else {
-             print("could not load sound files")
-             return
-             }
-             
-             do {
-             try self.sampler?.loadSoundBankInstrument(at: bankURL,
-             program: 0,
-             bankMSB: 0x79,
-             bankLSB: 0)
-             } catch {
-             print("error loading sound bank instrument")
-             } */
-            
-            
-        
-
-//        switch self.playerIsPlaying {
-//        case true:
-//            player.stop()
-//            self.playerIsPlaying = false
-//            NotificationCenter.default.post(name: SCConstants.ShouldEnginePauseNotification, object: nil)
-//        case false:
+ 
             startEngine()
         
         // schedule the appropriate content
@@ -730,24 +586,27 @@ class SCGAudioController {
             print("No sample at selected sample index!")
             return
         }
-        //        switch isRecordingSelected {
-        //        case true:
+        plays = plays+1
+        activePlayers = activePlayers+1
+        print("total plays : \(plays), active players: \(activePlayers)")
+      
         player.scheduleFile(sample, at: nil, completionHandler: {
             
             [weak self] in
             guard let strongSelf = self else {
                 return
             }
+            strongSelf.playerIsPlaying = true
             //  calculate audio tail based on reverb and delay parameters
             var durationInt = Int(round(Double(sample.length)/44100))
             if durationInt == 0 {
                 durationInt = 1
             }
             let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[SCAudioManager.shared.selectedSampleIndex]
-            let reverbTime = round(Float(reverbParameter * 10.0))
+            let reverbTime = round(Float(reverbParameter * 5.0))
             durationInt += Int(reverbTime)
             let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[SCAudioManager.shared.selectedSampleIndex]
-            let delayTime = round(Float(delayParams * 10.0))
+            let delayTime = round(Float(delayParams * 7.0))
             durationInt += Int(delayTime)
             let duration = DispatchTimeInterval.seconds(durationInt)
             let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
@@ -758,66 +617,49 @@ class SCGAudioController {
                     
                 }
                 nodes.removeAll()
-            }})
-        //            self.playerIsPlaying = true
-        //        case false:
-        //            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat,
-        //                                                     frameCapacity: AVAudioFrameCount(sample.length))
-        //                        do {
-        //                            try sample.read(into: playerLoopBuffer!)
-        //                        } catch let error {
-        //                            print("Error reading buffer from file\(error.localizedDescription)")
-        //                        }
-        //
-        //            player?.scheduleBuffer(playerLoopBuffer!, at: nil, options: .interrupts, completionHandler: nil)
-        //        }
+                strongSelf.playerIsPlaying = false 
+                
+                
+                
+                strongSelf.activePlayers = strongSelf.activePlayers-1
+                print("total plays : \(strongSelf.plays), active players: \(strongSelf.activePlayers)")
 
+            }})
+        
         player.play()
     }
     
     
     
-    func toggleBuffer(recordBuffer: Bool) {
-        
-        isRecordingSelected = recordBuffer
-        
-        switch self.playerIsPlaying {
-        case true:
-//            player?.stop()
-            startEngine() // start the engine if it's not already started
-            schedulePlayerContent()
-            player?.play()
-        case false:
-            schedulePlayerContent()
-        }
-    }
     
-    
-    
-    private func schedulePlayerContent(){
-        
-        // schedule the appropriate content
-        let key: String = "\(SCAudioManager.shared.selectedSampleIndex)"
-        guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {  //createAudioFileForPlayback()!
-            print("No sample at selected sample index!")
-            return
-        }
-//        switch isRecordingSelected {
+//    func toggleBuffer(recordBuffer: Bool) {
+//        
+//        isRecordingSelected = recordBuffer
+//        
+//        switch self.playerIsPlaying {
 //        case true:
-            player?.scheduleFile(sample, at: nil, completionHandler: nil)
-//            self.playerIsPlaying = true
+////            player?.stop()
+//            startEngine() // start the engine if it's not already started
+//            schedulePlayerContent()
+//            player?.play()
 //        case false:
-//            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat,
-//                                                     frameCapacity: AVAudioFrameCount(sample.length))
-//                        do {
-//                            try sample.read(into: playerLoopBuffer!)
-//                        } catch let error {
-//                            print("Error reading buffer from file\(error.localizedDescription)")
-//                        }
-//
-//            player?.scheduleBuffer(playerLoopBuffer!, at: nil, options: .interrupts, completionHandler: nil)
+//            schedulePlayerContent()
 //        }
-    }
+//    }
+//    
+    
+//    
+//    private func schedulePlayerContent(){
+//        
+//        // schedule the appropriate content
+//        let key: String = "\(SCAudioManager.shared.selectedSampleIndex)"
+//        guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {  //createAudioFileForPlayback()!
+//            print("No sample at selected sample index!")
+//            return
+//        }
+//        
+//        player?.scheduleFile(sample, at: nil, completionHandler: nil)
+//    }
 
     
   
@@ -854,18 +696,17 @@ class SCGAudioController {
     
     func getAudioFilesForURL(){
         
-        guard let samples = SCDataManager.shared.user?.currentSampleBank?.samples else { return }
+        guard let currentSB = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!]  else {
+            print("Error, no current sample bank.")
+            return
+        }
         
-        audioFiles = samples
+        audioFiles = currentSB.samples
         
         for (key, value) in audioFiles {
-//            print("AudioFiles key : \(key), val: \(String(describing: value))")
             
             let path = SCAudioManager.shared.getPathForSampleIndex(sampleIndex: Int(key)!)
             if let audioFile: AVAudioFile = getSample(samplePath: path!) {
-                
-                
-//                print("Audiofile: \(String(describing: audioFile))")
                 audioFiles.updateValue(audioFile, forKey: key)
                 print("AudioFiles key : \(key), val : \(String(describing: value))")
             }
@@ -876,136 +717,10 @@ class SCGAudioController {
     
     
     
-    func playSample(sampleURL: URL, senderID: Int) {
-        
-        
-        guard let sampleIdx = SCAudioManager.shared.getIndex(senderID: senderID) else { return }
-        //        let effectControls = SCAudioManager.shared.effectControls
-        do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-        } catch let error {
-            print("Error setting avaudiosession category, \(error.localizedDescription)")
-        }
-//        let key = "\(sampleIdx)"
-//        guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {
-//            print("No audiofile")
-//            return
-//        }
 
-//            playerLoopBuffer = AVAudioPCMBuffer.init(pcmFormat: sample.processingFormat, frameCapacity: AVAudioFrameCount(sample.length))
-//            do {
-//                try sample.read(into: playerLoopBuffer!)
-//            } catch let error {
-//                print("Error reading buffer from file\(error.localizedDescription)")
-//            }
-/*
-         
-         let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)//playerLoopBuffer?.format
-         let stereoFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 2)
-         
-         
- 
-            // establish a connection between nodes
-            // connect the player to the reverb
-            // use the buffer format for the connection format as they must match
-            engine?.connect(player, to: reverb!, format: playerFormat)
-
-           // connect the reverb effect to mixer input bus 0
-           // use the buffer format for the connection format as they must match
-            engine?.connect(reverb!, to: (engine?.mainMixerNode)!, fromBus: 0,  toBus: 0, format: playerFormat)
-           
-//            // connect the distortion effect to mixer input bus 2
-           
-            engine?.connect(distortion!, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 2,  format:stereoFormat)
-            
-         
-            // fan out the sampler to mixer input 1 and distortion effect
-            
-            let destinationNodes = [
-                AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1),
-                AVAudioConnectionPoint.init(node: distortion!, bus: 0)
-            ]
-            engine?.connect(sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
-
-            engine?.connect(player, to: pitchShift, format: playerFormat)
-            engine?.connect(pitchShift, to: timeStretch, format: playerFormat)
-            engine?.connect(timeStretch, to: distortion, format: playerFormat)
-            engine?.connect(distortion, to: delay, format: playerFormat)
-            engine?.connect(delay, to: reverb, format: playerFormat)
-            engine?.connect(reverb, to: mixer!, format: playerFormat)
-            engine?.connect(mixer!, to: (engine?.mainMixerNode)!, format: playerFormat)
-//            engine?.connect(player, to: reverb, format: playerFormat)
-//            engine?.connect(reverb, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 0, format: playerFormat)
-//            engine?.connect(distortion, to: (engine?.mainMixerNode)!, fromBus: 0, toBus: 2, format: stereoFormat)
-//            let destinationNodes = [
-//            AVAudioConnectionPoint.init(node: (engine?.mainMixerNode)!, bus: 1),
-//            AVAudioConnectionPoint.init(node: distortion, bus: 0)
-//            ]
-//            engine?.connect(sampler!, to: destinationNodes, fromBus: 0, format: stereoFormat)
-//
-            let nodes = [player, reverb, delay, distortion, timeStretch, pitchShift]
-            playIt(player: player, sample: sample, audioNodes: nodes)
-//        } catch let error {
-//            print("Error, couldn't create AVAudioFile, \(error.localizedDescription)")
-//        }
-    }
-    
-    */
-    }
     
     
-    func playIt(player: SCAudioPlayerNode, sample: AVAudioFile, audioNodes: [AVAudioNode]){
-        
-        var nodes = audioNodes
-        player.isActive = true
-        plays = plays+1
-        usedPlayers = usedPlayers+1
-        
-        print("plays : \(plays)")
-        var durationInt = Int(round(Double(sample.length)/44100))
-        if durationInt == 0 {
-            durationInt = 1
-        }
-        let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[SCAudioManager.shared.selectedSampleIndex]
-        let reverbTime = round(Float(reverbParameter * 10.0))
-        durationInt += Int(reverbTime)
-        let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[SCAudioManager.shared.selectedSampleIndex]
-        let delayTime = round(Float(delayParams * 10.0))
-        durationInt += Int(delayTime)
-        let duration = DispatchTimeInterval.seconds(durationInt)
-        
-        player.scheduleFile(sample, at: nil, completionHandler:{
-            
-            [weak self] in
-            guard let strongSelf = self else {
-                return
-            }
-            //  calculate audio tail based on reverb and delay parameters
-            
-                let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-                delayQueue.asyncAfter(deadline: .now()+duration){
-                    
-                    strongSelf.usedPlayers = strongSelf.usedPlayers-1
-                    for node in nodes {
-                        strongSelf.engine?.disconnectNodeInput(node)
-                        strongSelf.engine?.detach(node)
-                        
-                    }
-                    nodes.removeAll()
-                    print("used players: \(strongSelf.usedPlayers)")
-                }
-            })
-        engine?.prepare()
-        do {
-            try engine?.start()
-        } catch _ {
-            print("Play session Error")
-        }
-        player.play()
-        
-    }
-
-
+   
     
     //MARK: Recording Methods
     
@@ -1063,20 +778,6 @@ class SCGAudioController {
                 (buffer : AVAudioPCMBuffer!, when : AVAudioTime!) in
                 print("Got buffer of length: \(buffer.frameLength) at time: \(when)")
                 
-//                let numChans = Int(pcmBuffer.format.channelCount)
-//                let flength = Int(pcmBuffer.frameLength)
-//                
-//                if let chans = pcmBuffer.floatChannelData?.pointee {
-//                    for a in 0..<numChans {
-//                        let samples = chans.advanced(by: a)
-//                        
-//                        for b in 0..<flength {
-//                            let sampleP = samples.advanced(by: b)
-//                            let sample = sampleP.pointee
-//                            print("sample: \(sample)")
-//                        }
-//                    }
-//                }
                 do {
                     try self.mixerOutputFile.write(from: buffer)
                 } catch {
@@ -1136,19 +837,6 @@ class SCGAudioController {
     
     
     
-//    func getRecordingIsAvailable() -> Bool {
-//        
-//        var result: Bool
-//        
-//        if mixerOutputFile != nil {
-//            result = true
-//        } else {
-//            result = false
-//        }
-//        return result
-//    }
-    
-    
     
     //MARK: AVAudioSession
     
@@ -1194,21 +882,26 @@ class SCGAudioController {
     }
     
     
-    @objc func handleInterruption(notification: NSNotification) {// TODO: not handling this
-     /*
-        let interruptionDict = notification.userInfo
-        let interruptionType = interruptionDict?[AVAudioSessionInterruptionTypeKey] as! AVAudioSessionInterruptionType
+    
+    
+    
+    @objc func handleInterruption(notification: NSNotification) {
+     
+        guard let userInfo = notification.userInfo,
+            let interruptionTypeRawValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let interruptionType = AVAudioSessionInterruptionType(rawValue: interruptionTypeRawValue) else {
+                return
+        }
         
-        switch interruptionType {
-            
-        case .began:
+        if interruptionType == .began {
             print("Session interrupted > --- Begin Interruption ---\n")
             isSessionInterrupted = true
-//            player?.stop()
+            player?.stop()
             sequencer?.stop()
             stopRecordingMixerOutput()
             self.delegate?.engineWasInterrupted()
-        case .ended:
+    }
+        if interruptionType == .ended {
             print("Session interrupted > --- End Interruption ---\n")
             // make sure to activate the session
             do {
@@ -1216,64 +909,62 @@ class SCGAudioController {
                 isSessionInterrupted = false
                 if isConfigChangePending == true {
                     // there is a pending config changed notification
-                    print("Responding to earlier engine config change notification. Re-wiring connections")
-//                    makeEngineConnections()
                     isConfigChangePending = false
+                    startEngine()
                 }
             } catch let error {
                 print("AVAudioSession set active failed with error, \(error.localizedDescription)")
             }
-        }*/
+        }
     }
     
     
     
     @objc func handleRouteChange(notification: NSNotification) {
         
-       /*
-        guard let userInfo = notification.userInfo else {
-            print("No notification userInfo.")
-            return
+        guard let userInfo = notification.userInfo,
+            let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
+            let reason = AVAudioSessionRouteChangeReason(rawValue:reasonValue) else {
+                return
         }
-        let routeChangedReason = userInfo[AVAudioSessionRouteChangeReasonKey] as! Int
-        if routeChangedReason == 1 || routeChangedReason == 2 {
-            SCAudioManager.shared.observeAudioIO()
-        }
-        print("reason : \(routeChangedReason)")
+
+        print("Route change:")
         
-//        let reasonDict = notification.userInfo
-//        let reason = reasonDict?[AVAudioSessionRouteChangeReasonKey] as? Int
-//        print("Route change:")
-//        switch reason {
-//            
-//        case AVAudioSessionRouteChangeNewDeviceAvailable:
-//            print("     NewDeviceAvailable")
-//            break
-//        case .oldDeviceUnavailable:
-//            print("     OldDeviceUnavailable")
-//            break
-//        case .categoryChange:
-//            print("     CategoryChange")
-//            print("     New Category: \(AVAudioSession.sharedInstance().category)")
-//            break
-//        case .override:
-//            print("     Override")
-//            break
-//        case .wakeFromSleep:
-//            print("     WakeFromSleep")
-//            break
-//        case .noSuitableRouteForCategory:
-//            print("     NoSuitableRouteForCategory")
-//            break
-//        default:
-//            print("     ReasonUnknown")
-//        }*/
+        switch reason {
+            
+        case .unknown:
+            print("     Unknown")
+            break
+        case .newDeviceAvailable:
+            print("     NewDeviceAvailable")
+            SCAudioManager.shared.observeAudioIO()
+            break
+        case .oldDeviceUnavailable:
+            print("     OldDeviceUnavailable")
+            SCAudioManager.shared.observeAudioIO()
+            break
+        case .categoryChange:
+            print("     CategoryChange")
+            print("     New Category: \(AVAudioSession.sharedInstance().category)")
+            break
+        case .override:
+            print("     Override")
+            break
+        case .wakeFromSleep:
+            print("     WakeFromSleep")
+            break
+        case .noSuitableRouteForCategory:
+            print("     NoSuitableRouteForCategory")
+            break
+        default:
+            print("     ReasonUnknown")
+        }
     }
     
     
     
     @objc func handleMediaServicesReset(notification: NSNotification) {
-    /*    // if we've received this notification, the media server has been reset
+        // if we've received this notification, the media server has been reset
         // re-wire all the connections and start the engine
         print("Media services have been reset!")
         print("Re-wiring connections")
@@ -1298,14 +989,11 @@ class SCGAudioController {
         }
         
         // rebuild the world
-//        initAndCreateNodes()
-//        createEngineAndAttachNodes()
-//        makeEngineConnections()
-//        createAndSetupSequencer() // recreate the sequencer with the new AVAudioEngine
-//        setNodeDefaults()
-//        
-        // notify the delegate
-        self.delegate?.engineConfigurationHasChanged() */
+        createEngine()
+//        createAndSetupSequencer()
+        
+//          // notify the delegate
+        self.delegate?.engineConfigurationHasChanged()
     }
   
 }

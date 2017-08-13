@@ -28,7 +28,7 @@ class SCFirstContainerCell: UICollectionViewCell {
     func setupCollectionView(){
         
         
-        NotificationCenter.default.addObserver(self, selector: #selector(SCFirstContainerCell.scrollToSampler), name: NSNotification.Name(rawValue: "recordBtnDidPress"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SCFirstContainerCell.scrollToSampler), name: NSNotification.Name(rawValue: "ScrollToSamplerNotification"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SCFirstContainerCell.scrollToSequencer), name: NSNotification.Name(rawValue: "sequencerPlaybackDidPress"), object: nil)
         
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)

@@ -36,6 +36,7 @@
 		A74B368E1F3105D7000E8DEA /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = A74B368D1F3105D7000E8DEA /* play.png */; };
 		A75D4EBC1F25BFF300C304D8 /* SCSequencerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */; };
 		A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A886A1EB0445200FEDED0 /* SCDataManager.swift */; };
+		A7743EAA1F40C14600BD5961 /* SCConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7743EA91F40C14600BD5961 /* SCConstants.swift */; };
 		A78250E31EE601BA00350768 /* SCEffectControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78250E21EE601BA00350768 /* SCEffectControl.swift */; };
 		A78A9BD01EABA919007117DD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78A9BCF1EABA919007117DD /* QuartzCore.framework */; };
 		A78C12951F2DAAE500682750 /* SCCircularView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78C12941F2DAAE500682750 /* SCCircularView.swift */; };
@@ -151,6 +152,7 @@
 		A74B368D1F3105D7000E8DEA /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerSettings.swift; sourceTree = "<group>"; };
 		A76A886A1EB0445200FEDED0 /* SCDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCDataManager.swift; sourceTree = "<group>"; };
+		A7743EA91F40C14600BD5961 /* SCConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCConstants.swift; sourceTree = "<group>"; };
 		A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SoundCollage-Bridging-Header.h"; sourceTree = "<group>"; };
 		A78250E21EE601BA00350768 /* SCEffectControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCEffectControl.swift; sourceTree = "<group>"; };
 		A78A9BCF1EABA919007117DD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -318,6 +320,7 @@
 		A7264E791EAE289E00664EDE /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A7743EA91F40C14600BD5961 /* SCConstants.swift */,
 				A7264E801EAEECD700664EDE /* SCUser.swift */,
 				A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */,
 				A78250E21EE601BA00350768 /* SCEffectControl.swift */,
@@ -723,6 +726,7 @@
 				A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */,
 				A713F50C1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift in Sources */,
 				A7264E7D1EAE619800664EDE /* SCAnimator.swift in Sources */,
+				A7743EAA1F40C14600BD5961 /* SCConstants.swift in Sources */,
 				A7BD6AB41F140D85000CDF9A /* SCScoreCell.swift in Sources */,
 				A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */,
 				A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */,
