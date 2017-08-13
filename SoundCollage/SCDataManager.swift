@@ -28,10 +28,9 @@ class SCDataManager {
                 print("Read filepath with success ")
             }
             do {
-                // mappedIfSafe might be better 
-                let urlContent = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: [])
-                let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options: []) as? [String: Any]
-                guard let scUser = Mapper<SCUser>().map(JSON: jsonResult!) else {
+//                let urlContent = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: [])
+                let jsonResult = try String(contentsOf: URL(fileURLWithPath: filePath.path), encoding: .utf8)
+                guard let scUser = Mapper<SCUser>().map(JSONString: jsonResult) else {
                     print("Error, unable to instantiate user from json.")
                     return
                 }
@@ -39,11 +38,12 @@ class SCDataManager {
                 printAudioFilePaths()
             } catch let error {
                 print("Error, \(error.localizedDescription)")
-            }
+             }
         } else {
             print("Invalid filename/path or first run, no file to read until we create one.")
         }
     }
+    
     
     
     
