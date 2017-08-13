@@ -299,13 +299,52 @@ class SCMixerPanelCell: UICollectionViewCell {
         addSliderTarget(slider: slider)
         slider.minimumTrackTintColor = color//SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
         slider.maximumTrackTintColor = color
-        slider.thumbTintColor = color
+//        slider.thumbTintColor = color
 //        let image = UIImage.imageWithImage(image: UIImage.init(named: "rectWhite")!, newSize: CGSize(width: 40.0, height: 70.0))
 //        slider.setThumbImage(image, for: .normal)
+        let img = self.generateHandleImage(with: color)
+        let circ = circularImageWithImage(inputImage: img, borderColor: color, borderWidth: 1.0)
+        slider.setThumbImage(circ, for: .normal)
+
         self.contentView.addSubview(slider)
     }
     
-
+    
+    
+    private func generateHandleImage(with color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: 44.0, height: 44.0)
+        
+        return UIGraphicsImageRenderer(size: rect.size).image { (imageContext) in
+            imageContext.cgContext.setFillColor(color.cgColor)
+            imageContext.cgContext.fill(rect.insetBy(dx: 10, dy: 10))
+        }
+    }
+    
+    
+    func circularImageWithImage(inputImage: UIImage, borderColor: UIColor, borderWidth: CGFloat) -> UIImage {
+        
+        let rect : CGRect = CGRect(origin: .zero, size: inputImage.size)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, inputImage.scale)
+        
+        // Fill the entire circle with the border color.
+        borderColor.setFill()
+        UIBezierPath.init(ovalIn: rect).fill()
+        //    [[UIBezierPath bezierPathWithOvalInRect:rect] fill];
+        
+        // Clip to the interior of the circle (inside the border).
+        let interiorBox: CGRect = rect.insetBy(dx: borderWidth, dy: borderWidth);
+        let interior: UIBezierPath = UIBezierPath.init(ovalIn: interiorBox)
+        interior.addClip()
+        
+        inputImage.draw(in: rect)
+        
+        
+        
+        let outputImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        return outputImage
+    }
 
     func addSliderTarget(slider: SCSlider){
         slider.addTarget(self, action: #selector(SCMixerPanelCell.sliderChanged(sender:)), for: .valueChanged)
