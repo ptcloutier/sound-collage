@@ -28,14 +28,20 @@ class SCDataManager {
                 print("Read filepath with success ")
             }
             do {
-//                let urlContent = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: [])
-                let jsonResult = try String(contentsOf: URL(fileURLWithPath: filePath.path), encoding: .utf8)
-                guard let scUser = Mapper<SCUser>().map(JSONString: jsonResult) else {
-                    print("Error, unable to instantiate user from json.")
-                    return
-                }
-                self.user = scUser
-                printAudioFilePaths()
+                let data = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: .alwaysMapped)
+                let jsonString = String(data: data, encoding: .utf8)
+                print(jsonString!)
+                
+                
+                
+                guard let scUser = SCUser(JSONString: jsonString!) else {//Mapper<SCUser>().map(JSONObject: jsonResult) else {
+                        print("Error, unable to instantiate user from json.")
+                        return
+                    }
+                    self.user = scUser
+                    printAudioFilePaths()
+                
+                
             } catch let error {
                 print("Error, \(error.localizedDescription)")
              }
@@ -196,6 +202,8 @@ class SCDataManager {
     }
     
     
+    
+    
     func createNewSampleBank(){
         
         let samples = SCDataManager.shared.newSampleBank()
@@ -209,6 +217,8 @@ class SCDataManager {
         SCDataManager.shared.user?.sampleBanks?.append(sampleBank)
         SCDataManager.shared.user?.currentSampleBank = SCDataManager.shared.user?.sampleBanks?.last?.id
     }
+    
+    
     
     
     func newSampleBank() -> [String: AnyObject]{
