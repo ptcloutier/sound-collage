@@ -13,12 +13,12 @@ class SCSampleBank: Mappable {
    
     var name: String?
     var id: Int?
-    var samples: [String: AnyObject] = [:]
-    var effectSettings: [[SCEffectControl]] = []
+    var samples: [String: AnyObject]?
+    var effectSettings: [[SCEffectControl]]?
     var sequencerSettings: SCSequencerSettings?
     
     
-    init(name: String?, id: Int?, samples: [String: AnyObject], effectSettings: [[SCEffectControl]] , sequencerSettings: SCSequencerSettings? ) {
+    init(name: String?, id: Int?, samples: [String: AnyObject]?, effectSettings: [[SCEffectControl]]? , sequencerSettings: SCSequencerSettings? ) {
         self.name = name
         self.id = id
         self.samples = samples

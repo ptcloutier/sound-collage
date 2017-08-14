@@ -271,7 +271,7 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
         }
         print("Current sample bank \(current)")
         
-        SCAudioManager.shared.effectControls =  currentSB.effectSettings
+        SCAudioManager.shared.effectControls =  currentSB.effectSettings!
         self.presentSampler()
     }
 }

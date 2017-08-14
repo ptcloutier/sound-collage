@@ -36,8 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SCAudioManager.shared.setupAudioManager()
         SCDataManager.shared.fetchCurrentUserData()
         
-        let u = SCDataManager.shared.user
-        
+         
         if let currentSBEffectSettings = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!].effectSettings {
             SCAudioManager.shared.effectControls = currentSBEffectSettings
         }

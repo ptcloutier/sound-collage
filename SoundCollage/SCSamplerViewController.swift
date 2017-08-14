@@ -173,7 +173,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let numberOfItems = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!].samples.count  else {
+        guard let numberOfItems = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!].samples?.count  else {
             print("Error, no current sample bank.")
             return 0
         }

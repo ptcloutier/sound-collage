@@ -323,7 +323,7 @@ class SCGAudioController {
         for (_ , connection) in connectionPoints.enumerated() {
             if connection.node == engine?.mainMixerNode {
                 // get the corresponding mixing destination object and set the mixer input bus volume
-                guard let sampler = self.sampler else {
+                guard self.sampler != nil else {
                     print("Error, sampler is nil")
                     return
                 }
@@ -581,7 +581,7 @@ class SCGAudioController {
             startEngine()
         
         // schedule the appropriate content
-        let key: String = "\(SCAudioManager.shared.selectedSampleIndex)"
+        let key: String = "\(index)"
         guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {  //createAudioFileForPlayback()!
             print("No sample at selected sample index!")
             return
@@ -602,10 +602,10 @@ class SCGAudioController {
             if durationInt == 0 {
                 durationInt = 1
             }
-            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[SCAudioManager.shared.selectedSampleIndex]
+            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[index]
             let reverbTime = round(Float(reverbParameter * 5.0))
             durationInt += Int(reverbTime)
-            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[SCAudioManager.shared.selectedSampleIndex]
+            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[index]
             let delayTime = round(Float(delayParams * 7.0))
             durationInt += Int(delayTime)
             let duration = DispatchTimeInterval.seconds(durationInt)
@@ -701,7 +701,7 @@ class SCGAudioController {
             return
         }
         
-        audioFiles = currentSB.samples
+        audioFiles = currentSB.samples!
         
         for (key, value) in audioFiles {
             

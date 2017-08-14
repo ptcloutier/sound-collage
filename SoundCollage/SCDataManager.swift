@@ -20,6 +20,36 @@ class SCDataManager {
     
    
     
+    
+    func fetchCurrentUserData() {
+        
+        readJSONFromFile()
+        
+        guard let user = SCDataManager.shared.user else {
+            var sampleBanks: [SCSampleBank] = []
+            let samples = newSampleBank()
+            let sampleBankID = 0
+            let userDefaults = UserDefaults.standard
+            userDefaults.set(0, forKey: "sampleBankID")
+            let effectSettings: [[SCEffectControl]] = setupEffectSettings()
+            let score: [[Bool]] = SCDataManager.shared.setupScorePage()
+            let sequencerSettings = SCSequencerSettings.init(score: score)
+            let uuid = UUID().uuidString
+            let name = "\(uuid)_sampleBank_id_\(sampleBankID)"
+            let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples,effectSettings: effectSettings, sequencerSettings: sequencerSettings)
+            sampleBanks.append(sampleBank)
+            let soundCollages: [String] = []
+            let newUser = SCUser.init(userName: "Perrin", sampleBanks: sampleBanks, currentSampleBank: sampleBankID, soundCollages: soundCollages)
+            self.user = newUser
+            printAudioFilePaths()
+            print("Created user")
+            return
+        }
+        print("Fetched user data from file with success")
+        self.user = user
+    }
+
+    
     func readJSONFromFile(){
 
         if let filePath = getFileURL(filePath: "SoundCollageUser.json") {
@@ -33,7 +63,6 @@ class SCDataManager {
                 let jsonString = json.rawString()
                 let scUser = SCUser(JSONString: jsonString!)
                     self.user = scUser
-                printAudioFilePaths()
                 
             } catch let error {
                 print("Error, \(error.localizedDescription)")
@@ -85,33 +114,6 @@ class SCDataManager {
     
     
     
-    func fetchCurrentUserData() {
-        
-        readJSONFromFile()
-        
-        guard let user = SCDataManager.shared.user else {
-            var sampleBanks: [SCSampleBank] = []
-            let samples = newSampleBank()
-            let sampleBankID = 0
-            let userDefaults = UserDefaults.standard
-            userDefaults.set(0, forKey: "sampleBankID")
-            let effectSettings: [[SCEffectControl]] = setupEffectSettings()
-            let score: [[Bool]] = SCDataManager.shared.setupScorePage()
-            let sequencerSettings = SCSequencerSettings.init(score: score)
-            let uuid = UUID().uuidString
-            let name = "\(uuid)_sampleBank_id_\(sampleBankID)"
-            let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples,effectSettings: effectSettings, sequencerSettings: sequencerSettings)
-            sampleBanks.append(sampleBank)
-            let soundCollages: [String] = []
-            let newUser = SCUser.init(userName: "Perrin", sampleBanks: sampleBanks, currentSampleBank: sampleBankID, soundCollages: soundCollages)
-            self.user = newUser
-            printAudioFilePaths()
-            print("Created user")
-            return
-        }
-        print("Fetched user data from file with success")
-        self.user = user
-    }
     
     
     
@@ -182,13 +184,14 @@ class SCDataManager {
     
     
     func printAudioFilePaths(){
+        let d = SCDataManager.shared.user
         
-        guard let sampleBanks = self.user?.sampleBanks else {
+        guard let sampleBanks = SCDataManager.shared.user?.sampleBanks else {
             print("SampleBanks not found.")
             return
         }
         for sampleBank in sampleBanks {
-            for value in sampleBank.samples.values {
+            for value in (sampleBank.samples?.values)! {
                 print(value)
             }
         }
