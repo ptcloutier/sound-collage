@@ -8,7 +8,7 @@
 
 import Foundation
 import ObjectMapper
-
+import SwiftyJSON
 
 
 class SCDataManager {
@@ -29,22 +29,15 @@ class SCDataManager {
             }
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: .alwaysMapped)
-                let jsonString = String(data: data, encoding: .utf8)
-                print(jsonString!)
-                
-                
-                
-                guard let scUser = SCUser(JSONString: jsonString!) else {//Mapper<SCUser>().map(JSONObject: jsonResult) else {
-                        print("Error, unable to instantiate user from json.")
-                        return
-                    }
+                let json = JSON(data: data)
+                let jsonString = json.rawString()
+                let scUser = SCUser(JSONString: jsonString!)
                     self.user = scUser
-                    printAudioFilePaths()
-                
+                printAudioFilePaths()
                 
             } catch let error {
                 print("Error, \(error.localizedDescription)")
-             }
+            }
         } else {
             print("Invalid filename/path or first run, no file to read until we create one.")
         }

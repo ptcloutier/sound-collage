@@ -86,6 +86,7 @@
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
 		A7FD67551F3775C100B1AD74 /* bluesyRiff.mid in Resources */ = {isa = PBXBuildFile; fileRef = A7FD67541F3775C100B1AD74 /* bluesyRiff.mid */; };
 		A7FD675A1F38305300B1AD74 /* SCAudioPlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FD67591F38305300B1AD74 /* SCAudioPlayerNode.swift */; };
+		A7FDF60A1F41780500645E97 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7FDF6091F41780500645E97 /* SwiftyJSON.framework */; };
 		D12EE6F44C0DB1631E344924 /* Pods_SoundCollage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */; };
 /* End PBXBuildFile section */
 
@@ -212,6 +213,7 @@
 		A7FD67571F3775EB00B1AD74 /* marimbaLoop.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = marimbaLoop.caf; sourceTree = "<group>"; };
 		A7FD67581F37761500B1AD74 /* gs_instruments.dls */ = {isa = PBXFileReference; lastKnownFileType = file; path = gs_instruments.dls; sourceTree = "<group>"; };
 		A7FD67591F38305300B1AD74 /* SCAudioPlayerNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCAudioPlayerNode.swift; sourceTree = "<group>"; };
+		A7FDF6091F41780500645E97 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../Library/Developer/Xcode/DerivedData/SoundCollage-dzjqflrxgcjwhheyipgxnbopvqyd/Build/Products/Debug-iphoneos/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +221,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7FDF60A1F41780500645E97 /* SwiftyJSON.framework in Frameworks */,
 				A78A9BD01EABA919007117DD /* QuartzCore.framework in Frameworks */,
 				A7054EC61EA82D7700BBC34E /* Foundation.framework in Frameworks */,
 				A71414FF1EA82B5000BE9718 /* CoreAudio.framework in Frameworks */,
@@ -249,6 +252,7 @@
 		095B8402F860F7E6A5BAF4F4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A7FDF6091F41780500645E97 /* SwiftyJSON.framework */,
 				A78A9BCF1EABA919007117DD /* QuartzCore.framework */,
 				A7054EC51EA82D7700BBC34E /* Foundation.framework */,
 				A71414FD1EA82B5000BE9718 /* CoreAudio.framework */,
