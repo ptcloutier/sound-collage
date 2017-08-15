@@ -323,7 +323,7 @@ class SCGAudioController {
         for (_ , connection) in connectionPoints.enumerated() {
             if connection.node == engine?.mainMixerNode {
                 // get the corresponding mixing destination object and set the mixer input bus volume
-                guard self.sampler != nil else {
+                guard let sampler = self.sampler else {
                     print("Error, sampler is nil")
                     return
                 }
@@ -534,10 +534,11 @@ class SCGAudioController {
     func togglePlayer(index: Int){
         
 
-        if activePlayers>=maxPlayers {
-            print("Error, too many active players")
-            return
-        }
+//        if activePlayers>=maxPlayers {
+//            print("Error, too many active players")
+//            return
+//        }
+        
         let sampler = AVAudioUnitSampler.init()
         let player = AVAudioPlayerNode.init()
         let reverb = setupReverb(sampleIndex: index)
@@ -581,11 +582,12 @@ class SCGAudioController {
             startEngine()
         
         // schedule the appropriate content
-        let key: String = "\(index)"
+        let key: String = "\(SCAudioManager.shared.selectedSampleIndex)"
         guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {  //createAudioFileForPlayback()!
             print("No sample at selected sample index!")
             return
         }
+        playerIsPlaying = true
         plays = plays+1
         activePlayers = activePlayers+1
         print("total plays : \(plays), active players: \(activePlayers)")
@@ -593,37 +595,18 @@ class SCGAudioController {
         player.scheduleFile(sample, at: nil, completionHandler: {
             
             [weak self] in
-            guard let strongSelf = self else {
-                return
-            }
-            strongSelf.playerIsPlaying = true
-            //  calculate audio tail based on reverb and delay parameters
-            var durationInt = Int(round(Double(sample.length)/44100))
-            if durationInt == 0 {
-                durationInt = 1
-            }
-            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[index]
-            let reverbTime = round(Float(reverbParameter * 5.0))
-            durationInt += Int(reverbTime)
-            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[index]
-            let delayTime = round(Float(delayParams * 7.0))
-            durationInt += Int(delayTime)
-            let duration = DispatchTimeInterval.seconds(durationInt)
-            let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-            delayQueue.asyncAfter(deadline: .now()+duration){
+            guard let strongSelf = self else { return }
+           
+            DispatchQueue.main.async {
+            
                 for x in nodes {
                     strongSelf.engine?.disconnectNodeInput(x)
                     strongSelf.engine?.detach(x)
-                    
                 }
                 nodes.removeAll()
-                strongSelf.playerIsPlaying = false 
-                
-                
-                
+                strongSelf.playerIsPlaying = false
                 strongSelf.activePlayers = strongSelf.activePlayers-1
-                print("total plays : \(strongSelf.plays), active players: \(strongSelf.activePlayers)")
-
+                print("total plays : \(strongSelf.plays), active players: \(strongSelf.activePlayers)")          
             }})
         
         player.play()
@@ -709,6 +692,7 @@ class SCGAudioController {
             if let audioFile: AVAudioFile = getSample(samplePath: path!) {
                 audioFiles.updateValue(audioFile, forKey: key)
                 print("AudioFiles key : \(key), val : \(String(describing: value))")
+                break
             }
         }
     }

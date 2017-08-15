@@ -28,8 +28,8 @@ class SCSequencerSettings: Mappable {
     
     
     required init?(map: Map) {
-        timeSignature   <- map["timeSignature"]
-        score           <- map["score"]
+//        timeSignature   <- map["timeSignature"]
+//        score           <- map["score"]
     }
     
     

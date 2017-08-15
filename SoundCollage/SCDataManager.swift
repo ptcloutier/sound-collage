@@ -23,52 +23,63 @@ class SCDataManager {
     
     func fetchCurrentUserData() {
         
-        readJSONFromFile()
-        
-        guard let user = SCDataManager.shared.user else {
-            var sampleBanks: [SCSampleBank] = []
-            let samples = newSampleBank()
-            let sampleBankID = 0
-            let userDefaults = UserDefaults.standard
-            userDefaults.set(0, forKey: "sampleBankID")
-            let effectSettings: [[SCEffectControl]] = setupEffectSettings()
-            let score: [[Bool]] = SCDataManager.shared.setupScorePage()
-            let sequencerSettings = SCSequencerSettings.init(score: score)
-            let uuid = UUID().uuidString
-            let name = "\(uuid)_sampleBank_id_\(sampleBankID)"
-            let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples,effectSettings: effectSettings, sequencerSettings: sequencerSettings)
-            sampleBanks.append(sampleBank)
-            let soundCollages: [String] = []
-            let newUser = SCUser.init(userName: "Perrin", sampleBanks: sampleBanks, currentSampleBank: sampleBankID, soundCollages: soundCollages)
+        guard let savedUser = readFile() else {
+            
+            // no file, first run
+            let newUser = createUser()
+            print("Created new user")
             self.user = newUser
             printAudioFilePaths()
-            print("Created user")
+
             return
         }
+        self.user = savedUser
         print("Fetched user data from file with success")
-        self.user = user
+        
     }
-
     
-    func readJSONFromFile(){
-
-        if let filePath = getFileURL(filePath: "SoundCollageUser.json") {
-            print("SoundCollage.user json file exists at path: \(filePath)")
-            if FileManager.default.fileExists(atPath: filePath.path) {
-                print("Read filepath with success ")
-            }
+    
+    
+    
+    func createUser() -> SCUser {
+        
+        var sampleBanks: [SCSampleBank] = []
+        let samples = newSampleBank()
+        let sampleBankID = getNewSampleBankID()
+        let effectSettings: [[SCEffectControl]] = setupEffectSettings()
+        let score: [[Bool]] = SCDataManager.shared.setupScorePage()
+        let sequencerSettings = SCSequencerSettings.init(score: score)
+        let name = "SCSampleBank_ID_\(sampleBankID)"
+        let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples,effectSettings: effectSettings, sequencerSettings: sequencerSettings)
+        sampleBanks.append(sampleBank)
+        let soundCollages: [String] = []
+        let newUser = SCUser.init(userName: "Perrin", sampleBanks: sampleBanks, currentSampleBank: sampleBankID, soundCollages: soundCollages)
+        return newUser
+    }
+    
+    
+    
+    func readFile() -> SCUser? {
+        
+        guard let filePath = getFileURL(filePath: "SoundCollageUser.json") else {
+            print("No file at path.")
+            return nil
+        }
+        
+        if FileManager.default.fileExists(atPath: filePath.path) {
+            print("File exists at path: \(filePath)")
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: .alwaysMapped)
                 let json = JSON(data: data)
                 let jsonString = json.rawString()
                 let scUser = SCUser(JSONString: jsonString!)
-                    self.user = scUser
-                
+                return scUser
             } catch let error {
                 print("Error, \(error.localizedDescription)")
+                return nil
             }
         } else {
-            print("Invalid filename/path or first run, no file to read until we create one.")
+            return nil
         }
     }
     
@@ -126,8 +137,9 @@ class SCDataManager {
             userDefaults.set(0, forKey: "sampleBankID")
             return 0
         }
-        userDefaults.set(sampleBankID+1, forKey: "sampleBankID")
-        return sampleBankID+1   // increment the sampleBankID when a new one is created
+        let newSampleID = sampleBankID+1
+        userDefaults.set( newSampleID, forKey: "sampleBankID")
+        return newSampleID   // increment the sampleBankID when a new one is created
     }
 
     
@@ -175,6 +187,7 @@ class SCDataManager {
             let file = try FileHandle(forWritingTo: jsonFilePath!)
             file.write(jsonData)
             print("JSON data was written to the file successfully!")
+            print(jsonString)
         } catch let error as NSError {
             print("Couldn't write to file: \(error.localizedDescription)")
         }
@@ -184,7 +197,7 @@ class SCDataManager {
     
     
     func printAudioFilePaths(){
-        let d = SCDataManager.shared.user
+//        let d = SCDataManager.shared.user
         
         guard let sampleBanks = SCDataManager.shared.user?.sampleBanks else {
             print("SampleBanks not found.")

@@ -27,11 +27,11 @@ class SCSampleBank: Mappable {
     }
     
     required init?(map: Map) {
-        name                <- map["name"]
-        id                  <- map["id"]
-        samples             <- map["samples"]
-        effectSettings      <- map["effectSettings"]
-        sequencerSettings   <- map["sequencerSettings"]
+//        name                <- map["name"]
+//        id                  <- map["id"]
+//        samples             <- map["samples"]
+//        effectSettings      <- map["effectSettings"]
+//        sequencerSettings   <- map["sequencerSettings"]
     }
     
     func mapping(map: Map) {

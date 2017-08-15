@@ -21,7 +21,7 @@ class SCEffectControl: Mappable {
     
     
     required init?(map: Map) {
-        parameter     <- map["parameter"]
+//        parameter     <- map["parameter"]
     }
     
     

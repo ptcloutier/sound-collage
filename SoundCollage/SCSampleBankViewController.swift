@@ -154,15 +154,18 @@ class SCSampleBankViewController: UIViewController {
         let newSamplerBtn = UIButton()
         newSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newSamplerDidPress), for: .touchUpInside)
         
-        let samplerBarBtn = setupToolbarButton(btn: newSamplerBtn)
+    
+        let newSamplerBarBtn = setupToolbarButton(btn: newSamplerBtn)
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        toolbar.items = [flexibleSpace, samplerBarBtn, flexibleSpace]
+        toolbar.items = [flexibleSpace, newSamplerBarBtn, flexibleSpace]
         self.view.addSubview(toolbar)
     }
     
     
+    
+
     
     
     func setupToolbarButton(btn: UIButton)-> UIBarButtonItem {
