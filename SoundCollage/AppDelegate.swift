@@ -29,26 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = initialViewController
         window?.makeKeyAndVisible()
         
-
+        
         
         // get user and sample banks
         SCAudioManager.shared.setupAudioManager()
         SCDataManager.shared.fetchCurrentUserData()
-        
-//        let dm = SCDataManager.shared
-        
-        
-        // TODO : crash on below line caused by incrementing soundbank id without being able to retrieve soundbanks from storage, thus calling an index that doesn't exist
-        guard let currentSBEffectSettings = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!].effectSettings else {
-            print("No sample bank for index.")
-            return true 
-        }
-        
-        SCAudioManager.shared.effectControls = currentSBEffectSettings
-        SCAudioManager.shared.audioController = SCGAudioController.init()
-        SCAudioManager.shared.audioController?.delegate = SCAudioManager.shared as? SCGAudioControllerDelegate
-        
-        
+    
         return true
     }
     

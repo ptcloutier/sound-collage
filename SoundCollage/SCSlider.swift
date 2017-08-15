@@ -40,7 +40,7 @@ class SCSlider: UISlider {
         let xPos = view.frame.maxX - view.frame.width * 0.1
         let yPos = view.frame.minY + view.frame.height * 0.1
         let width = view.frame.width * 0.1
-        let height = view.frame.height * 0.8
+        let height = view.frame.height * 0.9
         let sliderFrame = CGRect(x: xPos, y: yPos, width: width, height: height)
         slider.frame = sliderFrame
         slider.isHidden = false

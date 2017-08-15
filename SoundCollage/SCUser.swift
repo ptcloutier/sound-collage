@@ -12,13 +12,11 @@ class SCUser: Mappable {
     
     var userName: String?
     var sampleBanks: [SCSampleBank]?
-    var currentSampleBank: Int?
     var soundCollages: [String]?
     
-    init(userName: String?, sampleBanks: [SCSampleBank]?, currentSampleBank: Int?, soundCollages: [String]?) {
+    init(userName: String?, sampleBanks: [SCSampleBank]?, soundCollages: [String]?) {
         self.userName = userName
         self.sampleBanks = sampleBanks
-        self.currentSampleBank = currentSampleBank
         self.soundCollages = soundCollages
     }
     
@@ -34,7 +32,6 @@ class SCUser: Mappable {
     func mapping(map: Map) {
         userName            <- map["userName"]
         sampleBanks         <- map["sampleBanks"]
-        currentSampleBank   <- map["currentSampleBank"]
         soundCollages       <- map["soundCollages"]
     }    
 }

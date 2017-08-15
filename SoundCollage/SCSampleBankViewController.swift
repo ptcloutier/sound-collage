@@ -193,28 +193,50 @@ class SCSampleBankViewController: UIViewController {
     
     
     func newSamplerDidPress(){
-      
-        newSampler()
-    }
-    
-    
-    
-    
-    
-    private func newSampler(){
         
-        SCDataManager.shared.createNewSampleBank()
-        presentSampler()
+        let dm = SCDataManager.shared
+        
+        dm.createNewSampleBank()
+        dm.currentSampleBank = (dm.user?.sampleBanks?.count)!-1
+        
+        collectionView.reloadData()
+        scrollToNewSampleBank(index: dm.currentSampleBank!)
     }
     
+    
+    
+    
+    private func scrollToNewSampleBank(index: Int) {
+        
+        if let cv = self.collectionView {
+            let indexPath = IndexPath(item: index, section: 0)
+            cv.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        }
+    }
+    
+
+    
+    func setupCurrentSampleBankEffectSettings(){
+
+        SCAudioManager.shared.audioController = SCGAudioController.init()
+        SCAudioManager.shared.audioController?.delegate = SCAudioManager.shared as? SCGAudioControllerDelegate
+
+        SCAudioManager.shared.audioController?.getAudioFilesForURL()
+        SCAudioManager.shared.effectControls = (SCDataManager.shared.user?.sampleBanks?[SCDataManager.shared.currentSampleBank!].effectSettings)!
+        SCAudioManager.shared.audioController?.effectControls = SCAudioManager.shared.effectControls
+    }
     
     
     
     func presentSampler(){
-        SCAudioManager.shared.audioController?.getAudioFilesForURL()
-        SCAudioManager.shared.audioController?.effectControls = SCAudioManager.shared.effectControls
+        
+        let dm = SCDataManager.shared
+        let currentSB = dm.user?.sampleBanks?[dm.currentSampleBank!]
+
+        print("Current sample bank \(String(describing: currentSB.debugDescription))")
+
         let vc: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
-        SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
+        SCAnimator.FadeIn(duration: 2.0, fromVC: self, toVC: vc)
     }
 }
 
@@ -228,8 +250,8 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
      
         guard let sampleBanks = SCDataManager.shared.user?.sampleBanks else {
-            print("Error: could not load sampler, sample bank not found")
-            return 1
+//            print("Error: could not load sampler, sample bank not found")
+            return 0
         }
         return sampleBanks.count
     }
@@ -264,17 +286,16 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        SCDataManager.shared.user?.currentSampleBank = indexPath.row
-        
-        guard let current = SCDataManager.shared.user?.currentSampleBank else { return }
-
-        guard let currentSB = SCDataManager.shared.user?.sampleBanks?[current]  else {
-            print("Error, no current sample bank.")
-            return
+        let dm = SCDataManager.shared
+        dm.currentSampleBank = indexPath.row
+        for sb in (SCDataManager.shared.user?.sampleBanks)! {
+            if sb.id == indexPath.row {
+                setupCurrentSampleBankEffectSettings()
+                presentSampler()
+                return
+            }
         }
-        print("Current sample bank \(current)")
+        print("***")
         
-        SCAudioManager.shared.effectControls =  currentSB.effectSettings!
-        self.presentSampler()
     }
 }

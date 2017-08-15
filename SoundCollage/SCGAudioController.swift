@@ -594,9 +594,29 @@ class SCGAudioController {
       
         player.scheduleFile(sample, at: nil, completionHandler: {
             
+            
             [weak self] in
             guard let strongSelf = self else { return }
-           
+            
+            // calculate audio tail based on reverb and delay parameters
+            var durationValue = Int(round(Double(sample.length)/44100))
+            if durationValue == 0 {
+                durationValue = 1
+            }
+            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[index]
+            let reverbTime = round(Float(reverbParameter * 5.0))
+            durationValue += Int(reverbTime)
+            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[index]
+            let delayTime = round(Float(delayParams * 5.0))
+            durationValue += Int(delayTime)
+            durationValue = durationValue+1
+            let duration = DispatchTimeInterval.seconds(durationValue)
+            let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
+            delayQueue.asyncAfter(deadline: .now()+duration){
+//                let serialQueue = DispatchQueue(label: "myqueue")
+//                serialQueue.sync {
+                
+
             DispatchQueue.main.async {
             
                 for x in nodes {
@@ -607,7 +627,7 @@ class SCGAudioController {
                 strongSelf.playerIsPlaying = false
                 strongSelf.activePlayers = strongSelf.activePlayers-1
                 print("total plays : \(strongSelf.plays), active players: \(strongSelf.activePlayers)")          
-            }})
+                }}})
         
         player.play()
     }
@@ -679,7 +699,9 @@ class SCGAudioController {
     
     func getAudioFilesForURL(){
         
-        guard let currentSB = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!]  else {
+        let dm = SCDataManager.shared
+        let idx = dm.currentSampleBank
+        guard let currentSB = dm.user?.sampleBanks?[dm.currentSampleBank!]  else {
             print("Error, no current sample bank.")
             return
         }
@@ -692,7 +714,6 @@ class SCGAudioController {
             if let audioFile: AVAudioFile = getSample(samplePath: path!) {
                 audioFiles.updateValue(audioFile, forKey: key)
                 print("AudioFiles key : \(key), val : \(String(describing: value))")
-                break
             }
         }
     }

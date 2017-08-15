@@ -131,7 +131,7 @@ class SCScoreViewController: UIViewController {
         var playbackSamples: [Int] = []
         print("trigger counter: \(triggerCounter)")
         
-        guard let score = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!].sequencerSettings?.score  else {
+        guard let score = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.currentSampleBank)!].sequencerSettings?.score  else {
             print("Error, no score.")
             return
         }
@@ -145,7 +145,7 @@ class SCScoreViewController: UIViewController {
         }
         for sample in playbackSamples {
             SCAudioManager.shared.selectedSequencerIndex = sample
-            SCAudioManager.shared.audioController?.togglePlayer(index: SCAudioManager.shared.selectedSequencerIndex)
+            SCAudioManager.shared.audioController?.togglePlayer(index: sample)
         }
         if triggerCounter == 15 {
             triggerCounter = 0

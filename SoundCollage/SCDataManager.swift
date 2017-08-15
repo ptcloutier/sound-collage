@@ -17,7 +17,7 @@ class SCDataManager {
     
     var user: SCUser?
     var currentSamplePath: String?
-    
+    var currentSampleBank: Int?
    
     
     
@@ -50,10 +50,10 @@ class SCDataManager {
         let score: [[Bool]] = SCDataManager.shared.setupScorePage()
         let sequencerSettings = SCSequencerSettings.init(score: score)
         let name = "SCSampleBank_ID_\(sampleBankID)"
-        let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples,effectSettings: effectSettings, sequencerSettings: sequencerSettings)
+        let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
         sampleBanks.append(sampleBank)
         let soundCollages: [String] = []
-        let newUser = SCUser.init(userName: "Perrin", sampleBanks: sampleBanks, currentSampleBank: sampleBankID, soundCollages: soundCollages)
+        let newUser = SCUser.init(userName: "Perrin", sampleBanks: sampleBanks, soundCollages: soundCollages)
         return newUser
     }
     
@@ -71,8 +71,9 @@ class SCDataManager {
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: .alwaysMapped)
                 let json = JSON(data: data)
-                let jsonString = json.rawString()
-                let scUser = SCUser(JSONString: jsonString!)
+//                let jsonString = json.rawString()
+                
+                let scUser = Mapper<SCUser>().map(JSON: json.dictionaryObject!)
                 return scUser
             } catch let error {
                 print("Error, \(error.localizedDescription)")
@@ -159,9 +160,8 @@ class SCDataManager {
     
     
     
-    
     func writeToFile(jsonString: String){
-        
+    
         let documentsDirectoryPathString = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         let documentsDirectoryPath = NSURL(string: documentsDirectoryPathString)!
         
@@ -220,11 +220,10 @@ class SCDataManager {
         let score: [[Bool]] = SCDataManager.shared.setupScorePage()
         let sequencerSettings = SCSequencerSettings.init(score: score)
         let effectSettings: [[SCEffectControl]] = SCDataManager.shared.setupEffectSettings()
-        let uuid = UUID().uuidString
-        let name = "\(uuid)_sampleBank_id_\(sampleBankID)"
+        let name = "SampleBank_ID_\(sampleBankID)"
         let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
         SCDataManager.shared.user?.sampleBanks?.append(sampleBank)
-        SCDataManager.shared.user?.currentSampleBank = SCDataManager.shared.user?.sampleBanks?.last?.id
+//        SCDataManager.shared.currentSampleBank = SCDataManager.shared.user?.sampleBanks?.last?.id
     }
     
     
