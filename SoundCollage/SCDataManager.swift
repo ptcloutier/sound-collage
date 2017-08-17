@@ -61,27 +61,26 @@ class SCDataManager {
     
     func readFile() -> SCUser? {
         
-        guard let filePath = getFileURL(filePath: "SoundCollageUser.json") else {
+        guard let filePath = getFileURL(filePath: "SoundCollageUser.json") else { //Bundle.main.path(forResource: "SoundCollageUser", ofType: "json") else {//
             print("No file at path.")
             return nil
         }
-        
-        if FileManager.default.fileExists(atPath: filePath.path) {
-            print("File exists at path: \(filePath)")
-            do {
-                let jsonData = try Data(contentsOf: filePath, options: .mappedIfSafe)
-                let jsonString = String(data: jsonData, encoding: .utf8)
+        do {
+            let data = try Data(contentsOf: filePath, options: .alwaysMapped)
+            let jsonObj = JSON(data: data)
+            if jsonObj != JSON.null {
+                print("jsonData:\(jsonObj)")
+                let jsonString = jsonObj.rawString()
                 let scUser = SCUser(JSONString: jsonString!)
                 return scUser
-            } catch let error {
-                print("Error, \(error.localizedDescription)")
-                return nil
+            } else {
+                print("Could not get json from file, make sure that file contains valid json.")
             }
-        } else {
-            return nil
+        } catch let error {
+            print(error.localizedDescription)
         }
+        return nil
     }
-    
     
     
     
@@ -195,7 +194,7 @@ class SCDataManager {
     
     
     func printAudioFilePaths(){
-//        let d = SCDataManager.shared.user
+
         
         guard let sampleBanks = SCDataManager.shared.user?.sampleBanks else {
             print("SampleBanks not found.")
