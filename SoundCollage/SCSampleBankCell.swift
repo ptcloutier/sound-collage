@@ -12,7 +12,7 @@ class SCSampleBankCell: UICollectionViewCell {
  
     let imageView = UIImageView()
     let titleTextField = UITextField()
-    
+    var id: Int?
     
     
     override init(frame: CGRect) {

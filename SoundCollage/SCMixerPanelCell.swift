@@ -299,11 +299,9 @@ class SCMixerPanelCell: UICollectionViewCell {
         addSliderTarget(slider: slider)
         slider.minimumTrackTintColor = color//SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral
         slider.maximumTrackTintColor = color
-//        slider.thumbTintColor = color
-//        let image = UIImage.imageWithImage(image: UIImage.init(named: "rectWhite")!, newSize: CGSize(width: 40.0, height: 70.0))
-//        slider.setThumbImage(image, for: .normal)
+
         let img = self.generateHandleImage(with: color)
-        let circ = circularImageWithImage(inputImage: img, borderColor: color, borderWidth: 1.0)
+        let circ = circularImageWithImage(inputImage: img, borderColor: color, borderWidth: 2.0)
         slider.setThumbImage(circ, for: .normal)
 
         self.contentView.addSubview(slider)

@@ -69,11 +69,9 @@ class SCDataManager {
         if FileManager.default.fileExists(atPath: filePath.path) {
             print("File exists at path: \(filePath)")
             do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: filePath.path), options: .alwaysMapped)
-                let json = JSON(data: data)
-//                let jsonString = json.rawString()
-                
-                let scUser = Mapper<SCUser>().map(JSON: json.dictionaryObject!)
+                let jsonData = try Data(contentsOf: filePath, options: .mappedIfSafe)
+                let jsonString = String(data: jsonData, encoding: .utf8)
+                let scUser = SCUser(JSONString: jsonString!)
                 return scUser
             } catch let error {
                 print("Error, \(error.localizedDescription)")

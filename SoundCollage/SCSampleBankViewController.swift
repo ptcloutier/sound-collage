@@ -279,6 +279,9 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
         }
         cell.imageView.backgroundColor =  UIColor.white //iceCreamColors[colorIdx] 
         cell.imageView.image = images[imgIdx]
+        
+        let dm = SCDataManager.shared
+        cell.id = dm.user?.sampleBanks?[indexPath.row].id
         return cell
     }
     
@@ -286,16 +289,17 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        let cell = collectionView.cellForItem(at: indexPath) as! SCSampleBankCell
+        cell
+        
         let dm = SCDataManager.shared
         dm.currentSampleBank = indexPath.row
         for sb in (SCDataManager.shared.user?.sampleBanks)! {
-            if sb.id == indexPath.row {
+            if sb.id == cell.id {
                 setupCurrentSampleBankEffectSettings()
                 presentSampler()
                 return
             }
         }
-        print("***")
-        
     }
 }

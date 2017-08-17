@@ -368,24 +368,21 @@ class SCGAudioController {
     //MARK: Effect Methods
  
     
-    func setupReverb(sampleIndex: Int) -> AVAudioUnitReverb {
+    func setupReverb(sampleIndex: Int, reverb: AVAudioUnitReverb) {
         
-        let reverb = AVAudioUnitReverb()
         let reverbParams = effectControls[0]
         
         if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*50.0)) {
             reverb.loadFactoryPreset(.cathedral) // there are thirteen possible presets
             reverb.wetDryMix = reverbValue
         }
-        return reverb
     }
     
     
     
     
-    func setupDelay(sampleIndex: Int) -> AVAudioUnitDelay {
+    func setupDelay(sampleIndex: Int, delay: AVAudioUnitDelay) {
         
-        let delay = AVAudioUnitDelay()
         let delayParams = effectControls[1]
         
         let delayWetDryMixValue = delayParams[0].parameter[sampleIndex] * 100.0
@@ -394,20 +391,17 @@ class SCGAudioController {
         let delayTime = delayParams[1].parameter[sampleIndex] * 0.5
         delay.delayTime = TimeInterval(delayTime)
         
-        let delayFeedback = delayParams[2].parameter[sampleIndex] * 50.0
+        let delayFeedback = delayParams[2].parameter[sampleIndex] * 70.0
         delay.feedback = delayFeedback
         
         let delayLPCutoff = delayParams[3].parameter[sampleIndex] * 6000.0 // 10 -> (samplerate/2), default 15000
         delay.lowPassCutoff = delayLPCutoff
-        
-        return delay
     }
     
     
     
-    func setupPitchShift(sampleIndex: Int) -> AVAudioUnitTimePitch {
-        
-        let pitch = AVAudioUnitTimePitch()
+    func setupPitchShift(sampleIndex: Int, pitch: AVAudioUnitTimePitch) {
+     
         let pitchParams = effectControls[2]
         
         let pitchUp = pitchParams[0].parameter[sampleIndex] * 100.0
@@ -419,15 +413,12 @@ class SCGAudioController {
         let negiPitch = (pitchDownValue+1.0) * -1.0
         
         pitch.pitch = posiPitch + negiPitch
-        
-        return pitch
     }
     
     
     
-    func setupDistortion(sampleIndex: Int) -> AVAudioUnitDistortion {
+    func setupDistortion(sampleIndex: Int, distortion: AVAudioUnitDistortion) {
         
-        let distortion = AVAudioUnitDistortion()
         let distortionParams = effectControls[4]
         
         let preGainValue = distortionParams[0].parameter[sampleIndex] * 100.0// range -80.0 -> 20.0
@@ -435,16 +426,12 @@ class SCGAudioController {
         
         let dmix = distortionParams[1].parameter[sampleIndex] * 100.0
         distortion.wetDryMix = dmix
-        
-        return distortion
     }
     
     
     
     
-    func setupTimeStretch(sampleIndex: Int) -> AVAudioUnitVarispeed {
-        
-        let time = AVAudioUnitVarispeed()
+    func setupTimeStretch(sampleIndex: Int, time: AVAudioUnitVarispeed) {
         let timeParams = effectControls[3]
         
         let timeRateUp = 1.0 + timeParams[0].parameter[sampleIndex] * 4.0
@@ -452,8 +439,6 @@ class SCGAudioController {
         
         let rateValue = Float(timeRateUp - timeRateDown)
         time.rate = rateValue
-        
-        return time
     }
     
     
@@ -533,47 +518,57 @@ class SCGAudioController {
     
     func togglePlayer(index: Int){
         
-
-//        if activePlayers>=maxPlayers {
-//            print("Error, too many active players")
-//            return
-//        }
+        
+        let mixer = AVAudioMixerNode.init()
+        engine?.attach(mixer)
+        
+        let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)
+        let mainMixer = (engine?.mainMixerNode)!
         
         let sampler = AVAudioUnitSampler.init()
         let player = AVAudioPlayerNode.init()
-        let reverb = setupReverb(sampleIndex: index)
-        let delay = setupDelay(sampleIndex: index)
-        let pitchShift = setupPitchShift(sampleIndex: index)
-        let timeStretch = setupTimeStretch(sampleIndex: index)
-        let distortion = setupDistortion(sampleIndex: index)
-
+        
         engine?.attach(sampler)
         engine?.attach(player)
+        
+        
+        let reverb = AVAudioUnitReverb()
+        let delay = AVAudioUnitDelay()
+        let pitchShift = AVAudioUnitTimePitch()
+        let distortion = AVAudioUnitDistortion()
+        let timeStretch = AVAudioUnitVarispeed()
+        
+        
+        setupReverb(sampleIndex: index, reverb: reverb)
+        setupDelay(sampleIndex: index, delay: delay)
+        setupPitchShift(sampleIndex: index, pitch: pitchShift)
+        setupTimeStretch(sampleIndex: index, time: timeStretch)
+        setupDistortion(sampleIndex: index, distortion: distortion)
+        
+        
         engine?.attach(reverb)
         engine?.attach(delay)
         engine?.attach(pitchShift)
         engine?.attach(timeStretch)
         engine?.attach(distortion)
         
-        let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)//playerLoopBuffer?.format
-        let mixer = (engine?.mainMixerNode)!
-
-        engine?.connect(player, to: pitchShift, format: playerFormat)
+        engine?.connect(player, to: mixer, format: playerFormat)
+        engine?.connect(mixer, to: pitchShift, format: playerFormat)
         engine?.connect(pitchShift, to: timeStretch, format: playerFormat)
         engine?.connect(timeStretch, to: distortion, format: playerFormat)
         engine?.connect(distortion, to: delay, format: playerFormat)
         engine?.connect(delay, to: reverb, format: playerFormat)
-        engine?.connect(reverb, to: mixer, format: playerFormat)
-        engine?.connect(sampler, to: mixer, format: playerFormat)
+        engine?.connect(reverb, to: mainMixer, format: playerFormat)
+        engine?.connect(sampler, to: mainMixer, format: playerFormat)
         
-        var nodes = [player, sampler , reverb, delay, pitchShift, timeStretch, distortion]
-        
-        self.sampler = sampler
-        self.player = player
+    
+//        var detachNodes = [player, sampler]
+        var disconnectNodes = [player, sampler, reverb, delay, pitchShift, timeStretch, distortion]
+ 
         
         if let urls: [URL] = Bundle.main.urls(forResourcesWithExtension: "aac", subdirectory: "Documents") {
             do {
-                try self.sampler?.loadAudioFiles(at: urls)
+                try sampler.loadAudioFiles(at: urls)
             } catch {
                 print("No sample\n")
             }
@@ -582,7 +577,7 @@ class SCGAudioController {
             startEngine()
         
         // schedule the appropriate content
-        let key: String = "\(SCAudioManager.shared.selectedSampleIndex)"
+        let key: String = "\(index)"
         guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {  //createAudioFileForPlayback()!
             print("No sample at selected sample index!")
             return
@@ -613,21 +608,30 @@ class SCGAudioController {
             let duration = DispatchTimeInterval.seconds(durationValue)
             let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
             delayQueue.asyncAfter(deadline: .now()+duration){
-//                let serialQueue = DispatchQueue(label: "myqueue")
-//                serialQueue.sync {
+                let serialQueue = DispatchQueue(label: "myqueue")
+                serialQueue.sync {
                 
 
             DispatchQueue.main.async {
             
-                for x in nodes {
+                for x in disconnectNodes {
                     strongSelf.engine?.disconnectNodeInput(x)
-                    strongSelf.engine?.detach(x)
+                    
                 }
-                nodes.removeAll()
+                
+                for i in disconnectNodes {
+                    strongSelf.engine?.detach(i)
+                }
+               
+//                detachNodes.removeAll()
+                disconnectNodes.removeAll()
                 strongSelf.playerIsPlaying = false
                 strongSelf.activePlayers = strongSelf.activePlayers-1
                 print("total plays : \(strongSelf.plays), active players: \(strongSelf.activePlayers)")          
-                }}})
+                    }
+                }
+            }
+        })
         
         player.play()
     }
