@@ -22,7 +22,6 @@ class SCSamplerViewController: UIViewController  {
     let parameterViewColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet, SCColor.Custom.PsychedelicIceCreamShoppe.medViolet, SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet]
     let backGroundColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua, SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueDark]
     var selectedPadIndex: Int?
-    var doWaveAnimation: Bool = false 
     
     //MARK: vc lifecycle
     
@@ -154,32 +153,59 @@ class SCSamplerViewController: UIViewController  {
     }
     
     
-    func performWave(row: Int, cell: SCSamplerCollectionViewCell){
+    func performWave(fillMode: String, row: Int, cell: SCSamplerCollectionViewCell, delays: [Double]){
         
-        let secondRow = DispatchTimeInterval.seconds(Int(0.5))
-        let thirdRow = DispatchTimeInterval.seconds(Int(1.0))
-        let fourthRow = DispatchTimeInterval.seconds(Int(1.5))
 
         if row == 0 || row == 4 || row == 8 || row == 12 {
-            cell.animateColor()
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[0]) {
+            cell.animateColor(fillMode: fillMode)
+            }
         }
         
         if row == 1 || row == 5 || row == 9 || row == 13 {
-            DispatchQueue.main.asyncAfter(deadline: .now()+secondRow) {
-                cell.animateColor()
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[1]) {
+                cell.animateColor(fillMode: fillMode)
             }
         }
         if row == 2 || row == 6 || row == 10 || row == 14 {
-            DispatchQueue.main.asyncAfter(deadline: .now()+thirdRow) {
-                cell.animateColor()
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[2]) {
+                cell.animateColor(fillMode: fillMode)
             }
         }
         if row == 3 || row == 7 || row == 11 || row == 15 {
-            DispatchQueue.main.asyncAfter(deadline: .now()+fourthRow){
-                cell.animateColor()
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[3]){
+                cell.animateColor(fillMode: fillMode)
+            }
+        }
+        cell.doWaveAnimation = false
+        cell.doXAnimation = true 
+    }
+    
+    
+    func performXAnimation(fillMode: String, row: Int, cell: SCSamplerCollectionViewCell, delays: [Double]){
+        
+        if row == 0 || row == 5 {
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[0]) {
+                cell.animateColor(fillMode: fillMode)
             }
         }
         
+        if row == 3 || row == 6 {
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[1]) {
+                cell.animateColor(fillMode: fillMode)
+            }
+        }
+        if row == 10 || row == 15 {
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[2]) {
+                cell.animateColor(fillMode: fillMode)
+            }
+        }
+        if row == 9 || row == 12 {
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[3]){
+                cell.animateColor(fillMode: fillMode)
+            }
+        }
+        cell.doXAnimation = false
     }
 }
 
@@ -263,10 +289,16 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         // wave animation when navigating from samplebanks
         
         
-        if doWaveAnimation == true {
-            performWave(row: indexPath.row, cell: cell)
+        if cell.doWaveAnimation == true {
+            performWave(fillMode: kCATransitionFromLeft, row: indexPath.row, cell: cell, delays: [0.5, 0.6, 0.7, 0.8])
             
         }
+        
+//        if cell.doXAnimation == true {
+//            performXAnimation(fillMode: kCATransitionFade, row: indexPath.row, cell: cell, delays:[0.5, 0.6, 0.7, 0.8])
+//        }
+        
+        
         
             
         return cell
@@ -301,7 +333,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 
             case false:
                 cell.playbackSample()
-                cell.animateCell()
+                cell.animateColor(fillMode: kCATransitionFade)
             }
         }
     }

@@ -56,7 +56,7 @@ class SCColor {
     }
     
     
-    func morphColors(in view: UIView) {
+    func morphColors(in view: UIView, fillMode: String) {
 //        
 //        if currentColors < colors.count - 1 {
 //            currentColors+=1
@@ -67,7 +67,7 @@ class SCColor {
         colorChangeAnimation.duration = 0.3
         colorChangeAnimation.fromValue = colors[0]
         colorChangeAnimation.toValue = colors[1]
-        colorChangeAnimation.fillMode = kCATransitionFade
+        colorChangeAnimation.fillMode = fillMode
         colorChangeAnimation.autoreverses = true
         gradientLayer.add(colorChangeAnimation, forKey: "colorChange")
     }

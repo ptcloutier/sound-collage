@@ -24,6 +24,10 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var padLabel: UILabel = UILabel()
     var colors = [[SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor]]//[[UIColor.black.cgColor, UIColor.purple.cgColor, UIColor.black.cgColor]]// [UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor]]
     var gradientColors: SCColor?
+    var doWaveAnimation: Bool = true
+    var doXAnimation: Bool = false 
+    
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -82,14 +86,14 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     func startTimer() {
         
-        animateCell()
+        animateColor(fillMode: kCATransitionFade)
 
         flashTimer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: true) {
             [weak self] flashTimer in  // creates a capture group for the timer
             guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
                 return
             }
-            strongSelf.animateCell()
+            strongSelf.animateColor(fillMode: kCATransitionFade)
         }
     }
     
@@ -105,16 +109,16 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     
-    func animateCell(){
-        
-        animateColor()
-    }
+//    func animateCell(){
+//        
+//        animateColor()
+//    }
     
     
     
-    func animateColor(){
+    func animateColor(fillMode: String){
         guard let gradientColors = self.gradientColors else { return }
-        gradientColors.morphColors(in: self)
+        gradientColors.morphColors(in: self, fillMode: fillMode)
        
 //
 //        UIView.animate(withDuration: 0.05, animations: {

@@ -28,7 +28,6 @@ class SCMusicInterfaceCell: UICollectionViewCell {
     func setupSampler(){
         self.samplerVC = SCSamplerViewController(nibName: nil, bundle: nil)
         guard let samplerVC = self.samplerVC else { return }
-        samplerVC.doWaveAnimation = true 
         samplerVC.view.frame = contentView.bounds
         self.contentView.addSubview(samplerVC.view)
     }
