@@ -173,7 +173,7 @@ class SCColor {
         let neonAqua = UIColor.init(red: 0/255.0, green: 205.0/255.0, blue: 210.0/255.0, alpha: 1.0)
         
         
-        let psyUIColors = [neonAqua, lightCoral, lightViolet, darkViolet, lightestBlueSky, brightCoral,  lightRose, rose, deepBlueDark, medRose, darkRose,  medRose,  deepBlue, lighterBlueSky, lighterBlue, lightBlueSky, deepBlueShade]
+        let psyUIColors = [neonAqua, lightCoral, lightViolet, deepBlue, darkViolet, lightestBlueSky, brightCoral,  rose, deepBlueDark, medRose, darkRose, medRose, lighterBlueSky, lightRose, lighterBlue, lightBlueSky, deepBlueShade]
         
         return psyUIColors
     }

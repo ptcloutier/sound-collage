@@ -24,9 +24,9 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var padLabel: UILabel = UILabel()
     var colors = [[SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor]]//[[UIColor.black.cgColor, UIColor.purple.cgColor, UIColor.black.cgColor]]// [UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor]]
     var gradientColors: SCColor?
-    var doWaveAnimation: Bool = true
     var doXAnimation: Bool = false 
-    
+    var doWaveAnimation: Bool = true
+
     
     
     override init(frame: CGRect) {

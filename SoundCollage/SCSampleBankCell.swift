@@ -36,7 +36,6 @@ class SCSampleBankCell: UICollectionViewCell {
     }
     
     
-    
     private func setupImageView(){
         
         self.translatesAutoresizingMaskIntoConstraints = false

@@ -22,7 +22,7 @@ class SCSamplerViewController: UIViewController  {
     let parameterViewColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet, SCColor.Custom.PsychedelicIceCreamShoppe.medViolet, SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet]
     let backGroundColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua, SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueDark]
     var selectedPadIndex: Int?
-    
+
     //MARK: vc lifecycle
     
     override func viewDidLoad() {
@@ -178,7 +178,7 @@ class SCSamplerViewController: UIViewController  {
             }
         }
         cell.doWaveAnimation = false
-        cell.doXAnimation = true 
+//        cell.doXAnimation = true
     }
     
     
@@ -290,8 +290,8 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         
         
         if cell.doWaveAnimation == true {
-            performWave(fillMode: kCATransitionFromLeft, row: indexPath.row, cell: cell, delays: [0.5, 0.6, 0.7, 0.8])
             
+            performWave(fillMode: kCATransitionFromLeft, row: indexPath.row, cell: cell, delays: [0.5, 0.6, 0.7, 0.8])
         }
         
 //        if cell.doXAnimation == true {

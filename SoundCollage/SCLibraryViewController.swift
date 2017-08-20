@@ -30,18 +30,25 @@ class SCLibraryViewController: UIViewController {
     func setupCollectionView(){
         
         
-        let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 1)
-        let frame = CGRect(x: self.view.frame.width/3.0, y: 10.0, width: self.view.frame.width/3.0, height: self.view.frame.height)
-        libraryCV = UICollectionView.init(frame: frame, collectionViewLayout: flowLayout)
+        let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
+        
+        libraryCV = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
         guard let libraryCV = self.libraryCV else { return }
-        libraryCV.backgroundColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet//UIColor.black
         libraryCV.delegate = self
         libraryCV.dataSource = self
         libraryCV.allowsMultipleSelection = false
         libraryCV.isUserInteractionEnabled = true
         libraryCV.isScrollEnabled = true
-        libraryCV.register(SCLibraryCell.self, forCellWithReuseIdentifier: "LibraryCell")
+        libraryCV.register(SCLibraryCell.self, forCellWithReuseIdentifier: "SCLibraryCell")
         self.view.addSubview(libraryCV)
+        libraryCV.backgroundColor = SCColor.Custom.Gray.dark
+        libraryCV.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addConstraint(NSLayoutConstraint(item: libraryCV, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: libraryCV, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: libraryCV, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: libraryCV, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0))
+
     }
     
     
@@ -109,7 +116,7 @@ class SCLibraryViewController: UIViewController {
         },
                        completion: { (finished: Bool) in
                         UIView.animate(withDuration: 0.1, delay: 0, options: [.transitionCrossDissolve], animations:{
-                            self.presentSampleBanks()
+                            self.presentSampler()
                             
                         })
         })
@@ -154,18 +161,19 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        guard let result = SCDataManager.shared.user?.soundCollages?.count else {
-            return 1
-        }
-        return result
+//        
+//        guard let result = SCDataManager.shared.user?.soundCollages?.count else {
+//            return 10
+//        }
+        return 10//result
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LibraryCell", for: indexPath) as! SCLibraryCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCLibraryCell", for: indexPath) as! SCLibraryCell
         cell.setupLabel()
         cell.setupImageView()
+        cell.backgroundColor = SCColor.Custom.Gray.dark
         return cell
     }
     
@@ -201,7 +209,7 @@ extension SCLibraryViewController:  UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let width = collectionView.frame.size.width-(inset*2.0)
-        let libraryCellSize = CGSize.init(width: width, height: width)
+        let libraryCellSize = CGSize.init(width: width, height: collectionView.frame.size.height)
         return libraryCellSize
     }
     
@@ -211,11 +219,32 @@ extension SCLibraryViewController:  UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return inset
+        return 60.0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(0,0,0,0)
     }
+}
+
+
+
+
+extension SCLibraryViewController: UIScrollViewDelegate {
+    
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if let cv = self.libraryCV {
+            scrollView.snapToNearestCell(scrollView: scrollView, collectionView: cv)
+        }
+    }
+    
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if let cv = libraryCV {
+            scrollView.snapToNearestCell(scrollView: scrollView, collectionView: cv)
+        }
+    }
+    
 }
 

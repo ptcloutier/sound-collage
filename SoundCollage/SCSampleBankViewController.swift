@@ -130,7 +130,9 @@ class SCSampleBankViewController: UIViewController {
         collectionView.register(SCSampleBankCell.self, forCellWithReuseIdentifier: "SCSampleBankCell")
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = SCColor.Custom.Gray.dark//SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet //UIColor.black//Custom.PsychedelicIceCreamShoppe.ice
+        collectionView.backgroundColor = SCColor.Custom.Gray.dark
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false 
         view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: collectionView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0))

@@ -26,15 +26,40 @@ class SCLibraryCell: UICollectionViewCell {
     }
     
     
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        makeImageCircular()
+    }
+    
+    
+    private func makeImageCircular() {
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius  = CGFloat(roundf(Float(imageView.frame.size.width/2.0)))
+    }
+    
+    
     func setupLabel(){
         
-        self.contentView.backgroundColor = UIColor.white 
-       
+        titleLabel.addGlow(color: SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet)
+        titleLabel.isUserInteractionEnabled = false
+        titleLabel.frame = CGRect(x: 0, y: 60.0, width: 200.0, height: 50.0)
+        titleLabel.text = "@#$%^&*"
+        titleLabel.textAlignment = NSTextAlignment.center
+        
+        titleLabel.frame.origin.x = (self.contentView.frame.maxX/2.0)-(titleLabel.frame.width/2.0)
+        titleLabel.font = UIFont.init(name: "Futura", size: 40.0)
+        titleLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+        contentView.addSubview(titleLabel)
     }
     
     
     func setupImageView(){
-        
+       
+        imageView.frame = CGRect(x:0, y: self.contentView.frame.maxY*0.25, width: self.contentView.frame.width, height: self.contentView.frame.width)
+        imageView.image = UIImage.init(named: "l1")
+        contentView.addSubview(imageView)
     }
     
 }

@@ -39,7 +39,7 @@ protocol SCGAudioControllerDelegate: class {
 class SCGAudioController {
     
     var activePlayers:                  Int = 0
-    let maxPlayers:                     Int = 16
+    let maxPlayers:                     Int = 25
     var plays:                          Int = 0
     var finishedNodes:                  [AVAudioNode] = []
     var nodeChain:                      [AnyObject] = []
@@ -518,6 +518,10 @@ class SCGAudioController {
     
     func togglePlayer(index: Int){
         
+        if activePlayers >= maxPlayers {
+            print("Max players reached.")
+            return
+        }
         
         let mixer = AVAudioMixerNode.init()
         engine?.attach(mixer)
