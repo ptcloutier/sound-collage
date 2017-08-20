@@ -161,11 +161,11 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        
-//        guard let result = SCDataManager.shared.user?.soundCollages?.count else {
-//            return 10
-//        }
-        return 10//result
+        
+        guard let result = SCDataManager.shared.user?.soundCollages?.count else {
+            return 0
+        }
+        return result
     }
     
     
@@ -182,8 +182,8 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        print("selected item")
-        
+        print("selected song at \(indexPath.row)")
+        SCAudioManager.shared.audioController?.playSoundCollage(index: indexPath.row)
     }
     
     

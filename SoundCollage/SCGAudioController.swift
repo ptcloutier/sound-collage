@@ -38,6 +38,7 @@ protocol SCGAudioControllerDelegate: class {
 
 class SCGAudioController {
     
+    var songPlayer:                     AVAudioPlayer?
     var activePlayers:                  Int = 0
     let maxPlayers:                     Int = 25
     var plays:                          Int = 0
@@ -708,7 +709,7 @@ class SCGAudioController {
     func getAudioFilesForURL(){
         
         let dm = SCDataManager.shared
-        let idx = dm.currentSampleBank
+//        let idx = dm.currentSampleBank
         guard let currentSB = dm.user?.sampleBanks?[dm.currentSampleBank!]  else {
             print("Error, no current sample bank.")
             return
@@ -836,6 +837,10 @@ class SCGAudioController {
         guard let path = self.mixerOutputFileURL?.absoluteString else { return }
         print("Recorded output to \(path)")
         
+        
+        SCDataManager.shared.user?.soundCollages?.append((self.mixerOutputFileURL?.absoluteString)!)
+        
+        
         if isRecording == true {
             engine?.mainMixerNode.removeTap(onBus: 0)
             isRecording = false
@@ -849,6 +854,36 @@ class SCGAudioController {
     }
     
     
+    
+    func playSoundCollage(index: Int){
+        
+        if SCDataManager.shared.user?.soundCollages?.count == 0 {
+            print("No songs recorded yet to sound collages.")
+            return
+        }
+        
+        
+        if songPlayer != nil {
+            if (songPlayer?.isPlaying)! {
+                print("stop song.")
+                songPlayer?.stop()
+                return 
+            }
+        }
+        let path = SCDataManager.shared.user?.soundCollages?[index]
+        let url = URL.init(string: path!)
+        
+        try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+        try! AVAudioSession.sharedInstance().setActive(true)
+        
+        do {
+            songPlayer = try AVAudioPlayer(contentsOf: url!)
+            songPlayer?.prepareToPlay()
+            songPlayer?.play()
+        } catch let error {
+            print("\(error.localizedDescription)")
+        }
+    }
     
     
     //MARK: AVAudioSession
