@@ -67,15 +67,22 @@ class SCLibraryViewController: UIViewController {
         
         let backBtn = UIButton()
         backBtn.addTarget(self, action: #selector(SCLibraryViewController.backBtnDidPress), for: .touchUpInside)
-        
+        backBtn.setImage(UIImage.init(named: "back"), for: .normal)
         let backBarBtn = setupToolbarButton(btn: backBtn)
         
+        let shareBtn = UIButton()
+        shareBtn.addTarget(self, action: #selector(SCLibraryViewController.shareBtnDidPress), for: .touchUpInside)
+        shareBtn.setImage(UIImage.init(named: "share"), for: .normal)
+        let shareBarBtn = setupToolbarButton(btn: shareBtn)
+
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        toolbar.items = [flexibleSpace, backBarBtn, flexibleSpace]
+        toolbar.items = [flexibleSpace, backBarBtn, flexibleSpace, shareBarBtn, flexibleSpace]
         self.view.addSubview(toolbar)
     }
     
+    
+   
     
     
     
@@ -85,7 +92,6 @@ class SCLibraryViewController: UIViewController {
         let yPosition = toolbar.center.y-buttonHeight/2
         
         btn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
-        btn.setImage(UIImage.init(named: "back"), for: .normal)
         
         let backgroundView = UIView.init(frame: btn.frame)
         backgroundView.isUserInteractionEnabled = false
@@ -152,6 +158,12 @@ class SCLibraryViewController: UIViewController {
             return
         }
         SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
+    }
+    
+    
+    func shareBtnDidPress(){
+        
+        print("Boogogogoogogboo")
     }
 }
 

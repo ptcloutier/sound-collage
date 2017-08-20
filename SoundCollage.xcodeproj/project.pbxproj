@@ -83,6 +83,7 @@
 		A7DC3AA11F21376C006354A5 /* SCMusicInterfaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DC3AA01F21376C006354A5 /* SCMusicInterfaceCell.swift */; };
 		A7E117D11F278C8300041400 /* rectPink.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E117D01F278C8300041400 /* rectPink.png */; };
 		A7E117D31F278DE800041400 /* UIImage+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E117D21F278DE800041400 /* UIImage+Custom.swift */; };
+		A7EC74B61F4A55720092E59E /* share.png in Resources */ = {isa = PBXBuildFile; fileRef = A7EC74B51F4A55720092E59E /* share.png */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
 		A7FD67551F3775C100B1AD74 /* bluesyRiff.mid in Resources */ = {isa = PBXBuildFile; fileRef = A7FD67541F3775C100B1AD74 /* bluesyRiff.mid */; };
 		A7FDF60A1F41780500645E97 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7FDF6091F41780500645E97 /* SwiftyJSON.framework */; };
@@ -206,6 +207,7 @@
 		A7DC3AA01F21376C006354A5 /* SCMusicInterfaceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCMusicInterfaceCell.swift; sourceTree = "<group>"; };
 		A7E117D01F278C8300041400 /* rectPink.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rectPink.png; sourceTree = "<group>"; };
 		A7E117D21F278DE800041400 /* UIImage+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Custom.swift"; sourceTree = "<group>"; };
+		A7EC74B51F4A55720092E59E /* share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = share.png; path = ../../../Downloads/share.png; sourceTree = "<group>"; };
 		A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBank.swift; sourceTree = "<group>"; };
 		A7FD67541F3775C100B1AD74 /* bluesyRiff.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; path = bluesyRiff.mid; sourceTree = "<group>"; };
 		A7FD67561F3775CA00B1AD74 /* drumLoop.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = drumLoop.caf; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 			isa = PBXGroup;
 			children = (
 				A74B368D1F3105D7000E8DEA /* play.png */,
+				A7EC74B51F4A55720092E59E /* share.png */,
 				A7E117D01F278C8300041400 /* rectPink.png */,
 				A74541841F310E02007A89B7 /* lp.png */,
 				A74541901F3112C3007A89B7 /* lp1.png */,
@@ -616,6 +619,7 @@
 				A79161011F1EA2B50051113C /* Quicksand_Book_Oblique.otf in Resources */,
 				A74541911F3112C3007A89B7 /* lp1.png in Resources */,
 				A74541871F310E0E007A89B7 /* mic.png in Resources */,
+				A7EC74B61F4A55720092E59E /* share.png in Resources */,
 				A7FD67551F3775C100B1AD74 /* bluesyRiff.mid in Resources */,
 				A70814351F01B54600A8AE92 /* A DAY WITHOUT SUN.otf in Resources */,
 				A79161021F1EA2B50051113C /* Quicksand_Dash.otf in Resources */,
