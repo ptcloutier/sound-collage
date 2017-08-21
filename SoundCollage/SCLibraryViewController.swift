@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MessageUI
 
 class SCLibraryViewController: UIViewController {
 
@@ -16,6 +17,7 @@ class SCLibraryViewController: UIViewController {
     let toolbarHeight: CGFloat = 98.0
     var toolbar = UIToolbar()
     let inset: CGFloat = 2.0
+    var indexForAudioSharing: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -163,7 +165,29 @@ class SCLibraryViewController: UIViewController {
     
     func shareBtnDidPress(){
         
-        print("Boogogogoogogboo")
+        if( MFMailComposeViewController.canSendMail() ) {
+            print("Can send email.")
+            
+            let mailComposer = MFMailComposeViewController()
+            mailComposer.mailComposeDelegate = self as? MFMailComposeViewControllerDelegate
+            
+            //Set the subject and message of the email
+            mailComposer.setSubject("Sound Collage Experiment")
+            mailComposer.setMessageBody("Hi, I made this for you!", isHTML: false)
+            mailComposer.setToRecipients(["cloutier.perrin@gmail.com"])
+            
+//            let docsDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            
+                let fm = FileManager.default
+                let fileName = SCDataManager.shared.user?.soundCollages?[indexForAudioSharing!]
+                let filecontent = fm.contents(atPath: fileName!)//(docsDir + "/" + fileName)
+            
+                mailComposer.addAttachmentData(filecontent!, mimeType: "audio/aac", fileName: fileName!)
+            
+            
+            self.present(mailComposer, animated: true, completion: nil)
+        }
+        
     }
 }
 
@@ -248,6 +272,7 @@ extension SCLibraryViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if let cv = self.libraryCV {
             scrollView.snapToNearestCell(scrollView: scrollView, collectionView: cv)
+            indexForAudioSharing = cv.indexPathsForVisibleItems.first?.row
         }
     }
     
@@ -257,6 +282,9 @@ extension SCLibraryViewController: UIScrollViewDelegate {
             scrollView.snapToNearestCell(scrollView: scrollView, collectionView: cv)
         }
     }
+    
+   
+
     
 }
 

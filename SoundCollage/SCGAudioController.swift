@@ -767,7 +767,8 @@ class SCGAudioController {
             
             if mixerOutputFileURL == nil {
                 let id = getSoundCollageID()
-                mixerOutputFileURL = URL.init(string: NSTemporaryDirectory()+"sound_collage_"+"\(id)"+".aac")
+                let filePath = "sound_collage_"+"\(id)"+".aac"
+                mixerOutputFileURL = SCAudioManager.shared.getDocumentsDirectory().appendingPathComponent(filePath)
             }
             
             
@@ -838,7 +839,7 @@ class SCGAudioController {
         print("Recorded output to \(path)")
         
         
-        SCDataManager.shared.user?.soundCollages?.append((self.mixerOutputFileURL?.absoluteString)!)
+        SCDataManager.shared.user?.soundCollages?.append(path)
         
         
         if isRecording == true {
