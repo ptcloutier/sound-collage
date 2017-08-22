@@ -15,10 +15,11 @@ class SCSampleBankViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     let toolbarHeight: CGFloat = 98.0
-    var toolbar = UIToolbar()
+    var toolbar = SCToolbar()
     var images: [UIImage] = []
     var window: UIWindow?
     var timer = Timer()
+    var titleLabels1: [UILabel] = []
     
     //MARK: vc life cycle 
     
@@ -37,39 +38,11 @@ class SCSampleBankViewController: UIViewController {
         
         setupCollectionView()
         
-      
+        createTitleLabels()
         
-//        setupTitle(xConstant: 0, yConstant:  0, textColor: UIColor.white)
-//        let ta1 = [CGFloat(50.0), CGFloat(17.0), CGFloat(8.0), CGFloat(2.0), SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral, SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueShade] as [Any]
-//        let ta2 = [CGFloat(45.0), CGFloat(18.0), CGFloat(7.0), CGFloat(2.0), SCColor.Custom.PsychedelicIceCreamShoppe.medRose, SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet] as [Any]
-//        let ta3 = [CGFloat(40.0), CGFloat(19.0), CGFloat(6.0), CGFloat(3.0), SCColor.Custom.PsychedelicIceCreamShoppe.darkRose, SCColor.Custom.PsychedelicIceCreamShoppe.lightRose] as [Any]
-        let ta4 = [CGFloat(45.0), CGFloat(50.0), CGFloat(8.0), CGFloat(1.0), SCColor.Custom.PsychedelicIceCreamShoppe.rose, SCColor.Custom.PsychedelicIceCreamShoppe.rose] as [Any]
-//        let ta5 = [CGFloat(35.0), CGFloat(35.0), CGFloat(3.0), CGFloat(3.0), SCColor.Custom.PsychedelicIceCreamShoppe.lightCoral, SCColor.Custom.PsychedelicIceCreamShoppe.lightCoral] as [Any]
-//        let ta6 = [CGFloat(30.0), CGFloat(45.0), CGFloat(1.0), CGFloat(8.0), SCColor.Custom.PsychedelicIceCreamShoppe.medRose, SCColor.Custom.PsychedelicIceCreamShoppe.rose] as [Any]
-//        let ta7 = [CGFloat(20.0), CGFloat(35.0), CGFloat(2.0), CGFloat(8.0), SCColor.Custom.PsychedelicIceCreamShoppe.lightRose, SCColor.Custom.PsychedelicIceCreamShoppe.medRose] as [Any]
-//        let ta8 = [CGFloat(19.0), CGFloat(40.0), CGFloat(2.0), CGFloat(9.0), SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet, SCColor.Custom.PsychedelicIceCreamShoppe.darkRose] as [Any]
-//        let ta9 = [CGFloat(18.0), CGFloat(45.0), CGFloat(2.0), CGFloat(9.0), SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueShade, SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral] as [Any]
-//        let ta10 = [CGFloat(17.0), CGFloat(50.0), CGFloat(2.0), CGFloat(9.0), SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet, SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral] as [Any]
-
-        // label1 fontSize, label2 fontSize, label1 alpha, label2 alpha , label1textColor, label2textColor
-//        setupTitle(xConstant: -50, yConstant: 0, textAttributes: ta1)
-//        setupTitle(xConstant: -35, yConstant: 20, textAttributes: ta2)
-//        setupTitle(xConstant: -20, yConstant: 40, textAttributes: ta3)
-        setupTitle(xConstant: 0, yConstant: 0, textAttributes: ta4)
-//        setupTitle(xConstant:  10, yConstant: 20, textAttributes: ta5)
-//        setupTitle(xConstant: 25, yConstant: 40, textAttributes: ta6)
-//        setupTitle(xConstant: 40, yConstant: 120, textAttributes: ta7)
-//        setupTitle(xConstant: 55, yConstant: 140, textAttributes: ta8)
-//        setupTitle(xConstant: 60, yConstant: 160, textAttributes: ta9)
-//        setupTitle(xConstant: 75, yConstant: 180, textAttributes: ta10)
-//        setupTitle(xConstant: 34, yConstant: 120, textAttributes: ta7, alpha: 0.5)
-//        setupTitle(xConstant: 30, yConstant: 140, textAttributes: ta8, alpha: 0.4)
-//        setupTitle(xConstant: 25, yConstant: 160, textAttributes: ta9, alpha: 0.7)
-//        setupTitle(xConstant: 20, yConstant: 120, textAttributes: ta10, alpha: 0.5)
-//        setupTitle(xConstant: 15, yConstant: 140, textAttributes: ta11, alpha: 0.4)
-//        setupTitle(xConstant: 10, yConstant: 160, textAttributes: ta12, alpha: 0.7)
-
     }
+    
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,46 +54,7 @@ class SCSampleBankViewController: UIViewController {
      
     
     //MARK: ui setup
-    
-    private func setupTitle(xConstant: CGFloat, yConstant: CGFloat, textAttributes: [Any]){
-    
-        let label1fontSize = textAttributes[0] as! CGFloat
-        let label2fontSize = textAttributes[1] as! CGFloat
-        let label1Alpha = textAttributes[2] as! CGFloat
-        let label2Alpha = textAttributes[3] as! CGFloat
-        let label1textColor = textAttributes[4] as! UIColor
-        let label2textColor = textAttributes[5] as! UIColor
-        
-        
-        let margin: CGFloat = 20.0
-        let titleLabel1 = UILabel.init(frame: .zero)
-        titleLabel1.text = "S O U N D"
-        titleLabel1.font = UIFont.init(name: "Futura", size: label1fontSize)
-        titleLabel1.textColor = label1textColor
-        titleLabel1.textAlignment = NSTextAlignment.center
-        titleLabel1.addGlow(color: label2textColor)
-        titleLabel1.alpha = label1Alpha
-        self.collectionView.addSubview(titleLabel1)
-        titleLabel1.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.1, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: xConstant))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: (yConstant+(margin*2.0))))
-        
-        let titleLabel2 = UILabel.init(frame: .zero)
-        titleLabel2.text = "C O L L A G E"
-        titleLabel2.font = UIFont.init(name: "Futura", size: label2fontSize)
-        titleLabel2.textColor = label2textColor
-        titleLabel2.textAlignment = NSTextAlignment.center
-        titleLabel2.addGlow(color: label2textColor)
-        titleLabel2.alpha = label2Alpha
-        self.collectionView.addSubview(titleLabel2)
-        titleLabel2.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.1, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .top, relatedBy: .equal, toItem: titleLabel1, attribute: .bottom, multiplier: 1.0, constant: 0))// 100+yConstant))
-    }
+ 
     
     
     private func setupCollectionView(){
@@ -146,55 +80,47 @@ class SCSampleBankViewController: UIViewController {
     
     private func setupControls(){
     
-        let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
+        let buttonHeight = (toolbarHeight/3)*2
+//        let yPosition = toolbar.center.y-buttonHeight/2
         
-        toolbar.frame = CGRect(x: 0, y: self.view.frame.height-toolbarHeight, width: self.view.frame.width, height: toolbarHeight)
-        toolbar.setBackgroundImage(transparentPixel, forToolbarPosition: .any, barMetrics: .default)
-        toolbar.setShadowImage(transparentPixel, forToolbarPosition: .any)
-        toolbar.isTranslucent = true
-        
+        toolbar.transparentToolbar(view: view, toolbarHeight: toolbarHeight)
         let newSamplerBtn = UIButton()
-        newSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newSamplerDidPress), for: .touchUpInside)
+        newSamplerBtn.addGlow(color: SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet)
+        newSamplerBtn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
+        newSamplerBtn.setImage(UIImage.init(named: "plus1"), for: .normal)
+        newSamplerBtn.addTarget(self, action: #selector(SCSampleBankViewController.newSamplerBtnDidPress), for: .touchUpInside)
         
-    
-        let newSamplerBarBtn = setupToolbarButton(btn: newSamplerBtn)
+        
+        let libraryBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
+        libraryBtn.setBackgroundImage(UIImage.init(named: "playlist"), for: .normal)
+        libraryBtn.addTarget(self, action: #selector(SCSampleBankViewController.libraryBtnDidPress), for: .touchUpInside)
+        libraryBtn.addGlow(color: SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet)
+
+        let newSamplerBarBtn = UIBarButtonItem.init(customView: newSamplerBtn)//setupToolbarButton(btn: newSamplerBtn)
+        let libraryBarBtn = UIBarButtonItem.init(customView: libraryBtn)
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        toolbar.items = [flexibleSpace, newSamplerBarBtn, flexibleSpace]
+        toolbar.items = [flexibleSpace, newSamplerBarBtn, flexibleSpace, libraryBarBtn, flexibleSpace]
         self.view.addSubview(toolbar)
     }
     
     
+    //MARK: Navigation
     
-
-    
-    
-    func setupToolbarButton(btn: UIButton)-> UIBarButtonItem {
+    func libraryBtnDidPress(){
         
-        let buttonHeight = toolbarHeight
-        let yPosition = toolbar.center.y-buttonHeight/2
+        print("library button pressed.")
+        let vc: SCLibraryViewController = SCLibraryViewController(nibName: nil, bundle: nil)
+        SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
         
-        btn.frame = CGRect(x: 0, y: 0, width: buttonHeight , height: buttonHeight)
-        btn.setImage(UIImage.init(named: "plus1"), for: .normal)
-        
-        let backgroundView = UIView.init(frame: btn.frame)
-        backgroundView.isUserInteractionEnabled = false
-        backgroundView.layer.cornerRadius = buttonHeight/2
-        backgroundView.layer.masksToBounds = true
-        btn.addSubview(backgroundView)
-        btn.center = CGPoint(x: toolbar.center.x, y: yPosition)
-        
-        let barBtn = UIBarButtonItem.init(customView: btn)
-        return barBtn
     }
+
     
-    
-   
 
     
     
-    func newSamplerDidPress(){
+    func newSamplerBtnDidPress(){
         
         let dm = SCDataManager.shared
         
@@ -226,6 +152,7 @@ class SCSampleBankViewController: UIViewController {
         SCAudioManager.shared.audioController?.getAudioFilesForURL()
         SCAudioManager.shared.effectControls = (SCDataManager.shared.user?.sampleBanks?[SCDataManager.shared.currentSampleBank!].effectSettings)!
         SCAudioManager.shared.audioController?.effectControls = SCAudioManager.shared.effectControls
+        SCAudioManager.shared.isSetup = true 
     }
     
     
@@ -240,6 +167,53 @@ class SCSampleBankViewController: UIViewController {
         let vc: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
         SCAnimator.FadeIn(duration: 2.0, fromVC: self, toVC: vc)
     }
+    
+    
+    
+    func createTitleLabels(){
+
+        let ta4 = [CGFloat(40.0), CGFloat(40.0), SCColor.Custom.PsychedelicIceCreamShoppe.rose, SCColor.Custom.PsychedelicIceCreamShoppe.rose] as [Any]
+        setupTitle(xConstant: 0, yConstant: 0, textAttributes: ta4)
+    }
+    
+    
+    
+    private func setupTitle(xConstant: CGFloat, yConstant: CGFloat, textAttributes: [Any]) {
+        
+        let label1fontSize = textAttributes[0] as! CGFloat
+        let label2fontSize = textAttributes[1] as! CGFloat
+        let label1textColor = textAttributes[2] as! UIColor
+        let label2textColor = textAttributes[3] as! UIColor
+        
+        
+        let margin: CGFloat = 20.0
+        let titleLabel1 = UILabel.init(frame: .zero)
+        titleLabel1.text = "S O U N D"
+        titleLabel1.font = UIFont.init(name: "Futura", size: label1fontSize)
+        titleLabel1.textColor = label1textColor
+        titleLabel1.textAlignment = NSTextAlignment.center
+        titleLabel1.addGlow(color: label2textColor)
+        self.collectionView.addSubview(titleLabel1)
+        view.sendSubview(toBack: titleLabel1)
+        titleLabel1.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.1, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: xConstant))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: (yConstant+(margin*2.0))))
+        
+        let titleLabel2 = UILabel.init(frame: .zero)
+        titleLabel2.text = "C O L L A G E"
+        titleLabel2.font = UIFont.init(name: "Futura", size: label2fontSize)
+        titleLabel2.textColor = label2textColor
+        titleLabel2.textAlignment = NSTextAlignment.center
+        titleLabel2.addGlow(color: label2textColor)
+        self.collectionView.addSubview(titleLabel2)
+        titleLabel2.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .height, relatedBy: .equal, toItem: view, attribute: .height, multiplier: 0.1, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: titleLabel2, attribute: .top, relatedBy: .equal, toItem: titleLabel1, attribute: .bottom, multiplier: 1.0, constant: 0))// 100+yConstant))
+   }
 }
 
 

@@ -23,9 +23,6 @@ class SCMixerViewController: UIViewController {
         
         setupMixerCV()
         NotificationCenter.default.addObserver(self, selector: #selector(SCMixerViewController.selectedSamplePadDidChange), name: Notification.Name.init("selectedSamplePadDidChangeNotification"), object: nil)
-        
-
-     
     }
     
     
@@ -114,6 +111,7 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        let am = SCAudioManager.shared
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MixerPanelCell", for: indexPath) as! SCMixerPanelCell
         
@@ -128,7 +126,7 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         cell.sliderXPositions = [xPos, xPos*2.5, xPos*6.0, xPos*9.5, xPos*13.0 ]
         cell.sliders = [cell.slider1,  cell.slider2,  cell.slider3,  cell.slider4,  cell.slider5 ]
         cell.parameterLabels = [ cell.pLabel1, cell.pLabel2, cell.pLabel3, cell.pLabel4, cell.pLabel5 ]
-        let keys: [String] = Array(SCAudioManager.shared.mixerPanels.keys)
+        let keys: [String] = Array(am.mixerPanels.keys)
         let vals: [[String]] = Array(SCAudioManager.shared.mixerPanels.values)
         
         for (index, slider) in cell.sliders.enumerated() {
@@ -145,9 +143,9 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         for (index, slider) in cell.sliders.enumerated() {
             
             cell.adjustLabel(label: cell.parameterLabels[index], slider: slider)
-            let effectControls = SCAudioManager.shared.effectControls[cell.mixerPanelIdx]
+            let effectControls = am.effectControls[cell.mixerPanelIdx]
             let parameters = effectControls[index].parameter
-            let parameter = parameters[SCAudioManager.shared.selectedSampleIndex]
+            let parameter = parameters[am.selectedSampleIndex]
             slider.value = parameter
         }
         

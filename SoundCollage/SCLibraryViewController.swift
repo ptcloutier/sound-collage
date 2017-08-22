@@ -15,7 +15,7 @@ class SCLibraryViewController: UIViewController {
     
     var libraryCV: UICollectionView?
     let toolbarHeight: CGFloat = 98.0
-    var toolbar = UIToolbar()
+    var toolbar = SCToolbar()
     let inset: CGFloat = 2.0
     var indexForAudioSharing: Int?
     
@@ -56,16 +56,9 @@ class SCLibraryViewController: UIViewController {
     
     
     
-    
-    
     private func setupControls(){
         
-        let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
-        
-        toolbar.frame = CGRect(x: 0, y: self.view.frame.height-toolbarHeight, width: self.view.frame.width, height: toolbarHeight)
-        toolbar.setBackgroundImage(transparentPixel, forToolbarPosition: .any, barMetrics: .default)
-        toolbar.setShadowImage(transparentPixel, forToolbarPosition: .any)
-        toolbar.isTranslucent = true
+        toolbar.transparentToolbar(view: view, toolbarHeight: toolbarHeight)
         
         let backBtn = UIButton()
         backBtn.addTarget(self, action: #selector(SCLibraryViewController.backBtnDidPress), for: .touchUpInside)
@@ -106,27 +99,34 @@ class SCLibraryViewController: UIViewController {
         return barBtn
     }
     
+    
+    
     //MARK: Navigation
     
+    
+    
     func backBtnDidPress(){
-        
-        dissolve()
-    }
-    
-    
-    
-    
-    func dissolve(){
-        
-        
+                
+        guard let currentSB = SCDataManager.shared.currentSampleBank else {
+            print("No sample bank chosen")
+            
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.transitionCrossDissolve], animations:{
+                self.presentSampleBanks()
+                
+            })
+            return
+        }
         UIView.animate(withDuration: 0.3, delay: 0, options: [.transitionCrossDissolve], animations:{
-          
-        },
-                       completion: { (finished: Bool) in
-                        UIView.animate(withDuration: 0.1, delay: 0, options: [.transitionCrossDissolve], animations:{
-                            self.presentSampler()
-                            
-                        })
+            
+            guard let audioManagerIsSetup = SCAudioManager.shared.isSetup else { return }
+            
+            switch  audioManagerIsSetup {
+            case true:
+                self.presentSampler()
+                print("Current sample bank #\(currentSB)")
+            case false:
+                self.presentSampleBanks()
+            }
         })
     }
     

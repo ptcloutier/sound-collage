@@ -12,8 +12,6 @@ class SCScoreViewController: UIViewController {
     
     var cvHeight: CGFloat = 368.0
     var scoreCV: UICollectionView?
-    let toolbarHeight = CGFloat(98.0)
-    var toolbar = UIToolbar()
     var recordBtn: UIButton?
     var sequencerTimer: Timer?
     var sequencerBar = UIView()

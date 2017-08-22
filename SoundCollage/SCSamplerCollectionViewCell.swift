@@ -22,7 +22,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var touchTimer: Timer? = nil
     var isTouchDelayed: Bool = false
     var padLabel: UILabel = UILabel()
-    var colors = [[SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor]]//[[UIColor.black.cgColor, UIColor.purple.cgColor, UIColor.black.cgColor]]// [UIColor.red.cgColor, UIColor.magenta.cgColor, UIColor.orange.cgColor]]
+    var colors = [[SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor]]
     var gradientColors: SCColor?
     var doXAnimation: Bool = false 
     var doWaveAnimation: Bool = true
@@ -55,13 +55,12 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         self.layer.borderWidth = 1.0
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 25.0
-        
         contentView.addSubview(padLabel)
-//        padLabel.translatesAutoresizingMaskIntoConstraints = false
-//        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .height, relatedBy: .equal, toItem: self.contentView, attribute: .height, multiplier: 1.0, constant: 0))
-//        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .centerX, relatedBy: .equal, toItem: self.contentView, attribute: .centerX, multiplier: 1.0, constant: 0))
-//        let centerY = ((contentView.frame.height/4)*3)/4
-//        self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: centerY))
+    }
+    
+    
+    
+    func setupGradientColors(){
         
         if self.colors.count<2 {
             self.colors.append([(cellColor?.cgColor)!, (cellColor?.cgColor)!, (cellColor?.cgColor)!])
@@ -70,7 +69,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         guard let gradientColors = self.gradientColors else { return }
         gradientColors.configureGradientLayer(in: self.contentView, from: self.contentView.center, to: CGPoint.init(x: 1, y: 1))
     }
-    
 
     
     //MARK: Animations
@@ -100,6 +98,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     func stopCellsFlashing() {
+        
         if flashTimer != nil {
             flashTimer?.invalidate()
         }
@@ -107,31 +106,10 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     
-    
-    
-//    func animateCell(){
-//        
-//        animateColor()
-//    }
-    
-    
-    
-    func animateColor(fillMode: String){
+    func animateColor(fillMode: String) {
+        
         guard let gradientColors = self.gradientColors else { return }
         gradientColors.morphColors(in: self, fillMode: fillMode)
-       
-//
-//        UIView.animate(withDuration: 0.05, animations: {
-//            self.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
-////            let colors = [UIColor.red, UIColor.magenta, UIColor.orange]
-////            self.applyGradient(withColors: colors, gradientOrientation: .topLeftBottomRight)
-//        }, completion: { _ in
-//            UIView.animate(withDuration: 0.05, animations: {
-//                self.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-////                self.backgroundColor = UIColor.black
-//                
-//            })
-//        })
     }
 
     
@@ -144,7 +122,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     func startRecording(){
-      
         
         self.isRecordingEnabled = false
         

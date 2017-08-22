@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        SCAudioManager.shared.isSetup = false 
         
         
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -35,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // get user and sample banks
         SCAudioManager.shared.setupAudioManager()
         SCDataManager.shared.fetchCurrentUserData()
-    
+        
         return true
     }
     

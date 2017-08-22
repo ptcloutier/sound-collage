@@ -15,7 +15,7 @@ class SCContainerViewController: UIViewController {
     var recordBtn: UIButton?
     let navBarBtnFrameSize = CGRect.init(x: 0, y: 0, width: 30, height: 30)
     let toolbarHeight = CGFloat(77.0)
-    var toolbar = UIToolbar()
+    var toolbar = SCToolbar()
 
     
     
@@ -50,15 +50,7 @@ class SCContainerViewController: UIViewController {
     
     private func setupControls(){ 
         
-        let transparentPixel = UIImage.imageWithColor(color: UIColor.clear)
-        
-        toolbar.frame = CGRect(x: 0, y: self.view.frame.height-toolbarHeight, width: self.view.frame.width, height: toolbarHeight)
-        toolbar.setBackgroundImage(transparentPixel, forToolbarPosition: .any, barMetrics: .default)
-        toolbar.setShadowImage(transparentPixel, forToolbarPosition: .any)
-        toolbar.isTranslucent = true
-        
-        
-        
+        toolbar.transparentToolbar(view: view, toolbarHeight: toolbarHeight)
         let buttonHeight = (toolbarHeight/3)*2
 
         self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
@@ -99,11 +91,9 @@ class SCContainerViewController: UIViewController {
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
-        
         toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace,  libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
         self.view.addSubview(toolbar)
         toolbar.backgroundColor = SCColor.Custom.Gray.dark
-
     }
     
     

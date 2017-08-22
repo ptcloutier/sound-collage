@@ -57,6 +57,7 @@ class SCSamplerViewController: UIViewController  {
     }
     
     
+    
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self)
     }
@@ -108,12 +109,6 @@ class SCSamplerViewController: UIViewController  {
     }
     
     
-    
-    
-   
-    
-    
-    
         
     //MARK: recording and playback
     
@@ -126,11 +121,6 @@ class SCSamplerViewController: UIViewController  {
             reloadSamplerCV()
         case false:
             SCAudioManager.shared.isRecordingModeEnabled = true 
-//            if SCAudioManager.shared.isRecording == true {
-//                SCAudioManager.shared.isRecordingModeEnabled = false
-//            } else {
-//                SCAudioManager.shared.isRecordingModeEnabled = true
-//            }
             self.selectedPadIndex = nil
             reloadSamplerCV()
         }
@@ -248,6 +238,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.cellColor = iceCreamColors[colorIdx]
         
         cell.setupLabel()
+        cell.setupGradientColors()
        
         
         if indexPath.row == self.selectedPadIndex {
@@ -288,21 +279,12 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
 
         // wave animation when navigating from samplebanks
         
-        
         if cell.doWaveAnimation == true {
             
             performWave(fillMode: kCATransitionFromLeft, row: indexPath.row, cell: cell, delays: [0.5, 0.6, 0.7, 0.8])
         }
         
-//        if cell.doXAnimation == true {
-//            performXAnimation(fillMode: kCATransitionFade, row: indexPath.row, cell: cell, delays:[0.5, 0.6, 0.7, 0.8])
-//        }
-        
-        
-        
-            
         return cell
-        
     }
     
     

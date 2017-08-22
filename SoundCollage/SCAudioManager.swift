@@ -18,8 +18,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     static let shared = SCAudioManager()
     
-    var ouputMixer:                     AVAudioMixerNode?
-
+    var ouputMixer: AVAudioMixerNode?
+    var isSetup: Bool?
     var recordedOutputFile: AVAudioFile?
     var audioFile: AVAudioFile!
     let audioSession: AVAudioSession = AVAudioSession.sharedInstance()

@@ -84,6 +84,7 @@
 		A7E117D11F278C8300041400 /* rectPink.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E117D01F278C8300041400 /* rectPink.png */; };
 		A7E117D31F278DE800041400 /* UIImage+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E117D21F278DE800041400 /* UIImage+Custom.swift */; };
 		A7EC74B61F4A55720092E59E /* share.png in Resources */ = {isa = PBXBuildFile; fileRef = A7EC74B51F4A55720092E59E /* share.png */; };
+		A7EC74B81F4C6E7B0092E59E /* SCToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
 		A7FD67551F3775C100B1AD74 /* bluesyRiff.mid in Resources */ = {isa = PBXBuildFile; fileRef = A7FD67541F3775C100B1AD74 /* bluesyRiff.mid */; };
 		A7FDF60A1F41780500645E97 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7FDF6091F41780500645E97 /* SwiftyJSON.framework */; };
@@ -208,6 +209,7 @@
 		A7E117D01F278C8300041400 /* rectPink.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rectPink.png; sourceTree = "<group>"; };
 		A7E117D21F278DE800041400 /* UIImage+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Custom.swift"; sourceTree = "<group>"; };
 		A7EC74B51F4A55720092E59E /* share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = share.png; path = ../../../Downloads/share.png; sourceTree = "<group>"; };
+		A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCToolbar.swift; sourceTree = "<group>"; };
 		A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBank.swift; sourceTree = "<group>"; };
 		A7FD67541F3775C100B1AD74 /* bluesyRiff.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; path = bluesyRiff.mid; sourceTree = "<group>"; };
 		A7FD67561F3775CA00B1AD74 /* drumLoop.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = drumLoop.caf; sourceTree = "<group>"; };
@@ -337,6 +339,7 @@
 				A713F50B1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift */,
 				A713F50D1F2F65A900742D1C /* SCFaderDelegate.swift */,
 				A748E2CB1F3AB1AF00507DF8 /* UIView+Glow.swift */,
+				A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */,
 			);
 			name = "Classes+Extensions";
 			sourceTree = "<group>";
@@ -741,6 +744,7 @@
 				A7264E7D1EAE619800664EDE /* SCAnimator.swift in Sources */,
 				A7743EAA1F40C14600BD5961 /* SCConstants.swift in Sources */,
 				A7BD6AB41F140D85000CDF9A /* SCScoreCell.swift in Sources */,
+				A7EC74B81F4C6E7B0092E59E /* SCToolbar.swift in Sources */,
 				A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */,
 				A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */,
 				A748E2CC1F3AB1AF00507DF8 /* UIView+Glow.swift in Sources */,

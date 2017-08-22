@@ -57,7 +57,7 @@ class SCColor {
     
     
     func morphColors(in view: UIView, fillMode: String) {
-//        
+//
 //        if currentColors < colors.count - 1 {
 //            currentColors+=1
 //        } else {
