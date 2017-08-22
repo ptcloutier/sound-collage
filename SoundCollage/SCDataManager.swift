@@ -301,4 +301,36 @@ class SCDataManager {
         UserDefaults.standard.set(index, forKey: "selectedMixerPanelIndex")
     }
     
+    
+    
+    func getLastSampleBankIdx() -> Int {
+        
+        let idx = UserDefaults.standard.integer(forKey: "lastSampleBank")
+        return idx
+    }
+    
+    
+    
+    func setLastSampleBankIdx(){
+        
+        guard let idx = SCDataManager.shared.currentSampleBank else { return }
+        UserDefaults.standard.set(idx, forKey: "lastSampleBank")
+        
+    }
+    
+    
+    func setupCurrentSampleBankEffectSettings(){
+        
+        SCAudioManager.shared.audioController = SCGAudioController.init()
+        SCAudioManager.shared.audioController?.delegate = SCAudioManager.shared as? SCGAudioControllerDelegate
+        
+        SCAudioManager.shared.audioController?.getAudioFilesForURL()
+        SCAudioManager.shared.effectControls = (SCDataManager.shared.user?.sampleBanks?[SCDataManager.shared.currentSampleBank!].effectSettings)!
+        SCAudioManager.shared.audioController?.effectControls = SCAudioManager.shared.effectControls
+        SCAudioManager.shared.isSetup = true
+        if SCDataManager.shared.currentSampleBank == nil {
+            SCDataManager.shared.currentSampleBank = SCDataManager.shared.getLastSampleBankIdx()
+        }
+    }
+    
 }

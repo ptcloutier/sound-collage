@@ -710,6 +710,10 @@ class SCGAudioController {
         
         let dm = SCDataManager.shared
 //        let idx = dm.currentSampleBank
+        
+        if dm.currentSampleBank == nil {
+            dm.currentSampleBank = dm.getLastSampleBankIdx()
+        }
         guard let currentSB = dm.user?.sampleBanks?[dm.currentSampleBank!]  else {
             print("Error, no current sample bank.")
             return

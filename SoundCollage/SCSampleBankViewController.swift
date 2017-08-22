@@ -266,13 +266,12 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let cell = collectionView.cellForItem(at: indexPath) as! SCSampleBankCell
-        cell
-        
         let dm = SCDataManager.shared
         dm.currentSampleBank = indexPath.row
         for sb in (SCDataManager.shared.user?.sampleBanks)! {
             if sb.id == cell.id {
-                setupCurrentSampleBankEffectSettings()
+                dm.setLastSampleBankIdx()
+                dm.setupCurrentSampleBankEffectSettings()
                 presentSampler()
                 return
             }

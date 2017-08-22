@@ -22,21 +22,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        SCAudioManager.shared.isSetup = false 
-        
-        
-        window = UIWindow(frame: UIScreen.main.bounds)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let initialViewController = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController
-        window?.rootViewController = initialViewController
-        window?.makeKeyAndVisible()
-        
+        let dm = SCDataManager.shared
+        let am = SCAudioManager.shared
+        am.isSetup = false
         
         
         // get user and sample banks
-        SCAudioManager.shared.setupAudioManager()
-        SCDataManager.shared.fetchCurrentUserData()
+        am.setupAudioManager()
+        dm.fetchCurrentUserData()
+        dm.setupCurrentSampleBankEffectSettings()
         
+        
+        let initialVC: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = initialVC
+        window?.makeKeyAndVisible()
+        
+
         return true
     }
     

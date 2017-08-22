@@ -11,7 +11,6 @@ import MessageUI
 
 class SCLibraryViewController: UIViewController {
 
-    //TODO: navigate from samplebanks or sampler 
     
     var libraryCV: UICollectionView?
     let toolbarHeight: CGFloat = 98.0
@@ -31,9 +30,7 @@ class SCLibraryViewController: UIViewController {
     
     func setupCollectionView(){
         
-        
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
-        
         libraryCV = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
         guard let libraryCV = self.libraryCV else { return }
         libraryCV.delegate = self
@@ -50,7 +47,6 @@ class SCLibraryViewController: UIViewController {
         view.addConstraint(NSLayoutConstraint(item: libraryCV, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: libraryCV, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: libraryCV, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0))
-
     }
     
     
@@ -137,16 +133,8 @@ class SCLibraryViewController: UIViewController {
     
     func presentSampler(){
         
-        UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations:{
-            let vc: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
-            let transition = CATransition()
-            transition.duration = 1.0
-            transition.type = kCATransitionPush
-            transition.subtype = kCATransitionFade
-            self.view.window!.layer.add(transition, forKey: kCATransition)
-            self.present(vc, animated: true, completion: nil)
-        }, completion: nil
-        )
+        let vc: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
+        SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
     }
     
     
