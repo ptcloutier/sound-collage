@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import ObjectMapper
+//import ObjectMapper
 import SwiftyJSON
 
 
@@ -61,25 +61,22 @@ class SCDataManager {
     
     func readFile() -> SCUser? {
         
-        guard let filePath = getFileURL(filePath: "SoundCollageUser.json") else { //Bundle.main.path(forResource: "SoundCollageUser", ofType: "json") else {//
+        guard let url = getFileURL(filePath: "SoundCollageUser.json") else { //Bundle.main.path(forResource: "SoundCollageUser", ofType: "json") else {//
             print("No file at path.")
             return nil
         }
-        do {
-            let data = try Data(contentsOf: filePath, options: .alwaysMapped)
-            let jsonObj = JSON(data: data)
-            if jsonObj != JSON.null {
-                print("jsonData:\(jsonObj)")
-                let jsonString = jsonObj.rawString()
-                let scUser = SCUser(JSONString: jsonString!)
-                return scUser
-            } else {
-                print("Could not get json from file, make sure that file contains valid json.")
-            }
-        } catch let error {
-            print(error.localizedDescription)
+        guard let data = try? Data(contentsOf: url) else {
+            print("error reading file")
+            return nil
         }
-        return nil
+        
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) else {
+            print("json serialization error")
+            return nil
+        }
+        
+        let user = SCUser.init(json: json as! [String : Any])
+        return user
     }
     
     
@@ -145,17 +142,65 @@ class SCDataManager {
     
     func saveObjectToJSON(){
         
-        let user = SCDataManager.shared.user
         
-        if let jsonString = user?.toJSONString(prettyPrint: true){
-            print(jsonString)
-            writeToFile(jsonString: jsonString)
-        } else {
-            print("Error serializing json")
-        }
+        
+        let userJSON: [String: Any] = dictionaryFromSCUser(user: SCDataManager.shared.user!)
+        print("\(userJSON)")
+//        var values: [String] = []
+//        
+//        for value in dict.values {
+//            values.append(value as! String)
+//        }
+//
+//        if let jsonString =  {
+//            print(jsonString)
+//            writeToFile(jsonString: jsonString)
+//        } else {
+//            print("Error serializing json")
+//        }
     }
     
     
+    func dictionaryFromSCUser(user: SCUser) -> [String: Any] {
+        
+        var dict: [String: Any] = [:]
+        
+        let sbDict: [String: Any] = dictionaryFromSCSampleBank(sb: user.sampleBanks)
+        
+        dict.updateValue("\(user.userName!)", forKey: "userName")
+        dict.updateValue("\(sbDict)", forKey: "sampleBanks")
+        dict.updateValue("\(user.soundCollages!)", forKey: "soundCollages")
+        
+        return dict
+    }
+
+    
+    func dictionaryFromSCSampleBank(sb: SCSampleBank) -> [String: Any] {
+        
+        var dict: [String: Any] = [:]
+        
+        var effectSettings: [[SCEffectControl]] = []
+        
+        for effectControl in sb.effectSettings {
+            let ecDict: [String: Any] = dictionaryFromSCEffectControl(ec: effectControl)
+            
+        }
+        
+        dict.updateValue("\(sb.name!)", forKey: "name")
+        dict.updateValue("\(sb.id!)", forKey: "id")
+        dict.updateValue("\(sb.samples!)", forKey: "samples")
+        dict.updateValue("\()", forKey: "effectSettings")
+        dict.updateValue("\(sb.sequencerSettings!)", forKey: "sequencerSettings")
+        return dict
+    }
+    
+    
+    func dictionaryFromSCEffectControl(ec: SCEffectControl) -> [String: Any] {
+        
+        var dict: [String: Any] = [:]
+        dict.updateValue("\(ec.parameter)", forKey: "parameter")
+        return dict
+    }
     
     func writeToFile(jsonString: String){
     

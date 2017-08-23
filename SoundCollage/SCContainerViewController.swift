@@ -64,7 +64,7 @@ class SCContainerViewController: UIViewController {
         recordBtn.addTarget(self, action: #selector(SCContainerViewController.recordBtnDidPress), for: .touchUpInside)
         
         let bankBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
-        bankBtn.setBackgroundImage(UIImage.init(named: "samplebank"), for: .normal)
+        bankBtn.setBackgroundImage(UIImage.init(named: "sampleBank"), for: .normal)
         bankBtn.addTarget(self, action: #selector(SCContainerViewController.bankBtnDidPress), for: .touchUpInside)
         bankBtn.addGlow(color: UIColor.white)
         

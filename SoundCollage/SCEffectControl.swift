@@ -8,11 +8,10 @@
 
 import Foundation
 import AVFoundation
-import ObjectMapper
 
 
-class SCEffectControl: Mappable {
-
+class SCEffectControl {
+    
     var parameter: [Float] = []
     
     init() {
@@ -20,12 +19,40 @@ class SCEffectControl: Mappable {
     }
     
     
-    required init?(map: Map) {
-//        parameter     <- map["parameter"]
-    }
-    
-    
-    func mapping(map: Map) {
-        parameter     <- map["parameter"]
+    convenience init?(json: [String: Any]) {
+        
+        guard let parameter = json["parameter"] as? [Float] else {
+            print("json error")
+            return nil
+        }
+        
+        self.init()
+        self.parameter = parameter
     }
 }
+
+//import ObjectMapper
+//
+//
+//class SCEffectControl: Mappable {
+//
+//    var parameter: [Float] = []
+//    
+//    init() {
+//        self.parameter = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+//    }
+//    
+//    
+//    required init?(map: Map) {
+//        // check if a required property exists within the JSON.
+//        if map.JSON["parameter"] == nil {
+//            print("Json error, sceffectcontrol parameter is nil")
+//            return nil
+//        }
+//    }
+//    
+//    
+//    func mapping(map: Map) {
+//        parameter     <- map["parameter"]
+//    }
+//}
