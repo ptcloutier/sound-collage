@@ -859,6 +859,23 @@ class SCGAudioController {
     }
     
     
+    func stopSong(){
+        
+        if SCDataManager.shared.user?.soundCollages?.count == 0 {
+            print("No songs recorded yet to sound collages.")
+            return
+        }
+        
+        
+        if songPlayer != nil {
+            if (songPlayer?.isPlaying)! {
+                print("stop song.")
+                songPlayer?.stop()
+                return
+            }
+        }
+    }
+    
     
     func playSoundCollage(index: Int){
         

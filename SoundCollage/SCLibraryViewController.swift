@@ -102,7 +102,10 @@ class SCLibraryViewController: UIViewController {
     
     
     func backBtnDidPress(){
-                
+        
+        SCAudioManager.shared.audioController?.stopSong()
+
+        
         guard let currentSB = SCDataManager.shared.currentSampleBank else {
             print("No sample bank chosen")
             
@@ -133,6 +136,8 @@ class SCLibraryViewController: UIViewController {
     
     func presentSampler(){
         
+        SCAudioManager.shared.audioController?.stopSong()
+
         let vc: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
         SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
     }
@@ -142,6 +147,8 @@ class SCLibraryViewController: UIViewController {
     
     func presentSampleBanks(){
         
+        SCAudioManager.shared.audioController?.stopSong()
+
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController else {
             print("SampleBank vc not found.")
@@ -152,6 +159,8 @@ class SCLibraryViewController: UIViewController {
     
     
     func shareBtnDidPress(){
+        
+        SCAudioManager.shared.audioController?.stopSong()
         
         if( MFMailComposeViewController.canSendMail() ) {
             print("Can send email.")
@@ -194,7 +203,14 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCLibraryCell", for: indexPath) as! SCLibraryCell
+       
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCLibraryViewController.tap(gestureRecognizer:)))
+        tapGestureRecognizer.delegate = self
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        cell.addGestureRecognizer(tapGestureRecognizer)
+        
         cell.setupLabel()
         cell.setupImageView()
         cell.backgroundColor = SCColor.Custom.Gray.dark
@@ -270,9 +286,49 @@ extension SCLibraryViewController: UIScrollViewDelegate {
             scrollView.snapToNearestCell(scrollView: scrollView, collectionView: cv)
         }
     }
-    
-   
-
-    
 }
+
+
+
+
+
+extension SCLibraryViewController: UIGestureRecognizerDelegate {
+    
+    
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    
+    
+    func tap(gestureRecognizer: UITapGestureRecognizer) {
+        
+        
+        let tapLocation = gestureRecognizer.location(in: self.libraryCV)
+        
+        guard let indexPath = self.libraryCV?.indexPathForItem(at: tapLocation) else {
+            print("IndexPath not found.")
+            return
+        }
+        
+        guard let cell = self.libraryCV?.cellForItem(at: indexPath) else {
+            print("Cell not found.")
+            return
+        }
+        
+        selectCell(cell: cell, indexPath: indexPath)
+    }
+    
+    
+    
+    func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
+        
+        print("selected cell at \(indexPath.row)")
+        self.collectionView(libraryCV!, didSelectItemAt: indexPath)
+    }
+}
+
+
+
 
