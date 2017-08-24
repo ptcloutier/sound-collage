@@ -146,7 +146,18 @@ class SCDataManager {
         
         let userJSON: [String: Any] = dictionaryFromSCUser(user: SCDataManager.shared.user!)
         print("\(userJSON)")
-//        var values: [String] = []
+        do {
+            let data = try JSONSerialization.data(withJSONObject: userJSON, options: [])
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print(jsonString)
+                writeToFile(jsonString: jsonString)
+            } else {
+               print("Error, couldn't get json string from data")
+            }
+        } catch let error {
+           print("\(error.localizedDescription)")
+        }
+        //        var values: [String] = []
 //        
 //        for value in dict.values {
 //            values.append(value as! String)
@@ -161,46 +172,75 @@ class SCDataManager {
     }
     
     
+    
+    
     func dictionaryFromSCUser(user: SCUser) -> [String: Any] {
         
         var dict: [String: Any] = [:]
         
-        let sbDict: [String: Any] = dictionaryFromSCSampleBank(sb: user.sampleBanks)
+        var sampBanksDict: [[String: Any]] = []
         
-        dict.updateValue("\(user.userName!)", forKey: "userName")
-        dict.updateValue("\(sbDict)", forKey: "sampleBanks")
-        dict.updateValue("\(user.soundCollages!)", forKey: "soundCollages")
+        for sb in user.sampleBanks! {
+            let sbDict: [String: Any] = dictionaryFromSCSampleBank(sb: sb)
+            sampBanksDict.append(sbDict)
+        }
+        
+        dict.updateValue(String(describing:user.userName!), forKey: "userName")
+        dict.updateValue(String(describing:sampBanksDict), forKey: "sampleBanks")
+        dict.updateValue(String(describing:user.soundCollages!), forKey: "soundCollages")
         
         return dict
     }
 
     
+    
+    
+    
     func dictionaryFromSCSampleBank(sb: SCSampleBank) -> [String: Any] {
         
         var dict: [String: Any] = [:]
+        var effSettDict: [[String: Any]] = []
         
-        var effectSettings: [[SCEffectControl]] = []
         
-        for effectControl in sb.effectSettings {
-            let ecDict: [String: Any] = dictionaryFromSCEffectControl(ec: effectControl)
-            
+        for settings in sb.effectSettings! {
+            for ec in settings {
+                let ecDict: [String: Any] = dictionaryFromSCEffectControl(ec: ec)
+                effSettDict.append(ecDict)
+            }
         }
         
-        dict.updateValue("\(sb.name!)", forKey: "name")
-        dict.updateValue("\(sb.id!)", forKey: "id")
-        dict.updateValue("\(sb.samples!)", forKey: "samples")
-        dict.updateValue("\()", forKey: "effectSettings")
-        dict.updateValue("\(sb.sequencerSettings!)", forKey: "sequencerSettings")
+        let seqSetDict: [String: Any] = dictionaryFromSCSequencerSettings(ss: sb.sequencerSettings!)
+        
+        
+        dict.updateValue(String(describing:sb.name!), forKey: "name")
+        dict.updateValue(String(describing:sb.id!), forKey: "id")
+        dict.updateValue(String(describing:sb.samples!), forKey: "samples")
+        dict.updateValue(String(describing:effSettDict), forKey: "effectSettings")
+        dict.updateValue(String(describing:seqSetDict), forKey: "sequencerSettings")
         return dict
     }
+    
+    
     
     
     func dictionaryFromSCEffectControl(ec: SCEffectControl) -> [String: Any] {
         
         var dict: [String: Any] = [:]
-        dict.updateValue("\(ec.parameter)", forKey: "parameter")
+        dict.updateValue(String(describing:ec.parameter), forKey: "parameter")
         return dict
     }
+    
+    
+    
+    func dictionaryFromSCSequencerSettings(ss: SCSequencerSettings) -> [String: Any] {
+        
+        var dict: [String: Any] = [:]
+        dict.updateValue(String(describing: ss.score), forKey: "score")
+        dict.updateValue(String(describing: ss.timeSignature), forKey: "timeSignature")
+        return dict
+    }
+    
+    
     
     func writeToFile(jsonString: String){
     
