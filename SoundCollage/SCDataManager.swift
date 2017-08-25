@@ -70,14 +70,26 @@ class SCDataManager {
             return nil
         }
         
-        guard let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) else {
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
             print("json serialization error")
             return nil
         }
         
-        let user = SCUser.init(json: json as! [String : Any])
+        
+        guard let sbStringJSON = json?["sampleBanks"] as? String else {
+            print("Error getting samplebanks from json")
+            return nil
+        }
+        
+        
+        
+        let user = SCUser.init(json: json!)
         return user
+            
+        
     }
+    
+    
     
     
     
@@ -145,9 +157,9 @@ class SCDataManager {
         
         
         let userJSON: [String: Any] = dictionaryFromSCUser(user: SCDataManager.shared.user!)
-        print("\(userJSON)")
+
         do {
-            let data = try JSONSerialization.data(withJSONObject: userJSON, options: [])
+            let data = try JSONSerialization.data(withJSONObject: userJSON, options: .prettyPrinted)
             if let jsonString = String(data: data, encoding: .utf8) {
                 print(jsonString)
                 writeToFile(jsonString: jsonString)
@@ -157,18 +169,6 @@ class SCDataManager {
         } catch let error {
            print("\(error.localizedDescription)")
         }
-        //        var values: [String] = []
-//        
-//        for value in dict.values {
-//            values.append(value as! String)
-//        }
-//
-//        if let jsonString =  {
-//            print(jsonString)
-//            writeToFile(jsonString: jsonString)
-//        } else {
-//            print("Error serializing json")
-//        }
     }
     
     
@@ -178,15 +178,15 @@ class SCDataManager {
         
         var dict: [String: Any] = [:]
         
-        var sampBanksDict: [[String: Any]] = []
+        var sampBanks: [[String: Any]] = []
         
         for sb in user.sampleBanks! {
             let sbDict: [String: Any] = dictionaryFromSCSampleBank(sb: sb)
-            sampBanksDict.append(sbDict)
+            sampBanks.append(sbDict)
         }
         
         dict.updateValue(String(describing:user.userName!), forKey: "userName")
-        dict.updateValue(String(describing:sampBanksDict), forKey: "sampleBanks")
+        dict.updateValue(String(describing:sampBanks), forKey: "sampleBanks")
         dict.updateValue(String(describing:user.soundCollages!), forKey: "soundCollages")
         
         return dict

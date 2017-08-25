@@ -40,7 +40,7 @@ class SCUser {
     convenience init?(json: [String: Any]) {
         
         guard let userName = json["userName"] as? String?,
-            let sampleBanks = json["sampleBanks"] as? [SCSampleBank]?,//SCSampleBank.collection(json: json["sampleBanks"] as? [String : Any]),//
+            let sampleBanks = json["sampleBanks"] as? [SCSampleBank]?,
             let soundCollages = json["soundCollages"] as? [String]
             else {
                 print("json error")

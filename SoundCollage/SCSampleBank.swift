@@ -60,11 +60,6 @@ class SCSampleBank {
         self.effectSettings = effectSettings
         self.sequencerSettings = sequencerSettings
     }
-    
-    class func collection(json: [String: Any]) -> [SCSampleBank]? {
-        let sbArray = Array(json.values)
-        return sbArray.map({ SCSampleBank.init(json: $0 as! [String : Any])! })
-    }
 }
 //import ObjectMapper
 //
