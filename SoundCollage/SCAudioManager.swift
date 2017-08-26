@@ -87,9 +87,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             return nil
         }
         
-        for key in (sampleBank.samples?.keys)! {
+        for key in sampleBank.samples.keys {
             if key == selectedSampleIndex.description {
-                selectedSample = sampleBank.samples?[key] as! String?
+                selectedSample = sampleBank.samples[key] 
             }
         }
         
@@ -530,9 +530,9 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
 //            print("Error, no current sample bank.")
 //            return
 //        }
-        for key in (SCDataManager.shared.user?.sampleBanks?[SCDataManager.shared.currentSampleBank!].samples?.keys)!{
+        for key in (SCDataManager.shared.user?.sampleBanks?[SCDataManager.shared.currentSampleBank!].samples.keys)!{
             if key == selectedSampleIndex.description {
-                SCDataManager.shared.user?.sampleBanks?[SCDataManager.shared.currentSampleBank!].samples?[key] = urlPart as AnyObject?
+                SCDataManager.shared.user?.sampleBanks?[SCDataManager.shared.currentSampleBank!].samples[key] = urlPart 
                 print("Audio file recorded and saved at \(urlPart.description)")
                 break 
             }

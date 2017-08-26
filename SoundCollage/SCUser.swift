@@ -37,11 +37,18 @@ class SCUser {
     }
     
     
-    convenience init?(json: [String: Any]) {
+    convenience init?(userJSON: [String: Any]){//, sbJSON: [[String: Any]] ) {
         
-        guard let userName = json["userName"] as? String?,
-            let sampleBanks = json["sampleBanks"] as? [SCSampleBank]?,
-            let soundCollages = json["soundCollages"] as? [String]
+//        var sampleBanksCollection: [SCSampleBank]? = []
+//        for i in sbJSON {
+//            if let sb = SCSampleBank.init(json: i){
+//                sampleBanksCollection?.append(sb)
+//            }
+//        }
+
+        guard let userName = userJSON["userName"] as? String?,
+            let sampleBanks = userJSON["sampleBanks"] as? [SCSampleBank]?,//sampleBanksCollection,
+            let soundCollages = userJSON["soundCollages"] as? [String]
             else {
                 print("json error")
                 return nil

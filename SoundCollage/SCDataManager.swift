@@ -22,18 +22,30 @@ class SCDataManager {
     
     
     func fetchCurrentUserData() {
-        
-        guard let savedUser = readFile() else {
+        guard let userJSON = readUserFile(path: "SoundCollageUser.json") else {//,
+//            let sbJSON = readSBFile(path: "SoundCollageSampleBanks.json") else {
             
-            // no file, first run
+                // no file, first run
             let newUser = createUser()
             print("Created new user")
             self.user = newUser
             printAudioFilePaths()
-
-            return
+                
+                return
         }
-        self.user = savedUser
+        if let savedUser = SCUser.init(userJSON: userJSON){//, sbJSON: sbJSON){
+            print("\(String(describing: savedUser.userName))")
+            print("\(String(describing: savedUser.soundCollages))")
+        }
+        
+//        for i in sbJSON {
+//            print("\(String(describing: i["name"]))")
+//            print("\(String(describing: i["samples"]))")
+//            print("\(String(describing: i["sequencerSettings"]))")
+//            print("\(String(describing: i["id"]))")
+//        }
+//        self.user = savedUser
+//        self.user?.sampleBanks = savedSB
         print("Fetched user data from file with success")
         
     }
@@ -50,7 +62,7 @@ class SCDataManager {
         let score: [[Bool]] = SCDataManager.shared.setupScorePage()
         let sequencerSettings = SCSequencerSettings.init(score: score)
         let name = "SCSampleBank_ID_\(sampleBankID)"
-        let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
+        let sampleBank = SCSampleBank.init(name: name, samples: samples, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
         sampleBanks.append(sampleBank)
         let soundCollages: [String] = []
         let newUser = SCUser.init(userName: "Perrin", sampleBanks: sampleBanks, soundCollages: soundCollages)
@@ -59,37 +71,44 @@ class SCDataManager {
     
     
     
-    func readFile() -> SCUser? {
+    func readUserFile(path: String) -> [String: Any]? {
         
-        guard let url = getFileURL(filePath: "SoundCollageUser.json") else { //Bundle.main.path(forResource: "SoundCollageUser", ofType: "json") else {//
-            print("No file at path.")
+        guard let url = getFileURL(filePath: path) else {
+            print("No file at user path.")
             return nil
         }
         guard let data = try? Data(contentsOf: url) else {
-            print("error reading file")
+            print("error reading user file")
             return nil
         }
         
         guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-            print("json serialization error")
+            print("user json serialization error")
             return nil
         }
-        
-        
-        guard let sbStringJSON = json?["sampleBanks"] as? String else {
-            print("Error getting samplebanks from json")
-            return nil
-        }
-        
-        
-        
-        let user = SCUser.init(json: json!)
-        return user
-            
-        
+        return json
     }
     
     
+    
+    func readSBFile(path: String) -> [[String: Any]]? {
+        
+        guard let url = getFileURL(filePath: path) else {
+            print("No file at sb path.")
+            return nil
+        }
+        guard let data = try? Data(contentsOf: url) else {
+            print("error reading sb file")
+            return nil
+        }
+        
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]] else {
+            print("sb json serialization error")
+            return nil
+        }
+        return json
+    }
+   
     
     
     
@@ -152,31 +171,29 @@ class SCDataManager {
     
     
     
-    func saveObjectToJSON(){
-        
-        
-        
-        let userJSON: [String: Any] = dictionaryFromSCUser(user: SCDataManager.shared.user!)
-
-        do {
-            let data = try JSONSerialization.data(withJSONObject: userJSON, options: .prettyPrinted)
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print(jsonString)
-                writeToFile(jsonString: jsonString)
-            } else {
-               print("Error, couldn't get json string from data")
-            }
-        } catch let error {
-           print("\(error.localizedDescription)")
-        }
-    }
-    
-    
     
     
     func dictionaryFromSCUser(user: SCUser) -> [String: Any] {
         
         var dict: [String: Any] = [:]
+        
+        
+        let unData = user.userName?.data(using: .utf8)
+        let unString = String.init(data: unData!, encoding: .utf8)
+    
+        let scString = String(describing: user.soundCollages)
+        
+        dict.updateValue(unString!, forKey: "userName")
+        dict.updateValue(scString, forKey: "soundCollages")
+        
+        let userDict: [String: [String: Any]] = ["user": dict]
+        return userDict
+    }
+
+    
+    
+    
+    func arrayOfSCSampleBanks(user: SCUser) -> [[String: Any]]{
         
         var sampBanks: [[String: Any]] = []
         
@@ -184,14 +201,10 @@ class SCDataManager {
             let sbDict: [String: Any] = dictionaryFromSCSampleBank(sb: sb)
             sampBanks.append(sbDict)
         }
-        
-        dict.updateValue(String(describing:user.userName!), forKey: "userName")
-        dict.updateValue(String(describing:sampBanks), forKey: "sampleBanks")
-        dict.updateValue(String(describing:user.soundCollages!), forKey: "soundCollages")
-        
-        return dict
-    }
 
+        return sampBanks
+    }
+    
     
     
     
@@ -213,8 +226,7 @@ class SCDataManager {
         
         
         dict.updateValue(String(describing:sb.name!), forKey: "name")
-        dict.updateValue(String(describing:sb.id!), forKey: "id")
-        dict.updateValue(String(describing:sb.samples!), forKey: "samples")
+        dict.updateValue(String(describing:sb.samples), forKey: "samples")
         dict.updateValue(String(describing:effSettDict), forKey: "effectSettings")
         dict.updateValue(String(describing:seqSetDict), forKey: "sequencerSettings")
         return dict
@@ -241,13 +253,78 @@ class SCDataManager {
     }
     
     
+    func jsonToString(json: AnyObject) -> String? {
+        do {
+            let data1 =  try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) // first of all convert json to the data
+            let convertedString = String(data: data1, encoding: String.Encoding.utf8) // the data will be converted to the string
+            return convertedString
+        } catch let myJSONError {
+            print(myJSONError)
+            return nil
+        }
+    }
+
+    func saveObjectToJSON(){
+        
+        let userJSONString = jsonToString(json: SCDataManager.shared.user!)
+        
+        
+        
+//        let userJSON: [String: Any] = //dictionaryFromSCUser(user: SCDataManager.shared.user!)
+//        let sampleBanksJSON: [[String: Any]] = //arrayOfSCSampleBanks(user: SCDataManager.shared.user!)
+        
+        
+        
+        doWriteToFile(json: userJSONString!, path: "SoundCollageUser.json")
+//        doWriteToFile(json: sampleBanksJSON, path: "SoundCollageSampleBanks.json")
+        //        do {
+        //            let userData = try JSONSerialization.data(withJSONObject: userJSON, options: .prettyPrinted)
+        //            if let userJsonString = String(data: userData, encoding: .utf8) {
+        //                print(userJsonString)
+        //                writeToFile(jsonString: userJsonString)
+        //            } else {
+        //               print("Error, couldn't get json string from data")
+        //            }
+        //        } catch let error {
+        //           print("\(error.localizedDescription)")
+        //        }
+        
+        //        do {
+        //            let data = try JSONSerialization.data(withJSONObject: sampleBanksJSON, options: .prettyPrinted)
+        //            if let jsonString = String(data: data, encoding: .utf8) {
+        //                print(jsonString)
+        //                writeToFile(jsonString: jsonString)
+        //            } else {
+        //                print("Error, couldn't get json string from data")
+        //            }
+        //        } catch let error {
+        //            print("\(error.localizedDescription)")
+        //        }
+    }
     
-    func writeToFile(jsonString: String){
+    private func doWriteToFile(json: Any, path: String){
+        
+        do {
+            let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print(jsonString)
+                writeToFile(jsonString: jsonString, path: path)
+            } else {
+                print("Error, couldn't get json string from data")
+            }
+        } catch let error {
+            print("\(error.localizedDescription)")
+        }
+    }
+    
+    
+    
+    func writeToFile(jsonString: String, path: String){
     
         let documentsDirectoryPathString = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         let documentsDirectoryPath = NSURL(string: documentsDirectoryPathString)!
         
-        let jsonFilePath = documentsDirectoryPath.appendingPathComponent("SoundCollageUser.json")
+        let jsonFilePath = documentsDirectoryPath.appendingPathComponent(path)
         let fileManager = FileManager.default
         var isDirectory: ObjCBool = false
         
@@ -286,7 +363,7 @@ class SCDataManager {
             return
         }
         for sampleBank in sampleBanks {
-            for value in (sampleBank.samples?.values)! {
+            for value in sampleBank.samples.values {
                 print(value)
             }
         }
@@ -303,7 +380,7 @@ class SCDataManager {
         let sequencerSettings = SCSequencerSettings.init(score: score)
         let effectSettings: [[SCEffectControl]] = SCDataManager.shared.setupEffectSettings()
         let name = "SampleBank_ID_\(sampleBankID)"
-        let sampleBank = SCSampleBank.init(name: name, id: sampleBankID, samples: samples, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
+        let sampleBank = SCSampleBank.init(name: name, samples: samples, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
         SCDataManager.shared.user?.sampleBanks?.append(sampleBank)
 //        SCDataManager.shared.currentSampleBank = SCDataManager.shared.user?.sampleBanks?.last?.id
     }
@@ -311,23 +388,23 @@ class SCDataManager {
     
     
     
-    func newSampleBank() -> [String: AnyObject]{
-        let samples: [String: AnyObject] = ["0": "" as AnyObject,
-                                            "1": "" as AnyObject,
-                                            "2": "" as AnyObject,
-                                            "3": "" as AnyObject,
-                                            "4": "" as AnyObject,
-                                            "5": "" as AnyObject,
-                                            "6": "" as AnyObject,
-                                            "7": "" as AnyObject,
-                                            "8": "" as AnyObject,
-                                            "9": "" as AnyObject,
-                                            "10": "" as AnyObject,
-                                            "11": "" as AnyObject,
-                                            "12": "" as AnyObject,
-                                            "13": "" as AnyObject,
-                                            "14": "" as AnyObject,
-                                            "15": "" as AnyObject]
+    func newSampleBank() -> [String: String]{
+        let samples: [String: String] = ["0": "",
+                                            "1": "",
+                                            "2": "",
+                                            "3": "",
+                                            "4": "",
+                                            "5": "",
+                                            "6": "",
+                                            "7": "",
+                                            "8": "",
+                                            "9": "",
+                                            "10": "",
+                                            "11": "",
+                                            "12": "",
+                                            "13": "",
+                                            "14": "",
+                                            "15": ""]
         
         return samples
     }
@@ -408,7 +485,6 @@ class SCDataManager {
         
         SCAudioManager.shared.audioController = SCGAudioController.init()
         SCAudioManager.shared.audioController?.delegate = SCAudioManager.shared as? SCGAudioControllerDelegate
-        
         SCAudioManager.shared.audioController?.getAudioFilesForURL()
         SCAudioManager.shared.effectControls = (SCDataManager.shared.user?.sampleBanks?[SCDataManager.shared.currentSampleBank!].effectSettings)!
         SCAudioManager.shared.audioController?.effectControls = SCAudioManager.shared.effectControls

@@ -44,7 +44,7 @@ class SCGAudioController {
     var plays:                          Int = 0
     var finishedNodes:                  [AVAudioNode] = []
     var nodeChain:                      [AnyObject] = []
-    var audioFiles:                     [String : AnyObject?] = [:]
+    var audioFiles:                     [String : Any?] = [:]
     var effectControls:                 [[SCEffectControl]] = []
     var engine:                         AVAudioEngine?
     var mixer:                          AVAudioMixerNode?
@@ -324,7 +324,7 @@ class SCGAudioController {
         for (_ , connection) in connectionPoints.enumerated() {
             if connection.node == engine?.mainMixerNode {
                 // get the corresponding mixing destination object and set the mixer input bus volume
-                guard let sampler = self.sampler else {
+                guard self.sampler != nil else {
                     print("Error, sampler is nil")
                     return
                 }
@@ -719,7 +719,7 @@ class SCGAudioController {
             return
         }
         
-        audioFiles = currentSB.samples!
+        audioFiles = currentSB.samples
         
         for (key, value) in audioFiles {
             

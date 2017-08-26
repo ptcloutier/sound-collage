@@ -13,8 +13,7 @@ import Foundation
 class SCSampleBank {
     
     var name: String?
-    var id: Int?
-    var samples: [String: AnyObject]?
+    var samples: [String: String] = [:]
     var effectSettings: [[SCEffectControl]]?
     var sequencerSettings: SCSequencerSettings?
     
@@ -33,9 +32,8 @@ class SCSampleBank {
 //    }
     
     
-    init(name: String?, id: Int?, samples: [String: AnyObject]?, effectSettings: [[SCEffectControl]]? , sequencerSettings: SCSequencerSettings? ) {
+    init(name: String?, samples: [String: String], effectSettings: [[SCEffectControl]]? , sequencerSettings: SCSequencerSettings? ) {
         self.name = name
-        self.id = id
         self.samples = samples
         self.effectSettings = effectSettings
         self.sequencerSettings = sequencerSettings
@@ -45,17 +43,67 @@ class SCSampleBank {
     convenience init?(json: [String: Any]) {
         
         guard let name = json["name"] as? String?,
-            let id = json["id"] as? Int?,
-            let samples = json["samples"] as? [String: AnyObject]?,
+            let samples = json["samples"] as? [String: String],
             let effectSettings = json["effectSettings"] as? [[SCEffectControl]]?,
             let sequencerSettings = json["sequencerSettings"] as? SCSequencerSettings?
             else {
                 print("json error")
                 return nil
         }
-        self.init(name: name, id: id, samples: samples, effectSettings: effectSettings, sequencerSettings: sequencerSettings)
+        
+//        for k in json.keys {
+//            print("\(k)")
+//        }
+//        for i in json.values {
+//            print("\(i)")
+//        }
+//    
+//        
+//        
+//        guard let name = json["name"] as? String?
+//            else {
+//                print("json error")
+//                return nil
+//        }
+//        
+//        guard let samplesStr = json["samples"] as? String else {
+//            print("json samples failed")
+//            return nil
+//        }
+//
+//        var samples: [String: String] = [:]
+//        var samplesArr = samplesStr.components(separatedBy: "\"")
+//        
+//        for (idx, obj) in samplesArr.enumerated().reversed() {
+//            if idx % 2 == 0 {
+//                samplesArr.remove(at: idx)
+//                print("removing \(obj)")
+//            }
+//        }
+//        for (idx, obj) in samplesArr.enumerated().reversed() {
+//            if obj != samplesArr.last {
+//                
+//                if idx % 2 == 0 {
+//                    let key = samplesArr[idx]
+//                    let val = samplesArr[idx+1]
+//                    samples[key] = val
+//                }
+//            }
+//        }
+//
+//        
+//        guard let effectSettings = json["effectSettings"]  else {
+//            print("json effectsettings failed")
+//            return nil
+//        }
+//        guard let sequencerSettings = json["sequencerSettings"] else {
+//           print("json sequencer settings failed")
+//            return nil
+//        }
+
+        
+        self.init(name: name, samples: samples , effectSettings: effectSettings, sequencerSettings: sequencerSettings)
         self.name = name
-        self.id = id
         self.samples = samples
         self.effectSettings = effectSettings
         self.sequencerSettings = sequencerSettings
