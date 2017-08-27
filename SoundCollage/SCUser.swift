@@ -27,20 +27,20 @@ class SCUser {
         
         
         guard let userName = userJSON["userName"] as? String,
-        let sbJSON = userJSON["sampleBanks"] as? [String: Any],
+        let sbJSON = userJSON["sampleBanks"] as? [[String: Any]],
             let soundCollages = userJSON["soundCollages"] as? [String]
             else {
                 print("json error")
                 return nil
         }
     
-//        
+       
         var sampleBanks: [SCSampleBank] = []
-//
-//        for jsonDict in sbArray {
-            let sampleBank: SCSampleBank = SCSampleBank.init(json: sbJSON)!
+
+        for sbjsonDict in sbJSON {
+            let sampleBank: SCSampleBank = SCSampleBank.init(json: sbjsonDict)!
             sampleBanks.append(sampleBank)
-//        }
+        }
         
         self.init(userName: userName, sampleBanks: sampleBanks, soundCollages: soundCollages)
         self.userName = userName

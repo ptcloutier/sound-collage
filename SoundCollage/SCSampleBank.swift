@@ -19,7 +19,7 @@ class SCSampleBank {
     var sequencerSettings: SCSequencerSettings?
  
     
-    init(name: String, sbID: Int, samples: [String: String], effectSettings: [[SCEffectControl]] , sequencerSettings: SCSequencerSettings? ) {
+    init(name: String, sbID: Int, samples: [String: String], effectSettings: [[SCEffectControl]] , sequencerSettings: SCSequencerSettings?) {
         self.name = name
         self.sbID = sbID
         self.samples = samples
@@ -33,8 +33,8 @@ class SCSampleBank {
         guard let name = json["name"] as? String,
             let sbID = json["sbID"] as? Int,
             let samples = json["samples"] as? [String: String],
-            let effectJSON = json["effectSettings"] as? [String: [[Float]]],
-            let sequencerSettings = json["sequencerSettings"] as? [String: Any]?
+            let effectJSON = json["effectSettings"] as? [[[Float]]],
+            let seqJSON = json["sequencerSettings"] as? [[Bool]]
             else {
                 print("json error")
                 return nil
@@ -47,29 +47,25 @@ class SCSampleBank {
         
         while effectSettings.count<Array(SCAudioManager.shared.mixerPanels.keys).count{
             var controls: [SCEffectControl] = []
-            while controls.count<5{
+            while controls.count<5 {
                 let ec = SCEffectControl.init()
                 controls.append(ec)
             }
             effectSettings.append(controls)
         }
-
-        let esJSON: [[Float]] = effectJSON["effectSettings"]!
         
-        for (index, settingsJSON) in esJSON.enumerated() {
+        for (index, settingsJSON) in effectJSON.enumerated() {
             
-            let ec = effectSettings[index]
-            for i in settingsJSON {
-                ec[idx].parameter = settingsJSON
+            for (idx, obj) in settingsJSON.enumerated() {
+                effectSettings[index][idx].parameter = obj
             }
         }
         
         
+        // create sequencer settings
         
-        
-
-        
-        
+         let sequencerSettings = SCSequencerSettings.init(score: seqJSON)
+     
         
         self.init(name: name, sbID: sbID, samples: samples , effectSettings: effectSettings, sequencerSettings: sequencerSettings)
         self.name = name

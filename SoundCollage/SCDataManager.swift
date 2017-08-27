@@ -22,9 +22,10 @@ class SCDataManager {
     
     
     func fetchCurrentUserData() {
+        
         guard let userJSON = readUserFile(path: "SoundCollageUser.json") else {//,
             
-            // no file, first run
+            // no file error, or first run
             let newUser = createUser()
             print("Created new user")
             self.user = newUser
@@ -32,13 +33,12 @@ class SCDataManager {
                 
             return
         }
-        if let savedUser = SCUser.init(userJSON: userJSON){//, sbJSON: sbJSON){
-            print("\(String(describing: savedUser.userName))")
-            print("\(String(describing: savedUser.soundCollages))")
-            print("Fetched user data from file with success")
-        } else {
+        guard let savedUser = SCUser.init(userJSON: userJSON) else {
             print("Failed to get user data from file.")
+            return
         }
+        print("Fetched user data from file with success")
+        self.user = savedUser
     }
     
     
@@ -81,25 +81,6 @@ class SCDataManager {
     }
     
     
-    
-    func readSBFile(path: String) -> [[String: Any]]? {
-        
-        guard let url = getFileURL(filePath: path) else {
-            print("No file at sb path.")
-            return nil
-        }
-        guard let data = try? Data(contentsOf: url) else {
-            print("error reading sb file")
-            return nil
-        }
-        
-        guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]] else {
-            print("sb json serialization error")
-            return nil
-        }
-        return json
-    }
-   
     
     
     
@@ -159,92 +140,8 @@ class SCDataManager {
         return newSampleID   // increment the sampleBankID when a new one is created
     }
 
-//    
-//    
-//    
-//    
-//    
-//    func dictionaryFromSCUser(user: SCUser) -> [String: Any] {
-//        
-//        var dict: [String: Any] = [:]
-//        
-//        
-//        let unData = user.userName.data(using: .utf8)
-//        let unString = String.init(data: unData!, encoding: .utf8)
-//    
-//        let scString = String(describing: user.soundCollages)
-//        
-//        dict.updateValue(unString!, forKey: "userName")
-//        dict.updateValue(scString, forKey: "soundCollages")
-//        
-//        let userDict: [String: [String: Any]] = ["user": dict]
-//        return userDict
-//    }
-//
-//    
-    
-    
-//    func arrayOfSCSampleBanks(user: SCUser) -> [[String: Any]]{
-//        
-//        var sampBanks: [[String: Any]] = []
-//        
-//        for sb in user.sampleBanks {
-//            let sbDict: [String: Any] = dictionaryFromSCSampleBank(sb: sb)
-//            sampBanks.append(sbDict)
-//        }
-//
-//        return sampBanks
-//    }
-    
-    
-    
-    
-//    
-//    func dictionaryFromSCSampleBank(sb: SCSampleBank) -> [String: Any] {
-//        
-//        var dict: [String: Any] = [:]
-//        var effSettDict: [[String: Any]] = []
-//        
-//        
-//        for settings in sb.effectSettings! {
-//            for ec in settings {
-//                let ecDict: [String: Any] = dictionaryFromSCEffectControl(ec: ec)
-//                effSettDict.append(ecDict)
-//            }
-//        }
-//        
-//        let seqSetDict: [String: Any] = dictionaryFromSCSequencerSettings(ss: sb.sequencerSettings!)
-//        
-//        
-//        dict.updateValue(String(describing:sb.name!), forKey: "name")
-//        dict.updateValue(String(describing:sb.samples), forKey: "samples")
-//        dict.updateValue(String(describing:effSettDict), forKey: "effectSettings")
-//        dict.updateValue(String(describing:seqSetDict), forKey: "sequencerSettings")
-//        return dict
-//    }
-    
-    
-    
-//    
-//    func dictionaryFromSCEffectControl(ec: SCEffectControl) -> [String: Any] {
-//        
-//        var dict: [String: Any] = [:]
-//        dict.updateValue(String(describing:ec.parameter), forKey: "parameter")
-//        return dict
-//    }
-//    
-//    
-//    
-//    func dictionaryFromSCSequencerSettings(ss: SCSequencerSettings) -> [String: Any] {
-//        
-//        var dict: [String: Any] = [:]
-//        dict.updateValue(String(describing: ss.score), forKey: "score")
-//        dict.updateValue(String(describing: ss.timeSignature), forKey: "timeSignature")
-//        return dict
-//    }
-//    
-//    
 
+    
     func saveObjectToJSON(){
         
         let path = "SoundCollageUser.json"
@@ -275,8 +172,6 @@ class SCDataManager {
         var sbDictArray: [[String: Any]] = []
         var ecArray1: [[[Float]]] = []
         var ecArray2: [[Float]] = []
-        var scoreArray: [[Bool]] = []
-        var seqSettings: [String: Any] = [:]
         
         
         guard let user = SCDataManager.shared.user else {
@@ -294,15 +189,15 @@ class SCDataManager {
             guard let score = sb.sequencerSettings?.score else {
                 return dict
             }
-            scoreArray = score
-            seqSettings.updateValue(scoreArray, forKey: "score")
-            sbDict.updateValue(seqSettings, forKey: "sequencerSettings")
+            sbDict.updateValue(score, forKey: "sequencerSettings")
             
             // create name
             sbDict.updateValue( sb.name, forKey: "name")
             
             // create id 
             sbDict.updateValue(sb.sbID, forKey: "sbID")
+            
+            
             
             // create effect settings 
             for i in sb.effectSettings {
@@ -323,12 +218,14 @@ class SCDataManager {
         
         
         dict = ["userName": user.userName,
-                                   "sampleBanks": sbDict,
+                                   "sampleBanks": sbDictArray,
                                    "soundCollages": soundColl
         ]
         
         return dict
     }
+    
+    
     
     
     func writeToFile(jsonData: Data, path: String){
@@ -424,7 +321,7 @@ class SCDataManager {
     
     
     
-    func setupScorePage()-> [[Bool]] {
+    func setupScorePage()-> [[Bool]] { // sequencerSettings
         
         var score: [[Bool]] = []
         while score.count < 16 {
