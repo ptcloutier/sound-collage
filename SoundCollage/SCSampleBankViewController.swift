@@ -257,7 +257,7 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
         cell.imageView.image = images[imgIdx]
         
         let dm = SCDataManager.shared
-//        cell.id = dm.user?.sampleBanks?[indexPath.row].sbID
+        cell.id = dm.user?.sampleBanks[indexPath.row].sbID
         return cell
     }
     
@@ -268,13 +268,13 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
         let cell = collectionView.cellForItem(at: indexPath) as! SCSampleBankCell
         let dm = SCDataManager.shared
         dm.currentSampleBank = indexPath.row
-//        for sb in (SCDataManager.shared.user?.sampleBanks)! {
-//            if sb.sbID == cell.id {
+        for sb in (SCDataManager.shared.user?.sampleBanks)! {
+            if sb.sbID == cell.id {
                 dm.setLastSampleBankIdx()
                 dm.setupCurrentSampleBankEffectSettings()
                 presentSampler()
                 return
-//            }
-//        }
+            }
+        }
     }
 }

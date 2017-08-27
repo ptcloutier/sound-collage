@@ -30,15 +30,15 @@ class SCDataManager {
             self.user = newUser
             printAudioFilePaths()
                 
-                return
+            return
         }
         if let savedUser = SCUser.init(userJSON: userJSON){//, sbJSON: sbJSON){
             print("\(String(describing: savedUser.userName))")
             print("\(String(describing: savedUser.soundCollages))")
+            print("Fetched user data from file with success")
+        } else {
+            print("Failed to get user data from file.")
         }
-
-        print("Fetched user data from file with success")
-        
     }
     
     
@@ -249,11 +249,7 @@ class SCDataManager {
         
         let path = "SoundCollageUser.json"
 
-        guard let user = SCDataManager.shared.user else {
-            print("Error getting user")
-            return
-        }
-        let userJSONDict: [String: Any] = dictionaryFromUser()!
+        let userJSONDict: [String: Any] = dictionaryFromUser()
         
         if (!JSONSerialization.isValidJSONObject(userJSONDict)) {
             print("is not a valid json object")
@@ -262,7 +258,7 @@ class SCDataManager {
         
         
         do {
-            let userJSONData =  try JSONSerialization.data(withJSONObject: user, options: .prettyPrinted)
+            let userJSONData =  try JSONSerialization.data(withJSONObject: userJSONDict, options: .prettyPrinted)
             writeToFile(jsonData: userJSONData, path: path)
         } catch let error {
             print(error.localizedDescription)
@@ -273,9 +269,9 @@ class SCDataManager {
     
     
     
-    func dictionaryFromUser() -> [String: Any]? {
+    func dictionaryFromUser() -> [String: Any] {
       
-        var dict: [String: Any]
+        var dict: [String: Any] = [:]
         var sbDictArray: [[String: Any]] = []
         var ecArray1: [[[Float]]] = []
         var ecArray2: [[Float]] = []
@@ -285,7 +281,7 @@ class SCDataManager {
         
         guard let user = SCDataManager.shared.user else {
             print("Error getting user")
-            return nil
+            return dict
         }
         
         var sbDict: [String: Any] = [:]
@@ -295,7 +291,9 @@ class SCDataManager {
             let sb = user.sampleBanks[idx]
 
             // create sequencer settings
-            guard let score = sb.sequencerSettings?.score else { return nil }
+            guard let score = sb.sequencerSettings?.score else {
+                return dict
+            }
             scoreArray = score
             seqSettings.updateValue(scoreArray, forKey: "score")
             sbDict.updateValue(seqSettings, forKey: "sequencerSettings")
@@ -325,7 +323,7 @@ class SCDataManager {
         
         
         dict = ["userName": user.userName,
-                                   "sampleBanks": sbDictArray,
+                                   "sampleBanks": sbDict,
                                    "soundCollages": soundColl
         ]
         

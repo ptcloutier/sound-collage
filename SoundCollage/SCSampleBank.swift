@@ -33,12 +33,42 @@ class SCSampleBank {
         guard let name = json["name"] as? String,
             let sbID = json["sbID"] as? Int,
             let samples = json["samples"] as? [String: String],
-            let effectSettings = json["effectSettings"] as? [[SCEffectControl]],
+        let esJSON = json["effectSettings"] as? ,
             let sequencerSettings = json["sequencerSettings"] as? SCSequencerSettings?
             else {
                 print("json error")
                 return nil
         }
+        
+        
+        // create effect settings
+        
+        var effectSettings: [[SCEffectControl]] = []
+        
+        while effectSettings.count<Array(SCAudioManager.shared.mixerPanels.keys).count{
+            var controls: [SCEffectControl] = []
+            while controls.count<5{
+                let ec = SCEffectControl.init()
+                controls.append(ec)
+            }
+            effectSettings.append(controls)
+        }
+
+        for (index, settings) in esJSON.enumerated() {
+            
+
+            for (idx, ec) in settings.enumerated() {
+                effectSettings[index][idx].parameter = ec.parameter
+            }
+        }
+        
+        
+        
+        
+
+        
+        
+        
         self.init(name: name, sbID: sbID, samples: samples , effectSettings: effectSettings, sequencerSettings: sequencerSettings)
         self.name = name
         self.sbID = sbID
