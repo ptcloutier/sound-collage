@@ -33,8 +33,8 @@ class SCSampleBank {
         guard let name = json["name"] as? String,
             let sbID = json["sbID"] as? Int,
             let samples = json["samples"] as? [String: String],
-        let esJSON = json["effectSettings"] as? ,
-            let sequencerSettings = json["sequencerSettings"] as? SCSequencerSettings?
+            let effectJSON = json["effectSettings"] as? [String: [[Float]]],
+            let sequencerSettings = json["sequencerSettings"] as? [String: Any]?
             else {
                 print("json error")
                 return nil
@@ -54,11 +54,13 @@ class SCSampleBank {
             effectSettings.append(controls)
         }
 
-        for (index, settings) in esJSON.enumerated() {
+        let esJSON: [[Float]] = effectJSON["effectSettings"]!
+        
+        for (index, settingsJSON) in esJSON.enumerated() {
             
-
-            for (idx, ec) in settings.enumerated() {
-                effectSettings[index][idx].parameter = ec.parameter
+            let ec = effectSettings[index]
+            for i in settingsJSON {
+                ec[idx].parameter = settingsJSON
             }
         }
         
