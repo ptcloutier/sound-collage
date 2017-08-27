@@ -112,7 +112,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             let idx = cell.idx
             
             let dm = SCDataManager.shared
-            if (SCDataManager.shared.user?.sampleBanks?[dm.currentSampleBank!].sequencerSettings?.score[seqIdx][idx])! == true {
+            if (SCDataManager.shared.user?.sampleBanks[dm.currentSampleBank!].sequencerSettings?.score[seqIdx][idx])! == true {
                 cell.isPlaybackEnabled = true
             }
             
@@ -149,7 +149,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             return
         }
         
-        guard let currentSB = SCDataManager.shared.user?.sampleBanks?[SCDataManager.shared.currentSampleBank!]  else {
+        guard let currentSB = SCDataManager.shared.user?.sampleBanks[SCDataManager.shared.currentSampleBank!]  else {
             print("Error, no current sample bank.")
             return
         }

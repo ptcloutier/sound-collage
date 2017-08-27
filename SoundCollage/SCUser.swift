@@ -11,43 +11,23 @@ import Foundation
 
 class SCUser {
     
-    var userName: String?
-    var sampleBanks: [SCSampleBank]?
-    var soundCollages: [String]?
-//    var jsonRepresentation : String? {
-//        //        let sb = self.sampleBanks.jsonRepresentation
-//        let jsonDict = ["userName" : userName as Any,
-//                        "sampleBanks" : sampleBanks as Any ,
-//                        "soundCollages" : soundCollages as Any]
-//        
-//        if let data = try? JSONSerialization.data(withJSONObject: jsonDict, options: []),
-//            let jsonString = String(data:data, encoding:.utf8) {
-//            return jsonString
-//        } else {
-//            print("error serializing json string")
-//            return nil }
-//    }
+    var userName: String = ""
+    var sampleBanks: [SCSampleBank] = []
+    var soundCollages: [String] = []
 
     
-    
-    init(userName: String?, sampleBanks: [SCSampleBank]?, soundCollages: [String]?) {
+    init(userName: String, sampleBanks: [SCSampleBank], soundCollages: [String]) {
         self.userName = userName
         self.sampleBanks = sampleBanks
         self.soundCollages = soundCollages
     }
     
     
-    convenience init?(userJSON: [String: Any]){//, sbJSON: [[String: Any]] ) {
-        
-//        var sampleBanksCollection: [SCSampleBank]? = []
-//        for i in sbJSON {
-//            if let sb = SCSampleBank.init(json: i){
-//                sampleBanksCollection?.append(sb)
-//            }
-//        }
+    convenience init?(userJSON: [String: Any]) {
 
-        guard let userName = userJSON["userName"] as? String?,
-            let sampleBanks = userJSON["sampleBanks"] as? [SCSampleBank]?,//sampleBanksCollection,
+
+        guard let userName = userJSON["userName"] as? String,
+            let sampleBanks = userJSON["sampleBanks"] as? [SCSampleBank],
             let soundCollages = userJSON["soundCollages"] as? [String]
             else {
                 print("json error")
@@ -60,44 +40,4 @@ class SCUser {
         self.soundCollages = soundCollages
     }
 }
-
-//import ObjectMapper
-//import Foundation
-//
-//class SCUser: Mappable {
-//    
-//    var userName: String?
-//    var sampleBanks: [SCSampleBank]?
-//    var soundCollages: [String]?
-//    
-//    init(userName: String?, sampleBanks: [SCSampleBank]?, soundCollages: [String]?) {
-//        self.userName = userName
-//        self.sampleBanks = sampleBanks
-//        self.soundCollages = soundCollages
-//    }
-//    
-//    required init?(map: Map) {
-//        // check if a required property exists within the JSON.
-//        if map.JSON["userName"] == nil {
-//            print("Json error, scuser userName is nil")
-//            return nil
-//        }
-//        if map.JSON["sampleBanks"] == nil {
-//            print("Json error, scuser samplebanks are nil")
-//            return nil
-//        }
-//        if map.JSON["soundCollages"] == nil {
-//            print("Json error, scuser soundCollages are nil")
-//            return nil
-//        }
-//    }
-//    
-//    
-//    // Mappable
-//    func mapping(map: Map) {
-//        userName            <- map["userName"]
-//        sampleBanks         <- map["sampleBanks"]
-//        soundCollages       <- map["soundCollages"]
-//    }    
-//}
-//
+ 

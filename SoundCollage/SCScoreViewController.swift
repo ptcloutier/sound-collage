@@ -129,7 +129,7 @@ class SCScoreViewController: UIViewController {
         var playbackSamples: [Int] = []
         print("trigger counter: \(triggerCounter)")
         
-        guard let score = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.currentSampleBank)!].sequencerSettings?.score  else {
+        guard let score = SCDataManager.shared.user?.sampleBanks[(SCDataManager.shared.currentSampleBank)!].sequencerSettings?.score  else {
             print("Error, no score.")
             return
         }

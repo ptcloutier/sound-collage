@@ -125,7 +125,7 @@ class SCSampleBankViewController: UIViewController {
         let dm = SCDataManager.shared
         
         dm.createNewSampleBank()
-        dm.currentSampleBank = (dm.user?.sampleBanks?.count)!-1
+        dm.currentSampleBank = (dm.user?.sampleBanks.count)!-1
         
         collectionView.reloadData()
         scrollToNewSampleBank(index: dm.currentSampleBank!)
@@ -150,7 +150,7 @@ class SCSampleBankViewController: UIViewController {
         SCAudioManager.shared.audioController?.delegate = SCAudioManager.shared as? SCGAudioControllerDelegate
 
         SCAudioManager.shared.audioController?.getAudioFilesForURL()
-        SCAudioManager.shared.effectControls = (SCDataManager.shared.user?.sampleBanks?[SCDataManager.shared.currentSampleBank!].effectSettings)!
+        SCAudioManager.shared.effectControls = (SCDataManager.shared.user?.sampleBanks[SCDataManager.shared.currentSampleBank!].effectSettings)!
         SCAudioManager.shared.audioController?.effectControls = SCAudioManager.shared.effectControls
         SCAudioManager.shared.isSetup = true 
     }
@@ -160,7 +160,7 @@ class SCSampleBankViewController: UIViewController {
     func presentSampler(){
         
         let dm = SCDataManager.shared
-        let currentSB = dm.user?.sampleBanks?[dm.currentSampleBank!]
+        let currentSB = dm.user?.sampleBanks[dm.currentSampleBank!]
 
         print("Current sample bank \(String(describing: currentSB.debugDescription))")
 

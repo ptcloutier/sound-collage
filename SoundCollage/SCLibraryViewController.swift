@@ -176,7 +176,7 @@ class SCLibraryViewController: UIViewController {
 //            let docsDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
             
                 let fm = FileManager.default
-                let fileName = SCDataManager.shared.user?.soundCollages?[indexForAudioSharing!]
+                let fileName = SCDataManager.shared.user?.soundCollages[indexForAudioSharing!]
                 let filecontent = fm.contents(atPath: fileName!)//(docsDir + "/" + fileName)
             
                 mailComposer.addAttachmentData(filecontent!, mimeType: "audio/aac", fileName: fileName!)
@@ -195,7 +195,7 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        guard let result = SCDataManager.shared.user?.soundCollages?.count else {
+        guard let result = SCDataManager.shared.user?.soundCollages.count else {
             return 0
         }
         return result

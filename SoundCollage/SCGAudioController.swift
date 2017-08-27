@@ -714,7 +714,7 @@ class SCGAudioController {
         if dm.currentSampleBank == nil {
             dm.currentSampleBank = dm.getLastSampleBankIdx()
         }
-        guard let currentSB = dm.user?.sampleBanks?[dm.currentSampleBank!]  else {
+        guard let currentSB = dm.user?.sampleBanks[dm.currentSampleBank!]  else {
             print("Error, no current sample bank.")
             return
         }
@@ -843,7 +843,7 @@ class SCGAudioController {
         print("Recorded output to \(path)")
         
         
-        SCDataManager.shared.user?.soundCollages?.append(path)
+        SCDataManager.shared.user?.soundCollages.append(path)
         
         
         if isRecording == true {
@@ -861,7 +861,7 @@ class SCGAudioController {
     
     func stopSong(){
         
-        if SCDataManager.shared.user?.soundCollages?.count == 0 {
+        if SCDataManager.shared.user?.soundCollages.count == 0 {
             print("No songs recorded yet to sound collages.")
             return
         }
@@ -879,7 +879,7 @@ class SCGAudioController {
     
     func playSoundCollage(index: Int){
         
-        if SCDataManager.shared.user?.soundCollages?.count == 0 {
+        if SCDataManager.shared.user?.soundCollages.count == 0 {
             print("No songs recorded yet to sound collages.")
             return
         }
@@ -892,7 +892,7 @@ class SCGAudioController {
                 return 
             }
         }
-        let path = SCDataManager.shared.user?.soundCollages?[index]
+        let path = SCDataManager.shared.user?.soundCollages[index]
         let url = URL.init(string: path!)
         
         try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
