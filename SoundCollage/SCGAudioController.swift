@@ -105,7 +105,7 @@ class SCGAudioController {
         effectControls = SCAudioManager.shared.effectControls
         initAVAudioSession()
         loadSamples()
-        getAudioFilesForURL()
+//        getAudioFilesForURL()
         engine = AVAudioEngine.init()
         
         isRecording = false

@@ -28,6 +28,8 @@ class SCSamplerViewController: UIViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        SCAudioManager.shared.audioController?.getAudioFilesForURL()
+        
         view.backgroundColor = SCColor.Custom.Gray.dark //SCColor.Custom.PsychedelicIceCreamShoppe.ice
         vintageColors = SCColor.getVintageColors()
         iceCreamColors = SCColor.getPsychedelicIceCreamShopColors()

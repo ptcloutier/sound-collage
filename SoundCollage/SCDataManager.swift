@@ -31,6 +31,7 @@ class SCDataManager {
         guard let userJSON = readUserFile(path: "SoundCollageUser.json") else {//,
             
             // no file error, or first run
+            resetCurrentSampleBankID()
             let newUser = createUser()
             print("Created new user")
             self.user = newUser
@@ -39,10 +40,10 @@ class SCDataManager {
             return
         }
         guard let savedUser = SCUser.init(userJSON: userJSON) else {
-            print("Failed to get user data from file.")
+            print("\n\n\n***********************\nFailed to get user data from file\n\n\n")
             return
         }
-        print("Fetched user data from file with success")
+        print("\n\n\n***********************\nSUCCESS! \nFetched user data from file.\n\n\n")
         self.user = savedUser
     }
     
@@ -92,16 +93,7 @@ class SCDataManager {
         }
         return nil
     }
-//
-//
-//        guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-//            print("user json serialization error")
-//            return nil
-//        }
-//        return json
-    
-    
-    
+ 
     
     
     
@@ -176,8 +168,17 @@ class SCDataManager {
         
         
         do {
-            let userJSONData =  try JSONSerialization.data(withJSONObject: userJSONDict, options: .prettyPrinted)
-            writeToFile(jsonData: userJSONData, path: path)
+            let userJSONData =  try JSONSerialization.data(withJSONObject: userJSONDict, options: [])
+            let fileManager = FileManager.default
+            do {
+                let documentDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                let fileURL = documentDirectory.appendingPathComponent(path)
+                try userJSONData.write(to: fileURL)
+                print("JSON data was written to the file successfully!")
+                
+            } catch let error {
+                print(error.localizedDescription)
+            }
         } catch let error {
             print(error.localizedDescription)
             return
@@ -252,39 +253,7 @@ class SCDataManager {
     
     
     
-    
-    func writeToFile(jsonData: Data, path: String){
-    
-        let documentsDirectoryPathString = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-        let documentsDirectoryPath = NSURL(string: documentsDirectoryPathString)!
-        
-        let jsonFilePath = documentsDirectoryPath.appendingPathComponent(path)
-        let fileManager = FileManager.default
-        var isDirectory: ObjCBool = false
-        
-        // creating a .json file in the Documents folder
-        if !fileManager.fileExists(atPath: (jsonFilePath?.absoluteString)!, isDirectory: &isDirectory) {
-            let created = fileManager.createFile(atPath: (jsonFilePath?.absoluteString)!, contents: nil, attributes: nil)
-            if created {
-                print("File created successfully")
-            } else {
-                print("Error creating SoundCollageUser.json")
-            }
-        } else {
-            print("File already exists at path: \(documentsDirectoryPathString)")
-        }
-        
-        // Write that JSON to the file created earlier
-        do {
-            let file = try FileHandle(forWritingTo: jsonFilePath!)
-            file.write(jsonData)
-            print("JSON data was written to the file successfully!")
-            let jsonString = String(data: jsonData, encoding: .utf8)
-            print(jsonString as Any)
-        } catch let error as NSError {
-            print("Couldn't write to file: \(error.localizedDescription)")
-        }
-    }
+  
     
     
     
@@ -414,6 +383,11 @@ class SCDataManager {
         
     }
     
+    
+    private func resetCurrentSampleBankID(){
+        
+        UserDefaults.standard.set(0, forKey: "lastSampleBank")
+    }
     
     func setupCurrentSampleBankEffectSettings(){
         

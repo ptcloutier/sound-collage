@@ -455,7 +455,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         }
         
         let sampleID = getSampleID(samplePadIndex: selectedSampleIndex)
-        let audioType = ".aac"
+        let audioType = ".caf"
         let filePath = "sampleBank_\(id)_pad_\(selectedSampleIndex)_id_\(sampleID)\(audioType)"
         let fullURL = getDocumentsDirectory().appendingPathComponent(filePath)
         SCDataManager.shared.currentSamplePath = fullURL.absoluteString
@@ -463,10 +463,16 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         self.audioFilePath = fullURL
         
         let settings = [
-            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVFormatIDKey: Int(kAudioFormatAppleIMA4),
             AVSampleRateKey: 44100,
             AVNumberOfChannelsKey: 2,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
+            AVLinearPCMBitDepthKey: Int(32),
+            AVLinearPCMIsBigEndianKey: false,
+            AVLinearPCMIsFloatKey: false
+//            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+//            AVSampleRateKey: 44100,
+//            AVNumberOfChannelsKey: 2,
+//            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
             ] as [String : Any]
         
         do {
