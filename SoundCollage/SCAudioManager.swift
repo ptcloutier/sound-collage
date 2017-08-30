@@ -510,7 +510,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         })
     }
     
-    
+   
     
     func stopRecordingSample() {
 
@@ -524,6 +524,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         guard let url = self.audioFilePath else { return }
         self.postRecordingFinishedNotification()
         
+        SCDataManager.shared.jsonTest()
         let urlPart = url.lastPathComponent
        
 //        guard let currentSB = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!]  else {

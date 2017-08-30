@@ -40,12 +40,13 @@ class SCSampleBank {
                 return nil
         }
         
+        let am = SCAudioManager.shared
         
         // create effect settings
         
         var effectSettings: [[SCEffectControl]] = []
         
-        while effectSettings.count<Array(SCAudioManager.shared.mixerPanels.keys).count{
+        while effectSettings.count<Array(am.mixerPanels.keys).count{
             var controls: [SCEffectControl] = []
             while controls.count<5 {
                 let ec = SCEffectControl.init()
@@ -54,7 +55,7 @@ class SCSampleBank {
             effectSettings.append(controls)
         }
         
-        for (index, settingsJSON) in effectJSON.enumerated() {
+        for (index, settingsJSON) in effectJSON.enumerated().reversed() {
             
             for (idx, obj) in settingsJSON.enumerated() {
                 effectSettings[index][idx].parameter = obj

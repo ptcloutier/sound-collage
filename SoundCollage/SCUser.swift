@@ -9,7 +9,7 @@
 import Foundation
 
 
-class SCUser {
+class  SCUser {
     
     var userName: String = ""
     var sampleBanks: [SCSampleBank] = []
@@ -27,7 +27,7 @@ class SCUser {
         
         
         guard let userName = userJSON["userName"] as? String,
-        let sbJSON = userJSON["sampleBanks"] as? [[String: Any]],
+            let sbJSON = userJSON["sampleBanks"] as? [[String: Any]],
             let soundCollages = userJSON["soundCollages"] as? [String]
             else {
                 print("json error")

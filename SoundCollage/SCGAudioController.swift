@@ -839,7 +839,7 @@ class SCGAudioController {
     
     func stopRecordingMixerOutput(){
         
-        guard let path = self.mixerOutputFileURL?.absoluteString else { return }
+        guard let path = self.mixerOutputFileURL?.lastPathComponent else { return }
         print("Recorded output to \(path)")
         
         
@@ -892,14 +892,15 @@ class SCGAudioController {
                 return 
             }
         }
-        let path = SCDataManager.shared.user?.soundCollages[index]
-        let url = URL.init(string: path!)
+        guard let filePath = SCDataManager.shared.user?.soundCollages[index] else { return }
+        
+        let url = SCAudioManager.shared.getDocumentsDirectory().appendingPathComponent(filePath)
         
         try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         try! AVAudioSession.sharedInstance().setActive(true)
         
         do {
-            songPlayer = try AVAudioPlayer(contentsOf: url!)
+            songPlayer = try AVAudioPlayer(contentsOf: url)
             songPlayer?.prepareToPlay()
             songPlayer?.play()
         } catch let error {

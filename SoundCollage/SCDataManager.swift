@@ -20,6 +20,11 @@ class SCDataManager {
     var currentSampleBank: Int?
    
     
+    func jsonTest(){
+        SCDataManager.shared.saveObjectToJSON()
+        SCDataManager.shared.fetchCurrentUserData()
+        
+    }
     
     func fetchCurrentUserData() {
         
@@ -73,12 +78,28 @@ class SCDataManager {
             return nil
         }
         
-        guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-            print("user json serialization error")
+        
+        do {
+                let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                if json is [String:Any] {
+                    // This part is just for example from my project, you need to change it for your custom model
+                    return json as? [String : Any]
+                    // use your custom model object after that
+                }
+        } catch let error {
+            print(error.localizedDescription)
             return nil
         }
-        return json
+        return nil
     }
+//
+//
+//        guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+//            print("user json serialization error")
+//            return nil
+//        }
+//        return json
+    
     
     
     
@@ -200,6 +221,9 @@ class SCDataManager {
             
             
             // create effect settings 
+            ecArray1.removeAll()
+            ecArray2.removeAll()
+
             for i in sb.effectSettings {
                 for j in i {
                     ecArray2.append(j.parameter)
@@ -208,6 +232,7 @@ class SCDataManager {
                 ecArray2.removeAll()
             }
             sbDict.updateValue(ecArray1, forKey: "effectSettings")
+            
             
             // create samples
             sbDict.updateValue(sb.samples, forKey: "samples")
