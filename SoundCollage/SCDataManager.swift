@@ -20,11 +20,11 @@ class SCDataManager {
     var currentSampleBank: Int?
    
     
-    func jsonTest(){
-        SCDataManager.shared.saveObjectToJSON()
-        SCDataManager.shared.fetchCurrentUserData()
-        
-    }
+//    func jsonTest(){
+//        SCDataManager.shared.saveObjectToJSON()
+//        SCDataManager.shared.fetchCurrentUserData()
+//        
+//    }
     
     func fetchCurrentUserData() {
         

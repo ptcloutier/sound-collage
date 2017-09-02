@@ -113,20 +113,6 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
-
-    
-//    func playAudio(senderID: Int){
-//        
-//        guard let sampleIdx = getIndex(senderID: senderID) else {
-//            print("Error getting index.")
-//            return
-//        }
-//        guard let path = getPathForSampleIndex(sampleIndex: sampleIdx) else { return }
-//        let url = URL.init(fileURLWithPath: path)
-////        self.audioController?.playSample(sampleURL: url, senderID: senderID)
-//    }
-    
-    
     
     func getIndex(senderID: Int)-> Int?{
        
@@ -236,28 +222,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         SCAudioManager.shared.audioController?.effectControls = self.effectControls
         dm.user?.sampleBanks[dm.currentSampleBank!].effectSettings = self.effectControls
         
-        
-//        switch mixerPanelIdx {
-//        case 0:
-//            print("reverb changed")
-//            break
-//        case 1:
-//            print("delay changed")
-//            break
-//        case 2:
-//            print("pitch changed")
-//            break
-//        case 3:
-//            print("time changed")
-//            break
-//        case 4:
-//            print("distortion changed ")
-//            break
-//        default:
-//            print("default .... ")
-//            break
-//        }
-
+ 
         // write to file
         SCDataManager.shared.saveObjectToJSON()
         
@@ -281,7 +246,11 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("default .... ")
             break
         }
-
+        
+        guard let reverbParams = audioController?.effectControls[0] else { return }
+        let reverbWDM: Float = Float(String(format: "%.0f", reverbParams[0].parameter[selectedSamplePad]*50.0))!
+        audioController?.reverbWetDryMix = reverbWDM
+        audioController?.setReverbWetDryMix(reverbWetDryMix: reverbWDM)
     }
    
     
@@ -468,7 +437,8 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             AVNumberOfChannelsKey: 2,
             AVLinearPCMBitDepthKey: Int(32),
             AVLinearPCMIsBigEndianKey: false,
-            AVLinearPCMIsFloatKey: false
+            AVLinearPCMIsFloatKey: false,
+        
 //            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
 //            AVSampleRateKey: 44100,
 //            AVNumberOfChannelsKey: 2,
@@ -530,7 +500,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         guard let url = self.audioFilePath else { return }
         self.postRecordingFinishedNotification()
         
-        SCDataManager.shared.jsonTest()
+//        SCDataManager.shared.jsonTest()
         let urlPart = url.lastPathComponent
        
 //        guard let currentSB = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!]  else {
@@ -556,27 +526,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     
     
-    
-    
-    func removeUsedEngines(){
-        
-        
-        if self.finishedEngines.isEmpty == false {
-            
-            for (i, fin) in self.finishedEngines.enumerated().reversed() {
-                for (j, engine) in self.audioEngineChain.enumerated().reversed() {
-                    if fin == engine {
-                        fin.stop()
-                        engine.stop()
-                        self.finishedEngines.remove(at: i)
-                        self.audioEngineChain.remove(at: j)
-                        print("removed at index:\(j), bye felicia")
-                    }
-                }
-            }
-        }
-    }
-    
+         
     
         
 }

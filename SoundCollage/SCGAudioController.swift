@@ -374,8 +374,9 @@ class SCGAudioController {
         let reverbParams = effectControls[0]
         
         if let reverbValue: Float = Float(String(format: "%.0f", reverbParams[0].parameter[sampleIndex]*50.0)) {
+            self.reverbWetDryMix = reverbValue
             reverb.loadFactoryPreset(.cathedral) // there are thirteen possible presets
-            reverb.wetDryMix = reverbValue
+            reverb.wetDryMix = self.reverbWetDryMix!
         }
     }
     
@@ -485,16 +486,14 @@ class SCGAudioController {
     }
     
     
-    private func setReverbWetDryMix(reverbWetDryMix: Float) {
-        reverb?.wetDryMix = reverbWetDryMix * 100.0
+    func setReverbWetDryMix(reverbWetDryMix: Float) {
+        
+        reverb?.wetDryMix = reverbWetDryMix// * 100.0
         
     }
     
     
-//    func reverbWetDryMix() -> Float {
-//        return reverb!.wetDryMix/100.0
-//    }
-//    
+    
     
     
     private func setReverbPreset(reverbPreset: Int){
@@ -521,7 +520,7 @@ class SCGAudioController {
         
         if activePlayers >= maxPlayers {
             print("Max players reached.")
-            return
+//            return
         }
         
         let mixer = AVAudioMixerNode.init()
@@ -530,60 +529,86 @@ class SCGAudioController {
         let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)
         let mainMixer = (engine?.mainMixerNode)!
         
-        let sampler = AVAudioUnitSampler.init()
+//        let sampler = AVAudioUnitSampler.init()
         let player = AVAudioPlayerNode.init()
         
-        engine?.attach(sampler)
+//        engine?.attach(sampler)
         engine?.attach(player)
         
-        
-        let reverb = AVAudioUnitReverb()
-        let delay = AVAudioUnitDelay()
-        let pitchShift = AVAudioUnitTimePitch()
-        let distortion = AVAudioUnitDistortion()
-        let timeStretch = AVAudioUnitVarispeed()
-        
-        
-        setupReverb(sampleIndex: index, reverb: reverb)
-        setupDelay(sampleIndex: index, delay: delay)
-        setupPitchShift(sampleIndex: index, pitch: pitchShift)
-        setupTimeStretch(sampleIndex: index, time: timeStretch)
-        setupDistortion(sampleIndex: index, distortion: distortion)
-        
-        
-        engine?.attach(reverb)
-        engine?.attach(delay)
-        engine?.attach(pitchShift)
-        engine?.attach(timeStretch)
-        engine?.attach(distortion)
-        
-        engine?.connect(player, to: mixer, format: playerFormat)
-        engine?.connect(mixer, to: pitchShift, format: playerFormat)
-        engine?.connect(pitchShift, to: timeStretch, format: playerFormat)
-        engine?.connect(timeStretch, to: distortion, format: playerFormat)
-        engine?.connect(distortion, to: delay, format: playerFormat)
-        engine?.connect(delay, to: reverb, format: playerFormat)
-        engine?.connect(reverb, to: mainMixer, format: playerFormat)
-        engine?.connect(sampler, to: mainMixer, format: playerFormat)
+        if reverb == nil {
+        reverb = AVAudioUnitReverb()
+            engine?.attach(reverb!)
+        }
+//        let delay = AVAudioUnitDelay()
+//        let pitchShift = AVAudioUnitTimePitch()
+//        let distortion = AVAudioUnitDistortion()
+//        let timeStretch = AVAudioUnitVarispeed()
+//        
+//        
+        setupReverb(sampleIndex: index, reverb: reverb!)
+//        setupDelay(sampleIndex: index, delay: delay)
+//        setupPitchShift(sampleIndex: index, pitch: pitchShift)
+//        setupTimeStretch(sampleIndex: index, time: timeStretch)
+//        setupDistortion(sampleIndex: index, distortion: distortion)
+//        
+//        
+//        engine?.attach(reverb)
+//        engine?.attach(delay)
+//        engine?.attach(pitchShift)
+//        engine?.attach(timeStretch)
+//        engine?.attach(distortion)
+//        
+        engine?.connect(player, to: reverb!, format: playerFormat)
+        engine?.connect(reverb!, to: mainMixer, fromBus: 0, toBus: 0, format: playerFormat)
+//        engine?.connect(mixer, to: pitchShift, format: playerFormat)
+//        engine?.connect(pitchShift, to: timeStretch, format: playerFormat)
+//        engine?.connect(timeStretch, to: distortion, format: playerFormat)
+//        engine?.connect(distortion, to: delay, format: playerFormat)
+//        engine?.connect(delay, to: reverb, format: playerFormat)
+//        engine?.connect(reverb, to: mainMixer, format: playerFormat)
+//        engine?.connect(sampler, to: mainMixer, format: playerFormat)
         
     
-//        var detachNodes = [player, sampler]
-        var disconnectNodes = [player, sampler, reverb, delay, pitchShift, timeStretch, distortion]
+        var disconnectNodes = [player]//[player, sampler, reverb, delay, pitchShift, timeStretch, distortion]
  
         
-        if let urls: [URL] = Bundle.main.urls(forResourcesWithExtension: "aac", subdirectory: "Documents") {
-            do {
-                try sampler.loadAudioFiles(at: urls)
-            } catch {
-                print("No sample\n")
-            }
-        }
- 
-            startEngine()
+//        if let urls: [URL] = Bundle.main.urls(forResourcesWithExtension: "caf", subdirectory: "Documents") {
+//            do {
+//                try sampler.loadAudioFiles(at: urls)
+        //            } catch {
+        //                print("No sample\n")
+        //            }
+        //        }
+        
+        startEngine()
+       
+        
+//        let dm = SCDataManager.shared
+//        guard let sampleBank = dm.user?.sampleBanks[dm.currentSampleBank!] else { return }
+//        
+//        if let path = sampleBank.samples["\(index)"] {
+//            
+//            let fileManager = FileManager.default
+//            let docsurl = try! fileManager.url(for:.documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+//            let myurl = docsurl.appendingPathComponent(path)
+//            
+//            
+//            var urls:[URL] = []
+//            urls.append(myurl)
+//            do {
+//                try sampler.loadAudioFiles(at: urls)
+//                
+//            } catch {
+//                print("No sample\n")
+//            }
+//        }
+        
+//        sampler.startNote(50, withVelocity: 64, onChannel: 0)
+        
         
         // schedule the appropriate content
         let key: String = "\(index)"
-        guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {  //createAudioFileForPlayback()!
+        guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {
             print("No sample at selected sample index!")
             return
         }
@@ -592,8 +617,9 @@ class SCGAudioController {
         activePlayers = activePlayers+1
         print("total plays : \(plays), active players: \(activePlayers)")
       
+        
         player.scheduleFile(sample, at: nil, completionHandler: {
-            
+        
             
             [weak self] in
             guard let strongSelf = self else { return }
@@ -628,7 +654,6 @@ class SCGAudioController {
                     strongSelf.engine?.detach(i)
                 }
                
-//                detachNodes.removeAll()
                 disconnectNodes.removeAll()
                 strongSelf.playerIsPlaying = false
                 strongSelf.activePlayers = strongSelf.activePlayers-1
