@@ -14,7 +14,7 @@ class SCTriggerCell: UICollectionViewCell {
     var idx: Int = 0
     var isPlaybackEnabled: Bool = false
     let padLabel = UILabel()
-    
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,6 +26,8 @@ class SCTriggerCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+     
     func setupLabel(){
         
         padLabel.isUserInteractionEnabled = false
@@ -42,6 +44,12 @@ class SCTriggerCell: UICollectionViewCell {
         self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .centerX, relatedBy: .equal, toItem: self.contentView, attribute: .centerX, multiplier: 1.0, constant: 0))
         let centerY = ((contentView.frame.height/4)*3)/6
         self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: centerY))
+    }
+    
+    func circularCell(){
         
+        self.layer.borderWidth = 0.5
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = self.contentView.frame.width/2
     }
   }

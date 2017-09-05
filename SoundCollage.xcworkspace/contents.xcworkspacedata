@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:SCSequencerTouchDelegate.swift">
+   </FileRef>
+   <FileRef
       location = "group:SoundCollage.xcodeproj">
    </FileRef>
    <FileRef

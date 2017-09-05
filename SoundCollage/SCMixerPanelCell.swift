@@ -110,14 +110,6 @@ class SCMixerPanelCell: UICollectionViewCell {
         
         
         
-//        
-//        
-//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
-//        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeft))
-//        tapGestureRecognizer.delegate = self
-//        selectedPadTextLabel.addGestureRecognizer(tapGestureRecognizer)
-//        selectedPadNumberLabel.addGestureRecognizer(tapGestureRecognizer)
-//        selectedPadCircle.addGestureRecognizer(tapGestureRecognizer)
 
     }
     
@@ -347,17 +339,11 @@ class SCMixerPanelCell: UICollectionViewCell {
     func addSliderTarget(slider: SCSlider){
         slider.addTarget(self, action: #selector(SCMixerPanelCell.sliderChanged(sender:)), for: .valueChanged)
     }
-    
-    
-    
-    
+  
     
     func sliderChanged(sender: SCSlider) {
         
-        //Use the value from the slider for something
-        // When slider changes, alert the controller, the controller will get the selected effect, the index of the slider will be the parameter to change and slider value will be the value 
-       
-        var values: [Int] = []
+             var values: [Int] = []
         values.append(self.mixerPanelIdx)
         values.append(sender.idx)
         values.append(SCAudioManager.shared.selectedSampleIndex)
@@ -365,57 +351,5 @@ class SCMixerPanelCell: UICollectionViewCell {
         
         self.faderDelegate?.faderValueDidChange(sender: sender)
     }
-    
-    
-    
-    
 }
-
-//
-//extension SCSamplerViewController: UIGestureRecognizerDelegate {
-//    
-//    
-//    
-//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return true
-//    }
-//    
-//    
-//    
-//    func tap(gestureRecognizer: UIGestureRecognizer) {
-//        
-//        if SCAudioManager.shared.isRecording == true {
-//            print("Recording in progress")
-//            return
-//        }
-//        
-//        
-//        let tapLocation = gestureRecognizer.location(in: self.samplerCV)
-//        
-//        guard let indexPath = self.samplerCV?.indexPathForItem(at: tapLocation) else {
-//            print("IndexPath not found.")
-//            return
-//        }
-//        
-//        guard let cell = self.samplerCV?.cellForItem(at: indexPath) else {
-//            print("Cell not found.")
-//            return
-//        }
-//        
-//        selectCell(cell: cell, indexPath: indexPath)
-//    }
-//    
-//    
-//    
-//    func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
-//        
-//        print("selected cell at \(indexPath.row)")
-//        if SCAudioManager.shared.isRecordingModeEnabled == true {
-//            self.selectedPadIndex = indexPath.row
-//        }
-//        self.collectionView(samplerCV!, didSelectItemAt: indexPath)
-//    }
-//}
-
-
 
