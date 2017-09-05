@@ -317,9 +317,9 @@
 		A7264E771EAE285900664EDE /* Sampler */ = {
 			isa = PBXGroup;
 			children = (
-				A7A823381EA81F500061D0A0 /* SCSamplerFlowLayout.swift */,
 				A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */,
 				A7A823371EA81F500061D0A0 /* SCSamplerCollectionViewCell.swift */,
+				A7A823381EA81F500061D0A0 /* SCSamplerFlowLayout.swift */,
 			);
 			name = Sampler;
 			sourceTree = "<group>";

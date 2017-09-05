@@ -19,7 +19,8 @@ class SCScoreViewController: UIViewController {
     var triggerTimer: Timer?
     var timeSignature: Double = 4.0
     let margin: CGFloat = 10.0
-    
+    let toolbarHeight = CGFloat(49.0)
+
     
     
     override func viewDidLoad() {
@@ -29,13 +30,14 @@ class SCScoreViewController: UIViewController {
         setupCollectionView()
         setupSequencerBarUI()
         NotificationCenter.default.addObserver(self, selector: #selector(SCScoreViewController.playback), name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
+        
     }
     
     
     //MARK: UI setup
     
     func setupCollectionView() {
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: cvHeight)
+        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: cvHeight-toolbarHeight)
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
         scoreCV = UICollectionView.init(frame: frame, collectionViewLayout: flowLayout)
         scoreCV?.register(SCScoreCell.self, forCellWithReuseIdentifier: "SCScoreCell")
@@ -174,7 +176,7 @@ extension SCScoreViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let cellSize = CGSize.init(width: collectionView.frame.size.width, height: self.cvHeight)
+        let cellSize = CGSize.init(width: collectionView.frame.size.width, height: self.cvHeight-toolbarHeight)
         print("cellSize - \(cellSize.width), \(cellSize.height)")
         return cellSize
     }

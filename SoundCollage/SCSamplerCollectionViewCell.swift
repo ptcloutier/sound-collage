@@ -49,12 +49,12 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         padLabel.addGlow(color: self.cellColor!)
         padLabel.isUserInteractionEnabled = false
         padLabel.frame = self.contentView.frame
-        padLabel.text = "\(self.idx+1)"
+//        padLabel.text = "\(self.idx+1)"
         padLabel.textAlignment = NSTextAlignment.center
         padLabel.font = UIFont.init(name: "Futura", size: 20.0)
         self.layer.borderWidth = 1.0
         self.layer.masksToBounds = true
-        self.layer.cornerRadius = 25.0
+        self.layer.cornerRadius = self.contentView.frame.width/2
         contentView.addSubview(padLabel)
     }
     

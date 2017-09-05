@@ -14,9 +14,10 @@ class SCContainerViewController: UIViewController {
     var collectionView: UICollectionView?
     var recordBtn: UIButton?
     let navBarBtnFrameSize = CGRect.init(x: 0, y: 0, width: 30, height: 30)
-    let toolbarHeight = CGFloat(77.0)
+    let toolbarHeight = CGFloat(49.0)
     var toolbar = SCToolbar()
-
+    var samplerVC: SCSamplerViewController?
+    var sequencerVC: SCScoreViewController?
     
     
     override func viewDidLoad() {
@@ -25,20 +26,38 @@ class SCContainerViewController: UIViewController {
     
         setupCollectionView()
         setupControls()
+        setupSampler()
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCContainerViewController.tap(gestureRecognizer:)))
+        tapGestureRecognizer.delegate = self
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGestureRecognizer)
     }
     
+    
+    func setupSampler(){
+        self.samplerVC = SCSamplerViewController(nibName: nil, bundle: nil)
+        guard let samplerVC = self.samplerVC else { return }
+        samplerVC.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height/1.83)
+        samplerVC.view.center = view.center
+        self.view.addSubview(samplerVC.view)
+    }
+    
+    
+       
+    
+
     
     func setupCollectionView(){
         
         let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 1)
-        collectionView = UICollectionView.init(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView = UICollectionView.init(frame: self.view.frame, collectionViewLayout: flowLayout)
         guard let cv = self.collectionView else { return }
         cv.delegate = self
         cv.dataSource = self
         cv.register(SCFirstContainerCell.self, forCellWithReuseIdentifier: "SCFirstContainerCell")
         cv.register(SCSecondContainerCell.self, forCellWithReuseIdentifier: "SCSecondContainerCell")
         cv.isScrollEnabled = false
-        cv.frame = self.view.bounds
         self.view.addSubview(cv)
 
     }
@@ -189,7 +208,7 @@ class SCContainerViewController: UIViewController {
 }
 
 
-extension SCContainerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension SCContainerViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -206,6 +225,71 @@ extension SCContainerViewController: UICollectionViewDelegate, UICollectionViewD
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSecondContainerCell", for: indexPath) as! SCSecondContainerCell
             cell.setupCollectionView()
             return cell
+        }
+    }
+    
+    
+    func darkenVC(){
+        
+        
+    }
+}
+
+
+
+
+
+
+extension SCContainerViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let cellSize = CGSize.init(width: collectionView.frame.size.width, height: self.view.frame.height/2)
+        print("cellSize - \(cellSize.width), \(cellSize.height)")
+        return cellSize
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0, 0, 0, 0)
+    }
+}
+
+
+
+extension SCContainerViewController: UIGestureRecognizerDelegate {
+    
+    
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    
+    
+    func tap(gestureRecognizer: UITapGestureRecognizer) {
+        
+        if SCAudioManager.shared.isRecording == true {
+            print("Recording in progress")
+            return
+        }
+        
+        
+        let tapLocation = gestureRecognizer.location(in: self.view)
+        
+        if tapLocation.y < 60.0 {
+            print("sup seq")
+        } else if tapLocation.y > 500 {
+            print("sup effects")
+        } else {
+            print("sup sampler")
         }
     }
 }

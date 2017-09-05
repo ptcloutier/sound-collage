@@ -92,22 +92,15 @@ extension SCFirstContainerCell: UICollectionViewDelegate, UICollectionViewDataSo
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return 1
     }
     
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.row == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCMusicInterfaceCell", for: indexPath) as! SCMusicInterfaceCell
-            cell.setupSampler()
-            return cell
-        } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCMusicInterfaceCell", for: indexPath) as! SCMusicInterfaceCell
             cell.setupSequencer()
             return cell
-            
-        }
     }
 }
 
