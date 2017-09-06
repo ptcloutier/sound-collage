@@ -13,6 +13,10 @@ class SCSequencerCell: UICollectionViewCell {
     var triggerCV: UICollectionView?
     var idx: Int = 0
     let cellCount: Int = 16
+    var iceCreamColors: [UIColor] = []
+    
+    
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -93,7 +97,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             brightColors.append(brighterIC)
         }
 
-        let iceCreamColors: [UIColor] = brightColors
+        iceCreamColors = brightColors
         
         var colorIdx: Int
         if indexPath.row > iceCreamColors.count-1 {
@@ -126,7 +130,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             case true:
                 cell.backgroundColor = iceCreamColors[colorIdx]
             case false:
-                cell.backgroundColor = SCColor.Custom.Gray.dark
+                cell.backgroundColor = UIColor.clear
                 
             }
         }
@@ -155,15 +159,13 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         case true:
             cell.isPlaybackEnabled = false
             currentSB.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = false
-            cell.backgroundColor = SCColor.Custom.Gray.dark
-        case false:
-            cell.isPlaybackEnabled = true
-            currentSB.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = true
-            let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
             var colorIdx: Int
             colorIdx = indexPath.row
             cell.backgroundColor = iceCreamColors[colorIdx]
-            
+        case false:
+            cell.isPlaybackEnabled = true
+            currentSB.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = true
+            cell.backgroundColor = UIColor.clear
             if SCAudioManager.shared.sequencerIsPlaying == false {
                 SCAudioManager.shared.selectedSequencerIndex = cell.idx
     
@@ -237,13 +239,6 @@ extension SCSequencerCell: UIGestureRecognizerDelegate {
         }
         
         let touchLocation = gestureRecognizer.location(in: self.triggerCV)
-        let convertedPoint = self.triggerCV?.convert(touchLocation, from: self.superview)
-        print("touch at \(String(describing: convertedPoint?.x)), \(String(describing: convertedPoint?.y))")
-        
-        let touchLocationDict = ["touchLocation": convertedPoint]
-        
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sequencerTouchNotification"), object: nil, userInfo: touchLocationDict)
-        
         
         guard let indexPath = self.triggerCV?.indexPathForItem(at: touchLocation) else {
             print("IndexPath not found.")

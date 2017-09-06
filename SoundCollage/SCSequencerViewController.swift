@@ -27,35 +27,24 @@ class SCSequencerViewController: UIViewController {
     var sampler: SCSamplerViewController?
     var avplayer: AVPlayer = AVPlayer()
     var videoView = UIView()
-    
-    
+    var gradientView = UIView()
+    var selectInterface: Int = 0
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.clear
+        
         setupVideoView()
         setupSequencer()
         setupSequencerBarUI()
         NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playback), name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
         setupControls()
         setupSampler()
-        toggleSelectedVC(index: 0)
-        NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.touch(notification:)), name: NSNotification.Name(rawValue: "sequencerTouchNotification"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.showSequencer(notification:)), name: NSNotification.Name(rawValue: "showSequencerNotification"), object: nil)
-        
-        
+        toggleSelectedVC()
         }
     
-       /*
-     //Config dark gradient view
-     CAGradientLayer *gradient = [CAGradientLayer layer];
-     gradient.frame = [[UIScreen mainScreen] bounds];
-     gradient.colors = [NSArray arrayWithObjects:(id)[UIColorFromRGB(0x030303) CGColor], (id)[[UIColor clearColor] CGColor], (id)[UIColorFromRGB(0x030303) CGColor],nil];
-     [self.gradientView.layer insertSublayer:gradient atIndex:0];
-     } */
     
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -272,9 +261,15 @@ class SCSequencerViewController: UIViewController {
         recordBtn.addTarget(self, action: #selector(SCSequencerViewController.recordBtnDidPress), for: .touchUpInside)
         
         let bankBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
-        bankBtn.setBackgroundImage(UIImage.init(named: "sampleBank"), for: .normal)
+        bankBtn.setBackgroundImage(UIImage.init(named: "back"), for: .normal)
         bankBtn.addTarget(self, action: #selector(SCSequencerViewController.bankBtnDidPress), for: .touchUpInside)
         bankBtn.addGlow(color: UIColor.white)
+        
+        let toggleBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
+        toggleBtn.setBackgroundImage(UIImage.init(named: "sampleBank"), for: .normal)
+        toggleBtn.addTarget(self, action: #selector(SCSequencerViewController.toggleSelectedVC), for: .touchUpInside)
+        toggleBtn.addGlow(color: UIColor.white)
+
         
         let sequencerBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         sequencerBtn.setBackgroundImage(UIImage.init(named: "play"), for: .normal)
@@ -291,6 +286,7 @@ class SCSequencerViewController: UIViewController {
         recordNewSCBtn.addTarget(self, action: #selector(SCSequencerViewController.recordMixerOutputBtnDidPress), for: .touchUpInside)
         recordNewSCBtn.addGlow(color: UIColor.white)
         
+        let toggleBarBtn = UIBarButtonItem.init(customView: toggleBtn)
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
         let sequencerBarBtn = UIBarButtonItem.init(customView: sequencerBtn)
@@ -299,9 +295,8 @@ class SCSequencerViewController: UIViewController {
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        toolbar.items = [ flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace,  libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
+        toolbar.items = [ flexibleSpace, toggleBarBtn, flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace,  libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
         self.view.addSubview(toolbar)
-        toolbar.backgroundColor = SCColor.Custom.Gray.dark
     }
     
     
@@ -395,36 +390,14 @@ class SCSequencerViewController: UIViewController {
     
     
     
-    //MARK: focus/darken vc's
-    
-    func touch(notification: Notification){
-        
-        if let touchLocation = notification.userInfo?["touchLocation"] as? CGPoint {
-        
-        if touchLocation.y < 75.0 {
-            
-            toggleSelectedVC(index: 0)
-        }
-        if touchLocation.y > 550.0 {
-            toggleSelectedVC(index: 1)
-        }
-        print("touch at : \(touchLocation.x), \(touchLocation.y)")
-        }
-    }
+    //MARK: toggle sampler/sequencer
 
     
     
-    func showSequencer(notification: Notification){
+    
+    func toggleSelectedVC(){
         
-        if let index = notification.userInfo?["index"] as? Int {
-            toggleSelectedVC(index: index)
-        }
-    }
-    
-    
-    
-    func toggleSelectedVC(index: Int){
-        
+      
         guard let sequencer = self.sequencer else {
             return
         }
@@ -433,15 +406,17 @@ class SCSequencerViewController: UIViewController {
         }
        
         
-        switch index {
+        switch selectInterface {
+        
         case 0:
             UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
                 sequencer.alpha = 1.0
-                sampler.alpha = 0.3
+                sampler.alpha = 0.1
                 self.view.bringSubview(toFront: sampler)
                 sequencer.isUserInteractionEnabled = true
                 sampler.isUserInteractionEnabled = false
             })
+            selectInterface = 1
             break
         case 1:
             UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
@@ -451,9 +426,10 @@ class SCSequencerViewController: UIViewController {
                 sequencer.isUserInteractionEnabled = false
                 sampler.isUserInteractionEnabled = true
             })
+            selectInterface = 0
             break
         default:
-            print("")
+            return
         }
     }
 }

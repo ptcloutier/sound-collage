@@ -243,13 +243,16 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
        
         
         if indexPath.row == self.selectedPadIndex {
+            cell.backgroundColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+//            cell.padLabel.textColor = UIColor.white
+//            cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
+        } else {
             cell.backgroundColor = cell.cellColor
             cell.padLabel.textColor = UIColor.white
             cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
-        } else {
-            cell.backgroundColor = SCColor.Custom.Gray.dark
-            cell.padLabel.textColor = UIColor.white
-            cell.layer.borderColor = cell.cellColor?.cgColor
+//            cell.backgroundColor = SCColor.Custom.Gray.dark
+//            cell.padLabel.textColor = UIColor.white
+//            cell.layer.borderColor = cell.cellColor?.cgColor
 
         }
         
