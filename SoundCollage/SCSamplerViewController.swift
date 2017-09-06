@@ -30,7 +30,6 @@ class SCSamplerViewController: UIViewController  {
         
         SCAudioManager.shared.audioController?.getAudioFilesForURL()
         
-//        view.backgroundColor = UIColor.clear
         
         let colors = SCColor.getPsychedelicIceCreamShopColors()
         var brightColors: [UIColor] = []
@@ -243,17 +242,13 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
        
         
         if indexPath.row == self.selectedPadIndex {
-            cell.backgroundColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
-//            cell.padLabel.textColor = UIColor.white
-//            cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
-        } else {
             cell.backgroundColor = cell.cellColor
-            cell.padLabel.textColor = UIColor.white
+            cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
             cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
-//            cell.backgroundColor = SCColor.Custom.Gray.dark
-//            cell.padLabel.textColor = UIColor.white
-//            cell.layer.borderColor = cell.cellColor?.cgColor
-
+        } else {
+            cell.backgroundColor = SCColor.Custom.Gray.dark
+            cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+            cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
         }
         
         

@@ -27,7 +27,6 @@ class SCSequencerViewController: UIViewController {
     var sampler: SCSamplerViewController?
     var avplayer: AVPlayer = AVPlayer()
     var videoView = UIView()
-    var gradientView = UIView()
     var selectInterface: Int = 0
     
     
@@ -43,7 +42,7 @@ class SCSequencerViewController: UIViewController {
         setupControls()
         setupSampler()
         toggleSelectedVC()
-        }
+    }
     
     
     
@@ -250,41 +249,39 @@ class SCSequencerViewController: UIViewController {
         toolbar.transparentToolbar(view: view, toolbarHeight: toolbarHeight)
         let buttonHeight = (toolbarHeight/3)*2
         
-        self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
-        
+//        self.recordBtn = UIButton.GradientColorStyle(height: buttonHeight, gradientColors: [UIColor.red, UIColor.magenta, UIColor.orange], secondaryColor: UIColor.white)
+        self.recordBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         guard let recordBtn = self.recordBtn else {
             print("No record btn.")
             return
         }
-        recordBtn.addGlow(color: SCColor.Custom.PsychedelicIceCreamShoppe.brightCoral)
-        recordBtn.setBackgroundImage(UIImage.init(named: "record"), for: .normal)
+        recordBtn.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
+        recordBtn.layer.borderWidth = 2.0
+        recordBtn.layer.masksToBounds = true
+        recordBtn.layer.cornerRadius = buttonHeight/2.0
+        recordBtn.backgroundColor = SCColor.Custom.Gray.dark
         recordBtn.addTarget(self, action: #selector(SCSequencerViewController.recordBtnDidPress), for: .touchUpInside)
         
         let bankBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         bankBtn.setBackgroundImage(UIImage.init(named: "back"), for: .normal)
         bankBtn.addTarget(self, action: #selector(SCSequencerViewController.bankBtnDidPress), for: .touchUpInside)
-        bankBtn.addGlow(color: UIColor.white)
         
         let toggleBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         toggleBtn.setBackgroundImage(UIImage.init(named: "sampleBank"), for: .normal)
         toggleBtn.addTarget(self, action: #selector(SCSequencerViewController.toggleSelectedVC), for: .touchUpInside)
-        toggleBtn.addGlow(color: UIColor.white)
 
         
         let sequencerBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         sequencerBtn.setBackgroundImage(UIImage.init(named: "play"), for: .normal)
         sequencerBtn.addTarget(self, action: #selector(SCSequencerViewController.postSequencerPlaybackDidPressNotification), for: .touchUpInside)
-        sequencerBtn.addGlow(color: UIColor.white)
         
         let libraryBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         libraryBtn.setBackgroundImage(UIImage.init(named: "playlist"), for: .normal)
         libraryBtn.addTarget(self, action: #selector(SCSequencerViewController.libraryBtnDidPress), for: .touchUpInside)
-        libraryBtn.addGlow(color: UIColor.white)
         
         let recordNewSCBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         recordNewSCBtn.setBackgroundImage(UIImage.init(named: "lp1"), for: .normal)
         recordNewSCBtn.addTarget(self, action: #selector(SCSequencerViewController.recordMixerOutputBtnDidPress), for: .touchUpInside)
-        recordNewSCBtn.addGlow(color: UIColor.white)
         
         let toggleBarBtn = UIBarButtonItem.init(customView: toggleBtn)
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
@@ -295,7 +292,7 @@ class SCSequencerViewController: UIViewController {
         
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        toolbar.items = [ flexibleSpace, toggleBarBtn, flexibleSpace, bankBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace,  libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
+        toolbar.items = [ toggleBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace, bankBarBtn, flexibleSpace, libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
         self.view.addSubview(toolbar)
     }
     
@@ -305,9 +302,15 @@ class SCSequencerViewController: UIViewController {
     
     func recordBtnDidPress(){
         
+        if SCAudioManager.shared.sequencerIsPlaying == true {
+            stopPlaying()
+        }
         guard let recordBtn = self.recordBtn else {
             print("No record btn.")
             return
+        }
+        if selectInterface == 1 {
+            toggleSelectedVC()
         }
         postRecordBtnDidPressNotification()
         
@@ -334,6 +337,9 @@ class SCSequencerViewController: UIViewController {
     
     func bankBtnDidPress(){
         
+        if SCAudioManager.shared.sequencerIsPlaying == true {
+            stopPlaying()
+        }
         SCAudioManager.shared.audioController?.engine?.pause()
         SCAudioManager.shared.audioController?.engine?.reset()
         
@@ -349,6 +355,9 @@ class SCSequencerViewController: UIViewController {
     
     func libraryBtnDidPress(){
         
+        if SCAudioManager.shared.sequencerIsPlaying == true {
+            stopPlaying()
+        }
         print("library button pressed.")
         let vc: SCLibraryViewController = SCLibraryViewController(nibName: nil, bundle: nil)
         SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
@@ -411,7 +420,7 @@ class SCSequencerViewController: UIViewController {
         case 0:
             UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
                 sequencer.alpha = 1.0
-                sampler.alpha = 0.1
+                sampler.alpha = 0
                 self.view.bringSubview(toFront: sampler)
                 sequencer.isUserInteractionEnabled = true
                 sampler.isUserInteractionEnabled = false
@@ -421,7 +430,7 @@ class SCSequencerViewController: UIViewController {
         case 1:
             UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
                 sampler.alpha = 1.0
-                sequencer.alpha = 0.1
+                sequencer.alpha = 0.2
                 self.view.bringSubview(toFront: sequencer)
                 sequencer.isUserInteractionEnabled = false
                 sampler.isUserInteractionEnabled = true

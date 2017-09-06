@@ -78,7 +78,7 @@ class SCColor {
     struct Custom {
         
         struct Gray {
-            static let dark = UIColor.init(red: 49.0/255.0, green: 36.0/255.0, blue: 32.0/255.0, alpha: 1.0)
+            static let dark = UIColor.init(red: 49.0/255.0, green: 36.0/255.0, blue: 32.0/255.0, alpha: 0.4)
         }
         struct PsychedelicIceCreamShoppe {
             static let medViolet = UIColor.init(red: 180.0/255.0, green: 172.0/255.0, blue: 216.0/255.0, alpha: 1.0)

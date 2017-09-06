@@ -109,7 +109,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             colorIdx = indexPath.row
         }
        
-        cell.layer.borderColor = iceCreamColors[colorIdx].cgColor
+        cell.layer.borderColor = UIColor.white.cgColor
 
         if self.idx == 0 {
             cell.padLabel.text = "\(cell.idx+1)"
@@ -130,7 +130,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             case true:
                 cell.backgroundColor = iceCreamColors[colorIdx]
             case false:
-                cell.backgroundColor = UIColor.clear
+                cell.backgroundColor = SCColor.Custom.Gray.dark
                 
             }
         }
@@ -143,7 +143,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        
+       
         guard let cell = collectionView.cellForItem(at: indexPath) as? SCTriggerCell else {
             print("No cell found.")
             return
@@ -154,18 +154,18 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             return
         }
         
-        switch cell.isPlaybackEnabled {
+        switch cell.isPlaybackEnabled { // toggle
         
         case true:
             cell.isPlaybackEnabled = false
             currentSB.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = false
-            var colorIdx: Int
-            colorIdx = indexPath.row
-            cell.backgroundColor = iceCreamColors[colorIdx]
+//            var colorIdx: Int
+//            colorIdx = indexPath.row
+            cell.backgroundColor = SCColor.Custom.Gray.dark //iceCreamColors[colorIdx]
         case false:
             cell.isPlaybackEnabled = true
             currentSB.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = true
-            cell.backgroundColor = UIColor.clear
+            cell.backgroundColor =  SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
             if SCAudioManager.shared.sequencerIsPlaying == false {
                 SCAudioManager.shared.selectedSequencerIndex = cell.idx
     
@@ -245,8 +245,12 @@ extension SCSequencerCell: UIGestureRecognizerDelegate {
             return
         }
         
-        guard let cell = self.triggerCV?.cellForItem(at: indexPath) else {
+        guard let cell = self.triggerCV?.cellForItem(at: indexPath) as? SCTriggerCell else {
             print("Cell not found.")
+            return
+        }
+        if cell.sequencerIdx == -1 {
+            print("seq idx -1, deselect")
             return
         }
         selectCell(cell: cell, indexPath: indexPath)

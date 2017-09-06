@@ -26,7 +26,6 @@ class SCSampleBankViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor.clear
         
         let img1 = UIImage.init(named: "l1")
         let img2 = UIImage.init(named: "l2")
@@ -251,7 +250,7 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
         } else {
             imgIdx = indexPath.row
         }
-        cell.imageView.backgroundColor =  UIColor.white //iceCreamColors[colorIdx] 
+        cell.imageView.backgroundColor = iceCreamColors[colorIdx] 
         cell.imageView.image = images[imgIdx]
         
         let dm = SCDataManager.shared

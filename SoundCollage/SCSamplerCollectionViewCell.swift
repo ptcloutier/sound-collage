@@ -22,7 +22,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var touchTimer: Timer? = nil
     var isTouchDelayed: Bool = false
     var padLabel: UILabel = UILabel()
-    var colors = [[SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor, SCColor.Custom.Gray.dark.cgColor]]
+    var colors = [[UIColor.clear.cgColor, UIColor.clear.cgColor, UIColor.clear.cgColor]]
     var gradientColors: SCColor?
     var doXAnimation: Bool = false 
     var doWaveAnimation: Bool = true
@@ -54,7 +54,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         padLabel.addGlow(color: self.cellColor!)
         padLabel.isUserInteractionEnabled = false
         padLabel.frame = self.contentView.frame
-//        padLabel.text = "\(self.idx+1)"
+        padLabel.text = "\(self.idx+1)"
         padLabel.textAlignment = NSTextAlignment.center
         padLabel.font = UIFont.init(name: "Futura", size: 20.0)
         contentView.addSubview(padLabel)
@@ -141,7 +141,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     func playbackSample() {
         
         SCAudioManager.shared.audioController?.togglePlayer(index: self.idx)
-//        SCAudioManager.shared.playAudio(senderID: 0)
         playbackTouchDelay()
     }
     
