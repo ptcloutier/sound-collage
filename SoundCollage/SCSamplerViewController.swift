@@ -30,9 +30,16 @@ class SCSamplerViewController: UIViewController  {
         
         SCAudioManager.shared.audioController?.getAudioFilesForURL()
         
-        view.backgroundColor = SCColor.Custom.Gray.dark
-        vintageColors = SCColor.getVintageColors()
-        iceCreamColors = SCColor.getPsychedelicIceCreamShopColors()
+        view.backgroundColor = UIColor.clear
+        
+        let colors = SCColor.getPsychedelicIceCreamShopColors()
+        var brightColors: [UIColor] = []
+        for color in colors {
+            let bright = SCColor.BrighterColor(color: color)
+            brightColors.append(bright)
+        }
+        
+        iceCreamColors = brightColors//SCColor.getPsychedelicIceCreamShopColors()
         
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: Notification.Name.init("recordingDidFinish"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.toggleRecordingMode), name: Notification.Name.init("recordBtnDidPress"), object: nil)

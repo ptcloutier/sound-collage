@@ -39,22 +39,5 @@ class SCAnimator {
         layer.add(rotation, forKey: "Spin")
         completion(true)
     }
-    
-    
-    class func FadeAlphaIn(duration: TimeInterval, view: UIView){
-       
-        UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations:{
-            view.alpha = 1.0
-        })
-    }
-    
-    
-    
-    class func FadeAlphaOut(duration: TimeInterval, view: UIView){
-        
-        UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations:{
-            view.alpha = 0.1
-        })
-    }
 }
 

@@ -359,18 +359,26 @@ class SCSequencerViewController: UIViewController {
         guard let sampler = self.sampler else{
             return
         }
+       
+        
         switch index {
         case 0:
-            SCAnimator.FadeAlphaIn(duration: 1.0, view: sequencer)
-            sequencer.isUserInteractionEnabled = true
-            SCAnimator.FadeAlphaOut(duration: 1.0, view: sampler.view)
-            sampler.view.isUserInteractionEnabled = false
+            UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
+                sequencer.alpha = 1.0
+                sampler.view.alpha = 0.3
+                self.view.sendSubview(toBack: sequencer)
+                sequencer.isUserInteractionEnabled = true
+                sampler.view.isUserInteractionEnabled = false
+            })
             break
         case 1:
-            SCAnimator.FadeAlphaIn(duration: 1.0, view: sampler.view)
-            sequencer.isUserInteractionEnabled = false
-            SCAnimator.FadeAlphaOut(duration: 1.0, view: sequencer)
-            sampler.view.isUserInteractionEnabled = true
+            UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
+                sampler.view.alpha = 1.0
+                sequencer.alpha = 0.1
+                self.view.sendSubview(toBack: sampler.view)
+                sequencer.isUserInteractionEnabled = false
+                sampler.view.isUserInteractionEnabled = true
+            })
             break
         default:
             print("")
@@ -432,30 +440,4 @@ extension SCSequencerViewController: UICollectionViewDelegate, UICollectionViewD
     }
 }
 
-
-
-//extension SCSequencerViewController: UIGestureRecognizerDelegate {
-//    
-//    
-//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return true
-//    }
-//    
-//    
-//    func tap(gestureRecognizer: UITapGestureRecognizer) {
-//        
-//        
-//        if SCAudioManager.shared.isRecording == true {
-//            print("Recording in progress")
-//            return
-//        }
-//        
-//        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed || gestureRecognizer.state == .ended {
-//
-//        let tapLocation = gestureRecognizer.location(in: self.view)
-//        
-//            
-//        }
-//    }
-//}
-//
+ 

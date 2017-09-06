@@ -34,8 +34,7 @@ class SCScoreCell: UICollectionViewCell {
         sequencerCV.delegate = self
         sequencerCV.dataSource = self
         contentView.addSubview(sequencerCV)
-      
-    }
+      }
 }
 
 
@@ -101,3 +100,11 @@ extension SCScoreCell:  UICollectionViewDelegate, UICollectionViewDataSource {
     }
         
 }
+
+
+
+
+
+
+
+

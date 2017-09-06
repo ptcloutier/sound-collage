@@ -27,6 +27,14 @@ class SCSequencerCell: UICollectionViewCell {
     
     func setupSequencer(){
         
+        let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: CGFloat(cellCount))
+        triggerCV = UICollectionView.init(frame: self.contentView.frame, collectionViewLayout: flowLayout)
+        guard let triggerCV = self.triggerCV else { return }
+        triggerCV.backgroundColor = SCColor.Custom.Gray.dark
+        triggerCV.register(SCTriggerCell.self, forCellWithReuseIdentifier: "SCTriggerCell")
+        triggerCV.delegate = self
+        triggerCV.dataSource = self
+        contentView.addSubview(triggerCV)
         
         let pan = UIPanGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
         pan.delegate = self
@@ -39,19 +47,12 @@ class SCSequencerCell: UICollectionViewCell {
         let swipe = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
         swipe.delegate = self
         self.addGestureRecognizer(swipe)
-        
-        
 
-        let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: CGFloat(cellCount))
-        triggerCV = UICollectionView.init(frame: self.contentView.frame, collectionViewLayout: flowLayout)
-        guard let triggerCV = self.triggerCV else { return }
-        triggerCV.backgroundColor = SCColor.Custom.Gray.dark
-        triggerCV.register(SCTriggerCell.self, forCellWithReuseIdentifier: "SCTriggerCell")
-        triggerCV.delegate = self
-        triggerCV.dataSource = self
-        contentView.addSubview(triggerCV)
     }
 }
+
+
+
 
 
 
@@ -76,7 +77,14 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         cell.circularCell()
         cell.sequencerIdx = self.idx-1
         cell.idx = indexPath.row
-        let iceCreamColors: [UIColor] = SCColor.getPsychedelicIceCreamShopColors()
+        let colors = SCColor.getPsychedelicIceCreamShopColors()
+        var brightColors: [UIColor] = []
+        for color in colors {
+            let bright = SCColor.BrighterColor(color: color)
+            brightColors.append(bright)
+        }
+
+        let iceCreamColors: [UIColor] = brightColors//SCColor.getPsychedelicIceCreamShopColors()
         
         var colorIdx: Int
         if indexPath.row > iceCreamColors.count-1 {
@@ -173,56 +181,6 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
 
 
 
-
-extension SCSequencerCell: UIGestureRecognizerDelegate {
-    
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    
-    
-    func touch(gestureRecognizer: UIGestureRecognizer) {
-        
-        if SCAudioManager.shared.isRecording == true {
-            print("Recording in progress")
-            return
-        }
-        
-        let touchLocation = gestureRecognizer.location(in: contentView)
-        
-        print("touch at \(touchLocation.x), \(touchLocation.y)")
-        
-        let touchLocationDict = ["touchLocation": touchLocation]
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sequencerTouchNotification"), object: nil, userInfo: touchLocationDict)
-
-
-        guard let indexPath = self.triggerCV?.indexPathForItem(at: touchLocation) else {
-            print("IndexPath not found.")
-            return
-        }
-        
-        guard let cell = self.triggerCV?.cellForItem(at: indexPath) else {
-            print("Cell not found.")
-            return
-        }
-        selectCell(cell: cell, indexPath: indexPath)
-    }
-
-    
-    
-    
-    func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
-        
-        print("selected seq cell at \(indexPath.row)")
-      
-        self.collectionView(triggerCV!, didSelectItemAt: indexPath)
-    }
-}
-
-
-
 extension SCSequencerCell: UICollectionViewDelegateFlowLayout {
     
     
@@ -251,6 +209,55 @@ extension SCSequencerCell: UICollectionViewDelegateFlowLayout {
     }
 }
 
+
+
+extension SCSequencerCell: UIGestureRecognizerDelegate {
+    
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    
+    
+    func touch(gestureRecognizer: UIGestureRecognizer) {
+        
+        if SCAudioManager.shared.isRecording == true {
+            print("Recording in progress")
+            return
+        }
+        
+        let touchLocation = gestureRecognizer.location(in: self.triggerCV)
+        let convertedPoint = self.triggerCV?.convert(touchLocation, from: self.superview)
+        print("touch at \(String(describing: convertedPoint?.x)), \(String(describing: convertedPoint?.y))")
+        
+        let touchLocationDict = ["touchLocation": convertedPoint]
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "sequencerTouchNotification"), object: nil, userInfo: touchLocationDict)
+        
+        
+        guard let indexPath = self.triggerCV?.indexPathForItem(at: touchLocation) else {
+            print("IndexPath not found.")
+            return
+        }
+        
+        guard let cell = self.triggerCV?.cellForItem(at: indexPath) else {
+            print("Cell not found.")
+            return
+        }
+        selectCell(cell: cell, indexPath: indexPath)
+    }
+    
+    
+    
+    
+    func selectCell(cell: UICollectionViewCell, indexPath: IndexPath) {
+        
+        print("selected seq cell at \(indexPath.row)")
+        
+        self.collectionView(triggerCV!, didSelectItemAt: indexPath)
+    }
+}
 
 
 

@@ -194,5 +194,21 @@ class SCColor {
         }
         return colorIdx
     }
-
+    
+    
+    class func BrighterColor(color: UIColor) -> UIColor {
+        var hue: CGFloat = 0.0
+        var saturation: CGFloat = 0.0
+        var brightness: CGFloat = 0.0
+        var alpha: CGFloat = 0.0
+        
+        let success: Bool = color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+        if !success {
+            // handle error
+        }
+        // ... adjust components..
+        print("hue - \(hue), sat - \(saturation), bri - \(brightness), a - \(alpha)")
+        let newColor = UIColor.init(hue: hue, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+        return newColor
+    }
 }
