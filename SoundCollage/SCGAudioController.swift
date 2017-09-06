@@ -523,8 +523,8 @@ class SCGAudioController {
 //            return
         }
         
-        let mixer = AVAudioMixerNode.init()
-        engine?.attach(mixer)
+//        let mixer = AVAudioMixerNode.init()
+//        engine?.attach(mixer)
         
         let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)
         let mainMixer = (engine?.mainMixerNode)!
@@ -535,17 +535,17 @@ class SCGAudioController {
 //        engine?.attach(sampler)
         engine?.attach(player)
         
-        if reverb == nil {
-        reverb = AVAudioUnitReverb()
-            engine?.attach(reverb!)
-        }
+//        if reverb == nil {
+//        reverb = AVAudioUnitReverb()
+//            engine?.attach(reverb!)
+//        }
 //        let delay = AVAudioUnitDelay()
 //        let pitchShift = AVAudioUnitTimePitch()
 //        let distortion = AVAudioUnitDistortion()
 //        let timeStretch = AVAudioUnitVarispeed()
 //        
 //        
-        setupReverb(sampleIndex: index, reverb: reverb!)
+//        setupReverb(sampleIndex: index, reverb: reverb!)
 //        setupDelay(sampleIndex: index, delay: delay)
 //        setupPitchShift(sampleIndex: index, pitch: pitchShift)
 //        setupTimeStretch(sampleIndex: index, time: timeStretch)
@@ -558,8 +558,8 @@ class SCGAudioController {
 //        engine?.attach(timeStretch)
 //        engine?.attach(distortion)
 //        
-        engine?.connect(player, to: reverb!, format: playerFormat)
-        engine?.connect(reverb!, to: mainMixer, fromBus: 0, toBus: 0, format: playerFormat)
+        engine?.connect(player, to: mainMixer, format: playerFormat)
+//        engine?.connect(reverb!, to: mainMixer, fromBus: 0, toBus: 0, format: playerFormat)
 //        engine?.connect(mixer, to: pitchShift, format: playerFormat)
 //        engine?.connect(pitchShift, to: timeStretch, format: playerFormat)
 //        engine?.connect(timeStretch, to: distortion, format: playerFormat)

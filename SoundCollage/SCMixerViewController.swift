@@ -23,6 +23,7 @@ class SCMixerViewController: UIViewController {
         
         setupMixerCV()
         NotificationCenter.default.addObserver(self, selector: #selector(SCMixerViewController.selectedSamplePadDidChange), name: Notification.Name.init("selectedSamplePadDidChangeNotification"), object: nil)
+        
     }
     
     

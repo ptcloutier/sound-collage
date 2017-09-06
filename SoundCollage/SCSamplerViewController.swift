@@ -30,9 +30,16 @@ class SCSamplerViewController: UIViewController  {
         
         SCAudioManager.shared.audioController?.getAudioFilesForURL()
         
-        view.backgroundColor = SCColor.Custom.Gray.dark //SCColor.Custom.PsychedelicIceCreamShoppe.ice
-        vintageColors = SCColor.getVintageColors()
-        iceCreamColors = SCColor.getPsychedelicIceCreamShopColors()
+        view.backgroundColor = UIColor.clear
+        
+        let colors = SCColor.getPsychedelicIceCreamShopColors()
+        var brightColors: [UIColor] = []
+        for color in colors {
+            let bright = SCColor.BrighterHigherSatColor(color: color)
+            brightColors.append(bright)
+        }
+        
+        iceCreamColors = brightColors//SCColor.getPsychedelicIceCreamShopColors()
         
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: Notification.Name.init("recordingDidFinish"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.toggleRecordingMode), name: Notification.Name.init("recordBtnDidPress"), object: nil)
@@ -204,18 +211,9 @@ class SCSamplerViewController: UIViewController  {
 
 
 
-extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let itemSize = samplerFlowLayout?.itemSize else {
-            print("No sampler flowLayout.")
-            return collectionView.frame.size
-        }
-        return itemSize
-    }
-    
-    
+ 
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
        
@@ -240,26 +238,27 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.cellColor = iceCreamColors[colorIdx]
         
         cell.setupLabel()
+        cell.circularCell()
         cell.setupGradientColors()
        
         
         if indexPath.row == self.selectedPadIndex {
             cell.backgroundColor = cell.cellColor
             cell.padLabel.textColor = UIColor.white
-            cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor// UIColor.black.cgColor
+            cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
         } else {
             cell.backgroundColor = SCColor.Custom.Gray.dark
-            cell.padLabel.textColor = UIColor.white //cell.cellColor
+            cell.padLabel.textColor = UIColor.white
             cell.layer.borderColor = cell.cellColor?.cgColor
 
         }
         
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
-        tapGestureRecognizer.delegate = self
-        tapGestureRecognizer.numberOfTapsRequired = 1
-        
-        cell.addGestureRecognizer(tapGestureRecognizer)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
+        tap.delegate = self
+        tap.numberOfTapsRequired = 1
+        tap.cancelsTouchesInView = false
+        cell.addGestureRecognizer(tap)
         
         
         switch SCAudioManager.shared.isRecordingModeEnabled {
@@ -358,9 +357,13 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
             return
         }
         
+        let tapLocation = gestureRecognizer.location(in: view)
+        if tapLocation.y < 75.0 {
+            let showSequencer = ["index": 0]
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showSequencerNotification"), object: nil, userInfo: showSequencer)
+        }
         
-        let tapLocation = gestureRecognizer.location(in: self.samplerCV)
-        
+
         guard let indexPath = self.samplerCV?.indexPathForItem(at: tapLocation) else {
             print("IndexPath not found.")
             return
@@ -386,6 +389,29 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
     }
 }
 
+
+extension SCSamplerViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard let itemSize = samplerFlowLayout?.itemSize else {
+            print("No sampler flowLayout.")
+            return collectionView.frame.size
+        }
+        return itemSize
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0, 0, 0, 0)
+    }
+}
 
 
 

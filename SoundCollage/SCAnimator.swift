@@ -40,3 +40,4 @@ class SCAnimator {
         completion(true)
     }
 }
+

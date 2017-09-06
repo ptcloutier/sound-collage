@@ -149,7 +149,6 @@ class SCSampleBankViewController: UIViewController {
         SCAudioManager.shared.audioController = SCGAudioController.init()
         SCAudioManager.shared.audioController?.delegate = SCAudioManager.shared as? SCGAudioControllerDelegate
 
-//        SCAudioManager.shared.audioController?.getAudioFilesForURL()
         SCAudioManager.shared.effectControls = (SCDataManager.shared.user?.sampleBanks[SCDataManager.shared.currentSampleBank!].effectSettings)!
         SCAudioManager.shared.audioController?.effectControls = SCAudioManager.shared.effectControls
         SCAudioManager.shared.isSetup = true 
@@ -164,7 +163,7 @@ class SCSampleBankViewController: UIViewController {
 
         print("Current sample bank \(String(describing: currentSB.debugDescription))")
 
-        let vc: SCContainerViewController = SCContainerViewController(nibName: nil, bundle: nil)
+        let vc: SCSequencerViewController = SCSequencerViewController(nibName: nil, bundle: nil)
         SCAnimator.FadeIn(duration: 2.0, fromVC: self, toVC: vc)
     }
     

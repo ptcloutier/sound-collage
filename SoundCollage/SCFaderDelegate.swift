@@ -14,6 +14,4 @@ import Foundation
 protocol SCFaderDelegate: class {
     
     func faderValueDidChange(sender: SCSlider)
-    
-    
 }
