@@ -27,10 +27,11 @@ class SCSequencerCell: UICollectionViewCell {
     
     func setupSequencer(){
         
+        contentView.backgroundColor = UIColor.clear
         let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: CGFloat(cellCount))
         triggerCV = UICollectionView.init(frame: self.contentView.frame, collectionViewLayout: flowLayout)
         guard let triggerCV = self.triggerCV else { return }
-        triggerCV.backgroundColor = SCColor.Custom.Gray.dark
+        triggerCV.backgroundColor = UIColor.clear
         triggerCV.register(SCTriggerCell.self, forCellWithReuseIdentifier: "SCTriggerCell")
         triggerCV.delegate = self
         triggerCV.dataSource = self

@@ -422,10 +422,10 @@
 				A78733881EB1160F00B5A8AE /* Managers */,
 				A7FDF60F1F4286CE00645E97 /* Models */,
 				A7264E791EAE289E00664EDE /* Classes+Extensions */,
+				A7BD6AB21F140CF7000CDF9A /* Sequencer */,
 				A7264E771EAE285900664EDE /* Sampler */,
 				A7D7CDC11F27BDE5000EE8DA /* Mixer */,
 				A7264E761EAE284600664EDE /* Sample Bank */,
-				A7BD6AB21F140CF7000CDF9A /* Sequencer */,
 				A74541941F3114F6007A89B7 /* Song Library */,
 			);
 			path = SoundCollage;

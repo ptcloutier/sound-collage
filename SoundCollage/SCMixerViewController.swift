@@ -45,7 +45,6 @@ class SCMixerViewController: UIViewController {
         mixerCV.showsHorizontalScrollIndicator = false
         mixerCV.register(SCMixerPanelCell.self, forCellWithReuseIdentifier: "MixerPanelCell")
      
-        mixerCV.backgroundColor = SCColor.Custom.Gray.dark
         self.view.addSubview(mixerCV)
         
         mixerCV.translatesAutoresizingMaskIntoConstraints = false

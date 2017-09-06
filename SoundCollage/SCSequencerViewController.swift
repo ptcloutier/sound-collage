@@ -35,7 +35,7 @@ class SCSequencerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = SCColor.Custom.Gray.dark
+        view.backgroundColor = UIColor.clear
         setupVideoView()
         setupSequencer()
         setupSequencerBarUI()
@@ -117,6 +117,7 @@ class SCSequencerViewController: UIViewController {
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
         sequencer = UICollectionView.init(frame: frame, collectionViewLayout: flowLayout)
         guard let sequencer = self.sequencer else { return }
+        sequencer.backgroundColor = UIColor.clear
         sequencer.register(SCScoreCell.self, forCellWithReuseIdentifier: "SCScoreCell")
         sequencer.delegate = self
         sequencer.dataSource = self

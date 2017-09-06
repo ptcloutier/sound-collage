@@ -40,7 +40,6 @@ class SCLibraryViewController: UIViewController {
         libraryCV.isScrollEnabled = true
         libraryCV.register(SCLibraryCell.self, forCellWithReuseIdentifier: "SCLibraryCell")
         self.view.addSubview(libraryCV)
-        libraryCV.backgroundColor = SCColor.Custom.Gray.dark
         libraryCV.translatesAutoresizingMaskIntoConstraints = false
         
         view.addConstraint(NSLayoutConstraint(item: libraryCV, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: 0))
