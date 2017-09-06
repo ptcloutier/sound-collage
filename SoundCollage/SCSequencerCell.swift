@@ -77,14 +77,22 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         cell.circularCell()
         cell.sequencerIdx = self.idx-1
         cell.idx = indexPath.row
+       
         let colors = SCColor.getPsychedelicIceCreamShopColors()
+        let iccolors = SCColor.getPsychedelicIceCreamShopColors()
         var brightColors: [UIColor] = []
+       
         for color in colors {
-            let bright = SCColor.BrighterColor(color: color)
+            let bright = SCColor.BrighterHigherSatColor(color: color)
             brightColors.append(bright)
         }
+        
+        for ic in iccolors {
+            let brighterIC = SCColor.BrighterHigherSatColor(color: ic)
+            brightColors.append(brighterIC)
+        }
 
-        let iceCreamColors: [UIColor] = brightColors//SCColor.getPsychedelicIceCreamShopColors()
+        let iceCreamColors: [UIColor] = brightColors
         
         var colorIdx: Int
         if indexPath.row > iceCreamColors.count-1 {
@@ -95,7 +103,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         } else {
             colorIdx = indexPath.row
         }
-        
+       
         cell.layer.borderColor = iceCreamColors[colorIdx].cgColor
 
         if self.idx == 0 {

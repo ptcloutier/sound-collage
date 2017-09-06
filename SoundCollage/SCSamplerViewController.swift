@@ -35,7 +35,7 @@ class SCSamplerViewController: UIViewController  {
         let colors = SCColor.getPsychedelicIceCreamShopColors()
         var brightColors: [UIColor] = []
         for color in colors {
-            let bright = SCColor.BrighterColor(color: color)
+            let bright = SCColor.BrighterHigherSatColor(color: color)
             brightColors.append(bright)
         }
         

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import AVFoundation
+
+
 
 class SCSequencerViewController: UIViewController {
 
@@ -22,12 +25,18 @@ class SCSequencerViewController: UIViewController {
     let navBarBtnFrameSize = CGRect.init(x: 0, y: 0, width: 30, height: 30)
     var toolbar = SCToolbar()
     var sampler: SCSamplerViewController?
+    var avplayer: AVPlayer = AVPlayer()
+    var videoView = UIView()
+    
+    
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = SCColor.Custom.Gray.dark
+        setupVideoView()
         setupSequencer()
         setupSequencerBarUI()
         NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playback), name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
@@ -36,8 +45,70 @@ class SCSequencerViewController: UIViewController {
         toggleSelectedVC(index: 0)
         NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.touch(notification:)), name: NSNotification.Name(rawValue: "sequencerTouchNotification"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.showSequencer(notification:)), name: NSNotification.Name(rawValue: "showSequencerNotification"), object: nil)
+        
+        
+        }
+    
+       /*
+     //Config dark gradient view
+     CAGradientLayer *gradient = [CAGradientLayer layer];
+     gradient.frame = [[UIScreen mainScreen] bounds];
+     gradient.colors = [NSArray arrayWithObjects:(id)[UIColorFromRGB(0x030303) CGColor], (id)[[UIColor clearColor] CGColor], (id)[UIColorFromRGB(0x030303) CGColor],nil];
+     [self.gradientView.layer insertSublayer:gradient atIndex:0];
+     } */
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.avplayer.pause()
     }
-
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.avplayer.play()
+    }
+    
+    
+    
+    //MARK: AVPlayer methods
+    
+    func setupVideoView(){
+        
+        self.videoView = UIView.init(frame: view.frame)
+        guard let path = Bundle.main.path(forResource: "1080p", ofType: "mov") else { return }
+        let videoURL = URL.init(fileURLWithPath: path)
+        let avasset = AVAsset.init(url: videoURL)
+        let avPlayerItem = AVPlayerItem.init(asset: avasset)
+        self.avplayer = AVPlayer.init(playerItem: avPlayerItem)
+        let avPlayerLayer = AVPlayerLayer.init(player: avplayer)
+        avPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        avPlayerLayer.frame = UIScreen.main.bounds
+        self.videoView.layer.addSublayer(avPlayerLayer)
+        
+        self.avplayer.seek(to: kCMTimeZero)
+        avplayer.volume = 0.0
+        avplayer.actionAtItemEnd = AVPlayerActionAtItemEnd.none
+        NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playerItemDidReachEnd(notification:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playerStartPlaying), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        self.view.addSubview(videoView)
+        self.view.sendSubview(toBack: videoView)
+    }
+    
+    
+    
+    func playerStartPlaying(){
+        self.avplayer.play()
+    }
+    
+    
+    func playerItemDidReachEnd(notification: Notification){
+        
+        guard let p: AVPlayerItem = notification.object as? AVPlayerItem else { return }
+        p.seek(to: kCMTimeZero)
+    }
+    
+    
     
     //MARK: UI setup
     
@@ -356,7 +427,7 @@ class SCSequencerViewController: UIViewController {
         guard let sequencer = self.sequencer else {
             return
         }
-        guard let sampler = self.sampler else{
+        guard let sampler = self.sampler?.view else{
             return
         }
        
@@ -365,19 +436,19 @@ class SCSequencerViewController: UIViewController {
         case 0:
             UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
                 sequencer.alpha = 1.0
-                sampler.view.alpha = 0.3
-                self.view.sendSubview(toBack: sequencer)
+                sampler.alpha = 0.3
+                self.view.bringSubview(toFront: sampler)
                 sequencer.isUserInteractionEnabled = true
-                sampler.view.isUserInteractionEnabled = false
+                sampler.isUserInteractionEnabled = false
             })
             break
         case 1:
             UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
-                sampler.view.alpha = 1.0
+                sampler.alpha = 1.0
                 sequencer.alpha = 0.1
-                self.view.sendSubview(toBack: sampler.view)
+                self.view.bringSubview(toFront: sequencer)
                 sequencer.isUserInteractionEnabled = false
-                sampler.view.isUserInteractionEnabled = true
+                sampler.isUserInteractionEnabled = true
             })
             break
         default:

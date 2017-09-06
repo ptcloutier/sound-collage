@@ -69,6 +69,8 @@
 		A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */; };
 		A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */; };
 		A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823421EA81F6C0061D0A0 /* SCStackView.swift */; };
+		A7B0AF041F5FACC400542FCB /* UIView+VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B0AF031F5FACC400542FCB /* UIView+VideoPlayer.swift */; };
+		A7B0AF061F5FAEE200542FCB /* 1080p.mov in Resources */ = {isa = PBXBuildFile; fileRef = A7B0AF051F5FAEE200542FCB /* 1080p.mov */; };
 		A7BD6AB41F140D85000CDF9A /* SCScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB31F140D85000CDF9A /* SCScoreCell.swift */; };
 		A7BD6AB61F141E4D000CDF9A /* SCSequencerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB51F141E4D000CDF9A /* SCSequencerCell.swift */; };
 		A7BD6AB81F14305B000CDF9A /* SCTriggerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB71F14305B000CDF9A /* SCTriggerCell.swift */; };
@@ -190,6 +192,8 @@
 		A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSamplerViewController.swift; sourceTree = "<group>"; };
 		A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankViewController.swift; sourceTree = "<group>"; };
 		A7A823421EA81F6C0061D0A0 /* SCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCStackView.swift; sourceTree = "<group>"; };
+		A7B0AF031F5FACC400542FCB /* UIView+VideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+VideoPlayer.swift"; sourceTree = "<group>"; };
+		A7B0AF051F5FAEE200542FCB /* 1080p.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = 1080p.mov; sourceTree = "<group>"; };
 		A7BD6AB31F140D85000CDF9A /* SCScoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SCScoreCell.swift; path = Assets.xcassets/SCScoreCell.swift; sourceTree = "<group>"; };
 		A7BD6AB51F141E4D000CDF9A /* SCSequencerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerCell.swift; sourceTree = "<group>"; };
 		A7BD6AB71F14305B000CDF9A /* SCTriggerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCTriggerCell.swift; sourceTree = "<group>"; };
@@ -271,6 +275,7 @@
 			children = (
 				A74B368D1F3105D7000E8DEA /* play.png */,
 				A7EC74B51F4A55720092E59E /* share.png */,
+				A7B0AF051F5FAEE200542FCB /* 1080p.mov */,
 				A7E117D01F278C8300041400 /* rectPink.png */,
 				A74541841F310E02007A89B7 /* lp.png */,
 				A74541901F3112C3007A89B7 /* lp1.png */,
@@ -332,6 +337,7 @@
 				A713F50D1F2F65A900742D1C /* SCFaderDelegate.swift */,
 				A748E2CB1F3AB1AF00507DF8 /* UIView+Glow.swift */,
 				A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */,
+				A7B0AF031F5FACC400542FCB /* UIView+VideoPlayer.swift */,
 			);
 			name = "Classes+Extensions";
 			sourceTree = "<group>";
@@ -599,6 +605,7 @@
 			files = (
 				A7D7CDCF1F28368A000EE8DA /* met.png in Resources */,
 				A79160FD1F1EA2B50051113C /* Quicksand SIL OFL License 1.1.txt in Resources */,
+				A7B0AF061F5FAEE200542FCB /* 1080p.mov in Resources */,
 				A79161011F1EA2B50051113C /* Quicksand_Book_Oblique.otf in Resources */,
 				A74541911F3112C3007A89B7 /* lp1.png in Resources */,
 				A74541871F310E0E007A89B7 /* mic.png in Resources */,
@@ -712,6 +719,7 @@
 				A79C9C911F393F72000DA04C /* Ref.swift in Sources */,
 				A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */,
 				A7E117D31F278DE800041400 /* UIImage+Custom.swift in Sources */,
+				A7B0AF041F5FACC400542FCB /* UIView+VideoPlayer.swift in Sources */,
 				A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */,
 				A74AA8B61F36FE1C00BCB5F0 /* SCGAudioController.swift in Sources */,
 				A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */,
