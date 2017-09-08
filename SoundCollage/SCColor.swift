@@ -241,7 +241,7 @@ class SCColor {
             // handle error
         }
         // ... adjust components..
-        print("hue - \(hue), sat - \(saturation), bri - \(brightness), a - \(alpha)")
+//        print("hue - \(hue), sat - \(saturation), bri - \(brightness), a - \(alpha)")
         let newColor = UIColor.init(hue: hue, saturation: 1.0, brightness: 1.0, alpha: 1.0)
         return newColor
     }

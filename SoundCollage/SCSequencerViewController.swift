@@ -8,7 +8,7 @@
 
 import UIKit
 import AVFoundation
-
+import SceneKit
 
 
 class SCSequencerViewController: UIViewController {
@@ -58,7 +58,7 @@ class SCSequencerViewController: UIViewController {
     
     
     
-    //MARK: AVPlayer methods
+    //MARK: AVPlayer/ Video view methods
     
     func setupVideoView(){
         
@@ -101,10 +101,15 @@ class SCSequencerViewController: UIViewController {
     //MARK: UI setup
     
     func setupSequencer() {
+        
+        print("secvccell\(self.view.frame.height)")
+        
+
         let frame = CGRect(x: margin, y: margin*2.0, width: self.view.frame.width-(margin*2.0), height: view.frame.height-toolbarHeight-(margin*2.0))
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
         sequencer = UICollectionView.init(frame: frame, collectionViewLayout: flowLayout)
         guard let sequencer = self.sequencer else { return }
+        sequencer.isScrollEnabled = false
         sequencer.backgroundColor = UIColor.clear
         sequencer.register(SCScoreCell.self, forCellWithReuseIdentifier: "SCScoreCell")
         sequencer.delegate = self
@@ -430,7 +435,7 @@ class SCSequencerViewController: UIViewController {
         case 1:
             UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
                 sampler.alpha = 1.0
-                sequencer.alpha = 0.2
+                sequencer.alpha = 0
                 self.view.bringSubview(toFront: sequencer)
                 sequencer.isUserInteractionEnabled = false
                 sampler.isUserInteractionEnabled = true

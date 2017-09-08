@@ -625,20 +625,20 @@ class SCGAudioController {
             guard let strongSelf = self else { return }
             
             // calculate audio tail based on reverb and delay parameters
-            var durationValue = Int(round(Double(sample.length)/44100))
-            if durationValue == 0 {
-                durationValue = 1
-            }
-            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[index]
-            let reverbTime = round(Float(reverbParameter * 5.0))
-            durationValue += Int(reverbTime)
-            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[index]
-            let delayTime = round(Float(delayParams * 5.0))
-            durationValue += Int(delayTime)
-            durationValue = durationValue+1
-            let duration = DispatchTimeInterval.seconds(durationValue)
-            let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-            delayQueue.asyncAfter(deadline: .now()+duration){
+//            var durationValue = Int(round(Double(sample.length)/44100))
+//            if durationValue == 0 {
+//                durationValue = 1
+//            }
+//            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[index]
+//            let reverbTime = round(Float(reverbParameter * 5.0))
+//            durationValue += Int(reverbTime)
+//            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[index]
+//            let delayTime = round(Float(delayParams * 5.0))
+//            durationValue += Int(delayTime)
+//            durationValue = durationValue+1
+//            let duration = DispatchTimeInterval.seconds(durationValue)
+//            let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
+//            delayQueue.asyncAfter(deadline: .now()+duration){
                 let serialQueue = DispatchQueue(label: "myqueue")
                 serialQueue.sync {
                 
@@ -660,7 +660,7 @@ class SCGAudioController {
                 print("total plays : \(strongSelf.plays), active players: \(strongSelf.activePlayers)")          
                     }
                 }
-            }
+//            }
         })
         
         player.play()

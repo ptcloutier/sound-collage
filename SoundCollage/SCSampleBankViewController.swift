@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import AVFoundation
 
 
 class SCSampleBankViewController: UIViewController {
@@ -20,6 +20,9 @@ class SCSampleBankViewController: UIViewController {
     var window: UIWindow?
     var timer = Timer()
     var titleLabels1: [UILabel] = []
+    var avplayer: AVPlayer = AVPlayer()
+    var videoView = UIView()
+
     
     //MARK: vc life cycle 
     
@@ -36,7 +39,7 @@ class SCSampleBankViewController: UIViewController {
         images = [img1!, img2!, img3!, img4!, img5!, img6!]
         
         setupCollectionView()
-        
+        setupVideoView()
         createTitleLabels()
         
     }
@@ -46,11 +49,63 @@ class SCSampleBankViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         setupControls()
      }
     
-     
+    
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.avplayer.pause()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.avplayer.play()
+    }
+    
+    
+    
+    //MARK: AVPlayer/ Video view methods
+    
+    func setupVideoView(){
+        
+        self.videoView = UIView.init(frame: view.frame)
+        guard let path = Bundle.main.path(forResource: "1080p", ofType: "mov") else { return }
+        let videoURL = URL.init(fileURLWithPath: path)
+        let avasset = AVAsset.init(url: videoURL)
+        let avPlayerItem = AVPlayerItem.init(asset: avasset)
+        self.avplayer = AVPlayer.init(playerItem: avPlayerItem)
+        let avPlayerLayer = AVPlayerLayer.init(player: avplayer)
+        avPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        avPlayerLayer.frame = UIScreen.main.bounds
+        self.videoView.layer.addSublayer(avPlayerLayer)
+        
+        self.avplayer.seek(to: kCMTimeZero)
+        avplayer.volume = 0.0
+        avplayer.actionAtItemEnd = AVPlayerActionAtItemEnd.none
+        NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playerItemDidReachEnd(notification:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playerStartPlaying), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        self.view.addSubview(videoView)
+        self.view.sendSubview(toBack: videoView)
+    }
+    
+    
+    
+    func playerStartPlaying(){
+        self.avplayer.play()
+    }
+    
+    
+    func playerItemDidReachEnd(notification: Notification){
+        
+        guard let p: AVPlayerItem = notification.object as? AVPlayerItem else { return }
+        p.seek(to: kCMTimeZero)
+    }
+    
+    
     
     //MARK: ui setup
  

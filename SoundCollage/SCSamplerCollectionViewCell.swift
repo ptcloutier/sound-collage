@@ -46,7 +46,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         
         self.layer.borderWidth = 1.0
         self.layer.masksToBounds = true
-        self.layer.cornerRadius = self.contentView.frame.width/2
+        self.layer.cornerRadius = self.contentView.frame.width/3
     }
     
     func setupLabel() {

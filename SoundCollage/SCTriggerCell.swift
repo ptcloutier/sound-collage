@@ -50,6 +50,6 @@ class SCTriggerCell: UICollectionViewCell {
         
         self.layer.borderWidth = 0.5
         self.layer.masksToBounds = true
-        self.layer.cornerRadius = self.contentView.frame.width/2
+        self.layer.cornerRadius = self.contentView.frame.width*1.25
     }
   }

@@ -8,6 +8,8 @@
 
 import UIKit
 import MessageUI
+import AVFoundation
+
 
 class SCLibraryViewController: UIViewController {
 
@@ -17,16 +19,69 @@ class SCLibraryViewController: UIViewController {
     var toolbar = SCToolbar()
     let inset: CGFloat = 2.0
     var indexForAudioSharing: Int = 0
-    
+    var avplayer: AVPlayer = AVPlayer()
+    var videoView = UIView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupCollectionView()
         setupControls()
-        
+        setupVideoView()
     }
 
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.avplayer.pause()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.avplayer.play()
+    }
+    
+    
+    
+    //MARK: AVPlayer/ Video view methods
+    
+    func setupVideoView(){
+        
+        self.videoView = UIView.init(frame: view.frame)
+        guard let path = Bundle.main.path(forResource: "1080p", ofType: "mov") else { return }
+        let videoURL = URL.init(fileURLWithPath: path)
+        let avasset = AVAsset.init(url: videoURL)
+        let avPlayerItem = AVPlayerItem.init(asset: avasset)
+        self.avplayer = AVPlayer.init(playerItem: avPlayerItem)
+        let avPlayerLayer = AVPlayerLayer.init(player: avplayer)
+        avPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        avPlayerLayer.frame = UIScreen.main.bounds
+        self.videoView.layer.addSublayer(avPlayerLayer)
+        
+        self.avplayer.seek(to: kCMTimeZero)
+        avplayer.volume = 0.0
+        avplayer.actionAtItemEnd = AVPlayerActionAtItemEnd.none
+        NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playerItemDidReachEnd(notification:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playerStartPlaying), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        self.view.addSubview(videoView)
+        self.view.sendSubview(toBack: videoView)
+    }
+    
+    
+    
+    func playerStartPlaying(){
+        self.avplayer.play()
+    }
+    
+    
+    func playerItemDidReachEnd(notification: Notification){
+        
+        guard let p: AVPlayerItem = notification.object as? AVPlayerItem else { return }
+        p.seek(to: kCMTimeZero)
+    }
+    
+    //MARK: CollectionView
     
     func setupCollectionView(){
         
@@ -220,7 +275,7 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
         
         cell.setupLabel()
         cell.setupImageView()
-        cell.backgroundColor = SCColor.Custom.Gray.dark
+//        cell.backgroundColor = SCColor.Custom.Gray.dark
         return cell
     }
     

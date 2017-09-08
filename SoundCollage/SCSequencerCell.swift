@@ -32,9 +32,11 @@ class SCSequencerCell: UICollectionViewCell {
     func setupSequencer(){
         
         contentView.backgroundColor = UIColor.clear
+        print("seq cell\(self.contentView.frame.height)")
         let flowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: CGFloat(cellCount))
         triggerCV = UICollectionView.init(frame: self.contentView.frame, collectionViewLayout: flowLayout)
         guard let triggerCV = self.triggerCV else { return }
+        triggerCV.isScrollEnabled = false 
         triggerCV.backgroundColor = UIColor.clear
         triggerCV.register(SCTriggerCell.self, forCellWithReuseIdentifier: "SCTriggerCell")
         triggerCV.delegate = self
@@ -49,9 +51,26 @@ class SCSequencerCell: UICollectionViewCell {
         tap.delegate = self
         self.addGestureRecognizer(tap)
         
-        let swipe = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
-        swipe.delegate = self
-        self.addGestureRecognizer(swipe)
+        let swipeUp = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
+        swipeUp.delegate = self
+        swipeUp.direction = .up
+        self.addGestureRecognizer(swipeUp)
+        
+        let swipeDn = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
+        swipeDn.delegate = self
+        swipeDn.direction = .down
+        self.addGestureRecognizer(swipeDn)
+
+        let swipeL = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
+        swipeL.delegate = self
+        swipeL.direction = .left
+        self.addGestureRecognizer(swipeL)
+
+        let swipeR = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
+        swipeR.delegate = self
+        swipeR.direction = .right
+        self.addGestureRecognizer(swipeR)
+
 
     }
 }
@@ -209,8 +228,8 @@ extension SCSequencerCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         
-        let h = collectionView.frame.height - 69.0 //toolbar+top spacing
-        let spacing = h/36.0
+        let h = contentView.frame.height - 69.0 //toolbar+top spacing
+        let spacing = h/60// TODO: calculate, don't use hardcoded values
         
         return spacing
     }

@@ -56,6 +56,7 @@
 		A79C9C911F393F72000DA04C /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79C9C901F393F72000DA04C /* Ref.swift */; };
 		A79F5C8A1F1551CE00A89492 /* spinner.png in Resources */ = {isa = PBXBuildFile; fileRef = A79F5C891F1551CE00A89492 /* spinner.png */; };
 		A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A21CB21EFAEFF300161DF3 /* UIButton+Custom.swift */; };
+		A7A748401F60A826005E6A9A /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7A7483F1F60A826005E6A9A /* SceneKit.framework */; };
 		A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A822F71EA81BEC0061D0A0 /* AppDelegate.swift */; };
 		A7A822FD1EA81BEC0061D0A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7A822FB1EA81BEC0061D0A0 /* Main.storyboard */; };
 		A7A823021EA81BEC0061D0A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7A823011EA81BEC0061D0A0 /* Assets.xcassets */; };
@@ -173,6 +174,7 @@
 		A79C9C901F393F72000DA04C /* Ref.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ref.swift; sourceTree = "<group>"; };
 		A79F5C891F1551CE00A89492 /* spinner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spinner.png; sourceTree = "<group>"; };
 		A7A21CB21EFAEFF300161DF3 /* UIButton+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Custom.swift"; sourceTree = "<group>"; };
+		A7A7483F1F60A826005E6A9A /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		A7A822F41EA81BEC0061D0A0 /* SoundCollage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoundCollage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7A822F71EA81BEC0061D0A0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A7A822FC1EA81BEC0061D0A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -219,6 +221,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7A748401F60A826005E6A9A /* SceneKit.framework in Frameworks */,
 				A7FDF60A1F41780500645E97 /* SwiftyJSON.framework in Frameworks */,
 				A78A9BD01EABA919007117DD /* QuartzCore.framework in Frameworks */,
 				A7054EC61EA82D7700BBC34E /* Foundation.framework in Frameworks */,
@@ -250,6 +253,7 @@
 		095B8402F860F7E6A5BAF4F4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A7A7483F1F60A826005E6A9A /* SceneKit.framework */,
 				A7FDF6091F41780500645E97 /* SwiftyJSON.framework */,
 				A78A9BCF1EABA919007117DD /* QuartzCore.framework */,
 				A7054EC51EA82D7700BBC34E /* Foundation.framework */,
