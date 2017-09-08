@@ -49,6 +49,31 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         self.layer.cornerRadius = self.contentView.frame.width/3
     }
     
+    func setupGIFView(){
+        
+        let v = self.contentView
+        
+        guard let url = Bundle.main.url(forResource: "cop_melt_repoman", withExtension: "gif") else { return }
+        do {
+            let gif = try Data(contentsOf: url)
+            let wv = UIWebView(frame: v.frame)
+            wv.load(gif, mimeType: "image/gif", textEncodingName: "UTF-8", baseURL: NSURL() as URL)
+            wv.isUserInteractionEnabled = false
+            wv.scalesPageToFit = true
+            wv.contentMode = .scaleAspectFill
+            v.addSubview(wv)
+            
+            let filter = UIView()
+            filter.frame = v.frame
+            filter.backgroundColor = UIColor.black
+            filter.alpha = 0.05
+            v.addSubview(filter)
+            
+        } catch let error {
+            print("\n\n\n\n NADA  \n\n\n\n\n\(error.localizedDescription)\n\n\n\n\n\n\n")
+        }
+    }
+
     func setupLabel() {
 
         padLabel.addGlow(color: self.cellColor!)

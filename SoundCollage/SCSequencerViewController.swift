@@ -35,7 +35,8 @@ class SCSequencerViewController: UIViewController {
         super.viewDidLoad()
         
         
-        setupVideoView()
+//        setupVideoView()
+//        setupGIFView()
         setupSequencer()
         setupSequencerBarUI()
         NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playback), name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
@@ -85,6 +86,7 @@ class SCSequencerViewController: UIViewController {
     
     
     
+        
     func playerStartPlaying(){
         self.avplayer.play()
     }

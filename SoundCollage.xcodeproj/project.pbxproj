@@ -57,6 +57,7 @@
 		A79F5C8A1F1551CE00A89492 /* spinner.png in Resources */ = {isa = PBXBuildFile; fileRef = A79F5C891F1551CE00A89492 /* spinner.png */; };
 		A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A21CB21EFAEFF300161DF3 /* UIButton+Custom.swift */; };
 		A7A748401F60A826005E6A9A /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7A7483F1F60A826005E6A9A /* SceneKit.framework */; };
+		A7A748431F634DCC005E6A9A /* cop_melt_repoman.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7A748421F634DCC005E6A9A /* cop_melt_repoman.gif */; };
 		A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A822F71EA81BEC0061D0A0 /* AppDelegate.swift */; };
 		A7A822FD1EA81BEC0061D0A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7A822FB1EA81BEC0061D0A0 /* Main.storyboard */; };
 		A7A823021EA81BEC0061D0A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7A823011EA81BEC0061D0A0 /* Assets.xcassets */; };
@@ -175,6 +176,7 @@
 		A79F5C891F1551CE00A89492 /* spinner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spinner.png; sourceTree = "<group>"; };
 		A7A21CB21EFAEFF300161DF3 /* UIButton+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Custom.swift"; sourceTree = "<group>"; };
 		A7A7483F1F60A826005E6A9A /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
+		A7A748421F634DCC005E6A9A /* cop_melt_repoman.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = cop_melt_repoman.gif; path = /Users/perrincloutier/Documents/SoundCollage/SoundCollage/cop_melt_repoman.gif; sourceTree = "<absolute>"; };
 		A7A822F41EA81BEC0061D0A0 /* SoundCollage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoundCollage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7A822F71EA81BEC0061D0A0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A7A822FC1EA81BEC0061D0A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 			isa = PBXGroup;
 			children = (
 				A74B368D1F3105D7000E8DEA /* play.png */,
+				A7A748421F634DCC005E6A9A /* cop_melt_repoman.gif */,
 				A7EC74B51F4A55720092E59E /* share.png */,
 				A7B0AF051F5FAEE200542FCB /* 1080p.mov */,
 				A7E117D01F278C8300041400 /* rectPink.png */,
@@ -611,6 +614,7 @@
 				A79160FD1F1EA2B50051113C /* Quicksand SIL OFL License 1.1.txt in Resources */,
 				A7B0AF061F5FAEE200542FCB /* 1080p.mov in Resources */,
 				A79161011F1EA2B50051113C /* Quicksand_Book_Oblique.otf in Resources */,
+				A7A748431F634DCC005E6A9A /* cop_melt_repoman.gif in Resources */,
 				A74541911F3112C3007A89B7 /* lp1.png in Resources */,
 				A74541871F310E0E007A89B7 /* mic.png in Resources */,
 				A7EC74B61F4A55720092E59E /* share.png in Resources */,

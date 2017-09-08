@@ -240,7 +240,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.setupLabel()
         cell.circularCell()
         cell.setupGradientColors()
-       
+       cell.setupGIFView()
         
         if indexPath.row == self.selectedPadIndex {
             cell.backgroundColor = cell.cellColor

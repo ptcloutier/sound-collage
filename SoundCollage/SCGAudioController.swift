@@ -660,7 +660,7 @@ class SCGAudioController {
                 print("total plays : \(strongSelf.plays), active players: \(strongSelf.activePlayers)")          
                     }
                 }
-//            }
+//            }  
         })
         
         player.play()
