@@ -22,7 +22,6 @@
 		A7264E811EAEECD700664EDE /* SCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7264E801EAEECD700664EDE /* SCUser.swift */; };
 		A7404BCD1F290884004BC4E1 /* SCMixerPanelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7404BCC1F290884004BC4E1 /* SCMixerPanelCell.swift */; };
 		A7404BD11F290AA5004BC4E1 /* SCColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7404BD01F290AA5004BC4E1 /* SCColor.swift */; };
-		A74541831F310C3E007A89B7 /* sampleBank.png in Resources */ = {isa = PBXBuildFile; fileRef = A74541821F310C3E007A89B7 /* sampleBank.png */; };
 		A74541851F310E02007A89B7 /* lp.png in Resources */ = {isa = PBXBuildFile; fileRef = A74541841F310E02007A89B7 /* lp.png */; };
 		A74541891F311054007A89B7 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = A74541881F311054007A89B7 /* back.png */; };
 		A745418B1F311101007A89B7 /* playlist.png in Resources */ = {isa = PBXBuildFile; fileRef = A745418A1F311101007A89B7 /* playlist.png */; };
@@ -53,6 +52,7 @@
 		A7808F6C1F647788008BA86E /* taco.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7808F6B1F647788008BA86E /* taco.gif */; };
 		A7808F6E1F647792008BA86E /* spiral.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7808F6D1F647792008BA86E /* spiral.gif */; };
 		A7808F701F6477A0008BA86E /* skull.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7808F6F1F6477A0008BA86E /* skull.gif */; };
+		A7808F721F647CB2008BA86E /* sampleBank.png in Resources */ = {isa = PBXBuildFile; fileRef = A7808F711F647CB2008BA86E /* sampleBank.png */; };
 		A78250E31EE601BA00350768 /* SCEffectControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78250E21EE601BA00350768 /* SCEffectControl.swift */; };
 		A78A9BD01EABA919007117DD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78A9BCF1EABA919007117DD /* QuartzCore.framework */; };
 		A78C12951F2DAAE500682750 /* SCCircularView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78C12941F2DAAE500682750 /* SCCircularView.swift */; };
@@ -151,7 +151,6 @@
 		A7264E801EAEECD700664EDE /* SCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCUser.swift; sourceTree = "<group>"; };
 		A7404BCC1F290884004BC4E1 /* SCMixerPanelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCMixerPanelCell.swift; sourceTree = "<group>"; };
 		A7404BD01F290AA5004BC4E1 /* SCColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCColor.swift; sourceTree = "<group>"; };
-		A74541821F310C3E007A89B7 /* sampleBank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sampleBank.png; sourceTree = "<group>"; };
 		A74541841F310E02007A89B7 /* lp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lp.png; sourceTree = "<group>"; };
 		A74541881F311054007A89B7 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		A745418A1F311101007A89B7 /* playlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playlist.png; sourceTree = "<group>"; };
@@ -182,6 +181,7 @@
 		A7808F6B1F647788008BA86E /* taco.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = taco.gif; sourceTree = "<group>"; };
 		A7808F6D1F647792008BA86E /* spiral.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = spiral.gif; sourceTree = "<group>"; };
 		A7808F6F1F6477A0008BA86E /* skull.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = skull.gif; sourceTree = "<group>"; };
+		A7808F711F647CB2008BA86E /* sampleBank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sampleBank.png; sourceTree = "<group>"; };
 		A780F0FA1EAF939D00BB5359 /* SoundCollage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SoundCollage-Bridging-Header.h"; sourceTree = "<group>"; };
 		A78250E21EE601BA00350768 /* SCEffectControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCEffectControl.swift; sourceTree = "<group>"; };
 		A78A9BCF1EABA919007117DD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -326,7 +326,7 @@
 				A745418C1F31115A007A89B7 /* record.png */,
 				A745418A1F311101007A89B7 /* playlist.png */,
 				A7E774FB1F6374C900B8086A /* play_filled.png */,
-				A74541821F310C3E007A89B7 /* sampleBank.png */,
+				A7808F711F647CB2008BA86E /* sampleBank.png */,
 				A70814381F01C46400A8AE92 /* plus.png */,
 				A79160F31F1EA2B50051113C /* quicksand */,
 				A70814301F01B54600A8AE92 /* zetafonts_a-day-without-sun */,
@@ -637,6 +637,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7808F721F647CB2008BA86E /* sampleBank.png in Resources */,
 				A79160FD1F1EA2B50051113C /* Quicksand SIL OFL License 1.1.txt in Resources */,
 				A79161011F1EA2B50051113C /* Quicksand_Book_Oblique.otf in Resources */,
 				A74541911F3112C3007A89B7 /* lp1.png in Resources */,
@@ -660,7 +661,6 @@
 				A79160FE1F1EA2B50051113C /* Quicksand_Bold.otf in Resources */,
 				A79160FF1F1EA2B50051113C /* Quicksand_Bold_Oblique.otf in Resources */,
 				A7A823051EA81BEC0061D0A0 /* LaunchScreen.storyboard in Resources */,
-				A74541831F310C3E007A89B7 /* sampleBank.png in Resources */,
 				A7808F701F6477A0008BA86E /* skull.gif in Resources */,
 				A7808F621F647354008BA86E /* physics2.gif in Resources */,
 				A7A823021EA81BEC0061D0A0 /* Assets.xcassets in Resources */,

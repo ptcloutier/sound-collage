@@ -280,10 +280,10 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         
         if let sb = SCDataManager.shared.currentSampleBank {
             
-            if sb > 3 && sb % 2 != 0 {
+            if sb == 3 {
                 cell.setupGIFView()
                 cell.cellColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
-            } else if sb > 3 && sb % 2 == 0 {
+            } else if sb != 3 && sb > 3 && sb % 2 == 0 {
                  let colorIdx = SCColor.findColorIndex(indexPath: indexPath, colors: iceCreamColors)
                 cell.cellColor = iceCreamColors[colorIdx]
             } else if sb < 3 {
@@ -356,10 +356,10 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
 
         // wave animation when navigating from samplebanks
         
-        if cell.doWaveAnimation == true {
-            
-            performWave(fillMode: kCATransitionFromLeft, row: indexPath.row, cell: cell, delays: [0.5, 0.6, 0.7, 0.8])
-        }
+//        if cell.doWaveAnimation == true {
+        
+        performWave(fillMode: kCATransitionFromLeft, row: indexPath.row, cell: cell, delays: [0.5, 0.6, 0.7, 0.8])
+//        }
         
         return cell
     }

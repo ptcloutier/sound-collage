@@ -413,6 +413,7 @@ class SCSequencerViewController: UIViewController {
     
     func toggleSelectedVC(){
         
+        self.sampler?.reloadSamplerCV()
       
         guard let sequencer = self.sequencer else {
             return
