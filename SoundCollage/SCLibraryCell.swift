@@ -13,7 +13,7 @@ class SCLibraryCell: UICollectionViewCell {
     
     var imageView = UIImageView()
     var titleLabel = UILabel()
-    
+    var playIcon = UIImageView()
     
     
     override init(frame: CGRect) {
@@ -33,6 +33,16 @@ class SCLibraryCell: UICollectionViewCell {
         makeImageCircular()
     }
     
+    
+    func setupPlayIcon(){
+        
+        let frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width/4, height: self.contentView.frame.height/4)
+        
+        playIcon = UIImageView.init(frame: frame)
+        playIcon.center = self.contentView.center
+        playIcon.image = UIImage.init(named: "play_filled")
+        contentView.addSubview(playIcon)
+    }
     
     private func makeImageCircular() {
         imageView.layer.masksToBounds = true

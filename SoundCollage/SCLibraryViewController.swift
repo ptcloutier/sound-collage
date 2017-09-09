@@ -117,7 +117,9 @@ class SCLibraryViewController: UIViewController {
         
         let shareBtn = UIButton()
         shareBtn.addTarget(self, action: #selector(SCLibraryViewController.shareBtnDidPress), for: .touchUpInside)
-        shareBtn.setImage(UIImage.init(named: "share"), for: .normal)
+        shareBtn.setImage(UIImage.init(named: "shareit"), for: .normal)
+        shareBtn.imageView?.contentMode = .scaleAspectFit
+
         let shareBarBtn = setupToolbarButton(btn: shareBtn)
 
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -212,6 +214,8 @@ class SCLibraryViewController: UIViewController {
     }
     
     
+    
+    
     func shareBtnDidPress(){
         
         SCAudioManager.shared.audioController?.stopSong()
@@ -276,6 +280,7 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.setupLabel()
         cell.setupImageView()
 //        cell.backgroundColor = SCColor.Custom.Gray.dark
+        cell.setupPlayIcon()
         return cell
     }
     

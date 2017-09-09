@@ -83,7 +83,10 @@
 		A7D7CDCF1F28368A000EE8DA /* met.png in Resources */ = {isa = PBXBuildFile; fileRef = A7D7CDCE1F28368A000EE8DA /* met.png */; };
 		A7E117D11F278C8300041400 /* rectPink.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E117D01F278C8300041400 /* rectPink.png */; };
 		A7E117D31F278DE800041400 /* UIImage+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E117D21F278DE800041400 /* UIImage+Custom.swift */; };
-		A7EC74B61F4A55720092E59E /* share.png in Resources */ = {isa = PBXBuildFile; fileRef = A7EC74B51F4A55720092E59E /* share.png */; };
+		A7E774F61F6361E300B8086A /* skeleton_dance.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7E774F51F6361E300B8086A /* skeleton_dance.gif */; };
+		A7E774F81F63635000B8086A /* glitter.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7E774F71F63635000B8086A /* glitter.gif */; };
+		A7E774FC1F6374C900B8086A /* play_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E774FB1F6374C900B8086A /* play_filled.png */; };
+		A7E775021F63769300B8086A /* shareit.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E775011F63769300B8086A /* shareit.png */; };
 		A7EC74B81F4C6E7B0092E59E /* SCToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
 		A7FD67551F3775C100B1AD74 /* bluesyRiff.mid in Resources */ = {isa = PBXBuildFile; fileRef = A7FD67541F3775C100B1AD74 /* bluesyRiff.mid */; };
@@ -208,7 +211,10 @@
 		A7D7CDCE1F28368A000EE8DA /* met.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = met.png; sourceTree = "<group>"; };
 		A7E117D01F278C8300041400 /* rectPink.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rectPink.png; sourceTree = "<group>"; };
 		A7E117D21F278DE800041400 /* UIImage+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Custom.swift"; sourceTree = "<group>"; };
-		A7EC74B51F4A55720092E59E /* share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = share.png; path = ../../../Downloads/share.png; sourceTree = "<group>"; };
+		A7E774F51F6361E300B8086A /* skeleton_dance.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = skeleton_dance.gif; sourceTree = "<group>"; };
+		A7E774F71F63635000B8086A /* glitter.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = glitter.gif; sourceTree = "<group>"; };
+		A7E774FB1F6374C900B8086A /* play_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_filled.png; sourceTree = "<group>"; };
+		A7E775011F63769300B8086A /* shareit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareit.png; sourceTree = "<group>"; };
 		A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCToolbar.swift; sourceTree = "<group>"; };
 		A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBank.swift; sourceTree = "<group>"; };
 		A7FD67541F3775C100B1AD74 /* bluesyRiff.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; path = bluesyRiff.mid; sourceTree = "<group>"; };
@@ -281,13 +287,13 @@
 			children = (
 				A74B368D1F3105D7000E8DEA /* play.png */,
 				A7A748421F634DCC005E6A9A /* cop_melt_repoman.gif */,
-				A7EC74B51F4A55720092E59E /* share.png */,
 				A7B0AF051F5FAEE200542FCB /* 1080p.mov */,
 				A7E117D01F278C8300041400 /* rectPink.png */,
 				A74541841F310E02007A89B7 /* lp.png */,
 				A74541901F3112C3007A89B7 /* lp1.png */,
 				A74541881F311054007A89B7 /* back.png */,
 				A713F5091F2F2DA700742D1C /* rectWhite.png */,
+				A7E775011F63769300B8086A /* shareit.png */,
 				A745418E1F311229007A89B7 /* plus1.png */,
 				A74541861F310E0E007A89B7 /* mic.png */,
 				A79F5C891F1551CE00A89492 /* spinner.png */,
@@ -295,7 +301,10 @@
 				A745418C1F31115A007A89B7 /* record.png */,
 				A745418A1F311101007A89B7 /* playlist.png */,
 				A7FD67561F3775CA00B1AD74 /* drumLoop.caf */,
+				A7E774F51F6361E300B8086A /* skeleton_dance.gif */,
+				A7E774F71F63635000B8086A /* glitter.gif */,
 				A7FD67571F3775EB00B1AD74 /* marimbaLoop.caf */,
+				A7E774FB1F6374C900B8086A /* play_filled.png */,
 				A7FD67581F37761500B1AD74 /* gs_instruments.dls */,
 				A7D7CDCE1F28368A000EE8DA /* met.png */,
 				A7FD67541F3775C100B1AD74 /* bluesyRiff.mid */,
@@ -611,15 +620,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7D7CDCF1F28368A000EE8DA /* met.png in Resources */,
+				A7E774F61F6361E300B8086A /* skeleton_dance.gif in Resources */,
 				A79160FD1F1EA2B50051113C /* Quicksand SIL OFL License 1.1.txt in Resources */,
 				A7B0AF061F5FAEE200542FCB /* 1080p.mov in Resources */,
 				A79161011F1EA2B50051113C /* Quicksand_Book_Oblique.otf in Resources */,
 				A7A748431F634DCC005E6A9A /* cop_melt_repoman.gif in Resources */,
 				A74541911F3112C3007A89B7 /* lp1.png in Resources */,
 				A74541871F310E0E007A89B7 /* mic.png in Resources */,
-				A7EC74B61F4A55720092E59E /* share.png in Resources */,
 				A7FD67551F3775C100B1AD74 /* bluesyRiff.mid in Resources */,
 				A70814351F01B54600A8AE92 /* A DAY WITHOUT SUN.otf in Resources */,
+				A7E775021F63769300B8086A /* shareit.png in Resources */,
 				A79161021F1EA2B50051113C /* Quicksand_Dash.otf in Resources */,
 				A79161001F1EA2B50051113C /* Quicksand_Book.otf in Resources */,
 				A745418B1F311101007A89B7 /* playlist.png in Resources */,
@@ -640,8 +650,10 @@
 				A79161051F1EA2B50051113C /* SPECIMENPOSTER_4967.jpg in Resources */,
 				A7D7CDCB1F283366000EE8DA /* ts.png in Resources */,
 				A7A822FD1EA81BEC0061D0A0 /* Main.storyboard in Resources */,
+				A7E774FC1F6374C900B8086A /* play_filled.png in Resources */,
 				A79161041F1EA2B50051113C /* Quicksand_Light_Oblique.otf in Resources */,
 				A79161031F1EA2B50051113C /* Quicksand_Light.otf in Resources */,
+				A7E774F81F63635000B8086A /* glitter.gif in Resources */,
 				A7E117D11F278C8300041400 /* rectPink.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

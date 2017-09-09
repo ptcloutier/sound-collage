@@ -147,7 +147,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             
             switch cell.isPlaybackEnabled {
             case true:
-                cell.backgroundColor = iceCreamColors[colorIdx]
+                cell.backgroundColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet//iceCreamColors[colorIdx]
             case false:
                 cell.backgroundColor = SCColor.Custom.Gray.dark
                 
@@ -205,8 +205,6 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         }
         return true
     }
-    
-    
 }
 
 
@@ -229,7 +227,7 @@ extension SCSequencerCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         
         let h = contentView.frame.height - 69.0 //toolbar+top spacing
-        let spacing = h/60// TODO: calculate, don't use hardcoded values
+        let spacing = h/40// TODO: calculate, don't use hardcoded values
         
         return spacing
     }

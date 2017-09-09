@@ -46,7 +46,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         
         self.layer.borderWidth = 1.0
         self.layer.masksToBounds = true
-        self.layer.cornerRadius = self.contentView.frame.width/3
+        self.layer.cornerRadius = self.contentView.frame.width*0.1
     }
     
     func setupGIFView(){
@@ -70,7 +70,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
             v.addSubview(filter)
             
         } catch let error {
-            print("\n\n\n\n NADA  \n\n\n\n\n\(error.localizedDescription)\n\n\n\n\n\n\n")
+            print("\(error.localizedDescription)")
         }
     }
 

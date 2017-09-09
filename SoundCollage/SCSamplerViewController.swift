@@ -235,12 +235,12 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         // ui
         cell.idx = indexPath.row
         let colorIdx = SCColor.findColorIndex(indexPath: indexPath, colors: iceCreamColors)
-        cell.cellColor = iceCreamColors[colorIdx]
+        cell.cellColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet//iceCreamColors[colorIdx]
         
         cell.setupLabel()
         cell.circularCell()
         cell.setupGradientColors()
-       cell.setupGIFView()
+//        cell.setupGIFView()
         
         if indexPath.row == self.selectedPadIndex {
             cell.backgroundColor = cell.cellColor
