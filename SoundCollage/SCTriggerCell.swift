@@ -33,12 +33,9 @@ class SCTriggerCell: UICollectionViewCell {
         padLabel.isUserInteractionEnabled = false
         padLabel.frame = .zero
         padLabel.textColor = UIColor.white 
-                
-
         padLabel.textAlignment = NSTextAlignment.center
         padLabel.font = UIFont.init(name: "Futura", size: 10.0)
         contentView.addSubview(padLabel)
-        
         padLabel.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .height, relatedBy: .equal, toItem: self.contentView, attribute: .height, multiplier: 0.75, constant: 0))
         self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .centerX, relatedBy: .equal, toItem: self.contentView, attribute: .centerX, multiplier: 1.0, constant: 0))
@@ -46,10 +43,17 @@ class SCTriggerCell: UICollectionViewCell {
         self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: centerY))
     }
     
+    
+    
     func circularCell(){
-        
         self.layer.borderWidth = 1.0
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.contentView.frame.width*0.5
+    }
+    
+    func diamondCell(){
+        self.layer.borderWidth = 1.0
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = self.contentView.frame.width*1.0
     }
   }

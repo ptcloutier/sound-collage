@@ -11,7 +11,7 @@ import UIKit
 class SCScoreCell: UICollectionViewCell {
 
     var sequencerCV: UICollectionView?
-    let cellCount: Int = 17
+    let cellCount: Int = 9
     
     override init(frame: CGRect) {
         super.init(frame: frame)

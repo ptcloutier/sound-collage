@@ -249,13 +249,11 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         
         guard let reverbParams = audioController?.effectControls[0] else { return }
         let reverbWDM: Float = Float(String(format: "%.0f", reverbParams[0].parameter[selectedSamplePad]*50.0))!
-        audioController?.reverbWetDryMix = reverbWDM
-        audioController?.setReverbWetDryMix(reverbWetDryMix: reverbWDM)
-    }
+        }
    
     
     
-    //MARK: Recording
+    //MARK: Recording samples
     
     
     func recordNew() {
@@ -266,9 +264,132 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
+    
+    func setupNewSample(){
+        
+        if isSpeakerEnabled == true {
+            isSpeakerEnabled = false
+            setAudioPlaybackSource()
+        }
+        recordingEngine.stop()
+        recordingEngine.reset()
+        recordingEngine = AVAudioEngine()
+        
+        
+        do {
+            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try audioSession.setActive(true)
+            audioSession.requestRecordPermission() { [unowned self] allowed in
+                DispatchQueue.main.async {
+                    if allowed {
+                        self.setupAudioFileForSample()
+                    } else {
+                        print("Failed to record!")
+                    }
+                }
+            }
+        } catch {
+            print("Failed to record!")
+        }
+    }
+    
+    
+    
+    
+    func setupAudioFileForSample(){
+        
+        
+        guard let id = SCDataManager.shared.currentSampleBank else {
+            print("current sample bank id not found.")
+            return
+        }
+        
+        let sampleID = getSampleID(samplePadIndex: selectedSampleIndex)
+        let audioType = ".caf"
+        let filePath = "sampleBank_\(id)_pad_\(selectedSampleIndex)_id_\(sampleID)\(audioType)"
+        let fullURL = getDocumentsDirectory().appendingPathComponent(filePath)
+        SCDataManager.shared.currentSamplePath = fullURL.absoluteString
+        self.replaceableFilePath = "sampleBank_\(id)_pad_\(selectedSampleIndex)_id_\(sampleID-1)\(audioType)"
+        self.audioFilePath = fullURL
+        
+        let settings = [
+            AVFormatIDKey: Int(kAudioFormatAppleIMA4),
+            AVSampleRateKey: 44100,
+            AVNumberOfChannelsKey: 2,
+            AVLinearPCMBitDepthKey: Int(32),
+            AVLinearPCMIsBigEndianKey: false,
+            AVLinearPCMIsFloatKey: false,
+            ] as [String : Any]
+        
+        do {
+            
+            try self.audioFile = AVAudioFile(forWriting: fullURL, settings: settings)
+        }
+        catch {
+            print("Error setting up audio file")
+        }
+    }
+    
+    
+    
+    
+    func startRecordingSample() {
+        
+        
+        let input = recordingEngine.inputNode!
+        let inputFormat = input.inputFormat(forBus: 0)
+        
+        recordingEngine.connect(input, to: recordingEngine.mainMixerNode, format: inputFormat)
+        assert(recordingEngine.inputNode != nil)
+        
+        try! recordingEngine.start()
+        //save url to property
+        
+        isRecording = true
+        let mixer = recordingEngine.mainMixerNode
+        let outputFormat = mixer.outputFormat(forBus: 0)
+        
+        mixer.installTap(onBus: 0, bufferSize: 1024, format: outputFormat, block:
+            { (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
+                
+                print(NSString(string: "writing"))
+                do {
+                    try self.audioFile.write(from: buffer)
+                }
+                catch {
+                    print(NSString(string: "Write failed"));
+                }
+        })
+    }
+    
+    
+    
+    func stopRecordingSample() {
+        
+        recordingEngine.mainMixerNode.removeTap(onBus: 0)
+        recordingEngine.stop()
+        isRecording = false
+        
+        print("Audio recording stopped.")
+        
+        setAudioPlaybackSource()
+        guard let url = self.audioFilePath else { return }
+        self.postRecordingFinishedNotification()
+        
+        let urlPart = url.lastPathComponent
+        for key in (SCDataManager.shared.user?.sampleBanks[SCDataManager.shared.currentSampleBank!].samples.keys)!{
+            if key == selectedSampleIndex.description {
+                SCDataManager.shared.user?.sampleBanks[SCDataManager.shared.currentSampleBank!].samples[key] = urlPart
+                print("Audio file recorded and saved at \(urlPart.description)")
+                break
+            }
+        }
+        SCAudioManager.shared.audioController?.getAudioFilesForURL()
+        isRecordingModeEnabled = false
+        SCDataManager.shared.saveObjectToJSON()
+        observeAudioIO()
+    }
 
-    
-    
     
     private func getSampleID(samplePadIndex: Int) -> Int {
         
@@ -284,20 +405,13 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     }
     
     
-
-    
-    
-    
     
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
         return documentsDirectory
     }
-    
 
-   
-    
     
     
     private func postRecordingFinishedNotification(){
@@ -380,153 +494,4 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
             print("Audio source: headphone output")
         }
     }
-    
-    
-    //MARK: Recording output
-    
-    func setupNewSample(){
-        
-        if isSpeakerEnabled == true {
-            isSpeakerEnabled = false
-            setAudioPlaybackSource()
-        }
-        recordingEngine.stop()
-        recordingEngine.reset()
-        recordingEngine = AVAudioEngine()
-        
-        
-        do {
-            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            try audioSession.setActive(true)
-            audioSession.requestRecordPermission() { [unowned self] allowed in
-                DispatchQueue.main.async {
-                    if allowed {
-                        self.setupAudioFileForSample()
-                    } else {
-                        print("Failed to record!")
-                    }
-                }
-            }
-        } catch {
-            print("Failed to record!")
-        }
-    }
-
-    
-    
-    
-    func setupAudioFileForSample(){
-        
-        
-        guard let id = SCDataManager.shared.currentSampleBank else {
-            print("current sample bank id not found.")
-            return
-        }
-        
-        let sampleID = getSampleID(samplePadIndex: selectedSampleIndex)
-        let audioType = ".caf"
-        let filePath = "sampleBank_\(id)_pad_\(selectedSampleIndex)_id_\(sampleID)\(audioType)"
-        let fullURL = getDocumentsDirectory().appendingPathComponent(filePath)
-        SCDataManager.shared.currentSamplePath = fullURL.absoluteString
-        self.replaceableFilePath = "sampleBank_\(id)_pad_\(selectedSampleIndex)_id_\(sampleID-1)\(audioType)"
-        self.audioFilePath = fullURL
-        
-        let settings = [
-            AVFormatIDKey: Int(kAudioFormatAppleIMA4),
-            AVSampleRateKey: 44100,
-            AVNumberOfChannelsKey: 2,
-            AVLinearPCMBitDepthKey: Int(32),
-            AVLinearPCMIsBigEndianKey: false,
-            AVLinearPCMIsFloatKey: false,
-        
-//            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-//            AVSampleRateKey: 44100,
-//            AVNumberOfChannelsKey: 2,
-//            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
-            ] as [String : Any]
-        
-        do {
-            
-            try self.audioFile = AVAudioFile(forWriting: fullURL, settings: settings)
-        }
-        catch {
-            print("Error setting up audio file")
-        }
-    }
-    
-    
-    
-    
-    func startRecordingSample() {
-        
-        
-        let input = recordingEngine.inputNode!
-        let inputFormat = input.inputFormat(forBus: 0)
-        
-        recordingEngine.connect(input, to: recordingEngine.mainMixerNode, format: inputFormat)
-        assert(recordingEngine.inputNode != nil)
-        
-        try! recordingEngine.start()
-        //save url to property
-        
-        isRecording = true
-        let mixer = recordingEngine.mainMixerNode
-        let outputFormat = mixer.outputFormat(forBus: 0)
-        
-        mixer.installTap(onBus: 0, bufferSize: 1024, format: outputFormat, block:
-            { (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-                
-                print(NSString(string: "writing"))
-                do {
-                    try self.audioFile.write(from: buffer)
-                }
-                catch {
-                    print(NSString(string: "Write failed"));
-                }
-        })
-    }
-    
-   
-    
-    func stopRecordingSample() {
-
-        recordingEngine.mainMixerNode.removeTap(onBus: 0)   
-        recordingEngine.stop()
-        isRecording = false
-        
-        print("Audio recording stopped.")
-        
-        setAudioPlaybackSource()
-        guard let url = self.audioFilePath else { return }
-        self.postRecordingFinishedNotification()
-        
-//        SCDataManager.shared.jsonTest()
-        let urlPart = url.lastPathComponent
-       
-//        guard let currentSB = SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!]  else {
-//            print("Error, no current sample bank.")
-//            return
-//        }
-        for key in (SCDataManager.shared.user?.sampleBanks[SCDataManager.shared.currentSampleBank!].samples.keys)!{
-            if key == selectedSampleIndex.description {
-                SCDataManager.shared.user?.sampleBanks[SCDataManager.shared.currentSampleBank!].samples[key] = urlPart 
-                print("Audio file recorded and saved at \(urlPart.description)")
-                break 
-            }
-        }
-//        SCDataManager.shared.user?.sampleBanks?[(SCDataManager.shared.user?.currentSampleBank)!] = currentSB
-//        SCAudioManager.shared.audioController?.loadSamples()
-        SCAudioManager.shared.audioController?.getAudioFilesForURL()
-        isRecordingModeEnabled = false
-        SCDataManager.shared.saveObjectToJSON()
-
-        print("file recorded at \(String(describing: url.absoluteString))")
-        observeAudioIO()
-    }
-    
-    
-    
-         
-    
-        
 }

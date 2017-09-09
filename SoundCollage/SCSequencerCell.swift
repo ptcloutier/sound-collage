@@ -38,6 +38,7 @@ class SCSequencerCell: UICollectionViewCell {
         guard let triggerCV = self.triggerCV else { return }
         triggerCV.isScrollEnabled = false 
         triggerCV.backgroundColor = UIColor.clear
+        triggerCV.allowsMultipleSelection = true
         triggerCV.register(SCTriggerCell.self, forCellWithReuseIdentifier: "SCTriggerCell")
         triggerCV.delegate = self
         triggerCV.dataSource = self
@@ -45,33 +46,15 @@ class SCSequencerCell: UICollectionViewCell {
         
         let pan = UIPanGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
         pan.delegate = self
-        self.addGestureRecognizer(pan)
+        triggerCV.addGestureRecognizer(pan)
         
         let tap = UITapGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
         tap.delegate = self
-        self.addGestureRecognizer(tap)
+        triggerCV.addGestureRecognizer(tap)
         
-        let swipeUp = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
-        swipeUp.delegate = self
-        swipeUp.direction = .up
-        self.addGestureRecognizer(swipeUp)
-        
-        let swipeDn = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
-        swipeDn.delegate = self
-        swipeDn.direction = .down
-        self.addGestureRecognizer(swipeDn)
-
-        let swipeL = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
-        swipeL.delegate = self
-        swipeL.direction = .left
-        self.addGestureRecognizer(swipeL)
-
-        let swipeR = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
-        swipeR.delegate = self
-        swipeR.direction = .right
-        self.addGestureRecognizer(swipeR)
-
-
+        let swipe = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
+        swipe.delegate = self
+        triggerCV.addGestureRecognizer(swipe)
     }
 }
 
@@ -98,7 +81,6 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = triggerCV?.dequeueReusableCell(withReuseIdentifier: "SCTriggerCell", for: indexPath) as!SCTriggerCell
         
-        cell.circularCell()
         cell.sequencerIdx = self.idx-1
         cell.idx = indexPath.row
        
@@ -130,13 +112,14 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
        
         cell.layer.borderColor = UIColor.white.cgColor
 
-        if self.idx == 0 {
+        if self.idx == 0 { // first row 
+            cell.circularCell()
             cell.padLabel.text = "\(cell.idx+1)"
             cell.isUserInteractionEnabled = false
             cell.backgroundColor = SCColor.Custom.Gray.dark 
         } else {
             cell.padLabel.isHidden = true
-            
+            cell.diamondCell()
             let seqIdx = cell.sequencerIdx
             let idx = cell.idx
             
@@ -194,17 +177,17 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     
-    
-    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        
-        if let selectedItems = collectionView.indexPathsForSelectedItems {
-            if selectedItems.contains(indexPath) {
-                collectionView.deselectItem(at: indexPath, animated: true)
-                return false
-            }
-        }
-        return true
-    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+//        
+//        if let selectedItems = collectionView.indexPathsForSelectedItems {
+//            if selectedItems.contains(indexPath) {
+//                collectionView.deselectItem(at: indexPath, animated: true)
+//                return false
+//            }
+//        }
+//        return true
+//    }
 }
 
 
@@ -214,7 +197,7 @@ extension SCSequencerCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let result = CGSize.init(width: collectionView.frame.width, height: collectionView.frame.width)
+        let result = CGSize.init(width: collectionView.frame.width*0.75, height: collectionView.frame.width*0.75)
         return result
     }
     
@@ -227,7 +210,7 @@ extension SCSequencerCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         
         let h = contentView.frame.height - 69.0 //toolbar+top spacing
-        let spacing = h/40// TODO: calculate, don't use hardcoded values
+        let spacing = h/80// TODO: calculate, don't use hardcoded values
         
         return spacing
     }

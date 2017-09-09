@@ -23,6 +23,7 @@ class SCSamplerViewController: UIViewController  {
     let parameterViewColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet, SCColor.Custom.PsychedelicIceCreamShoppe.medViolet, SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet]
     let backGroundColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua, SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueDark]
     var selectedPadIndex: Int?
+    var videoURLs: [URL] = []
 
     //MARK: vc lifecycle
     
@@ -30,7 +31,7 @@ class SCSamplerViewController: UIViewController  {
         super.viewDidLoad()
         
         SCAudioManager.shared.audioController?.getAudioFilesForURL()
-        
+        setupVideoURLs()
         
         let colors = SCColor.getPsychedelicIceCreamShopColors()
         var brightColors: [UIColor] = []
@@ -43,7 +44,6 @@ class SCSamplerViewController: UIViewController  {
         
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: Notification.Name.init("recordingDidFinish"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.toggleRecordingMode), name: Notification.Name.init("recordBtnDidPress"), object: nil)
-        
         setupSampler()
     }
     
@@ -117,7 +117,47 @@ class SCSamplerViewController: UIViewController  {
         self.view.addConstraint(NSLayoutConstraint(item: samplerCV, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: 0))
     }
     
-    
+    private func setupVideoURLs(){
+        
+        guard let copmelt = Bundle.main.url(forResource: "cop_melt_repoman", withExtension: "gif") else { return }
+        
+        videoURLs.append(copmelt)
+        
+        guard let physics2 = Bundle.main.url(forResource: "physics2", withExtension: "gif") else { return }
+        
+        videoURLs.append(physics2)
+        
+        guard let desert = Bundle.main.url(forResource: "desert", withExtension: "gif") else { return }
+        
+        videoURLs.append(desert)
+        
+        
+        guard let glitter = Bundle.main.url(forResource: "glitter", withExtension: "gif") else { return }
+        
+        videoURLs.append(glitter)
+        
+        
+        
+        guard let physics1 = Bundle.main.url(forResource: "physics1", withExtension: "gif") else { return }
+        
+        videoURLs.append(physics1)
+        
+        
+        guard let wave = Bundle.main.url(forResource: "wave_oscillation", withExtension: "gif") else { return }
+        
+        videoURLs.append(glitter)
+        videoURLs.append(copmelt)
+        videoURLs.append(desert)
+        videoURLs.append(wave)
+        videoURLs.append(physics1)
+        videoURLs.append(wave)
+        videoURLs.append(glitter)
+        videoURLs.append(physics1)
+        videoURLs.append(glitter)
+        videoURLs.append(physics2)
+        videoURLs.append(copmelt)
+        
+    }
         
     //MARK: recording and playback
     
@@ -234,25 +274,62 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         
         // ui
         cell.idx = indexPath.row
-        let colorIdx = SCColor.findColorIndex(indexPath: indexPath, colors: iceCreamColors)
-        cell.cellColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet//iceCreamColors[colorIdx]
+        cell.videoURL = self.videoURLs[cell.idx]
         
-        cell.setupLabel()
-        cell.circularCell()
-        cell.setupGradientColors()
-//        cell.setupGIFView()
         
-        if indexPath.row == self.selectedPadIndex {
-            cell.backgroundColor = cell.cellColor
-            cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
-            cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
-        } else {
-            cell.backgroundColor = SCColor.Custom.Gray.dark
-            cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
-            cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
+        
+        if let sb = SCDataManager.shared.currentSampleBank {
+            
+            if sb > 3 && sb % 2 != 0 {
+                cell.setupGIFView()
+                cell.cellColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+            } else if sb > 3 && sb % 2 == 0 {
+                 let colorIdx = SCColor.findColorIndex(indexPath: indexPath, colors: iceCreamColors)
+                cell.cellColor = iceCreamColors[colorIdx]
+            } else if sb < 3 {
+                cell.cellColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+            } else {
+                cell.cellColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+            }
+            
+            cell.setupLabel()
+            cell.setupGradientColors()
+            cell.layer.borderWidth = 1.0
+            cell.layer.borderColor = cell.cellColor?.cgColor
+
+
+            // choose colors or video
+            if indexPath.row == self.selectedPadIndex {
+                if sb < 3 {
+                    cell.backgroundColor = cell.cellColor
+                    cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+                    cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
+                } else {
+                    cell.backgroundColor = SCColor.Custom.Gray.dark
+                    cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+                    cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
+                }
+
+                if sb > 3 && sb % 2 != 0 {
+//                    cell.backgroundColor = SCColor.Custom.Gray.dark
+                } else {
+//                    cell.backgroundColor = SCColor.Custom.Gray.dark
+                    cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
+                }
+
+                if sb > 3 && sb % 2 == 0 {
+                    let colorIdx = SCColor.findColorIndex(indexPath: indexPath, colors: iceCreamColors)
+                    cell.cellColor = iceCreamColors[colorIdx]
+                } else {
+                    cell.backgroundColor = SCColor.Custom.Gray.dark
+                    cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+                    cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
+                }
+            } else {
+                cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
+                cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+            }
         }
-        
-        
         let tap = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
         tap.delegate = self
         tap.numberOfTapsRequired = 1
@@ -392,10 +469,7 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
 extension SCSamplerViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let itemSize = samplerFlowLayout?.itemSize else {
-            print("No sampler flowLayout.")
-            return collectionView.frame.size
-        }
+        let itemSize = CGSize.init(width: (samplerFlowLayout?.itemSize.width)!, height: (samplerFlowLayout?.itemSize.height)!)
         return itemSize
     }
     
@@ -404,7 +478,7 @@ extension SCSamplerViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

@@ -26,8 +26,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var gradientColors: SCColor?
     var doXAnimation: Bool = false 
     var doWaveAnimation: Bool = true
-
-    
+    var videoURL: URL?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,18 +48,27 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         self.layer.cornerRadius = self.contentView.frame.width*0.1
     }
     
+    
+    func diamondCell(){
+        self.layer.borderWidth = 1.0
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = self.contentView.frame.width*1.0
+    }
+    
+   
+    
     func setupGIFView(){
         
         let v = self.contentView
         
-        guard let url = Bundle.main.url(forResource: "cop_melt_repoman", withExtension: "gif") else { return }
+        guard let url = videoURL else { return }
         do {
             let gif = try Data(contentsOf: url)
             let wv = UIWebView(frame: v.frame)
             wv.load(gif, mimeType: "image/gif", textEncodingName: "UTF-8", baseURL: NSURL() as URL)
             wv.isUserInteractionEnabled = false
             wv.scalesPageToFit = true
-            wv.contentMode = .scaleAspectFill
+            wv.contentMode = .scaleToFill
             v.addSubview(wv)
             
             let filter = UIView()
