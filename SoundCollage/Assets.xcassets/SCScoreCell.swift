@@ -11,7 +11,7 @@ import UIKit
 class SCScoreCell: UICollectionViewCell {
 
     var sequencerCV: UICollectionView?
-    let cellCount: Int = 9
+    let cellCount: Int = 17
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -65,7 +65,6 @@ extension SCScoreCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(0, 0, 0, 0)
     }
-    
 }
 
 

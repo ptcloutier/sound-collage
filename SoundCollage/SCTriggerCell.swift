@@ -46,13 +46,11 @@ class SCTriggerCell: UICollectionViewCell {
     
     
     func circularCell(){
-        self.layer.borderWidth = 1.0
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.contentView.frame.width*0.5
     }
     
     func diamondCell(){
-        self.layer.borderWidth = 1.0
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.contentView.frame.width*1.0
     }

@@ -14,7 +14,7 @@ class SCSequencerCell: UICollectionViewCell {
     var idx: Int = 0
     let cellCount: Int = 16
     var iceCreamColors: [UIColor] = []
-    
+    var seaColors: [UIColor] = []
     
     
     
@@ -30,6 +30,9 @@ class SCSequencerCell: UICollectionViewCell {
     
     
     func setupSequencer(){
+        
+        iceCreamColors = SCColor.getPsychedelicIceCreamShopColors()
+        seaColors = SCColor.getVintageColors()
         
         contentView.backgroundColor = UIColor.clear
         print("seq cell\(self.contentView.frame.height)")
@@ -84,21 +87,21 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         cell.sequencerIdx = self.idx-1
         cell.idx = indexPath.row
        
-        let colors = SCColor.getPsychedelicIceCreamShopColors()
-        let iccolors = SCColor.getPsychedelicIceCreamShopColors()
-        var brightColors: [UIColor] = []
-       
-        for color in colors {
-            let bright = SCColor.BrighterHigherSatColor(color: color)
-            brightColors.append(bright)
-        }
-        
-        for ic in iccolors {
-            let brighterIC = SCColor.BrighterHigherSatColor(color: ic)
-            brightColors.append(brighterIC)
-        }
+        // get bright colors
+//        let colors = SCColor.getPsychedelicIceCreamShopColors()
+//        let iccolors = SCColor.getPsychedelicIceCreamShopColors()
+//        var brightColors: [UIColor] = []
+//       
+//        for color in colors {
+//            let bright = SCColor.BrighterHigherSatColor(color: color)
+//            brightColors.append(bright)
+//        }
+//        
+//        for ic in iccolors {
+//            let brighterIC = SCColor.BrighterHigherSatColor(color: ic)
+//            brightColors.append(brighterIC)
+//        }
 
-        iceCreamColors = brightColors
         
         var colorIdx: Int
         if indexPath.row > iceCreamColors.count-1 {
@@ -110,19 +113,18 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             colorIdx = indexPath.row
         }
        
-        cell.layer.borderColor = UIColor.white.cgColor
 
         if self.idx == 0 { // first row 
             cell.circularCell()
             cell.padLabel.text = "\(cell.idx+1)"
             cell.isUserInteractionEnabled = false
-            cell.backgroundColor = SCColor.Custom.Gray.dark 
+            cell.backgroundColor = SCColor.Custom.Gray.dark
         } else {
             cell.padLabel.isHidden = true
-            cell.diamondCell()
             let seqIdx = cell.sequencerIdx
             let idx = cell.idx
-            
+            cell.layer.borderWidth = 0.75
+            cell.layer.borderColor = seaColors[colorIdx].cgColor
             let dm = SCDataManager.shared
             if (SCDataManager.shared.user?.sampleBanks[dm.currentSampleBank!].sequencerSettings?.score[seqIdx][idx])! == true {
                 cell.isPlaybackEnabled = true
@@ -130,13 +132,11 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             
             switch cell.isPlaybackEnabled {
             case true:
-                cell.backgroundColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet//iceCreamColors[colorIdx]
+                cell.backgroundColor = iceCreamColors[colorIdx]
             case false:
                 cell.backgroundColor = SCColor.Custom.Gray.dark
-                
             }
         }
-
         return cell
     }
     
@@ -156,6 +156,17 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
             return
         }
         
+        var colorIdx: Int
+        if indexPath.row > iceCreamColors.count-1 {
+            colorIdx = indexPath.row-iceCreamColors.count
+            if colorIdx > iceCreamColors.count-1 {
+                colorIdx -= iceCreamColors.count
+            }
+        } else {
+            colorIdx = indexPath.row
+        }
+
+        
         switch cell.isPlaybackEnabled { // toggle
         
         case true:
@@ -167,7 +178,7 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         case false:
             cell.isPlaybackEnabled = true
             currentSB.sequencerSettings?.score[cell.sequencerIdx][cell.idx] = true
-            cell.backgroundColor =  SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+            cell.backgroundColor =  iceCreamColors[colorIdx]
             if SCAudioManager.shared.sequencerIsPlaying == false {
                 SCAudioManager.shared.selectedSequencerIndex = cell.idx
     
@@ -177,17 +188,17 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     
-//    
-//    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-//        
-//        if let selectedItems = collectionView.indexPathsForSelectedItems {
-//            if selectedItems.contains(indexPath) {
-//                collectionView.deselectItem(at: indexPath, animated: true)
-//                return false
-//            }
-//        }
-//        return true
-//    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        
+        if let selectedItems = collectionView.indexPathsForSelectedItems {
+            if selectedItems.contains(indexPath) {
+                collectionView.deselectItem(at: indexPath, animated: true)
+                return false
+            }
+        }
+        return true
+    }
 }
 
 
@@ -197,7 +208,7 @@ extension SCSequencerCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let result = CGSize.init(width: collectionView.frame.width*0.75, height: collectionView.frame.width*0.75)
+        let result = CGSize.init(width: collectionView.frame.width, height: collectionView.frame.width)
         return result
     }
     
@@ -210,7 +221,7 @@ extension SCSequencerCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         
         let h = contentView.frame.height - 69.0 //toolbar+top spacing
-        let spacing = h/80// TODO: calculate, don't use hardcoded values
+        let spacing = h/40// TODO: calculate, don't use hardcoded values
         
         return spacing
     }
