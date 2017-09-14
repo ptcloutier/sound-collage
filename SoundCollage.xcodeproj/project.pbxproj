@@ -44,8 +44,6 @@
 		A7808F5C1F647318008BA86E /* lighthouse.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7808F5B1F647318008BA86E /* lighthouse.gif */; };
 		A7808F5E1F647329008BA86E /* moon.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7808F5D1F647329008BA86E /* moon.gif */; };
 		A7808F601F64733F008BA86E /* physics1.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7808F5F1F64733F008BA86E /* physics1.gif */; };
-		A7808F621F647354008BA86E /* physics2.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7808F611F647354008BA86E /* physics2.gif */; };
-		A7808F641F647445008BA86E /* aztec.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7808F631F647445008BA86E /* aztec.gif */; };
 		A7808F661F6476C0008BA86E /* wave_oscillation.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7808F651F6476C0008BA86E /* wave_oscillation.gif */; };
 		A7808F681F64774B008BA86E /* skeleton_dance.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7808F671F64774B008BA86E /* skeleton_dance.gif */; };
 		A7808F6A1F647780008BA86E /* spectrum.gif in Resources */ = {isa = PBXBuildFile; fileRef = A7808F691F647780008BA86E /* spectrum.gif */; };
@@ -173,8 +171,6 @@
 		A7808F5B1F647318008BA86E /* lighthouse.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = lighthouse.gif; sourceTree = "<group>"; };
 		A7808F5D1F647329008BA86E /* moon.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = moon.gif; sourceTree = "<group>"; };
 		A7808F5F1F64733F008BA86E /* physics1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = physics1.gif; sourceTree = "<group>"; };
-		A7808F611F647354008BA86E /* physics2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = physics2.gif; path = ../../../Desktop/physics2.gif; sourceTree = "<group>"; };
-		A7808F631F647445008BA86E /* aztec.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = aztec.gif; path = ../../../Desktop/aztec.gif; sourceTree = "<group>"; };
 		A7808F651F6476C0008BA86E /* wave_oscillation.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = wave_oscillation.gif; sourceTree = "<group>"; };
 		A7808F671F64774B008BA86E /* skeleton_dance.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = skeleton_dance.gif; sourceTree = "<group>"; };
 		A7808F691F647780008BA86E /* spectrum.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = spectrum.gif; sourceTree = "<group>"; };
@@ -310,9 +306,7 @@
 				A7808F551F6472D6008BA86E /* desert.gif */,
 				A7808F671F64774B008BA86E /* skeleton_dance.gif */,
 				A745418E1F311229007A89B7 /* plus1.png */,
-				A7808F631F647445008BA86E /* aztec.gif */,
 				A7808F5B1F647318008BA86E /* lighthouse.gif */,
-				A7808F611F647354008BA86E /* physics2.gif */,
 				A7808F691F647780008BA86E /* spectrum.gif */,
 				A7808F591F647304008BA86E /* glitter.gif */,
 				A7808F531F6472C2008BA86E /* deity.gif */,
@@ -656,13 +650,11 @@
 				A7808F6A1F647780008BA86E /* spectrum.gif in Resources */,
 				A74541851F310E02007A89B7 /* lp.png in Resources */,
 				A74541891F311054007A89B7 /* back.png in Resources */,
-				A7808F641F647445008BA86E /* aztec.gif in Resources */,
 				A70814391F01C46400A8AE92 /* plus.png in Resources */,
 				A79160FE1F1EA2B50051113C /* Quicksand_Bold.otf in Resources */,
 				A79160FF1F1EA2B50051113C /* Quicksand_Bold_Oblique.otf in Resources */,
 				A7A823051EA81BEC0061D0A0 /* LaunchScreen.storyboard in Resources */,
 				A7808F701F6477A0008BA86E /* skull.gif in Resources */,
-				A7808F621F647354008BA86E /* physics2.gif in Resources */,
 				A7A823021EA81BEC0061D0A0 /* Assets.xcassets in Resources */,
 				A7808F521F64717E008BA86E /* cop_melt_repoman.gif in Resources */,
 				A745418D1F31115A007A89B7 /* record.png in Resources */,

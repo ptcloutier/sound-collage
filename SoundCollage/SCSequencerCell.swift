@@ -49,14 +49,17 @@ class SCSequencerCell: UICollectionViewCell {
         
         let pan = UIPanGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
         pan.delegate = self
+        pan.cancelsTouchesInView = false
         triggerCV.addGestureRecognizer(pan)
         
         let tap = UITapGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
         tap.delegate = self
+        tap.cancelsTouchesInView = false
         triggerCV.addGestureRecognizer(tap)
         
         let swipe = UISwipeGestureRecognizer.init(target: self, action: #selector(SCSequencerCell.touch(gestureRecognizer:)))
         swipe.delegate = self
+        swipe.cancelsTouchesInView = false 
         triggerCV.addGestureRecognizer(swipe)
     }
 }
@@ -187,18 +190,18 @@ extension SCSequencerCell:  UICollectionViewDelegate, UICollectionViewDataSource
         }
     }
     
-    
-    
-    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        
-        if let selectedItems = collectionView.indexPathsForSelectedItems {
-            if selectedItems.contains(indexPath) {
-                collectionView.deselectItem(at: indexPath, animated: true)
-                return false
-            }
-        }
-        return true
-    }
+//    
+//    
+//    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+//        
+//        if let selectedItems = collectionView.indexPathsForSelectedItems {
+//            if selectedItems.contains(indexPath) {
+//                collectionView.deselectItem(at: indexPath, animated: true)
+//                return false
+//            }
+//        }
+//        return true
+//    }
 }
 
 

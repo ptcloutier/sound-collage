@@ -82,14 +82,16 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         }
     }
 
+    
+    
     func setupLabel() {
 
-        padLabel.addGlow(color: self.cellColor!)
+        padLabel.addGlow(color: UIColor.white)
         padLabel.isUserInteractionEnabled = false
         padLabel.frame = self.contentView.frame
         padLabel.text = "\(self.idx+1)"
         padLabel.textAlignment = NSTextAlignment.center
-        padLabel.font = UIFont.init(name: "Futura", size: 20.0)
+        padLabel.font = UIFont.init(name: "Futura", size: 30.0)
         contentView.addSubview(padLabel)
     }
     
@@ -121,7 +123,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         
         animateColor(fillMode: kCATransitionFade)
 
-        flashTimer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: true) {
+        flashTimer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: true) {
             [weak self] flashTimer in  // creates a capture group for the timer
             guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
                 return

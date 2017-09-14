@@ -108,7 +108,7 @@ class SCSequencerViewController: UIViewController {
         
 
 //        let frame = CGRect(x: margin, y: margin*2.0, width: self.view.frame.width-(margin*2.0), height: view.frame.height-toolbarHeight-(margin*2.0))
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: view.frame.height-toolbarHeight-(margin*2.0))
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
         sequencer = UICollectionView.init(frame: frame, collectionViewLayout: flowLayout)
         guard let sequencer = self.sequencer else { return }
@@ -285,6 +285,11 @@ class SCSequencerViewController: UIViewController {
         libraryBtn.setBackgroundImage(UIImage.init(named: "playlist"), for: .normal)
         libraryBtn.addTarget(self, action: #selector(SCSequencerViewController.libraryBtnDidPress), for: .touchUpInside)
         
+        let effectsBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
+        effectsBtn.setBackgroundImage(UIImage.init(named: "rectPink"), for: .normal)
+        effectsBtn.addTarget(self, action: #selector(SCSequencerViewController.effectsBtnDidPress), for: .touchUpInside)
+
+        
         let recordNewSCBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         recordNewSCBtn.setBackgroundImage(UIImage.init(named: "lp1"), for: .normal)
         recordNewSCBtn.addTarget(self, action: #selector(SCSequencerViewController.recordMixerOutputBtnDidPress), for: .touchUpInside)
@@ -295,11 +300,12 @@ class SCSequencerViewController: UIViewController {
         let sequencerBarBtn = UIBarButtonItem.init(customView: sequencerBtn)
         let libraryBarBtn = UIBarButtonItem.init(customView: libraryBtn)
         let recordNewSCBarBtn = UIBarButtonItem.init(customView: recordNewSCBtn)
-        
+        let fxBarBtn = UIBarButtonItem.init(customView: effectsBtn)
         let flexibleSpace = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        toolbar.items = [ toggleBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace, bankBarBtn, flexibleSpace, libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace ]
+        toolbar.items = [ toggleBarBtn, flexibleSpace, sequencerBarBtn, flexibleSpace,  recordBarBtn, flexibleSpace, bankBarBtn, flexibleSpace, libraryBarBtn, flexibleSpace, recordNewSCBarBtn, flexibleSpace, fxBarBtn ]
         self.view.addSubview(toolbar)
+        self.view.bringSubview(toFront: toolbar)
     }
     
     
@@ -339,6 +345,11 @@ class SCSequencerViewController: UIViewController {
     }
     
     
+    
+    func effectsBtnDidPress(){
+        
+        // present effects workspace. for now, rerecord a sound with effects. Also, bounce tracks to pads
+    }
     
     
     func bankBtnDidPress(){
@@ -426,7 +437,7 @@ class SCSequencerViewController: UIViewController {
         case 0:
             UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
                 sequencer.alpha = 1.0
-                sampler.alpha = 0.05
+                sampler.alpha = 0.1
                 self.view.bringSubview(toFront: sampler)
                 sequencer.isUserInteractionEnabled = true
                 sampler.isUserInteractionEnabled = false
@@ -435,8 +446,8 @@ class SCSequencerViewController: UIViewController {
             break
         case 1:
             UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations:{
-                sampler.alpha = 0.9
-                sequencer.alpha = 0.3
+                sampler.alpha = 1.0
+                sequencer.alpha = 0.4
                 self.view.bringSubview(toFront: sequencer)
                 sequencer.isUserInteractionEnabled = false
                 sampler.isUserInteractionEnabled = true

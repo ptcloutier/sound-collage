@@ -34,7 +34,7 @@ class SCTriggerCell: UICollectionViewCell {
         padLabel.frame = .zero
         padLabel.textColor = UIColor.white 
         padLabel.textAlignment = NSTextAlignment.center
-        padLabel.font = UIFont.init(name: "Futura", size: 10.0)
+        padLabel.font = UIFont.init(name: "Futura", size: 16.0)
         contentView.addSubview(padLabel)
         padLabel.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addConstraint(NSLayoutConstraint.init(item: padLabel, attribute: .height, relatedBy: .equal, toItem: self.contentView, attribute: .height, multiplier: 0.75, constant: 0))

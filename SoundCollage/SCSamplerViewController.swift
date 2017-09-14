@@ -271,65 +271,33 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
-        
-        // ui
+       
         cell.idx = indexPath.row
-        cell.videoURL = self.videoURLs[cell.idx]
         
-        
-        
-        if let sb = SCDataManager.shared.currentSampleBank {
-            
-            if sb == 3 {
-                cell.setupGIFView()
-                cell.cellColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
-            } else if sb != 3 && sb > 3 && sb % 2 == 0 {
-                 let colorIdx = SCColor.findColorIndex(indexPath: indexPath, colors: iceCreamColors)
-                cell.cellColor = iceCreamColors[colorIdx]
-            } else if sb < 3 {
-                cell.cellColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
-            } else {
-                cell.cellColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
+        var colorIdx: Int
+        if indexPath.row > iceCreamColors.count-1 {
+            colorIdx = indexPath.row-iceCreamColors.count
+            if colorIdx > iceCreamColors.count-1 {
+                colorIdx -= iceCreamColors.count
             }
-            
-            cell.setupLabel()
-            cell.setupGradientColors()
-            cell.layer.borderWidth = 1.0
-            cell.layer.borderColor = cell.cellColor?.cgColor
-
-
-            // choose colors or video
-            if indexPath.row == self.selectedPadIndex {
-                if sb < 3 {
-                    cell.backgroundColor = cell.cellColor
-                    cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
-                    cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
-                } else {
-                    cell.backgroundColor = SCColor.Custom.Gray.dark
-                    cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
-                    cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
-                }
-
-                if sb > 3 && sb % 2 != 0 {
-//                    cell.backgroundColor = SCColor.Custom.Gray.dark
-                } else {
-//                    cell.backgroundColor = SCColor.Custom.Gray.dark
-                    cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
-                }
-
-                if sb > 3 && sb % 2 == 0 {
-                    let colorIdx = SCColor.findColorIndex(indexPath: indexPath, colors: iceCreamColors)
-                    cell.cellColor = iceCreamColors[colorIdx]
-                } else {
-                    cell.backgroundColor = SCColor.Custom.Gray.dark
-                    cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
-                    cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
-                }
-            } else {
-                cell.layer.borderColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet.cgColor
-                cell.padLabel.textColor = SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet
-            }
+        } else {
+            colorIdx = indexPath.row
         }
+        
+        cell.cellColor = iceCreamColors[colorIdx]
+        cell.setupLabel()
+        cell.setupGradientColors()
+        cell.circularCell()
+        cell.layer.borderWidth = 5.0
+        cell.layer.borderColor = cell.cellColor?.cgColor
+        cell.padLabel.textColor = UIColor.white
+        
+        // choose colors or video
+        if indexPath.row == self.selectedPadIndex {
+            cell.cellColor = iceCreamColors[colorIdx]
+            
+        }
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
         tap.delegate = self
         tap.numberOfTapsRequired = 1
