@@ -83,6 +83,8 @@
 		A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */; };
 		A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823421EA81F6C0061D0A0 /* SCStackView.swift */; };
 		A7B0AF041F5FACC400542FCB /* UIView+VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B0AF031F5FACC400542FCB /* UIView+VideoPlayer.swift */; };
+		A7B559431FD12449004C1D0B /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BBA8241FD11382001DEEE8 /* SpriteKit.framework */; };
+		A7BBA8261FD11471001DEEE8 /* AnimationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BBA8251FD11471001DEEE8 /* AnimationScene.swift */; };
 		A7BD6AB41F140D85000CDF9A /* SCScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB31F140D85000CDF9A /* SCScoreCell.swift */; };
 		A7BD6AB61F141E4D000CDF9A /* SCSequencerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB51F141E4D000CDF9A /* SCSequencerCell.swift */; };
 		A7BD6AB81F14305B000CDF9A /* SCTriggerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB71F14305B000CDF9A /* SCTriggerCell.swift */; };
@@ -96,8 +98,6 @@
 		A7E775021F63769300B8086A /* shareit.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E775011F63769300B8086A /* shareit.png */; };
 		A7EC74B81F4C6E7B0092E59E /* SCToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
-		A7FDF60A1F41780500645E97 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7FDF6091F41780500645E97 /* SwiftyJSON.framework */; };
-		D12EE6F44C0DB1631E344924 /* Pods_SoundCollage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,9 +131,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoundCollage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		75D104676F45F32E670413F6 /* Pods-SoundCollage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.debug.xcconfig"; sourceTree = "<group>"; };
-		9BEF22D19B1F94FC5200561F /* Pods-SoundCollage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCollage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage.release.xcconfig"; sourceTree = "<group>"; };
 		A7054EC51EA82D7700BBC34E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A706AE701F5F082400072F00 /* SCSequencerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerViewController.swift; sourceTree = "<group>"; };
 		A70814321F01B54600A8AE92 /* A DAY WITHOUT SUN.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "A DAY WITHOUT SUN.otf"; sourceTree = "<group>"; };
@@ -217,6 +214,8 @@
 		A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankViewController.swift; sourceTree = "<group>"; };
 		A7A823421EA81F6C0061D0A0 /* SCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCStackView.swift; sourceTree = "<group>"; };
 		A7B0AF031F5FACC400542FCB /* UIView+VideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+VideoPlayer.swift"; sourceTree = "<group>"; };
+		A7BBA8241FD11382001DEEE8 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
+		A7BBA8251FD11471001DEEE8 /* AnimationScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationScene.swift; sourceTree = "<group>"; };
 		A7BD6AB31F140D85000CDF9A /* SCScoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SCScoreCell.swift; path = Assets.xcassets/SCScoreCell.swift; sourceTree = "<group>"; };
 		A7BD6AB51F141E4D000CDF9A /* SCSequencerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerCell.swift; sourceTree = "<group>"; };
 		A7BD6AB71F14305B000CDF9A /* SCTriggerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCTriggerCell.swift; sourceTree = "<group>"; };
@@ -230,7 +229,6 @@
 		A7E775011F63769300B8086A /* shareit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareit.png; sourceTree = "<group>"; };
 		A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCToolbar.swift; sourceTree = "<group>"; };
 		A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBank.swift; sourceTree = "<group>"; };
-		A7FDF6091F41780500645E97 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../Library/Developer/Xcode/DerivedData/SoundCollage-dzjqflrxgcjwhheyipgxnbopvqyd/Build/Products/Debug-iphoneos/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,15 +236,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7B559431FD12449004C1D0B /* SpriteKit.framework in Frameworks */,
 				A7A748401F60A826005E6A9A /* SceneKit.framework in Frameworks */,
-				A7FDF60A1F41780500645E97 /* SwiftyJSON.framework in Frameworks */,
 				A78A9BD01EABA919007117DD /* QuartzCore.framework in Frameworks */,
 				A7054EC61EA82D7700BBC34E /* Foundation.framework in Frameworks */,
 				A71414FF1EA82B5000BE9718 /* CoreAudio.framework in Frameworks */,
 				A71415001EA82B5000BE9718 /* CoreAudioKit.framework in Frameworks */,
 				A71414FC1EA82B4300BE9718 /* CoreGraphics.framework in Frameworks */,
 				A71414FA1EA82B3B00BE9718 /* AVFoundation.framework in Frameworks */,
-				D12EE6F44C0DB1631E344924 /* Pods_SoundCollage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,15 +267,14 @@
 		095B8402F860F7E6A5BAF4F4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A7BBA8241FD11382001DEEE8 /* SpriteKit.framework */,
 				A7A7483F1F60A826005E6A9A /* SceneKit.framework */,
-				A7FDF6091F41780500645E97 /* SwiftyJSON.framework */,
 				A78A9BCF1EABA919007117DD /* QuartzCore.framework */,
 				A7054EC51EA82D7700BBC34E /* Foundation.framework */,
 				A71414FD1EA82B5000BE9718 /* CoreAudio.framework */,
 				A71414FE1EA82B5000BE9718 /* CoreAudioKit.framework */,
 				A71414FB1EA82B4300BE9718 /* CoreGraphics.framework */,
 				A71414F91EA82B3B00BE9718 /* AVFoundation.framework */,
-				31824778C2A9DAF6427BA297 /* Pods_SoundCollage.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -366,6 +362,7 @@
 				A748E2CB1F3AB1AF00507DF8 /* UIView+Glow.swift */,
 				A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */,
 				A7B0AF031F5FACC400542FCB /* UIView+VideoPlayer.swift */,
+				A7BBA8251FD11471001DEEE8 /* AnimationScene.swift */,
 			);
 			name = "Classes+Extensions";
 			sourceTree = "<group>";
@@ -429,7 +426,6 @@
 				A7A823191EA81BEC0061D0A0 /* SoundCollageUITests */,
 				A7A822F51EA81BEC0061D0A0 /* Products */,
 				095B8402F860F7E6A5BAF4F4 /* Frameworks */,
-				B80249A3457B6E7E4097B6BA /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -508,15 +504,6 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		B80249A3457B6E7E4097B6BA /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				75D104676F45F32E670413F6 /* Pods-SoundCollage.debug.xcconfig */,
-				9BEF22D19B1F94FC5200561F /* Pods-SoundCollage.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -524,13 +511,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A7A8231F1EA81BEC0061D0A0 /* Build configuration list for PBXNativeTarget "SoundCollage" */;
 			buildPhases = (
-				9C4708CC0774798D75D7BC56 /* [CP] Check Pods Manifest.lock */,
 				A7A822F01EA81BEC0061D0A0 /* Sources */,
 				A7A822F11EA81BEC0061D0A0 /* Frameworks */,
 				A7A822F21EA81BEC0061D0A0 /* Resources */,
 				A70418E51EA86B1800006871 /* Embed Frameworks */,
-				75B22E88DEA8AA8C8D771BD4 /* [CP] Embed Pods Frameworks */,
-				211B499293DE1F23B6C55B33 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -584,23 +568,26 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = ptcloutier;
 				TargetAttributes = {
 					A7A822F31EA81BEC0061D0A0 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = LHVTYN77KH;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 					};
 					A7A8230A1EA81BEC0061D0A0 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = LHVTYN77KH;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 						TestTargetID = A7A822F31EA81BEC0061D0A0;
 					};
 					A7A823151EA81BEC0061D0A0 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = LHVTYN77KH;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 						TestTargetID = A7A822F31EA81BEC0061D0A0;
 					};
@@ -692,54 +679,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		211B499293DE1F23B6C55B33 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		75B22E88DEA8AA8C8D771BD4 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SoundCollage/Pods-SoundCollage-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9C4708CC0774798D75D7BC56 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		A7A822F01EA81BEC0061D0A0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -756,6 +695,7 @@
 				A74541961F31153E007A89B7 /* SCLibraryCell.swift in Sources */,
 				A79C9C911F393F72000DA04C /* Ref.swift in Sources */,
 				A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */,
+				A7BBA8261FD11471001DEEE8 /* AnimationScene.swift in Sources */,
 				A7E117D31F278DE800041400 /* UIImage+Custom.swift in Sources */,
 				A7B0AF041F5FACC400542FCB /* UIView+VideoPlayer.swift in Sources */,
 				A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */,
@@ -846,7 +786,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -854,7 +796,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -898,7 +844,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -906,7 +854,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -935,7 +887,6 @@
 		};
 		A7A823201EA81BEC0061D0A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75D104676F45F32E670413F6 /* Pods-SoundCollage.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -947,13 +898,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SoundCollage/SoundCollage-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
 		A7A823211EA81BEC0061D0A0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9BEF22D19B1F94FC5200561F /* Pods-SoundCollage.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -964,7 +915,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SoundCollage/SoundCollage-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -978,7 +930,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SoundCollage.app/SoundCollage";
 			};
 			name = Debug;
@@ -993,7 +946,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SoundCollage.app/SoundCollage";
 			};
 			name = Release;
@@ -1007,7 +961,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollageUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = SoundCollage;
 			};
 			name = Debug;
@@ -1021,7 +976,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollageUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = SoundCollage;
 			};
 			name = Release;

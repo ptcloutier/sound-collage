@@ -57,7 +57,7 @@ class SCColor {
     
     
     func morphColors(in view: UIView, fillMode: String) {
-//
+
 //        if currentColors < colors.count - 1 {
 //            currentColors+=1
 //        } else {
@@ -173,7 +173,7 @@ class SCColor {
         let neonAqua = UIColor.init(red: 0/255.0, green: 205.0/255.0, blue: 210.0/255.0, alpha: 1.0)
         
         
-        let psyUIColors = [neonAqua, lightCoral, lightViolet, deepBlue, darkViolet, lightestBlueSky, brightCoral, medViolet, medViolet, deepBlueDark, medRose, lightViolet, darkRose, medRose, lighterBlueSky, medViolet, lighterBlue, lightBlueSky, lightRose, rose ]
+        let psyUIColors = [neonAqua, lightCoral, lightViolet, deepBlue, darkViolet, lightestBlueSky, brightCoral, medViolet, medViolet, deepBlueDark, medRose, medViolet, darkRose, medRose, lighterBlueSky, medViolet, lighterBlue, lightBlueSky, lightRose, rose ]
         
         return psyUIColors
     }

@@ -8,7 +8,7 @@
 
 import UIKit
 import AVFoundation
-import SceneKit
+import SpriteKit
 
 
 class SCSequencerViewController: UIViewController {
@@ -28,13 +28,25 @@ class SCSequencerViewController: UIViewController {
     var avplayer: AVPlayer = AVPlayer()
     var videoView = UIView()
     var selectInterface: Int = 0
+    var scene: AnimationScene!
+    var size: CGSize!
+
     
+//    override func loadView() {
+//        self.view = SKView.init(frame: UIScreen.main.bounds)
+//    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
+//        size = self.view.frame.size
+//        scene = AnimationScene(size: size)
+//
+//        let skView = self.view as! SKView
+//        skView.presentScene(scene)
+    
 //        setupVideoView()
 //        setupGIFView()
         setupSequencer()
@@ -70,7 +82,7 @@ class SCSequencerViewController: UIViewController {
         let avPlayerItem = AVPlayerItem.init(asset: avasset)
         self.avplayer = AVPlayer.init(playerItem: avPlayerItem)
         let avPlayerLayer = AVPlayerLayer.init(player: avplayer)
-        avPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        avPlayerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         avPlayerLayer.frame = UIScreen.main.bounds
         self.videoView.layer.addSublayer(avPlayerLayer)
         
@@ -87,12 +99,12 @@ class SCSequencerViewController: UIViewController {
     
     
         
-    func playerStartPlaying(){
+    @objc func playerStartPlaying(){
         self.avplayer.play()
     }
     
     
-    func playerItemDidReachEnd(notification: Notification){
+    @objc func playerItemDidReachEnd(notification: Notification){
         
         guard let p: AVPlayerItem = notification.object as? AVPlayerItem else { return }
         p.seek(to: kCMTimeZero)
@@ -147,7 +159,7 @@ class SCSequencerViewController: UIViewController {
     
     
     
-    func playback(){
+    @objc func playback(){
         
         switch SCAudioManager.shared.sequencerIsPlaying {
         case true:
@@ -203,7 +215,7 @@ class SCSequencerViewController: UIViewController {
     
     
     
-    func triggerSample(){
+    @objc func triggerSample(){
         
         print("\(sequencerBar.frame.origin.x), \(sequencerBar.frame.origin.y)")
         var playbackSamples: [Int] = []
@@ -233,7 +245,7 @@ class SCSequencerViewController: UIViewController {
     
     
     
-    func animateSequencerBarPosition(){
+    @objc func animateSequencerBarPosition(){
         
         DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
             let toPoint = CGPoint(x: UIScreen.main.bounds.width, y: 0)
@@ -312,7 +324,7 @@ class SCSequencerViewController: UIViewController {
     //MARK: Navigation
     
     
-    func recordBtnDidPress(){
+    @objc func recordBtnDidPress(){
         
         if SCAudioManager.shared.sequencerIsPlaying == true {
             stopPlaying()
@@ -346,13 +358,13 @@ class SCSequencerViewController: UIViewController {
     
     
     
-    func effectsBtnDidPress(){
+    @objc func effectsBtnDidPress(){
         
         // present effects workspace. for now, rerecord a sound with effects. Also, bounce tracks to pads
     }
     
     
-    func bankBtnDidPress(){
+    @objc func bankBtnDidPress(){
         
         if SCAudioManager.shared.sequencerIsPlaying == true {
             stopPlaying()
@@ -370,7 +382,7 @@ class SCSequencerViewController: UIViewController {
     
     
     
-    func libraryBtnDidPress(){
+    @objc func libraryBtnDidPress(){
         
         if SCAudioManager.shared.sequencerIsPlaying == true {
             stopPlaying()
@@ -382,7 +394,7 @@ class SCSequencerViewController: UIViewController {
     
     
     
-    func recordMixerOutputBtnDidPress(){
+    @objc func recordMixerOutputBtnDidPress(){
         
         print("new recording sound collage did press.")
         
@@ -409,7 +421,7 @@ class SCSequencerViewController: UIViewController {
     
     
     
-    func postSequencerPlaybackDidPressNotification(){
+    @objc func postSequencerPlaybackDidPressNotification(){
         
         NotificationCenter.default.post(name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
     }
@@ -421,7 +433,7 @@ class SCSequencerViewController: UIViewController {
     
     
     
-    func toggleSelectedVC(){
+    @objc func toggleSelectedVC(){
         
       
         guard let sequencer = self.sequencer else {

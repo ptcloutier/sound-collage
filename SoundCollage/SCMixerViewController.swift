@@ -79,7 +79,7 @@ class SCMixerViewController: UIViewController {
     
     
     
-    func selectedSamplePadDidChange(){
+    @objc func selectedSamplePadDidChange(){
         
         self.selectedSamplePad = SCAudioManager.shared.selectedSampleIndex
         self.mixerCV?.reloadData()

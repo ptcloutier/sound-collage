@@ -9,8 +9,7 @@
 import UIKit
 import AVFoundation
 import SceneKit
-
-
+import SpriteKit
 
 class SCSamplerViewController: UIViewController  {
     
@@ -24,24 +23,38 @@ class SCSamplerViewController: UIViewController  {
     let backGroundColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua, SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueDark]
     var selectedPadIndex: Int?
     var videoURLs: [URL] = []
+    // Sprite
+    var scene: AnimationScene!
+    var size: CGSize!
 
     //MARK: vc lifecycle
+    
+    override func loadView() {
+        self.view = SKView()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+       
+        size = self.view.frame.size
+        scene = AnimationScene(size: size)
+        let skView = self.view as! SKView
+        skView.presentScene(scene)
+        
+        
         SCAudioManager.shared.audioController?.getAudioFilesForURL()
         setupVideoURLs()
-        
+
         let colors = SCColor.getPsychedelicIceCreamShopColors()
         var brightColors: [UIColor] = []
         for color in colors {
             let bright = SCColor.BrighterHigherSatColor(color: color)
             brightColors.append(bright)
         }
-        
+
         iceCreamColors = brightColors//SCColor.getPsychedelicIceCreamShopColors()
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.finishedRecording), name: Notification.Name.init("recordingDidFinish"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SCSamplerViewController.toggleRecordingMode), name: Notification.Name.init("recordBtnDidPress"), object: nil)
         setupSampler()
@@ -51,7 +64,7 @@ class SCSamplerViewController: UIViewController  {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
         guard let samplerCV = self.samplerCV else {
             print("collectionview is nil")
             return
@@ -60,11 +73,11 @@ class SCSamplerViewController: UIViewController  {
             samplerCV.frame.size.width = samplerCV.frame.size.width-1.0
         }
         samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
-        
-        
+
+
         print("sampler size - \(samplerCV.frame.width), \(samplerCV.frame.height)")
     }
-    
+
     
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -88,20 +101,20 @@ class SCSamplerViewController: UIViewController  {
     
     
     private func setupSampler() {
- 
-        
+
+
         samplerFlowLayout = SCSamplerFlowLayout.init(direction: .vertical, numberOfColumns: 4)
         guard let samplerFlowLayout = self.samplerFlowLayout else {
             print("No sampler flow layout.")
             return
         }
         self.samplerCV = UICollectionView(frame: .zero, collectionViewLayout: samplerFlowLayout)
-        
+
         guard let samplerCV = self.samplerCV else {
             print("No sampler collection view.")
             return
         }
-        
+
         samplerCV.backgroundColor = UIColor.clear
         samplerCV.allowsMultipleSelection = true
         samplerCV.isScrollEnabled = false
@@ -109,7 +122,7 @@ class SCSamplerViewController: UIViewController  {
         samplerCV.delegate = self
         samplerCV.dataSource = self
         self.view.addSubview(samplerCV)
-        
+
         samplerCV.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1.0, constant: 0))
         self.view.addConstraint(NSLayoutConstraint.init(item: samplerCV, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1.0, constant: 0))
@@ -161,7 +174,7 @@ class SCSamplerViewController: UIViewController  {
         
     //MARK: recording and playback
     
-    func toggleRecordingMode() {
+    @objc func toggleRecordingMode() {
         
         print("go on")
         switch SCAudioManager.shared.isRecordingModeEnabled {
@@ -186,7 +199,7 @@ class SCSamplerViewController: UIViewController  {
     
     
     
-    func finishedRecording() {
+    @objc func finishedRecording() {
         reloadSamplerCV()
         print("Recording finished.")
     }
@@ -324,11 +337,9 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
 
         // wave animation when navigating from samplebanks
         
-//        if cell.doWaveAnimation == true {
         
         performWave(fillMode: kCATransitionFromLeft, row: indexPath.row, cell: cell, delays: [0.5, 0.6, 0.7, 0.8])
-//        }
-        
+
         return cell
     }
     
@@ -394,7 +405,7 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
     
     
     
-    func tap(gestureRecognizer: UITapGestureRecognizer) {
+    @objc func tap(gestureRecognizer: UITapGestureRecognizer) {
         
         if SCAudioManager.shared.isRecording == true {
             print("Recording in progress")

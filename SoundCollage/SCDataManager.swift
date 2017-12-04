@@ -7,8 +7,7 @@
 //
 
 import Foundation
-//import ObjectMapper
-import SwiftyJSON
+ 
 
 
 class SCDataManager {
@@ -83,9 +82,7 @@ class SCDataManager {
         do {
                 let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                 if json is [String:Any] {
-                    // This part is just for example from my project, you need to change it for your custom model
                     return json as? [String : Any]
-                    // use your custom model object after that
                 }
         } catch let error {
             print(error.localizedDescription)

@@ -245,7 +245,7 @@ extension SCSequencerCell: UIGestureRecognizerDelegate {
     
     
     
-    func touch(gestureRecognizer: UIGestureRecognizer) {
+    @objc func touch(gestureRecognizer: UIGestureRecognizer) {
         
         if SCAudioManager.shared.isRecording == true {
             print("Recording in progress")

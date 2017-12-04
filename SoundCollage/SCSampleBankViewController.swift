@@ -78,7 +78,7 @@ class SCSampleBankViewController: UIViewController {
         let avPlayerItem = AVPlayerItem.init(asset: avasset)
         self.avplayer = AVPlayer.init(playerItem: avPlayerItem)
         let avPlayerLayer = AVPlayerLayer.init(player: avplayer)
-        avPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        avPlayerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         avPlayerLayer.frame = UIScreen.main.bounds
         self.videoView.layer.addSublayer(avPlayerLayer)
         
@@ -161,7 +161,7 @@ class SCSampleBankViewController: UIViewController {
     
     //MARK: Navigation
     
-    func libraryBtnDidPress(){
+    @objc func libraryBtnDidPress(){
         
         print("library button pressed.")
         let vc: SCLibraryViewController = SCLibraryViewController(nibName: nil, bundle: nil)
@@ -173,7 +173,7 @@ class SCSampleBankViewController: UIViewController {
 
     
     
-    func newSamplerBtnDidPress(){
+    @objc func newSamplerBtnDidPress(){
         
         let dm = SCDataManager.shared
         

@@ -341,7 +341,7 @@ class SCMixerPanelCell: UICollectionViewCell {
     }
   
     
-    func sliderChanged(sender: SCSlider) {
+    @objc func sliderChanged(sender: SCSlider) {
         
              var values: [Int] = []
         values.append(self.mixerPanelIdx)

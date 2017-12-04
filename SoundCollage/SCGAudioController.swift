@@ -809,7 +809,7 @@ class SCGAudioController {
                              AVNumberOfChannelsKey: 2,
                              AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue] as [String : Any]
             
-            let format: AVAudioFormat = AVAudioFormat.init(settings: settings)
+            let format: AVAudioFormat = AVAudioFormat.init(settings: settings)!
             
             do {
                 mixerOutputFile = try AVAudioFile.init(forWriting: mixerOutputFileURL!, settings: format.settings)

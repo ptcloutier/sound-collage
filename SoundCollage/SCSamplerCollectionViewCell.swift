@@ -9,7 +9,7 @@
 
 import UIKit
 import AVFoundation
-
+import SpriteKit
 
 
 class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, CAAnimationDelegate {
@@ -27,11 +27,21 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var doXAnimation: Bool = false 
     var doWaveAnimation: Bool = true
     var videoURL: URL?
+    // Sprite
+    var scene: AnimationScene!
+    var size: CGSize!
+    var skView = SKView()
+    
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.isUserInteractionEnabled = true
-        
+        skView = SKView.init(frame: self.bounds)
+        self.contentView.addSubview(skView)
+        size = self.contentView.frame.size
+        scene = AnimationScene(size: size)
+        skView.presentScene(scene)
     }
     
     
@@ -41,8 +51,8 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     }
     
     
+    
     func circularCell(){
-        
         self.layer.borderWidth = 1.0
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.contentView.frame.width*0.1
@@ -58,9 +68,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
    
     
     func setupGIFView(){
-        
         let v = self.contentView
-        
         guard let url = videoURL else { return }
         do {
             let gif = try Data(contentsOf: url)
@@ -82,10 +90,18 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         }
     }
 
-    
+    func setupSprite(){
+        
+        
+        size = self.frame.size
+        scene = AnimationScene(size: size)
+        
+        let skView = self.contentView as! SKView
+        skView.presentScene(scene)
+        
+    }
     
     func setupLabel() {
-
         padLabel.addGlow(color: UIColor.white)
         padLabel.isUserInteractionEnabled = false
         padLabel.frame = self.contentView.frame
@@ -93,12 +109,12 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         padLabel.textAlignment = NSTextAlignment.center
         padLabel.font = UIFont.init(name: "Futura", size: 30.0)
         contentView.addSubview(padLabel)
+        
     }
     
     
     
-    func setupGradientColors(){
-        
+    func setupGradientColors() {
         if self.colors.count<2 {
             self.colors.append([(cellColor?.cgColor)!, (cellColor?.cgColor)!, (cellColor?.cgColor)!])
         }
@@ -120,9 +136,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     func startTimer() {
-        
         animateColor(fillMode: kCATransitionFade)
-
         flashTimer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: true) {
             [weak self] flashTimer in  // creates a capture group for the timer
             guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
@@ -135,7 +149,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     func stopCellsFlashing() {
-        
         if flashTimer != nil {
             flashTimer?.invalidate()
         }
@@ -144,7 +157,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     func animateColor(fillMode: String) {
-        
         guard let gradientColors = self.gradientColors else { return }
         gradientColors.morphColors(in: self, fillMode: fillMode)
     }
@@ -157,11 +169,8 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     
-    
     func startRecording(){
-        
         self.isRecordingEnabled = false
-        
         switch SCAudioManager.shared.isRecording {
         case true:
             print("Audio recording already in session.")
@@ -174,7 +183,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
 
     func playbackSample() {
-        
         SCAudioManager.shared.audioController?.togglePlayer(index: self.idx)
         playbackTouchDelay()
     }
@@ -183,7 +191,6 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     func recordNewSample() {
-        
         SCAudioManager.shared.recordNew()
     }
     
@@ -220,5 +227,10 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         self.isUserInteractionEnabled = true
         isTouchDelayed = false
     }
+    
+    
+    //MARK: Sprites
+    
+    
     
 }

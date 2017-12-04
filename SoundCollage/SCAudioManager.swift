@@ -336,7 +336,7 @@ class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     func startRecordingSample() {
         
         
-        let input = recordingEngine.inputNode!
+        let input = recordingEngine.inputNode
         let inputFormat = input.inputFormat(forBus: 0)
         
         recordingEngine.connect(input, to: recordingEngine.mainMixerNode, format: inputFormat)

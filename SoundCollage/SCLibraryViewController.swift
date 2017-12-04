@@ -54,7 +54,7 @@ class SCLibraryViewController: UIViewController {
         let avPlayerItem = AVPlayerItem.init(asset: avasset)
         self.avplayer = AVPlayer.init(playerItem: avPlayerItem)
         let avPlayerLayer = AVPlayerLayer.init(player: avplayer)
-        avPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        avPlayerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         avPlayerLayer.frame = UIScreen.main.bounds
         self.videoView.layer.addSublayer(avPlayerLayer)
         
@@ -157,7 +157,7 @@ class SCLibraryViewController: UIViewController {
     
     
     
-    func backBtnDidPress(){
+    @objc func backBtnDidPress(){
         
         SCAudioManager.shared.audioController?.stopSong()
 
@@ -216,7 +216,7 @@ class SCLibraryViewController: UIViewController {
     
     
     
-    func shareBtnDidPress(){
+    @objc func shareBtnDidPress(){
         
         SCAudioManager.shared.audioController?.stopSong()
         
@@ -369,7 +369,7 @@ extension SCLibraryViewController: UIGestureRecognizerDelegate {
     
     
     
-    func tap(gestureRecognizer: UITapGestureRecognizer) {
+    @objc func tap(gestureRecognizer: UITapGestureRecognizer) {
         
         
         let tapLocation = gestureRecognizer.location(in: self.libraryCV)
