@@ -32,23 +32,11 @@ class SCSequencerViewController: UIViewController {
     var size: CGSize!
 
     
-//    override func loadView() {
-//        self.view = SKView.init(frame: UIScreen.main.bounds)
-//    }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-//        size = self.view.frame.size
-//        scene = AnimationScene(size: size)
-//
-//        let skView = self.view as! SKView
-//        skView.presentScene(scene)
-    
-//        setupVideoView()
-//        setupGIFView()
+       
         setupSequencer()
         setupSequencerBarUI()
         NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playback), name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
