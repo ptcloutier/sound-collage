@@ -194,7 +194,7 @@ class SCLibraryViewController: UIViewController {
         
         SCAudioManager.shared.audioController?.stopSong()
 
-        let vc: SCSequencerViewController = SCSequencerViewController(nibName: nil, bundle: nil)
+        let vc = SCContainerViewController(nibName: nil, bundle: nil)
         SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
     }
     

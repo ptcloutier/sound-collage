@@ -517,59 +517,59 @@ class SCGAudioController {
     
     
     func togglePlayer(index: Int){
-        
-        if activePlayers >= maxPlayers {
-            print("Max players reached.")
+//
+//        if activePlayers >= maxPlayers {
+//            print("Max players reached.")
 //            return
-        }
-        
-//        let mixer = AVAudioMixerNode.init()
-//        engine?.attach(mixer)
+//        }
+//
+        let mixer = AVAudioMixerNode.init()
+        engine?.attach(mixer)
         
         let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)
         let mainMixer = (engine?.mainMixerNode)!
         
-//        let sampler = AVAudioUnitSampler.init()
+        let sampler = AVAudioUnitSampler.init()
+        engine?.attach(sampler)
+
         let player = AVAudioPlayerNode.init()
         
-//        engine?.attach(sampler)
         engine?.attach(player)
         
 //        if reverb == nil {
-//        reverb = AVAudioUnitReverb()
-//            engine?.attach(reverb!)
+        let reverb = AVAudioUnitReverb()
+            engine?.attach(reverb)
 //        }
-//        let delay = AVAudioUnitDelay()
-//        let pitchShift = AVAudioUnitTimePitch()
-//        let distortion = AVAudioUnitDistortion()
-//        let timeStretch = AVAudioUnitVarispeed()
-//        
-//        
-//        setupReverb(sampleIndex: index, reverb: reverb!)
-//        setupDelay(sampleIndex: index, delay: delay)
-//        setupPitchShift(sampleIndex: index, pitch: pitchShift)
-//        setupTimeStretch(sampleIndex: index, time: timeStretch)
-//        setupDistortion(sampleIndex: index, distortion: distortion)
-//        
-//        
-//        engine?.attach(reverb)
-//        engine?.attach(delay)
-//        engine?.attach(pitchShift)
-//        engine?.attach(timeStretch)
-//        engine?.attach(distortion)
-//        
-        engine?.connect(player, to: mainMixer, format: playerFormat)
-//        engine?.connect(reverb!, to: mainMixer, fromBus: 0, toBus: 0, format: playerFormat)
-//        engine?.connect(mixer, to: pitchShift, format: playerFormat)
-//        engine?.connect(pitchShift, to: timeStretch, format: playerFormat)
-//        engine?.connect(timeStretch, to: distortion, format: playerFormat)
-//        engine?.connect(distortion, to: delay, format: playerFormat)
-//        engine?.connect(delay, to: reverb, format: playerFormat)
-//        engine?.connect(reverb, to: mainMixer, format: playerFormat)
+        let delay = AVAudioUnitDelay()
+        let pitchShift = AVAudioUnitTimePitch()
+        let distortion = AVAudioUnitDistortion()
+        let timeStretch = AVAudioUnitVarispeed()
+        
+        
+        setupReverb(sampleIndex: index, reverb: reverb)
+        setupDelay(sampleIndex: index, delay: delay)
+        setupPitchShift(sampleIndex: index, pitch: pitchShift)
+        setupTimeStretch(sampleIndex: index, time: timeStretch)
+        setupDistortion(sampleIndex: index, distortion: distortion)
+        
+        
+        engine?.attach(reverb)
+        engine?.attach(delay)
+        engine?.attach(pitchShift)
+        engine?.attach(timeStretch)
+        engine?.attach(distortion)
+        
+        engine?.connect(player, to: mixer, format: playerFormat)
+        engine?.connect(mixer, to: pitchShift, format: playerFormat)
+        engine?.connect(pitchShift, to: timeStretch, format: playerFormat)
+        engine?.connect(timeStretch, to: distortion, format: playerFormat)
+        engine?.connect(distortion, to: delay, format: playerFormat)
+        engine?.connect(delay, to: reverb, format: playerFormat)
+        engine?.connect(reverb, to: mainMixer, format: playerFormat)
 //        engine?.connect(sampler, to: mainMixer, format: playerFormat)
         
     
-        var disconnectNodes = [player]//[player, sampler, reverb, delay, pitchShift, timeStretch, distortion]
+        var disconnectNodes = [player, sampler, reverb, delay, pitchShift, timeStretch, distortion]
  
         
 //        if let urls: [URL] = Bundle.main.urls(forResourcesWithExtension: "caf", subdirectory: "Documents") {
@@ -624,21 +624,21 @@ class SCGAudioController {
             [weak self] in
             guard let strongSelf = self else { return }
             
-            // calculate audio tail based on reverb and delay parameters
-//            var durationValue = Int(round(Double(sample.length)/44100))
-//            if durationValue == 0 {
-//                durationValue = 1
-//            }
-//            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[index]
-//            let reverbTime = round(Float(reverbParameter * 5.0))
-//            durationValue += Int(reverbTime)
-//            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[index]
-//            let delayTime = round(Float(delayParams * 5.0))
-//            durationValue += Int(delayTime)
-//            durationValue = durationValue+1
-//            let duration = DispatchTimeInterval.seconds(durationValue)
-//            let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
-//            delayQueue.asyncAfter(deadline: .now()+duration){
+             //calculate audio tail based on reverb and delay parameters
+            var durationValue = Int(round(Double(sample.length)/44100))
+            if durationValue == 0 {
+                durationValue = 1
+            }
+            let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[index]
+            let reverbTime = round(Float(reverbParameter * 5.0))
+            durationValue += Int(reverbTime)
+            let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[index]
+            let delayTime = round(Float(delayParams * 5.0))
+            durationValue += Int(delayTime)
+            durationValue = durationValue+1
+            let duration = DispatchTimeInterval.seconds(durationValue)
+            let delayQueue = DispatchQueue(label: "com.soundcollage.delayqueue", qos: .userInitiated)
+            delayQueue.asyncAfter(deadline: .now()+duration){
                 let serialQueue = DispatchQueue(label: "myqueue")
                 serialQueue.sync {
                 
@@ -660,7 +660,7 @@ class SCGAudioController {
                 print("total plays : \(strongSelf.plays), active players: \(strongSelf.activePlayers)")          
                     }
                 }
-//            }  
+            }
         })
         
         player.play()

@@ -60,6 +60,9 @@ class SCSampleBankViewController: UIViewController {
         self.avplayer.pause()
     }
     
+    
+    
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.avplayer.play()
@@ -216,8 +219,8 @@ class SCSampleBankViewController: UIViewController {
 
         print("Current sample bank \(String(describing: currentSB.debugDescription))")
 
-        let vc: SCSequencerViewController = SCSequencerViewController(nibName: nil, bundle: nil)
-        SCAnimator.FadeIn(duration: 2.0, fromVC: self, toVC: vc)
+        let vc = SCContainerViewController(nibName: nil, bundle: nil)
+        SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
     }
     
     

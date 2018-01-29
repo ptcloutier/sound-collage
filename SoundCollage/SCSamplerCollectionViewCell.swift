@@ -37,11 +37,11 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.isUserInteractionEnabled = true
-        skView = SKView.init(frame: self.bounds)
-        self.contentView.addSubview(skView)
-        size = self.contentView.frame.size
-        scene = AnimationScene(size: size)
-        skView.presentScene(scene)
+//        skView = SKView.init(frame: self.bounds)
+//        self.contentView.addSubview(skView)
+//        size = self.contentView.frame.size
+//        scene = AnimationScene(size: size)
+//        skView.presentScene(scene)
     }
     
     
@@ -90,16 +90,9 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         }
     }
 
-    func setupSprite(){
-        
-        
-        size = self.frame.size
-        scene = AnimationScene(size: size)
-        
-        let skView = self.contentView as! SKView
-        skView.presentScene(scene)
-        
-    }
+    
+    
+    
     
     func setupLabel() {
         padLabel.addGlow(color: UIColor.white)
@@ -126,42 +119,44 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     //MARK: Animations
     
-    func startCellFlashing() {
-        if flashTimer != nil {
-            flashTimer?.invalidate()
-        }
-        startTimer()
-    }
+//    func startCellFlashing() {
+//        if flashTimer != nil {
+//            flashTimer?.invalidate()
+//        }
+//        startTimer()
+//    }
     
     
     
-    func startTimer() {
-        animateColor(fillMode: kCATransitionFade)
-        flashTimer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: true) {
-            [weak self] flashTimer in  // creates a capture group for the timer
-            guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
-                return
-            }
-            strongSelf.animateColor(fillMode: kCATransitionFade)
-        }
-    }
+//    func startTimer() {
+//        scene.addShape(color: cellColor!, atLocation: CGPoint.zero)
+////        animateColor(fillMode: kCATransitionFade)
+//        flashTimer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: true) {
+//            [weak self] flashTimer in  // creates a capture group for the timer
+//            guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
+//                return
+//            }
+////            strongSelf.animateColor(fillMode: kCATransitionFade)
+//            strongSelf.scene.addShape(color: strongSelf.cellColor!, atLocation: CGPoint.zero)
+//        }
+//    }
+//
+//
+//
+//    func stopCellsFlashing() {
+//        if flashTimer != nil {
+//            flashTimer?.invalidate()
+//        }
+//    }
     
     
     
-    func stopCellsFlashing() {
-        if flashTimer != nil {
-            flashTimer?.invalidate()
-        }
-    }
-    
-    
-    
-    func animateColor(fillMode: String) {
-        guard let gradientColors = self.gradientColors else { return }
-        gradientColors.morphColors(in: self, fillMode: fillMode)
-    }
-
-    
+//    func animateColor(fillMode: String) {
+//        guard let gradientColors = self.gradientColors else { return }
+//        gradientColors.morphColors(in: self, fillMode: fillMode)
+//    }
+//
+//
     
     
     //MARK: Recording/Playback
@@ -229,8 +224,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     }
     
     
-    //MARK: Sprites
-    
+   
     
     
 }

@@ -33,10 +33,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         dm.setupCurrentSampleBankEffectSettings()
         
         
-        let initialVC: SCSequencerViewController = SCSequencerViewController(nibName: nil, bundle: nil)
+        
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = initialVC
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let initialViewController = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController
+        window?.rootViewController = initialViewController
         window?.makeKeyAndVisible()
+        
         
 
         return true
