@@ -139,7 +139,7 @@ class SCContainerViewController: UIViewController {
     
     
     
-    func libraryBtnDidPress(){
+    @objc func libraryBtnDidPress(){
         
         print("library button pressed.")
         let vc: SCLibraryViewController = SCLibraryViewController(nibName: nil, bundle: nil)
@@ -149,7 +149,7 @@ class SCContainerViewController: UIViewController {
     
     
     
-    func recordMixerOutputBtnDidPress(){
+    @objc func recordMixerOutputBtnDidPress(){
         
         print("new recording sound collage did press.")
         
@@ -176,7 +176,7 @@ class SCContainerViewController: UIViewController {
     
 
     
-    func postSequencerPlaybackDidPressNotification(){
+    @objc func postSequencerPlaybackDidPressNotification(){
        
         NotificationCenter.default.post(name: Notification.Name.init("sequencerPlaybackDidPress"), object: nil)
     }

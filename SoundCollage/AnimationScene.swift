@@ -48,7 +48,6 @@ class AnimationScene: SKScene {
         shape.glowWidth = 0.3
         animationBackground.addChild(shape)
         let convertedPosition = convertPosition(node: shape, position: atLocation)
-        print("shape position - \(convertedPosition?.x), \(convertedPosition?.y)")
         shape.position = convertedPosition!
     }
     
@@ -69,6 +68,10 @@ class AnimationScene: SKScene {
             let shape = child as! SKShapeNode
             shape.glowWidth += 0.3
             shape.alpha -= 0.03
+            if shape.alpha <= 0.0 {
+                    shape.removeFromParent()
+                    print("removed shape")
+            }
         }
     }
     
@@ -81,17 +84,6 @@ class AnimationScene: SKScene {
             let newLocation = CGPoint(x: child.position.x + xOffset/2, y: child.position.y + yOffset)
             let moveAction = SKAction.move(to: newLocation, duration: 0.2)
             child.run(moveAction)
-        }
-    }
-    
-    
-    
-    func removeExcessShapes() {
-        
-        for child in animationBackground.children {
-            if child.position.y > 0 {
-                child.removeFromParent()
-            }
         }
     }
 }

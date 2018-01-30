@@ -1,78 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
-    <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
-    </dependencies>
-    <scenes>
-        <!--SAMPLER-->
-        <scene sceneID="crF-tI-oZu">
-            <objects>
-                <viewController storyboardIdentifier="sampler" id="ZBM-cs-oHd" customClass="SCSamplerViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="gOj-HM-pS1"/>
-                        <viewControllerLayoutGuide type="bottom" id="ZQF-2v-u0L"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="L1F-DA-8h8">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" title="SAMPLER" id="vsd-8B-wCM"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Gzs-hE-Rib" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3890.4000000000001" y="35.532233883058474"/>
-        </scene>
-        <!--SAMPLE BANK-->
-        <scene sceneID="77J-Zd-rgc">
-            <objects>
-                <viewController storyboardIdentifier="SCSampleBankVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Brs-gS-Ctn" customClass="SCSampleBankViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="xXt-bi-0jb"/>
-                        <viewControllerLayoutGuide type="bottom" id="H7x-ld-RLl"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="pNQ-5h-lOO">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="yIO-dv-DSP">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <collectionViewLayout key="collectionViewLayout" id="lpU-Yt-J8U"/>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SCSampleBankCell" id="OSE-Hg-jA8">
-                                        <rect key="frame" x="26" y="0.0" width="323" height="658"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="323" height="658"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </view>
-                                        <size key="customSize" width="323" height="658"/>
-                                    </collectionViewCell>
-                                </cells>
-                            </collectionView>
-                        </subviews>
-                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="yIO-dv-DSP" firstAttribute="width" secondItem="pNQ-5h-lOO" secondAttribute="width" id="23b-aB-557"/>
-                            <constraint firstItem="yIO-dv-DSP" firstAttribute="centerY" secondItem="pNQ-5h-lOO" secondAttribute="centerY" id="IBP-hl-1v8"/>
-                            <constraint firstItem="yIO-dv-DSP" firstAttribute="centerX" secondItem="pNQ-5h-lOO" secondAttribute="centerX" id="aOZ-1U-IkH"/>
-                            <constraint firstItem="yIO-dv-DSP" firstAttribute="height" secondItem="pNQ-5h-lOO" secondAttribute="height" id="xjl-WW-IkZ"/>
-                        </constraints>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="SAMPLE BANK" id="Mum-u3-RoM"/>
-                    <connections>
-                        <outlet property="collectionView" destination="yIO-dv-DSP" id="fQF-GA-Jwe"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="k11-Ki-zmW" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3100" y="35.532233883058474"/>
-        </scene>
-    </scenes>
+<device id="retina4_7" orientation="portrait">
+<adaptation id="fullscreen"/>
+</device>
+<dependencies>
+<deployment identifier="iOS"/>
+<plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+<capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+</dependencies>
+<scenes>
+<!--SAMPLER-->
+<scene sceneID="crF-tI-oZu">
+<objects>
+<viewController storyboardIdentifier="sampler" id="ZBM-cs-oHd" customClass="SCSamplerViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
+<layoutGuides>
+<viewControllerLayoutGuide type="top" id="gOj-HM-pS1"/>
+<viewControllerLayoutGuide type="bottom" id="ZQF-2v-u0L"/>
+</layoutGuides>
+<view key="view" contentMode="scaleToFill" id="L1F-DA-8h8">
+<rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+<autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+</view>
+<extendedEdge key="edgesForExtendedLayout"/>
+<tabBarItem key="tabBarItem" title="SAMPLER" id="vsd-8B-wCM"/>
+</viewController>
+<placeholder placeholderIdentifier="IBFirstResponder" id="Gzs-hE-Rib" userLabel="First Responder" sceneMemberID="firstResponder"/>
+</objects>
+<point key="canvasLocation" x="3890.4000000000001" y="35.532233883058474"/>
+</scene>
+<!--SAMPLE BANK-->
+<scene sceneID="77J-Zd-rgc">
+<objects>
+<viewController storyboardIdentifier="SCSampleBankVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Brs-gS-Ctn" customClass="SCSampleBankViewController" customModule="SoundCollage" customModuleProvider="target" sceneMemberID="viewController">
+<layoutGuides>
+<viewControllerLayoutGuide type="top" id="xXt-bi-0jb"/>
+<viewControllerLayoutGuide type="bottom" id="H7x-ld-RLl"/>
+</layoutGuides>
+<view key="view" contentMode="scaleToFill" id="pNQ-5h-lOO">
+<rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+<autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+<subviews>
+<collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="yIO-dv-DSP">
+<rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+<color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+<collectionViewLayout key="collectionViewLayout" id="lpU-Yt-J8U"/>
+<cells>
+<collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SCSampleBankCell" id="OSE-Hg-jA8">
+<rect key="frame" x="26" y="0.0" width="323" height="658"/>
+<autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+<view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+<rect key="frame" x="0.0" y="0.0" width="323" height="658"/>
+<autoresizingMask key="autoresizingMask"/>
+</view>
+<size key="customSize" width="323" height="658"/>
+</collectionViewCell>
+</cells>
+</collectionView>
+</subviews>
+<color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+<constraints>
+<constraint firstItem="yIO-dv-DSP" firstAttribute="width" secondItem="pNQ-5h-lOO" secondAttribute="width" id="23b-aB-557"/>
+<constraint firstItem="yIO-dv-DSP" firstAttribute="centerY" secondItem="pNQ-5h-lOO" secondAttribute="centerY" id="IBP-hl-1v8"/>
+<constraint firstItem="yIO-dv-DSP" firstAttribute="centerX" secondItem="pNQ-5h-lOO" secondAttribute="centerX" id="aOZ-1U-IkH"/>
+<constraint firstItem="yIO-dv-DSP" firstAttribute="height" secondItem="pNQ-5h-lOO" secondAttribute="height" id="xjl-WW-IkZ"/>
+</constraints>
+</view>
+<tabBarItem key="tabBarItem" title="SAMPLE BANK" id="Mum-u3-RoM"/>
+<connections>
+<outlet property="collectionView" destination="yIO-dv-DSP" id="fQF-GA-Jwe"/>
+</connections>
+</viewController>
+<placeholder placeholderIdentifier="IBFirstResponder" id="k11-Ki-zmW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+</objects>
+<point key="canvasLocation" x="3100" y="35.532233883058474"/>
+</scene>
+</scenes>
 </document>
+

@@ -536,10 +536,7 @@ class SCGAudioController {
         
         engine?.attach(player)
         
-//        if reverb == nil {
         let reverb = AVAudioUnitReverb()
-            engine?.attach(reverb)
-//        }
         let delay = AVAudioUnitDelay()
         let pitchShift = AVAudioUnitTimePitch()
         let distortion = AVAudioUnitDistortion()
