@@ -42,6 +42,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
 //        size = self.contentView.frame.size
 //        scene = AnimationScene(size: size)
 //        skView.presentScene(scene)
+        
     }
     
     
