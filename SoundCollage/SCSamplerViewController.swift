@@ -145,8 +145,8 @@ class SCSamplerViewController: UIViewController  {
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
-        let pan = UIPanGestureRecognizer.init(target: self, action: #selector(SCSamplerViewController.pan(gestureRecognizer:)))
-        view.addGestureRecognizer(pan)
+//        let pan = UIPanGestureRecognizer.init(target: self, action: #selector(SCSamplerViewController.pan(gestureRecognizer:)))
+//        view.addGestureRecognizer(pan)
         
     }
     
@@ -428,11 +428,11 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 
             case true:
                 print("*")
-//                cell.startRecording()
-//                toggleRecordingMode()
+                cell.startRecording()
+                toggleRecordingMode()
                 
             case false:
-//                cell.playbackSample()
+                cell.playbackSample()
                 // flash cell
                 scene.addShape(color: cell.cellColor!, atLocation: shapeLocations[shapeIdx], rectWidth: cell.frame.width)
             }

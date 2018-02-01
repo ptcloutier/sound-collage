@@ -13,8 +13,14 @@ import SpriteKit
 class PCSpriteNode: SKSpriteNode {
     
     var timer = Timer()
+    weak var spriteSceneDelegate: PCSpriteSceneDelegate?
 
     
+    
+    func setupSpriteSceneDelegate(delegate: PCSpriteSceneDelegate){
+        
+        spriteSceneDelegate = delegate
+    }
     
     
     func startDegradeShapeTimer() {
@@ -22,12 +28,11 @@ class PCSpriteNode: SKSpriteNode {
     }
     
     @objc func degradeShape(){
-//        glowWidth += 0.3
         alpha -= 0.03
         if alpha <= 0.0 {
+            self.spriteSceneDelegate?.printChildrenCount(sender: self)
             removeFromParent()
             timer.invalidate()
-            print("bye bye")
         }
     }
 }
