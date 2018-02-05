@@ -145,8 +145,8 @@ class SCSamplerViewController: UIViewController  {
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
-//        let pan = UIPanGestureRecognizer.init(target: self, action: #selector(SCSamplerViewController.pan(gestureRecognizer:)))
-//        view.addGestureRecognizer(pan)
+        let pan = UIPanGestureRecognizer.init(target: self, action: #selector(SCSamplerViewController.pan(gestureRecognizer:)))
+        view.addGestureRecognizer(pan)
         
     }
     
@@ -340,15 +340,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             
         }
         
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(SCSamplerViewController.tap(gestureRecognizer:)))
-//        tap.delegate = self
-//        tap.numberOfTapsRequired = 1
-//        tap.cancelsTouchesInView = false
-//        cell.addGestureRecognizer(tap)
-//
-//        let pan = UIPanGestureRecognizer.init(target: self, action: #selector(SCSamplerViewController.pan(gestureRecognizer:)))
-//        cell.addGestureRecognizer(pan)
-//
+
         
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
@@ -357,14 +349,15 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             if flashTimer != nil {
                 flashTimer?.invalidate()
             }
+            let atLocation = shapeLocations[shapeIdx]
             
-            scene.addShape(color: cell.cellColor!, atLocation: shapeLocations[shapeIdx], rectWidth: cell.frame.width)
+            scene.addShape(color: cell.cellColor!, atLocation: atLocation, rectWidth: cell.frame.width)
             flashTimer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: true) {
                 [weak self] flashTimer in  // creates a capture group for the timer
                 guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
                     return
                 }
-                strongSelf.scene.addShape(color: cell.cellColor!, atLocation: strongSelf.shapeLocations[strongSelf.shapeIdx], rectWidth: cell.frame.width)
+                strongSelf.scene.addShape(color: cell.cellColor!, atLocation: atLocation, rectWidth: cell.frame.width)
             }
             
         case false:
@@ -434,7 +427,10 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             case false:
                 cell.playbackSample()
                 // flash cell
-                scene.addShape(color: cell.cellColor!, atLocation: shapeLocations[shapeIdx], rectWidth: cell.frame.width)
+                
+                // flash sprite at pad position
+                let padPosition = shapeLocations[shapeIdx]
+                scene.addShape(color: cell.cellColor!, atLocation: self.touchLocation  , rectWidth: cell.frame.width)
             }
         }
     }

@@ -10,6 +10,7 @@
 import UIKit
 import SpriteKit
 
+
 class PCSpriteNode: SKSpriteNode {
     
     var timer = Timer()
@@ -27,6 +28,7 @@ class PCSpriteNode: SKSpriteNode {
         timer = Timer.scheduledTimer(timeInterval: 0.03, target: self, selector: #selector(PCSpriteNode.degradeShape), userInfo: nil, repeats: true)
     }
     
+    
     @objc func degradeShape(){
         alpha -= 0.03
         if alpha <= 0.0 {
@@ -34,6 +36,7 @@ class PCSpriteNode: SKSpriteNode {
             removeFromParent()
             timer.invalidate()
         }
+
     }
 }
 

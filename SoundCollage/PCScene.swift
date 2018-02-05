@@ -30,7 +30,6 @@ class PCScene: SKScene {
     
     func addShape(color: UIColor, atLocation: CGPoint, rectWidth: CGFloat ) {
      
-        
         let sprite = PCSpriteNode(color: color, size: CGSize.init(width: rectWidth+10.0, height: rectWidth+10.0))
         sprite.setupSpriteSceneDelegate(delegate: self)
         sprite.blendMode = .add
