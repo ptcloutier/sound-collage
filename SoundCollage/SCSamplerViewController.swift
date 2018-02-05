@@ -24,7 +24,7 @@ class SCSamplerViewController: UIViewController  {
     var selectedPadIndex: Int?
     var videoURLs: [URL] = []
     // Sprite
-    var scene: AnimationScene!
+    var scene: PCScene!
     var size: CGSize!
     var flashTimer: Timer? = nil
     var touchLocation = CGPoint()
@@ -83,7 +83,7 @@ class SCSamplerViewController: UIViewController  {
         let h = samplerCV.frame.height
         
         size = CGSize(width: w, height: h)
-        scene = AnimationScene(size: size)
+        scene = PCScene(size: size)
         let skView = self.view as! SKView
         skView.presentScene(scene)
     }

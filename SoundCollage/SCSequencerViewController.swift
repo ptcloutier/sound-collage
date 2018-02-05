@@ -28,7 +28,7 @@ class SCSequencerViewController: UIViewController {
     var avplayer: AVPlayer = AVPlayer()
     var videoView = UIView()
     var selectInterface: Int = 0
-    var scene: AnimationScene!
+    var scene: PCScene!
     var size: CGSize!
 
     

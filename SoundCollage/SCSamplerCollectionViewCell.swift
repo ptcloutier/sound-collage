@@ -28,7 +28,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var doWaveAnimation: Bool = true
     var videoURL: URL?
     // Sprite
-    var scene: AnimationScene!
+    var scene: PCScene!
     var size: CGSize!
     var skView = SKView()
     

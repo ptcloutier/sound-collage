@@ -9,7 +9,7 @@
 import Foundation
 import SpriteKit
 
-class AnimationScene: SKScene {
+class PCScene: SKScene {
     
     var colors = [UIColor]()
     
@@ -68,7 +68,7 @@ class AnimationScene: SKScene {
 
 
 
-extension AnimationScene: PCSpriteSceneDelegate {
+extension PCScene: PCSpriteSceneDelegate {
     
     func printChildrenCount(sender: PCSpriteNode){
         print("sprite count \(children.count)")

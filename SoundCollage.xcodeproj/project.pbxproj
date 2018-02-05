@@ -82,13 +82,15 @@
 		A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */; };
 		A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */; };
 		A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823421EA81F6C0061D0A0 /* SCStackView.swift */; };
+		A7A907A02020207B004C17BD /* share.png in Resources */ = {isa = PBXBuildFile; fileRef = A7A9079F2020207B004C17BD /* share.png */; };
 		A7AA8FD5201E2A6A00B8B36F /* SCSecondContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AA8FD1201E2A6800B8B36F /* SCSecondContainerCell.swift */; };
 		A7AA8FD6201E2A6A00B8B36F /* SCContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AA8FD2201E2A6900B8B36F /* SCContainerViewController.swift */; };
 		A7AA8FD7201E2A6A00B8B36F /* SCFirstContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AA8FD3201E2A6900B8B36F /* SCFirstContainerCell.swift */; };
 		A7AA8FD8201E2A6A00B8B36F /* SCMusicInterfaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AA8FD4201E2A6900B8B36F /* SCMusicInterfaceCell.swift */; };
+		A7AE8CF620210ADB008AD715 /* PCSpriteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AE8CF520210ADB008AD715 /* PCSpriteNode.swift */; };
 		A7B0AF041F5FACC400542FCB /* UIView+VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B0AF031F5FACC400542FCB /* UIView+VideoPlayer.swift */; };
 		A7B559431FD12449004C1D0B /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BBA8241FD11382001DEEE8 /* SpriteKit.framework */; };
-		A7BBA8261FD11471001DEEE8 /* AnimationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BBA8251FD11471001DEEE8 /* AnimationScene.swift */; };
+		A7BBA8261FD11471001DEEE8 /* PCScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BBA8251FD11471001DEEE8 /* PCScene.swift */; };
 		A7BD6AB41F140D85000CDF9A /* SCScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB31F140D85000CDF9A /* SCScoreCell.swift */; };
 		A7BD6AB61F141E4D000CDF9A /* SCSequencerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB51F141E4D000CDF9A /* SCSequencerCell.swift */; };
 		A7BD6AB81F14305B000CDF9A /* SCTriggerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD6AB71F14305B000CDF9A /* SCTriggerCell.swift */; };
@@ -101,6 +103,7 @@
 		A7E774FC1F6374C900B8086A /* play_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E774FB1F6374C900B8086A /* play_filled.png */; };
 		A7E775021F63769300B8086A /* shareit.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E775011F63769300B8086A /* shareit.png */; };
 		A7EC74B81F4C6E7B0092E59E /* SCToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */; };
+		A7F7525A2022CC2600CB181E /* PCSpriteSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F752592022CC2600CB181E /* PCSpriteSceneDelegate.swift */; };
 		A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */; };
 /* End PBXBuildFile section */
 
@@ -217,13 +220,15 @@
 		A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSamplerViewController.swift; sourceTree = "<group>"; };
 		A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankViewController.swift; sourceTree = "<group>"; };
 		A7A823421EA81F6C0061D0A0 /* SCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCStackView.swift; sourceTree = "<group>"; };
+		A7A9079F2020207B004C17BD /* share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share.png; sourceTree = "<group>"; };
 		A7AA8FD1201E2A6800B8B36F /* SCSecondContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSecondContainerCell.swift; sourceTree = "<group>"; };
 		A7AA8FD2201E2A6900B8B36F /* SCContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCContainerViewController.swift; sourceTree = "<group>"; };
 		A7AA8FD3201E2A6900B8B36F /* SCFirstContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCFirstContainerCell.swift; sourceTree = "<group>"; };
 		A7AA8FD4201E2A6900B8B36F /* SCMusicInterfaceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCMusicInterfaceCell.swift; sourceTree = "<group>"; };
+		A7AE8CF520210ADB008AD715 /* PCSpriteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCSpriteNode.swift; sourceTree = "<group>"; };
 		A7B0AF031F5FACC400542FCB /* UIView+VideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+VideoPlayer.swift"; sourceTree = "<group>"; };
 		A7BBA8241FD11382001DEEE8 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
-		A7BBA8251FD11471001DEEE8 /* AnimationScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationScene.swift; sourceTree = "<group>"; };
+		A7BBA8251FD11471001DEEE8 /* PCScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCScene.swift; sourceTree = "<group>"; };
 		A7BD6AB31F140D85000CDF9A /* SCScoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SCScoreCell.swift; path = Assets.xcassets/SCScoreCell.swift; sourceTree = "<group>"; };
 		A7BD6AB51F141E4D000CDF9A /* SCSequencerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSequencerCell.swift; sourceTree = "<group>"; };
 		A7BD6AB71F14305B000CDF9A /* SCTriggerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCTriggerCell.swift; sourceTree = "<group>"; };
@@ -236,6 +241,7 @@
 		A7E774FB1F6374C900B8086A /* play_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_filled.png; sourceTree = "<group>"; };
 		A7E775011F63769300B8086A /* shareit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareit.png; sourceTree = "<group>"; };
 		A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCToolbar.swift; sourceTree = "<group>"; };
+		A7F752592022CC2600CB181E /* PCSpriteSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCSpriteSceneDelegate.swift; sourceTree = "<group>"; };
 		A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBank.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -304,6 +310,7 @@
 				A74541901F3112C3007A89B7 /* lp1.png */,
 				A74541881F311054007A89B7 /* back.png */,
 				A7808F651F6476C0008BA86E /* wave_oscillation.gif */,
+				A7A9079F2020207B004C17BD /* share.png */,
 				A713F5091F2F2DA700742D1C /* rectWhite.png */,
 				A7E775011F63769300B8086A /* shareit.png */,
 				A7808F571F6472ED008BA86E /* drivin.gif */,
@@ -367,10 +374,12 @@
 				A78C12941F2DAAE500682750 /* SCCircularView.swift */,
 				A713F50B1F2F2E1200742D1C /* UIScrollView+SnapToCell.swift */,
 				A713F50D1F2F65A900742D1C /* SCFaderDelegate.swift */,
+				A7F752592022CC2600CB181E /* PCSpriteSceneDelegate.swift */,
 				A748E2CB1F3AB1AF00507DF8 /* UIView+Glow.swift */,
 				A7EC74B71F4C6E7B0092E59E /* SCToolbar.swift */,
 				A7B0AF031F5FACC400542FCB /* UIView+VideoPlayer.swift */,
-				A7BBA8251FD11471001DEEE8 /* AnimationScene.swift */,
+				A7BBA8251FD11471001DEEE8 /* PCScene.swift */,
+				A7AE8CF520210ADB008AD715 /* PCSpriteNode.swift */,
 			);
 			name = "Classes+Extensions";
 			sourceTree = "<group>";
@@ -656,6 +665,7 @@
 				A713F50A1F2F2DA700742D1C /* rectWhite.png in Resources */,
 				A7808F6A1F647780008BA86E /* spectrum.gif in Resources */,
 				A74541851F310E02007A89B7 /* lp.png in Resources */,
+				A7A907A02020207B004C17BD /* share.png in Resources */,
 				A74541891F311054007A89B7 /* back.png in Resources */,
 				A70814391F01C46400A8AE92 /* plus.png in Resources */,
 				A79160FE1F1EA2B50051113C /* Quicksand_Bold.otf in Resources */,
@@ -717,13 +727,14 @@
 				A79C9C911F393F72000DA04C /* Ref.swift in Sources */,
 				A7BFEE2B1EBA16DB00C718E7 /* UIView+GradientColor.swift in Sources */,
 				A7AA8FD8201E2A6A00B8B36F /* SCMusicInterfaceCell.swift in Sources */,
-				A7BBA8261FD11471001DEEE8 /* AnimationScene.swift in Sources */,
+				A7BBA8261FD11471001DEEE8 /* PCScene.swift in Sources */,
 				A7E117D31F278DE800041400 /* UIImage+Custom.swift in Sources */,
 				A7B0AF041F5FACC400542FCB /* UIView+VideoPlayer.swift in Sources */,
 				A7F8E51D1EA8566D003B0747 /* SCSampleBank.swift in Sources */,
 				A74AA8B61F36FE1C00BCB5F0 /* SCGAudioController.swift in Sources */,
 				A79727D01EADA46E00BBD45F /* SCSampleBankCell.swift in Sources */,
 				A7A8232F1EA81D280061D0A0 /* AlertManager.swift in Sources */,
+				A7F7525A2022CC2600CB181E /* PCSpriteSceneDelegate.swift in Sources */,
 				A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */,
 				A78250E31EE601BA00350768 /* SCEffectControl.swift in Sources */,
 				A79727CD1EADA35200BBD45F /* SCSampleBankFlowLayout.swift in Sources */,
@@ -746,6 +757,7 @@
 				A78C12951F2DAAE500682750 /* SCCircularView.swift in Sources */,
 				A7D7CDC01F27BDD9000EE8DA /* SCMixerViewController.swift in Sources */,
 				A7D7CDC71F27E115000EE8DA /* SCSlider.swift in Sources */,
+				A7AE8CF620210ADB008AD715 /* PCSpriteNode.swift in Sources */,
 				A76A886B1EB0445200FEDED0 /* SCDataManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -922,7 +934,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SoundCollage/SoundCollage-Bridging-Header.h";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -939,7 +951,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptcloutier.SoundCollage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SoundCollage/SoundCollage-Bridging-Header.h";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
