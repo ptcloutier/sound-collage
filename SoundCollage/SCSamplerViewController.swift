@@ -22,8 +22,7 @@ class SCSamplerViewController: UIViewController  {
     let parameterViewColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet, SCColor.Custom.PsychedelicIceCreamShoppe.medViolet, SCColor.Custom.PsychedelicIceCreamShoppe.darkViolet]
     let backGroundColors: [UIColor] = [SCColor.Custom.PsychedelicIceCreamShoppe.deepBlue, SCColor.Custom.PsychedelicIceCreamShoppe.neonAqua, SCColor.Custom.PsychedelicIceCreamShoppe.deepBlueDark]
     var selectedPadIndex: Int?
-    var videoURLs: [URL] = []
-    // Sprite
+     // Sprite
     var scene: PCScene!
     var size: CGSize!
     var flashTimer: Timer? = nil
@@ -43,11 +42,8 @@ class SCSamplerViewController: UIViewController  {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+ 
         SCAudioManager.shared.getAudioFilesForURL()
-//        setupVideoURLs()
-
         let colors = SCColor.getPsychedelicIceCreamShopColors()
         var brightColors: [UIColor] = []
         for color in colors {
@@ -75,17 +71,7 @@ class SCSamplerViewController: UIViewController  {
             samplerCV.frame.size.width = samplerCV.frame.size.width-1.0
         }
         samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
-
         print("sampler size - \(samplerCV.frame.width), \(samplerCV.frame.height)")
-/* Sprite zone
-        let w = samplerCV.frame.width
-        let h = samplerCV.frame.height
-        
-        size = CGSize(width: w, height: h)
-        scene = PCScene(size: size)
-        let skView = self.view as! SKView
-        skView.presentScene(scene)
- */
     }
 
     
@@ -96,11 +82,9 @@ class SCSamplerViewController: UIViewController  {
     
     func calibrateSize(samplerCVWidth: CGFloat)-> Bool{
         var result: Bool = false
-        
         if samplerCVWidth.truncatingRemainder(dividingBy: 4.0) == 0 && samplerCVWidth.truncatingRemainder(dividingBy: 6.0) == 0 {
             result = true
         }
-        
         return result
     }
     
@@ -125,7 +109,7 @@ class SCSamplerViewController: UIViewController  {
             return
         }
 
-        samplerCV.backgroundColor = UIColor.clear
+        samplerCV.backgroundColor = UIColor.black
         samplerCV.allowsMultipleSelection = true
         samplerCV.isScrollEnabled = false
         samplerCV.register(SCSamplerCollectionViewCell.self, forCellWithReuseIdentifier: "SCSamplerCollectionViewCell")
@@ -144,60 +128,8 @@ class SCSamplerViewController: UIViewController  {
         tap.numberOfTapsRequired = 1
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
-        
-        // pan let's the user drag finger across pad cells to trigger them
-//         let pan = UIPanGestureRecognizer.init(target: self, action: #selector(SCSamplerViewController.pan(gestureRecognizer:)))
-//        view.addGestureRecognizer(pan)
-        
     }
-    
-    
-    
-    
-//    private func setupVideoURLs(){
-//
-//        guard let copmelt = Bundle.main.url(forResource: "cop_melt_repoman", withExtension: "gif") else { return }
-//
-//        videoURLs.append(copmelt)
-//
-//        guard let physics2 = Bundle.main.url(forResource: "physics2", withExtension: "gif") else { return }
-//
-//        videoURLs.append(physics2)
-//
-//        guard let desert = Bundle.main.url(forResource: "desert", withExtension: "gif") else { return }
-//
-//        videoURLs.append(desert)
-//
-//
-//        guard let glitter = Bundle.main.url(forResource: "glitter", withExtension: "gif") else { return }
-//
-//        videoURLs.append(glitter)
-//
-//
-//
-//        guard let physics1 = Bundle.main.url(forResource: "physics1", withExtension: "gif") else { return }
-//
-//        videoURLs.append(physics1)
-//
-//
-//        guard let wave = Bundle.main.url(forResource: "wave_oscillation", withExtension: "gif") else { return }
-//
-//        videoURLs.append(glitter)
-//        videoURLs.append(copmelt)
-//        videoURLs.append(desert)
-//        videoURLs.append(wave)
-//        videoURLs.append(physics1)
-//        videoURLs.append(wave)
-//        videoURLs.append(glitter)
-//        videoURLs.append(physics1)
-//        videoURLs.append(glitter)
-//        videoURLs.append(physics2)
-//        videoURLs.append(copmelt)
-//
-//    }
-//
-    
-    
+
     
     //MARK: recording and playback
     
@@ -232,12 +164,6 @@ class SCSamplerViewController: UIViewController  {
     }
     
     
-    func performWave(fillMode: String, row: Int, cell: SCSamplerCollectionViewCell, delays: [Double]){
-          cell.doXAnimation = true
-    }
-    
-    
-    
     func findPointInCell() -> Int {
 
         let shapeX = touchLocation.x
@@ -258,36 +184,8 @@ class SCSamplerViewController: UIViewController  {
                     return idx
                 }
             }
-
         }
         return 0
-    }
-    
-    
-    func performXAnimation(fillMode: String, row: Int, cell: SCSamplerCollectionViewCell, delays: [Double]){
-
-        if row == 0 || row == 5 {
-            DispatchQueue.main.asyncAfter(deadline: .now()+delays[0]) {
-                cell.animateColor(fillMode: fillMode)
-            }
-        }
-
-        if row == 3 || row == 6 {
-            DispatchQueue.main.asyncAfter(deadline: .now()+delays[1]) {
-                cell.animateColor(fillMode: fillMode)
-            }
-        }
-        if row == 10 || row == 15 {
-            DispatchQueue.main.asyncAfter(deadline: .now()+delays[2]) {
-                cell.animateColor(fillMode: fillMode)
-            }
-        }
-        if row == 9 || row == 12 {
-            DispatchQueue.main.asyncAfter(deadline: .now()+delays[3]){
-                cell.animateColor(fillMode: fillMode)
-            }
-        }
-        cell.doXAnimation = false
     }
 }
 
@@ -314,9 +212,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCSamplerCollectionViewCell", for: indexPath) as! SCSamplerCollectionViewCell
-       
         cell.idx = indexPath.row
-        
         var colorIdx: Int
         if indexPath.row > iceCreamColors.count-1 {
             colorIdx = indexPath.row-iceCreamColors.count
@@ -326,7 +222,6 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         } else {
             colorIdx = indexPath.row
         }
-        
         cell.cellColor = iceCreamColors[colorIdx]
         cell.setupLabel()
         cell.setupGradientColors()
@@ -335,14 +230,9 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.layer.borderColor = cell.cellColor?.cgColor
         cell.padLabel.textColor = UIColor.white
         
-        // choose colors or video
         if indexPath.row == self.selectedPadIndex {
             cell.cellColor = iceCreamColors[colorIdx]
-            
         }
-        
-        
-        
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
             cell.isRecordingEnabled = true
@@ -351,47 +241,12 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.isRecordingEnabled = false
             cell.stopCellsFlashing()
         }
-        
-        
-//        switch SCAudioManager.shared.isRecordingModeEnabled {
-//        case true:
-//            cell.isRecordingEnabled = true
-//            // start flashing cells
-//            if flashTimer != nil {
-//                flashTimer?.invalidate()
-//            }
-//            let atLocation = shapeLocations[shapeIdx]
-//
-////            scene.addShape(color: cell.cellColor!, atLocation: atLocation, rectWidth: cell.frame.width)
-//            flashTimer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: true) {
-//
-//                cell.animateColor(fillMode: kCATransitionFade)
-//
-////                strongSelf.scene.addShape(color: cell.cellColor!, atLocation: atLocation, rectWidth: cell.frame.width)
-//            }
-//
-//        case false:
-//            cell.isRecordingEnabled = false
-//            // stop flashing cells
-//            if flashTimer != nil {
-//                flashTimer?.invalidate()
-//            }
-//        }
-        
         switch SCAudioManager.shared.isRecording {
-            
         case true:
             cell.isRecordingDelayTouch()
         case false:
             cell.enableTouch()
         }
-        
-        // wave animation when navigating from samplebanks
-        
-        
-        performWave(fillMode: kCATransitionFromLeft, row: indexPath.row, cell: cell, delays: [0.5, 0.6, 0.7, 0.8])
-
-        
         // get the cell locations and store in an array
         if shapeLocations.count < 16 {
             shapeLocations.append(cell.center)
@@ -406,50 +261,31 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         }
         return cell
     }
-    
-    
-    
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        
+    
         guard let cell = collectionView.cellForItem(at: indexPath) as? SCSamplerCollectionViewCell else {
             fatalError("Wrong cell or no cell at indexpath.")
         }
         SCAudioManager.shared.selectedSampleIndex = indexPath.row
-   
         NotificationCenter.default.post(name: Notification.Name.init("selectedSamplePadDidChangeNotification"), object: nil)
-        
         if SCAudioManager.shared.isRecording == true {
             print("Recording in progress")
             return
         }
-        
-       if cell.isTouchDelayed == false {
-            
+        if cell.isTouchDelayed == false {
             switch SCAudioManager.shared.isRecordingModeEnabled {
-                
             case true:
                 cell.startRecording()
                 toggleRecordingMode()
-                
             case false:
                 cell.playbackSample()
-                // flash cell
-                
-                // flash sprite at pad position
-//                let padPosition = shapeLocations[shapeIdx]
-                // touchLocation create sprites at precise touch locations using pan gesture
-//                scene.addShape(color: cell.cellColor!, atLocation: padPosition  , rectWidth: cell.frame.width) // Sprite zone
                 cell.animateColor(fillMode: kCATransitionFade)
             }
         }
     }
-    
-    
-    
+   
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        
         if let selectedItems = collectionView.indexPathsForSelectedItems {
             if selectedItems.contains(indexPath) {
                 collectionView.deselectItem(at: indexPath, animated: true)
@@ -460,15 +296,8 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
     }
 }
 
-
-
-
-
-
 extension SCSamplerViewController: UIGestureRecognizerDelegate {
-    
-    
-    
+
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }

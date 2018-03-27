@@ -17,22 +17,12 @@ class SCSampleBankViewController: UIViewController {
     var window: UIWindow?
     var timer = Timer()
     var titleLabels1: [UILabel] = []
-    var avplayer: AVPlayer = AVPlayer()
-    var videoView = UIView()
     
     //MARK: vc life cycle 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let img1 = UIImage.init(named: "l1")
-        let img2 = UIImage.init(named: "l2")
-        let img3 = UIImage.init(named: "l3")
-        let img4 = UIImage.init(named: "l4")
-        let img5 = UIImage.init(named: "l7")
-        let img6 = UIImage.init(named: "l8")
-        images = [img1!, img2!, img3!, img4!, img5!, img6!]
         setupCollectionView()
-        setupVideoView()
         createTitleLabels()
     }
  
@@ -40,48 +30,8 @@ class SCSampleBankViewController: UIViewController {
         super.viewWillAppear(animated)
         setupControls()
      }
-  
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.avplayer.pause()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.avplayer.play()
-    }
-   
-    //MARK: AVPlayer/ Video view methods
     
-    func setupVideoView(){
-        self.videoView = UIView.init(frame: view.frame)
-        guard let path = Bundle.main.path(forResource: "1080p", ofType: "mov") else { return }
-        let videoURL = URL.init(fileURLWithPath: path)
-        let avasset = AVAsset.init(url: videoURL)
-        let avPlayerItem = AVPlayerItem.init(asset: avasset)
-        self.avplayer = AVPlayer.init(playerItem: avPlayerItem)
-        let avPlayerLayer = AVPlayerLayer.init(player: avplayer)
-        avPlayerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        avPlayerLayer.frame = UIScreen.main.bounds
-        self.videoView.layer.addSublayer(avPlayerLayer)
-        self.avplayer.seek(to: kCMTimeZero)
-        avplayer.volume = 0.0
-        avplayer.actionAtItemEnd = AVPlayerActionAtItemEnd.none
-        NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playerItemDidReachEnd(notification:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SCSequencerViewController.playerStartPlaying), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        self.view.addSubview(videoView)
-        self.view.sendSubview(toBack: videoView)
-    }
-
-    func playerStartPlaying(){
-        self.avplayer.play()
-    }
     
-    func playerItemDidReachEnd(notification: Notification){
-        guard let p: AVPlayerItem = notification.object as? AVPlayerItem else { return }
-        p.seek(to: kCMTimeZero)
-    }
-  
     //MARK: UI Setup
  
     private func setupCollectionView(){
@@ -213,14 +163,14 @@ extension SCSampleBankViewController: UICollectionViewDataSource, UICollectionVi
         } else {
             colorIdx = indexPath.row
         }
-        var imgIdx: Int
-        if indexPath.row > images.count-1 {
-            imgIdx = indexPath.row - images.count
-        } else {
-            imgIdx = indexPath.row
-        }
-        cell.imageView.backgroundColor = iceCreamColors[colorIdx] 
-        cell.imageView.image = images[imgIdx]
+//        var imgIdx: Int
+//        if indexPath.row > images.count-1 {
+//            imgIdx = indexPath.row - images.count
+//        } else {
+//            imgIdx = indexPath.row
+//        }
+        cell.imageView.backgroundColor = iceCreamColors[colorIdx]
+//        cell.imageView.image = images[imgIdx]
         let dm = SCDataManager.shared
         cell.id = dm.user?.sampleBanks[indexPath.row].sbID
         return cell

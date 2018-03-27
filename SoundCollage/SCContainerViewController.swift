@@ -21,8 +21,6 @@ class SCContainerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-       
         setupCollectionView()
         setupControls()
     }
@@ -40,7 +38,6 @@ class SCContainerViewController: UIViewController {
         cv.isScrollEnabled = false
         cv.frame = self.view.bounds
         self.view.addSubview(cv)
-
     }
     
     
