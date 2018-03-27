@@ -120,44 +120,44 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     //MARK: Animations
     
-//    func startCellFlashing() {
-//        if flashTimer != nil {
-//            flashTimer?.invalidate()
-//        }
-//        startTimer()
-//    }
+    func startCellFlashing() {
+        if flashTimer != nil {
+            flashTimer?.invalidate()
+        }
+        startTimer()
+    }
     
     
     
-//    func startTimer() {
-//        scene.addShape(color: cellColor!, atLocation: CGPoint.zero)
-////        animateColor(fillMode: kCATransitionFade)
-//        flashTimer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: true) {
-//            [weak self] flashTimer in  // creates a capture group for the timer
-//            guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
-//                return
-//            }
-////            strongSelf.animateColor(fillMode: kCATransitionFade)
-//            strongSelf.scene.addShape(color: strongSelf.cellColor!, atLocation: CGPoint.zero)
-//        }
-//    }
-//
-//
-//
-//    func stopCellsFlashing() {
-//        if flashTimer != nil {
-//            flashTimer?.invalidate()
-//        }
-//    }
+    func startTimer() {
+//        scene.addShape(color: cellColor!, atLocation: CGPoint.zero)   //Sprite zone
+        animateColor(fillMode: kCATransitionFade)
+        flashTimer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: true) {
+            [weak self] flashTimer in  // creates a capture group for the timer
+            guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
+                return
+            }
+            strongSelf.animateColor(fillMode: kCATransitionFade)
+//            strongSelf.scene.addShape(color: strongSelf.cellColor!, atLocation: CGPoint.zero)  //Sprite Zone
+        }
+    }
+
+
+
+    func stopCellsFlashing() {
+        if flashTimer != nil {
+            flashTimer?.invalidate()
+        }
+    }
     
     
     
-//    func animateColor(fillMode: String) {
-//        guard let gradientColors = self.gradientColors else { return }
-//        gradientColors.morphColors(in: self, fillMode: fillMode)
-//    }
-//
-//
+    func animateColor(fillMode: String) {
+        guard let gradientColors = self.gradientColors else { return }
+        gradientColors.morphColors(in: self, fillMode: fillMode)
+    }
+
+
     
     
     //MARK: Recording/Playback
@@ -179,7 +179,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
 
     func playbackSample() {
-        SCAudioManager.shared.audioController?.togglePlayer(index: self.idx)
+        SCAudioManager.shared.togglePlayer(index: self.idx)
         playbackTouchDelay()
     }
     

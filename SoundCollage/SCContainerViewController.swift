@@ -117,6 +117,10 @@ class SCContainerViewController: UIViewController {
                 recordBtn.alpha = 1
             }, completion: nil)
         case false:
+//            let action = UIAlertAction(title: "Stop",
+//                                       style: UIAlertActionStyle.default,
+//                                       handler: {(alert: UIAlertAction!) in print("recording stopped")})
+//            AlertManager.ShowAlert(title: "Recording", message: "...", requiredAction: action, optionalAction: nil, in: self)
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 recordBtn.alpha = 1
@@ -155,10 +159,10 @@ class SCContainerViewController: UIViewController {
         
         switch SCAudioManager.shared.isRecordingMixerOutput {
         case true:
-            SCAudioManager.shared.audioController?.stopRecordingMixerOutput()
+            SCAudioManager.shared.stopRecordingMixerOutput()
             SCAudioManager.shared.isRecordingMixerOutput = false
         case false:
-            SCAudioManager.shared.audioController?.startRecordingMixerOutput()
+            SCAudioManager.shared.startRecordingMixerOutput()
             SCAudioManager.shared.isRecordingMixerOutput = true
         }
     }

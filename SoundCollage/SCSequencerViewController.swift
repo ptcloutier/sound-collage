@@ -222,7 +222,7 @@ class SCSequencerViewController: UIViewController {
         }
         for sample in playbackSamples {
             SCAudioManager.shared.selectedSequencerIndex = sample
-            SCAudioManager.shared.audioController?.togglePlayer(index: sample)
+            SCAudioManager.shared.togglePlayer(index: sample)
         }
         if triggerCounter == 15 {
             triggerCounter = 0
@@ -328,15 +328,15 @@ class SCSequencerViewController: UIViewController {
         
         switch SCAudioManager.shared.isRecording {
         case true:
-            SCAudioManager.shared.audioController?.isRecordingSelected = false
+            SCAudioManager.shared.isRecordingSelected = false
             SCAudioManager.shared.stopRecordingSample()
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 recordBtn.alpha = 1
             }, completion: nil)
         case false:
-            SCAudioManager.shared.audioController?.engine?.pause()
-            SCAudioManager.shared.audioController?.isRecordingSelected = true
+            SCAudioManager.shared.engine?.pause()
+            SCAudioManager.shared.isRecordingSelected = true
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
                 recordBtn.alpha = 1
@@ -357,8 +357,8 @@ class SCSequencerViewController: UIViewController {
         if SCAudioManager.shared.sequencerIsPlaying == true {
             stopPlaying()
         }
-        SCAudioManager.shared.audioController?.engine?.pause()
-        SCAudioManager.shared.audioController?.engine?.reset()
+        SCAudioManager.shared.engine?.pause()
+        SCAudioManager.shared.engine?.reset()
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController else {
@@ -388,10 +388,10 @@ class SCSequencerViewController: UIViewController {
         
         switch SCAudioManager.shared.isRecordingMixerOutput {
         case true:
-            SCAudioManager.shared.audioController?.stopRecordingMixerOutput()
+            SCAudioManager.shared.stopRecordingMixerOutput()
             SCAudioManager.shared.isRecordingMixerOutput = false
         case false:
-            SCAudioManager.shared.audioController?.startRecordingMixerOutput()
+            SCAudioManager.shared.startRecordingMixerOutput()
             SCAudioManager.shared.isRecordingMixerOutput = true
         }
     }

@@ -159,7 +159,7 @@ class SCLibraryViewController: UIViewController {
     
     @objc func backBtnDidPress(){
         
-        SCAudioManager.shared.audioController?.stopSong()
+        SCAudioManager.shared.stopSong()
 
         
         guard let currentSB = SCDataManager.shared.currentSampleBank else {
@@ -185,26 +185,15 @@ class SCLibraryViewController: UIViewController {
         })
     }
     
-    
-    
-
-    
-    
     func presentSampler(){
-        
-        SCAudioManager.shared.audioController?.stopSong()
-
+        SCAudioManager.shared.stopSong()
         let vc = SCContainerViewController(nibName: nil, bundle: nil)
         SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
     }
     
     
-    
-    
     func presentSampleBanks(){
-        
-        SCAudioManager.shared.audioController?.stopSong()
-
+        SCAudioManager.shared.stopSong()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController else {
             print("SampleBank vc not found.")
@@ -212,43 +201,29 @@ class SCLibraryViewController: UIViewController {
         }
         SCAnimator.FadeIn(duration: 1.0, fromVC: self, toVC: vc)
     }
-    
-    
-    
-    
+  
     @objc func shareBtnDidPress(){
-        
-        SCAudioManager.shared.audioController?.stopSong()
-        
+        SCAudioManager.shared.stopSong()
         if( MFMailComposeViewController.canSendMail() ) {
             print("Can send email.")
-            
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
-            
             //Set the subject and message of the email
             mailComposer.setSubject("Somebody sent you a Sound Collage 🌈💥☄️🔥⭐️🌟🌝🌜🌔🌓🌒🌖!")
             mailComposer.setMessageBody("Hi, I made this for you using Sound Collage!", isHTML: false)
             mailComposer.setToRecipients([])
-            
             let docsDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            
                 let fm = FileManager.default
                 let fileName = SCDataManager.shared.user?.soundCollages[indexForAudioSharing]
                 let filecontent = fm.contents(atPath: docsDir+"/"+fileName!)
-            
                 mailComposer.addAttachmentData(filecontent!, mimeType: "audio/aac", fileName: fileName!)
-            
-            
             self.present(mailComposer, animated: true, completion: nil)
         }
-        
     }
 }
 
 
 extension SCLibraryViewController: MFMailComposeViewControllerDelegate {
-    
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         self.dismiss(animated: true, completion: nil)
@@ -290,7 +265,7 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         print("selected song at \(indexPath.row)")
-        SCAudioManager.shared.audioController?.playSoundCollage(index: indexPath.row)
+        SCAudioManager.shared.playSoundCollage(index: indexPath.row)
     }
     
     

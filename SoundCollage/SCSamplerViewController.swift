@@ -34,8 +34,7 @@ class SCSamplerViewController: UIViewController  {
     var shapeMinLocations: [CGPoint] = []
     
     
-    //MARK: vc lifecycle
-    
+ 
     override func loadView() {
         self.view = SKView()
     }
@@ -46,8 +45,8 @@ class SCSamplerViewController: UIViewController  {
         super.viewDidLoad()
         
         
-        SCAudioManager.shared.audioController?.getAudioFilesForURL()
-        setupVideoURLs()
+        SCAudioManager.shared.getAudioFilesForURL()
+//        setupVideoURLs()
 
         let colors = SCColor.getPsychedelicIceCreamShopColors()
         var brightColors: [UIColor] = []
@@ -78,7 +77,7 @@ class SCSamplerViewController: UIViewController  {
         samplerCV.bounds.size = samplerCV.collectionViewLayout.collectionViewContentSize
 
         print("sampler size - \(samplerCV.frame.width), \(samplerCV.frame.height)")
-        
+/* Sprite zone
         let w = samplerCV.frame.width
         let h = samplerCV.frame.height
         
@@ -86,6 +85,7 @@ class SCSamplerViewController: UIViewController  {
         scene = PCScene(size: size)
         let skView = self.view as! SKView
         skView.presentScene(scene)
+ */
     }
 
     
@@ -145,56 +145,57 @@ class SCSamplerViewController: UIViewController  {
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
-        let pan = UIPanGestureRecognizer.init(target: self, action: #selector(SCSamplerViewController.pan(gestureRecognizer:)))
-        view.addGestureRecognizer(pan)
+        // pan let's the user drag finger across pad cells to trigger them
+//         let pan = UIPanGestureRecognizer.init(target: self, action: #selector(SCSamplerViewController.pan(gestureRecognizer:)))
+//        view.addGestureRecognizer(pan)
         
     }
     
     
     
     
-    private func setupVideoURLs(){
-        
-        guard let copmelt = Bundle.main.url(forResource: "cop_melt_repoman", withExtension: "gif") else { return }
-        
-        videoURLs.append(copmelt)
-        
-        guard let physics2 = Bundle.main.url(forResource: "physics2", withExtension: "gif") else { return }
-        
-        videoURLs.append(physics2)
-        
-        guard let desert = Bundle.main.url(forResource: "desert", withExtension: "gif") else { return }
-        
-        videoURLs.append(desert)
-        
-        
-        guard let glitter = Bundle.main.url(forResource: "glitter", withExtension: "gif") else { return }
-        
-        videoURLs.append(glitter)
-        
-        
-        
-        guard let physics1 = Bundle.main.url(forResource: "physics1", withExtension: "gif") else { return }
-        
-        videoURLs.append(physics1)
-        
-        
-        guard let wave = Bundle.main.url(forResource: "wave_oscillation", withExtension: "gif") else { return }
-        
-        videoURLs.append(glitter)
-        videoURLs.append(copmelt)
-        videoURLs.append(desert)
-        videoURLs.append(wave)
-        videoURLs.append(physics1)
-        videoURLs.append(wave)
-        videoURLs.append(glitter)
-        videoURLs.append(physics1)
-        videoURLs.append(glitter)
-        videoURLs.append(physics2)
-        videoURLs.append(copmelt)
-        
-    }
-    
+//    private func setupVideoURLs(){
+//
+//        guard let copmelt = Bundle.main.url(forResource: "cop_melt_repoman", withExtension: "gif") else { return }
+//
+//        videoURLs.append(copmelt)
+//
+//        guard let physics2 = Bundle.main.url(forResource: "physics2", withExtension: "gif") else { return }
+//
+//        videoURLs.append(physics2)
+//
+//        guard let desert = Bundle.main.url(forResource: "desert", withExtension: "gif") else { return }
+//
+//        videoURLs.append(desert)
+//
+//
+//        guard let glitter = Bundle.main.url(forResource: "glitter", withExtension: "gif") else { return }
+//
+//        videoURLs.append(glitter)
+//
+//
+//
+//        guard let physics1 = Bundle.main.url(forResource: "physics1", withExtension: "gif") else { return }
+//
+//        videoURLs.append(physics1)
+//
+//
+//        guard let wave = Bundle.main.url(forResource: "wave_oscillation", withExtension: "gif") else { return }
+//
+//        videoURLs.append(glitter)
+//        videoURLs.append(copmelt)
+//        videoURLs.append(desert)
+//        videoURLs.append(wave)
+//        videoURLs.append(physics1)
+//        videoURLs.append(wave)
+//        videoURLs.append(glitter)
+//        videoURLs.append(physics1)
+//        videoURLs.append(glitter)
+//        videoURLs.append(physics2)
+//        videoURLs.append(copmelt)
+//
+//    }
+//
     
     
     
@@ -232,61 +233,61 @@ class SCSamplerViewController: UIViewController  {
     
     
     func performWave(fillMode: String, row: Int, cell: SCSamplerCollectionViewCell, delays: [Double]){
-  //        cell.doXAnimation = true
+          cell.doXAnimation = true
     }
     
     
     
-//    func findPointInCell() -> Int {
-//
-//        let shapeX = touchLocation.x
-//        let shapeY = touchLocation.y
-//
-//        for (idx, shapeLoc) in shapeLocations.enumerated() {
-//            print("idx = \(idx), shape loc - \(shapeLoc.x), \(shapeLoc.y)")
-//
-//            let minX = shapeMinLocations[idx].x
-//            let maxX = shapeMaxLocations[idx].x
-//            let minY = shapeMinLocations[idx].y
-//            let maxY = shapeMaxLocations[idx].y
-//            if shapeX >= minX && shapeX <= maxX {
-//                print("shape x test passed")
-//                if shapeY >= minY && shapeY <= maxY {
-//                    print("shape y test passed")
-//                    print("shape idx = \(idx)")
-//                    return idx
-//                }
-//            }
-//
-//        }
-//        return 0
-//    }
+    func findPointInCell() -> Int {
+
+        let shapeX = touchLocation.x
+        let shapeY = touchLocation.y
+
+        for (idx, shapeLoc) in shapeLocations.enumerated() {
+            print("idx = \(idx), shape loc - \(shapeLoc.x), \(shapeLoc.y)")
+
+            let minX = shapeMinLocations[idx].x
+            let maxX = shapeMaxLocations[idx].x
+            let minY = shapeMinLocations[idx].y
+            let maxY = shapeMaxLocations[idx].y
+            if shapeX >= minX && shapeX <= maxX {
+                print("shape x test passed")
+                if shapeY >= minY && shapeY <= maxY {
+                    print("shape y test passed")
+                    print("shape idx = \(idx)")
+                    return idx
+                }
+            }
+
+        }
+        return 0
+    }
     
     
     func performXAnimation(fillMode: String, row: Int, cell: SCSamplerCollectionViewCell, delays: [Double]){
-//
-//        if row == 0 || row == 5 {
-//            DispatchQueue.main.asyncAfter(deadline: .now()+delays[0]) {
-//                cell.animateColor(fillMode: fillMode)
-//            }
-//        }
-//
-//        if row == 3 || row == 6 {
-//            DispatchQueue.main.asyncAfter(deadline: .now()+delays[1]) {
-//                cell.animateColor(fillMode: fillMode)
-//            }
-//        }
-//        if row == 10 || row == 15 {
-//            DispatchQueue.main.asyncAfter(deadline: .now()+delays[2]) {
-//                cell.animateColor(fillMode: fillMode)
-//            }
-//        }
-//        if row == 9 || row == 12 {
-//            DispatchQueue.main.asyncAfter(deadline: .now()+delays[3]){
-//                cell.animateColor(fillMode: fillMode)
-//            }
-//        }
-//        cell.doXAnimation = false
+
+        if row == 0 || row == 5 {
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[0]) {
+                cell.animateColor(fillMode: fillMode)
+            }
+        }
+
+        if row == 3 || row == 6 {
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[1]) {
+                cell.animateColor(fillMode: fillMode)
+            }
+        }
+        if row == 10 || row == 15 {
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[2]) {
+                cell.animateColor(fillMode: fillMode)
+            }
+        }
+        if row == 9 || row == 12 {
+            DispatchQueue.main.asyncAfter(deadline: .now()+delays[3]){
+                cell.animateColor(fillMode: fillMode)
+            }
+        }
+        cell.doXAnimation = false
     }
 }
 
@@ -330,8 +331,8 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.setupLabel()
         cell.setupGradientColors()
         cell.circularCell()
-//        cell.layer.borderWidth = 5.0
-//        cell.layer.borderColor = cell.cellColor?.cgColor
+        cell.layer.borderWidth = 5.0
+        cell.layer.borderColor = cell.cellColor?.cgColor
         cell.padLabel.textColor = UIColor.white
         
         // choose colors or video
@@ -340,33 +341,42 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             
         }
         
-
+        
         
         switch SCAudioManager.shared.isRecordingModeEnabled {
         case true:
             cell.isRecordingEnabled = true
-            // start flashing cells
-            if flashTimer != nil {
-                flashTimer?.invalidate()
-            }
-            let atLocation = shapeLocations[shapeIdx]
-            
-            scene.addShape(color: cell.cellColor!, atLocation: atLocation, rectWidth: cell.frame.width)
-            flashTimer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: true) {
-                [weak self] flashTimer in  // creates a capture group for the timer
-                guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
-                    return
-                }
-                strongSelf.scene.addShape(color: cell.cellColor!, atLocation: atLocation, rectWidth: cell.frame.width)
-            }
-            
+            cell.startCellFlashing()
         case false:
             cell.isRecordingEnabled = false
-            // stop flashing cells 
-            if flashTimer != nil {
-                flashTimer?.invalidate()
-            }
+            cell.stopCellsFlashing()
         }
+        
+        
+//        switch SCAudioManager.shared.isRecordingModeEnabled {
+//        case true:
+//            cell.isRecordingEnabled = true
+//            // start flashing cells
+//            if flashTimer != nil {
+//                flashTimer?.invalidate()
+//            }
+//            let atLocation = shapeLocations[shapeIdx]
+//
+////            scene.addShape(color: cell.cellColor!, atLocation: atLocation, rectWidth: cell.frame.width)
+//            flashTimer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: true) {
+//
+//                cell.animateColor(fillMode: kCATransitionFade)
+//
+////                strongSelf.scene.addShape(color: cell.cellColor!, atLocation: atLocation, rectWidth: cell.frame.width)
+//            }
+//
+//        case false:
+//            cell.isRecordingEnabled = false
+//            // stop flashing cells
+//            if flashTimer != nil {
+//                flashTimer?.invalidate()
+//            }
+//        }
         
         switch SCAudioManager.shared.isRecording {
             
@@ -415,12 +425,11 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             return
         }
         
-        if cell.isTouchDelayed == false {
+       if cell.isTouchDelayed == false {
             
             switch SCAudioManager.shared.isRecordingModeEnabled {
                 
             case true:
-                print("*")
                 cell.startRecording()
                 toggleRecordingMode()
                 
@@ -429,8 +438,10 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
                 // flash cell
                 
                 // flash sprite at pad position
-                let padPosition = shapeLocations[shapeIdx]
-                scene.addShape(color: cell.cellColor!, atLocation: self.touchLocation  , rectWidth: cell.frame.width)
+//                let padPosition = shapeLocations[shapeIdx]
+                // touchLocation create sprites at precise touch locations using pan gesture
+//                scene.addShape(color: cell.cellColor!, atLocation: padPosition  , rectWidth: cell.frame.width) // Sprite zone
+                cell.animateColor(fillMode: kCATransitionFade)
             }
         }
     }

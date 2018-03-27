@@ -12,7 +12,7 @@ import SpriteKit
 class PCScene: SKScene {
     
     var colors = [UIColor]()
-    
+    var shapeNode: SKShapeNode?
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -30,7 +30,9 @@ class PCScene: SKScene {
     
     func addShape(color: UIColor, atLocation: CGPoint, rectWidth: CGFloat ) {
      
-        let sprite = PCSpriteNode(color: color, size: CGSize.init(width: rectWidth+10.0, height: rectWidth+10.0))
+        let padSize = CGSize.init(width: rectWidth+10.0, height: rectWidth+10.0)
+     
+        let sprite = PCSpriteNode(color: color, size: padSize)
         sprite.setupSpriteSceneDelegate(delegate: self)
         sprite.blendMode = .add
         addChild(sprite)
