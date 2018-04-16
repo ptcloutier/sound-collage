@@ -44,7 +44,6 @@
 		A7A8233F1EA81F500061D0A0 /* SCSamplerFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823381EA81F500061D0A0 /* SCSamplerFlowLayout.swift */; };
 		A7A823401EA81F500061D0A0 /* SCSamplerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */; };
 		A7A823431EA81F6C0061D0A0 /* SCSampleBankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */; };
-		A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A823421EA81F6C0061D0A0 /* SCStackView.swift */; };
 		A7AA8FD5201E2A6A00B8B36F /* SCSecondContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AA8FD1201E2A6800B8B36F /* SCSecondContainerCell.swift */; };
 		A7AA8FD6201E2A6A00B8B36F /* SCContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AA8FD2201E2A6900B8B36F /* SCContainerViewController.swift */; };
 		A7AA8FD7201E2A6A00B8B36F /* SCFirstContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AA8FD3201E2A6900B8B36F /* SCFirstContainerCell.swift */; };
@@ -139,7 +138,6 @@
 		A7A823381EA81F500061D0A0 /* SCSamplerFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSamplerFlowLayout.swift; sourceTree = "<group>"; };
 		A7A823391EA81F500061D0A0 /* SCSamplerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSamplerViewController.swift; sourceTree = "<group>"; };
 		A7A823411EA81F6C0061D0A0 /* SCSampleBankViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSampleBankViewController.swift; sourceTree = "<group>"; };
-		A7A823421EA81F6C0061D0A0 /* SCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCStackView.swift; sourceTree = "<group>"; };
 		A7AA8FD1201E2A6800B8B36F /* SCSecondContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCSecondContainerCell.swift; sourceTree = "<group>"; };
 		A7AA8FD2201E2A6900B8B36F /* SCContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCContainerViewController.swift; sourceTree = "<group>"; };
 		A7AA8FD3201E2A6900B8B36F /* SCFirstContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCFirstContainerCell.swift; sourceTree = "<group>"; };
@@ -231,7 +229,6 @@
 			isa = PBXGroup;
 			children = (
 				A7A8232E1EA81D280061D0A0 /* AlertManager.swift */,
-				A7A823421EA81F6C0061D0A0 /* SCStackView.swift */,
 				A7264E7C1EAE619800664EDE /* SCAnimator.swift */,
 				A7BFEE2A1EBA16DB00C718E7 /* UIView+GradientColor.swift */,
 				A7E117D21F278DE800041400 /* UIImage+Custom.swift */,
@@ -557,7 +554,6 @@
 				A7EC74B81F4C6E7B0092E59E /* SCToolbar.swift in Sources */,
 				A7A21CB31EFAEFF400161DF3 /* UIButton+Custom.swift in Sources */,
 				A7AA8FD7201E2A6A00B8B36F /* SCFirstContainerCell.swift in Sources */,
-				A7A823441EA81F6C0061D0A0 /* SCStackView.swift in Sources */,
 				A748E2CC1F3AB1AF00507DF8 /* UIView+Glow.swift in Sources */,
 				A713F50E1F2F65A900742D1C /* SCFaderDelegate.swift in Sources */,
 				A7A822F81EA81BEC0061D0A0 /* AppDelegate.swift in Sources */,

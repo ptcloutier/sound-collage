@@ -28,7 +28,8 @@
         var isRecordingModeEnabled = false
         var isSpeakerEnabled: Bool = false
         var replaceableFilePath: String?
-        var audioEngine: AVAudioEngine!
+        var audioEngine: AVAudioEngine?
+        var outputAudioEngine = AVAudioEngine()
         var mixerPanels: [String : [String]] = [:]
         var effectControls: [[SCEffectControl]] = []
         var sequencerSettings: [[Bool]] = []
@@ -41,7 +42,6 @@
         var sampler: AVAudioUnitSampler?
         var audioEngineChain: [AVAudioEngine] = []
         var finishedEngines: [AVAudioEngine] = []
-        // scg
         var songPlayer: AVAudioPlayer?
         var activePlayers: Int = 0
         let maxPlayers: Int = 25
@@ -49,10 +49,7 @@
         var finishedNodes: [AVAudioNode] = []
         var nodeChain: [AnyObject] = []
         var audioFiles: [String : Any?] = [:]
-        //    var effectControls: [[SCEffectControl]] = []
-        var engine: AVAudioEngine?
         var mixer: AVAudioMixerNode?
-        //    var sampler: AVAudioUnitSampler?
         var nodeIdx: Int = 0
         var player:                         AVAudioPlayerNode?
         var reverb:                         AVAudioUnitReverb?
@@ -81,6 +78,7 @@
         // managing session and configuration changes
         var isSessionInterrupted:           Bool = false
         var isConfigChangePending:          Bool = false
+        var busNumber: Int = 0
         
         //MARK: Set up session
         
@@ -102,10 +100,10 @@
             effectControls = SCAudioManager.shared.effectControls
             initAVAudioSession()
             loadSamples()
-            engine = AVAudioEngine.init()
+            audioEngine = AVAudioEngine.init()
             isRecording = false
             isRecordingSelected = false
-            print("\(String(describing: engine?.description))")
+            print("\(String(describing: audioEngine?.description))")
             NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: "ShouldEnginePauseNotification"),
                                                    object: nil,
                                                    queue: OperationQueue.main,
@@ -114,8 +112,8 @@
                                                     if !self.isSessionInterrupted && !self.isConfigChangePending {
                                                         if self.playerIsPlaying == true || self.isRecording == true {
                                                             print("Pausing engine.")
-                                                            self.engine?.pause()
-                                                            self.engine?.reset()
+                                                            self.audioEngine?.pause()
+                                                            self.audioEngine?.reset()
                                                         }
                                                     }
             })
@@ -390,18 +388,18 @@
         
         
         private func createEngine(){
-            engine = nil
-            engine = AVAudioEngine.init()
-            print("\(String(describing: engine?.description))")
+            audioEngine = nil
+            audioEngine = AVAudioEngine.init()
+            print("\(String(describing: audioEngine?.description))")
         }
         
         private func startEngine(){
-            if (engine?.isRunning)! == true {
+            if (audioEngine?.isRunning)! == true {
                 print("audio engine already started ")
                 return
             }
             do {
-                try engine?.start()
+                try audioEngine?.start()
                 print("audio engine started")
             } catch {
                 print("oops \(error)")
@@ -426,7 +424,7 @@
         //MARK: Mixer Methods //TODO: is this ncesary?
         
         private func setOutputVolume(outputVolume: Float){
-            engine?.mainMixerNode.outputVolume = outputVolume
+            audioEngine?.mainMixerNode.outputVolume = outputVolume
         }
         
         //MARK: Effect Methods
@@ -510,15 +508,16 @@
             player?.pan = playerPan
         }
         
+ 
         func togglePlayer(index: Int){
+            
             let mixer = AVAudioMixerNode.init()
-            engine?.attach(mixer)
             let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)
-            let mainMixer = (engine?.mainMixerNode)!
             let sampler = AVAudioUnitSampler.init()
-            engine?.attach(sampler)
             let player = AVAudioPlayerNode.init()
-            engine?.attach(player)
+            audioEngine?.attach(sampler)
+            audioEngine?.attach(mixer)
+            audioEngine?.attach(player)
             let reverb = AVAudioUnitReverb()
             let delay = AVAudioUnitDelay()
             let pitchShift = AVAudioUnitTimePitch()
@@ -529,18 +528,18 @@
             setupPitchShift(sampleIndex: index, pitch: pitchShift)
             setupTimeStretch(sampleIndex: index, time: timeStretch)
             setupDistortion(sampleIndex: index, distortion: distortion)
-            engine?.attach(reverb)
-            engine?.attach(delay)
-            engine?.attach(pitchShift)
-            engine?.attach(timeStretch)
-            engine?.attach(distortion)
-            engine?.connect(player, to: mixer, format: playerFormat)
-            engine?.connect(mixer, to: pitchShift, format: playerFormat)
-            engine?.connect(pitchShift, to: timeStretch, format: playerFormat)
-            engine?.connect(timeStretch, to: distortion, format: playerFormat)
-            engine?.connect(distortion, to: delay, format: playerFormat)
-            engine?.connect(delay, to: reverb, format: playerFormat)
-            engine?.connect(reverb, to: mainMixer, format: playerFormat)
+            audioEngine?.attach(reverb)
+            audioEngine?.attach(delay)
+            audioEngine?.attach(pitchShift)
+            audioEngine?.attach(timeStretch)
+            audioEngine?.attach(distortion)
+            audioEngine?.connect(player, to: mixer, format: playerFormat)
+            audioEngine?.connect(mixer, to: pitchShift, format: playerFormat)
+            audioEngine?.connect(pitchShift, to: timeStretch, format: playerFormat)
+            audioEngine?.connect(timeStretch, to: distortion, format: playerFormat)
+            audioEngine?.connect(distortion, to: delay, format: playerFormat)
+            audioEngine?.connect(delay, to: reverb, format: playerFormat)
+            audioEngine?.connect(reverb, to: (audioEngine?.mainMixerNode)!, format: playerFormat)
             var disconnectNodes = [player, sampler, reverb, delay, pitchShift, timeStretch, distortion]
             startEngine()
             let key: String = "\(index)"
@@ -574,10 +573,10 @@
                     serialQueue.sync {
                         DispatchQueue.main.async {
                             for x in disconnectNodes {
-                                strongSelf.engine?.disconnectNodeInput(x)
+                                strongSelf.audioEngine?.disconnectNodeInput(x)
                             }
                             for i in disconnectNodes {
-                                strongSelf.engine?.detach(i)
+                                strongSelf.audioEngine?.detach(i)
                             }
                             disconnectNodes.removeAll()
                             strongSelf.playerIsPlaying = false
@@ -589,6 +588,8 @@
             })
             player.play()
         }
+        
+       
         
         private func createAudioFileForPlayback() -> AVAudioFile? {
             var recording: AVAudioFile
@@ -642,7 +643,9 @@
                     let filePath = "sound_collage_"+"\(id)"+".aac"
                     mixerOutputFileURL = SCAudioManager.shared.getDocumentsDirectory().appendingPathComponent(filePath)
                 }
-                let mainMixer = engine?.mainMixerNode
+                
+
+                let mainMixer = outputAudioEngine.mainMixerNode
                 let settings  = [AVSampleRateKey: 44100,
                                  AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
                                  AVNumberOfChannelsKey: 2,
@@ -653,7 +656,7 @@
                 } catch let error {
                     print("mixerOutputFile is nil, \(error.localizedDescription)")
                 }
-                mainMixer?.installTap(onBus: 0, bufferSize: 4096, format: mainMixer?.outputFormat(forBus: 0), block:  {
+                mainMixer.installTap(onBus: 0, bufferSize: 4096, format: mainMixer.outputFormat(forBus: 0), block:  {
                     (buffer : AVAudioPCMBuffer!, when : AVAudioTime!) in
                     print("Got buffer of length: \(buffer.frameLength) at time: \(when)")
                     do {
@@ -665,7 +668,7 @@
                 print("starting audio engine for recording")
                 print("writing to \(String(describing: self.mixerOutputFileURL?.absoluteString))")
                 do {
-                    try self.engine?.start()
+                    try self.audioEngine?.start()
                 } catch {
                     print("Error starting audio engine: \(error.localizedDescription)")
                 }
@@ -691,7 +694,7 @@
             print("Recorded output to \(path)")
             SCDataManager.shared.user?.soundCollages.append(path)
             if isRecording == true {
-                engine?.mainMixerNode.removeTap(onBus: 0)
+                audioEngine?.mainMixerNode.removeTap(onBus: 0)
                 isRecording = false
                 if recordingIsAvailable == true {
                     //Post a notification that recording is complete

@@ -105,9 +105,6 @@ class SCSequencerViewController: UIViewController {
     func setupSequencer() {
         
         print("secvccell\(self.view.frame.height)")
-        
-
-//        let frame = CGRect(x: margin, y: margin*2.0, width: self.view.frame.width-(margin*2.0), height: view.frame.height-toolbarHeight-(margin*2.0))
         let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: view.frame.height-toolbarHeight-(margin*2.0))
         let flowLayout = SCSamplerFlowLayout.init(direction: .horizontal, numberOfColumns: 1)
         sequencer = UICollectionView.init(frame: frame, collectionViewLayout: flowLayout)
@@ -335,7 +332,7 @@ class SCSequencerViewController: UIViewController {
                 recordBtn.alpha = 1
             }, completion: nil)
         case false:
-            SCAudioManager.shared.engine?.pause()
+            SCAudioManager.shared.audioEngine?.pause()
             SCAudioManager.shared.isRecordingSelected = true
             recordBtn.alpha = 0
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations:{
@@ -357,8 +354,8 @@ class SCSequencerViewController: UIViewController {
         if SCAudioManager.shared.sequencerIsPlaying == true {
             stopPlaying()
         }
-        SCAudioManager.shared.engine?.pause()
-        SCAudioManager.shared.engine?.reset()
+        SCAudioManager.shared.audioEngine?.pause()
+        SCAudioManager.shared.audioEngine?.reset()
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "SCSampleBankVC") as? SCSampleBankViewController else {
