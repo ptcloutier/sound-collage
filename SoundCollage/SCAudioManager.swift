@@ -511,28 +511,52 @@
  
         func togglePlayer(index: Int){
             
+            let key: String = "\(index)"
+            guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {
+                print("No sample at selected sample index!")
+                return
+            }
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: sample.processingFormat, frameCapacity: AVAudioFrameCount(sample.length)) else {
+                print("error creating buffer")
+                return
+            }
+            
+            sample.framePosition = 0
+            do {
+                try sample.read(into: buffer)
+            } catch let error {
+                print("\(error.localizedDescription)")
+                return
+            }
             let mixer = AVAudioMixerNode.init()
-            let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)
+            let playerFormat = buffer.format
+            
             let sampler = AVAudioUnitSampler.init()
             let player = AVAudioPlayerNode.init()
+            
             audioEngine?.attach(sampler)
             audioEngine?.attach(mixer)
             audioEngine?.attach(player)
+            
             let reverb = AVAudioUnitReverb()
             let delay = AVAudioUnitDelay()
             let pitchShift = AVAudioUnitTimePitch()
             let distortion = AVAudioUnitDistortion()
             let timeStretch = AVAudioUnitVarispeed()
+            var disconnectNodes = [player, sampler, reverb, delay, pitchShift, timeStretch, distortion]
+
             setupReverb(sampleIndex: index, reverb: reverb)
             setupDelay(sampleIndex: index, delay: delay)
             setupPitchShift(sampleIndex: index, pitch: pitchShift)
             setupTimeStretch(sampleIndex: index, time: timeStretch)
             setupDistortion(sampleIndex: index, distortion: distortion)
+            
             audioEngine?.attach(reverb)
             audioEngine?.attach(delay)
             audioEngine?.attach(pitchShift)
             audioEngine?.attach(timeStretch)
             audioEngine?.attach(distortion)
+            
             audioEngine?.connect(player, to: mixer, format: playerFormat)
             audioEngine?.connect(mixer, to: pitchShift, format: playerFormat)
             audioEngine?.connect(pitchShift, to: timeStretch, format: playerFormat)
@@ -540,18 +564,15 @@
             audioEngine?.connect(distortion, to: delay, format: playerFormat)
             audioEngine?.connect(delay, to: reverb, format: playerFormat)
             audioEngine?.connect(reverb, to: (audioEngine?.mainMixerNode)!, format: playerFormat)
-            var disconnectNodes = [player, sampler, reverb, delay, pitchShift, timeStretch, distortion]
+     
             startEngine()
-            let key: String = "\(index)"
-            guard let sample: AVAudioFile = audioFiles[key]! as? AVAudioFile else {
-                print("No sample at selected sample index!")
-                return
-            }
+
             playerIsPlaying = true
             plays = plays+1
             activePlayers = activePlayers+1
             print("total plays : \(plays), active players: \(activePlayers)")
-            player.scheduleFile(sample, at: nil, completionHandler: {
+            
+            player.scheduleBuffer(buffer, at: nil, options: AVAudioPlayerNodeBufferOptions.interrupts, completionHandler: {
                 [weak self] in
                 guard let strongSelf = self else { return }
                 //calculate audio tail based on reverb and delay parameters
@@ -560,10 +581,10 @@
                     durationValue = 1
                 }
                 let reverbParameter = SCAudioManager.shared.effectControls[0][0].parameter[index]
-                let reverbTime = round(Float(reverbParameter * 5.0))
+                let reverbTime = round(Float(reverbParameter))
                 durationValue += Int(reverbTime)
                 let delayParams = SCAudioManager.shared.effectControls[1][2].parameter[index]
-                let delayTime = round(Float(delayParams * 5.0))
+                let delayTime = round(Float(delayParams))
                 durationValue += Int(delayTime)
                 durationValue = durationValue+1
                 let duration = DispatchTimeInterval.seconds(durationValue)
