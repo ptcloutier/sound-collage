@@ -37,6 +37,7 @@
         var audioBuffer = AVAudioPCMBuffer()
         var recordingEngine = AVAudioEngine()
         
+        var currentSampleLength:Int = 0
         var isRecordingSample: Bool = false
         var isRecordingSelected: Bool = false
         var isRecordingOutput: Bool = false
@@ -512,21 +513,23 @@
                 print("No sample at selected sample index!")
                 return
             }
-//            guard let buffer = AVAudioPCMBuffer(pcmFormat: sample.processingFormat, frameCapacity: AVAudioFrameCount(sample.length)) else {
-//                print("error creating buffer")
-//                return
-//            }
             
-//            sample.framePosition = 0
-//            do {
-//                try sample.read(into: buffer)
-//            } catch let error {
-//                print("\(error.localizedDescription)")
-//                return
-//            }
+            currentSampleLength = Int(AVAudioFrameCount(sample.length))/44100
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: sample.processingFormat, frameCapacity: AVAudioFrameCount(sample.length)) else {
+                print("error creating buffer")
+                return
+            }
+            
+            sample.framePosition = 0
+            do {
+                try sample.read(into: buffer)
+            } catch let error {
+                print("\(error.localizedDescription)")
+                return
+            }
             let mixer = AVAudioMixerNode.init()
-//            let playerFormat = buffer.format
-            let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)
+            let playerFormat = buffer.format
+//            let playerFormat = AVAudioFormat.init(standardFormatWithSampleRate: 44100, channels: 1)
 
             let sampler = AVAudioUnitSampler.init()
             let player = AVAudioPlayerNode.init()
@@ -569,9 +572,9 @@
             activePlayers = activePlayers+1
             print("total plays : \(plays), active players: \(activePlayers)")
             
-            player.scheduleFile(sample, at: nil, completionHandler: {
+//            player.scheduleFile(sample, at: nil, completionHandler: {
 
-//            player.scheduleBuffer(buffer, at: nil, options: AVAudioPlayerNodeBufferOptions.interrupts, completionHandler: {
+            player.scheduleBuffer(buffer, at: nil, options: AVAudioPlayerNodeBufferOptions.interrupts, completionHandler: {
                 [weak self] in
                 guard let strongSelf = self else { return }
                 //calculate audio tail based on reverb and delay parameters

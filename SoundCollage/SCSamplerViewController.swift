@@ -227,7 +227,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.setupLabel()
         cell.setupGradientColors()
         cell.circularCell()
-        cell.layer.borderWidth = 5.0
+        cell.layer.borderWidth = 3.0
         cell.layer.borderColor = cell.cellColor?.cgColor
         cell.padLabel.textColor = UIColor.white
         

@@ -38,7 +38,11 @@ class PCScene: SKScene {
         addChild(sprite)
         let convertedPosition = convertPosition(node: sprite, position: atLocation)
         sprite.position = convertedPosition!
-        sprite.startDegradeShapeTimer()
+        let sampleLength = Int(SCAudioManager.shared.currentSampleLength)
+        let duration = DispatchTimeInterval.seconds(sampleLength)
+        DispatchQueue.main.asyncAfter(deadline: .now()+duration){
+            sprite.startDegradeShapeTimer()
+            }
     }
     
   
@@ -61,7 +65,9 @@ class PCScene: SKScene {
             child.run(moveAction)
         }
     }
-   
+    
+    func fadeOutShapeAfterPlayback(length: Double, sprite: PCSpriteNode){
+    }
 }
 
 

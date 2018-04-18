@@ -31,18 +31,20 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     var scene: PCScene!
     var size: CGSize!
     var skView = SKView()
+    var spritePoint = CGPoint()
+
     
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.isUserInteractionEnabled = true
-//        skView = SKView.init(frame: self.bounds)
-//        self.contentView.addSubview(skView)
-//        size = self.contentView.frame.size
-//        scene = AnimationScene(size: size)
-//        skView.presentScene(scene)
-        
+        skView = SKView.init(frame: self.bounds)
+        self.contentView.addSubview(skView)
+        size = self.contentView.frame.size
+        scene = PCScene(size: size)
+        skView.presentScene(scene)
+        spritePoint = CGPoint.init(x: 50, y:50)
     }
     
     
@@ -130,15 +132,15 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     func startTimer() {
-        scene.addShape(color: cellColor!, atLocation: CGPoint.zero, rectWidth: 100.0)   //Sprite zone
+        scene.addShape(color: cellColor!, atLocation: spritePoint, rectWidth: 100.0)   //Sprite zone
         animateColor(fillMode: kCATransitionFade)
         flashTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) {
-            [weak self] flashTimer in  // creates a capture group for the timer
+            [weak self] flashTimer in           // creates a capture group for the timer
             guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
                 return
             }
             strongSelf.animateColor(fillMode: kCATransitionFade)
-            strongSelf.scene.addShape(color: strongSelf.cellColor!, atLocation: CGPoint.zero, rectWidth: 100.0)  //Sprite Zone
+            strongSelf.scene.addShape(color: strongSelf.cellColor!, atLocation: strongSelf.spritePoint, rectWidth: 100.0)  //Sprite Zone
         }
     }
 
@@ -154,11 +156,12 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     func animateColor(fillMode: String) {
-        guard let gradientColors = self.gradientColors else { return }
-        gradientColors.morphColors(in: self, fillMode: fillMode)
+//        guard let gradientColors = self.gradientColors else { return }
+//        gradientColors.morphColors(in: self, fillMode: fillMode)
+        scene.addShape(color: cellColor!, atLocation: spritePoint, rectWidth: 100.0)   
     }
 
-
+    
     
     
     //MARK: Recording/Playback

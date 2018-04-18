@@ -148,8 +148,7 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
             let parameter = parameters[am.selectedSampleIndex]
             slider.value = parameter
         }
-        
-        
+    
         
         //TODO: should scroll to last selected mixer panel
         
@@ -161,10 +160,7 @@ extension SCMixerViewController: UICollectionViewDelegate, UICollectionViewDataS
         return cell
         
     }
-    
-    
-    
-    
+ 
 
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -214,11 +210,6 @@ extension SCMixerViewController:  UICollectionViewDelegateFlowLayout {
         return UIEdgeInsetsMake(0, 0, 0, 0)
     }
 }
-
-
-
-
-
 
 
 

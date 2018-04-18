@@ -37,7 +37,7 @@ class SCFirstContainerCell: UICollectionViewCell {
         cv.delegate = self
         cv.dataSource = self
         cv.register(SCMusicInterfaceCell.self, forCellWithReuseIdentifier: "SCMusicInterfaceCell")
-        cv.isScrollEnabled = true
+        cv.isScrollEnabled = false
         cv.showsHorizontalScrollIndicator = false
         cv.frame = self.contentView.frame
         self.contentView.addSubview(cv)
@@ -97,16 +97,9 @@ extension SCFirstContainerCell: UICollectionViewDelegate, UICollectionViewDataSo
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.row == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCMusicInterfaceCell", for: indexPath) as! SCMusicInterfaceCell
             cell.setupSampler()
             return cell
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SCMusicInterfaceCell", for: indexPath) as! SCMusicInterfaceCell
-            cell.setupSequencer()
-            return cell
-            
-        }
     }
 }
 

@@ -11,7 +11,6 @@ import UIKit
 class SCMusicInterfaceCell: UICollectionViewCell {
     
     var samplerVC: SCSamplerViewController?
-    var sequencerVC: SCSequencerViewController?
     var mixerVC: SCMixerViewController?
     
     override init(frame: CGRect) {
@@ -30,14 +29,6 @@ class SCMusicInterfaceCell: UICollectionViewCell {
         guard let samplerVC = self.samplerVC else { return }
         samplerVC.view.frame = contentView.bounds
         self.contentView.addSubview(samplerVC.view)
-    }
-    
-    
-    func setupSequencer(){
-        self.sequencerVC = SCSequencerViewController(nibName: nil, bundle: nil)
-        guard let sequencerVC = self.sequencerVC else { return }
-        sequencerVC.view.frame = contentView.bounds
-        self.contentView.addSubview(sequencerVC.view)
     }
     
     

@@ -30,13 +30,12 @@ class PCSpriteNode: SKSpriteNode {
     
     
     @objc func degradeShape(){
-        alpha -= 0.03
+        alpha -= 0.05
         if alpha <= 0.0 {
             self.spriteSceneDelegate?.printChildrenCount(sender: self)
             removeFromParent()
             timer.invalidate()
         }
-
     }
 }
 
