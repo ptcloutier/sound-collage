@@ -55,7 +55,6 @@ class SCLibraryCell: UICollectionViewCell {
         titleLabel.addGlow(color: SCColor.Custom.PsychedelicIceCreamShoppe.lightViolet)
         titleLabel.isUserInteractionEnabled = false
         titleLabel.frame = CGRect(x: 0, y: 60.0, width: 200.0, height: 50.0)
-        titleLabel.text = "@#$%^&*"
         titleLabel.textAlignment = NSTextAlignment.center
         
         titleLabel.frame.origin.x = (self.contentView.frame.maxX/2.0)-(titleLabel.frame.width/2.0)

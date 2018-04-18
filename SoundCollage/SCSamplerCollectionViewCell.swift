@@ -130,18 +130,19 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     
     func startTimer() {
-//        scene.addShape(color: cellColor!, atLocation: CGPoint.zero)   //Sprite zone
+        scene.addShape(color: cellColor!, atLocation: CGPoint.zero, rectWidth: 100.0)   //Sprite zone
         animateColor(fillMode: kCATransitionFade)
-        flashTimer = Timer.scheduledTimer(withTimeInterval: 1.6, repeats: true) {
+        flashTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) {
             [weak self] flashTimer in  // creates a capture group for the timer
             guard let strongSelf = self else {  // bail out of the timer code if the cell has been freed
                 return
             }
             strongSelf.animateColor(fillMode: kCATransitionFade)
-//            strongSelf.scene.addShape(color: strongSelf.cellColor!, atLocation: CGPoint.zero)  //Sprite Zone
+            strongSelf.scene.addShape(color: strongSelf.cellColor!, atLocation: CGPoint.zero, rectWidth: 100.0)  //Sprite Zone
         }
     }
 
+    
 
 
     func stopCellsFlashing() {
@@ -223,9 +224,5 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
         self.isUserInteractionEnabled = true
         isTouchDelayed = false
     }
-    
-    
-   
-    
-    
+  
 }

@@ -105,7 +105,7 @@ class SCSampleBankViewController: UIViewController {
     }
 
     func createTitleLabels(){
-        let ta4 = [CGFloat(40.0), CGFloat(40.0), SCColor.Custom.PsychedelicIceCreamShoppe.rose, SCColor.Custom.PsychedelicIceCreamShoppe.rose] as [Any]
+        let ta4 = [CGFloat(30.0), CGFloat(40.0), SCColor.Custom.PsychedelicIceCreamShoppe.rose, SCColor.Custom.PsychedelicIceCreamShoppe.rose] as [Any]
         setupTitle(xConstant: 0, yConstant: 0, textAttributes: ta4)
     }
 
@@ -116,7 +116,7 @@ class SCSampleBankViewController: UIViewController {
         let label2textColor = textAttributes[3] as! UIColor
         let margin: CGFloat = 20.0
         let titleLabel1 = UILabel.init(frame: .zero)
-        titleLabel1.text = "S O U N D"
+        titleLabel1.text = "S o u n d C o l l a g e"
         titleLabel1.font = UIFont.init(name: "Futura", size: label1fontSize)
         titleLabel1.textColor = label1textColor
         titleLabel1.textAlignment = NSTextAlignment.center
@@ -129,7 +129,7 @@ class SCSampleBankViewController: UIViewController {
         self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: xConstant))
         self.view.addConstraint(NSLayoutConstraint(item: titleLabel1, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: (yConstant+(margin*2.0))))
         let titleLabel2 = UILabel.init(frame: .zero)
-        titleLabel2.text = "C O L L A G E"
+//        titleLabel2.text = "C O L L A G E"
         titleLabel2.font = UIFont.init(name: "Futura", size: label2fontSize)
         titleLabel2.textColor = label2textColor
         titleLabel2.textAlignment = NSTextAlignment.center

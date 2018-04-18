@@ -60,6 +60,7 @@ class SCSamplerViewController: UIViewController  {
     
     
     
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
@@ -91,7 +92,7 @@ class SCSamplerViewController: UIViewController  {
     
     
     
-  
+    
     
     
     private func setupSampler() {

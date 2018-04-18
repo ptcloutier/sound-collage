@@ -657,7 +657,6 @@
         
         func startRecordingOutput(){
             do {
-//                try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord)
                 if outputFileURL == nil {
                     let id = getSoundCollageID()
                     let filePath = "sound_collage_"+"\(id)"+".aac"

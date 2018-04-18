@@ -209,8 +209,8 @@ class SCLibraryViewController: UIViewController {
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
             //Set the subject and message of the email
-            mailComposer.setSubject("Somebody sent you a Sound Collage 🌈💥☄️🔥⭐️🌟🌝🌜🌔🌓🌒🌖!")
-            mailComposer.setMessageBody("Hi, I made this for you using Sound Collage!", isHTML: false)
+            mailComposer.setSubject("WoW! somebody sent you a SoundCollage 🌈💥☄️🔥⭐️🌟🌝🌜🌔🌓🌒🌖!")
+            mailComposer.setMessageBody("Hi, I made this for you in SoundCollage!", isHTML: false)
             mailComposer.setToRecipients([])
             let docsDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 let fm = FileManager.default
@@ -254,6 +254,7 @@ extension SCLibraryViewController: UICollectionViewDelegate, UICollectionViewDat
         
         cell.setupLabel()
         cell.setupImageView()
+        cell.titleLabel.text = "sound collage \(indexPath.row+1)"
 //        cell.backgroundColor = SCColor.Custom.Gray.dark
         cell.setupPlayIcon()
         return cell
