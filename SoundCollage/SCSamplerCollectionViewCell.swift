@@ -167,7 +167,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     func startRecording(){
         self.isRecordingEnabled = false
-        switch SCAudioManager.shared.isRecording {
+        switch SCAudioManager.shared.isRecordingSample {
         case true:
             print("Audio recording already in session.")
         case false:
@@ -198,7 +198,7 @@ class SCSamplerCollectionViewCell: UICollectionViewCell, AVAudioPlayerDelegate, 
     
     private func playbackTouchDelay(){
         
-        if SCAudioManager.shared.isRecording == false {
+        if SCAudioManager.shared.isRecordingSample == false {
             self.isUserInteractionEnabled = false
             isTouchDelayed = true
             let delayInSeconds = 0.001

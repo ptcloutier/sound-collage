@@ -302,7 +302,7 @@
 			children = (
 				A7264E7B1EAE294100664EDE /* Application */,
 				A78733881EB1160F00B5A8AE /* Managers */,
-				A7FDF60F1F4286CE00645E97 /* Models */,
+				A7FDF60F1F4286CE00645E97 /* Model */,
 				A7264E791EAE289E00664EDE /* Classes+Extensions */,
 				A7E0ADEC2069DB8500E311B1 /* Sprite Classes */,
 				A7AA8FD9201E2A7700B8B36F /* Container */,
@@ -374,7 +374,7 @@
 			name = "Sprite Classes";
 			sourceTree = "<group>";
 		};
-		A7FDF60F1F4286CE00645E97 /* Models */ = {
+		A7FDF60F1F4286CE00645E97 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				A78250E21EE601BA00350768 /* SCEffectControl.swift */,
@@ -382,7 +382,7 @@
 				A7F8E51C1EA8566D003B0747 /* SCSampleBank.swift */,
 				A75D4EBB1F25BFF300C304D8 /* SCSequencerSettings.swift */,
 			);
-			name = Models;
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

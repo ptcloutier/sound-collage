@@ -233,7 +233,7 @@ extension SCMixerViewController: UIGestureRecognizerDelegate {
     
     func tap(gestureRecognizer: UIGestureRecognizer) {
         
-        if SCAudioManager.shared.isRecording == true {
+        if SCAudioManager.shared.isRecordingSample == true {
             print("Recording in progress")
             return
         }

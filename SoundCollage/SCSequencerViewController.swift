@@ -323,7 +323,7 @@ class SCSequencerViewController: UIViewController {
         }
         postRecordBtnDidPressNotification()
         
-        switch SCAudioManager.shared.isRecording {
+        switch SCAudioManager.shared.isRecordingSample {
         case true:
             SCAudioManager.shared.isRecordingSelected = false
             SCAudioManager.shared.stopRecordingSample()
@@ -383,13 +383,13 @@ class SCSequencerViewController: UIViewController {
         
         print("new recording sound collage did press.")
         
-        switch SCAudioManager.shared.isRecordingMixerOutput {
+        switch SCAudioManager.shared.isRecordingOutput {
         case true:
-            SCAudioManager.shared.stopRecordingMixerOutput()
-            SCAudioManager.shared.isRecordingMixerOutput = false
+            SCAudioManager.shared.stopRecordingOutput()
+            SCAudioManager.shared.isRecordingOutput = false
         case false:
-            SCAudioManager.shared.startRecordingMixerOutput()
-            SCAudioManager.shared.isRecordingMixerOutput = true
+            SCAudioManager.shared.startRecordingOutput()
+            SCAudioManager.shared.isRecordingOutput = true
         }
     }
     

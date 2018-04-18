@@ -241,7 +241,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.isRecordingEnabled = false
             cell.stopCellsFlashing()
         }
-        switch SCAudioManager.shared.isRecording {
+        switch SCAudioManager.shared.isRecordingSample {
         case true:
             cell.isRecordingDelayTouch()
         case false:
@@ -269,7 +269,7 @@ extension SCSamplerViewController: UICollectionViewDelegate, UICollectionViewDat
         }
         SCAudioManager.shared.selectedSampleIndex = indexPath.row
         NotificationCenter.default.post(name: Notification.Name.init("selectedSamplePadDidChangeNotification"), object: nil)
-        if SCAudioManager.shared.isRecording == true {
+        if SCAudioManager.shared.isRecordingSample == true {
             print("Recording in progress")
             return
         }
@@ -313,7 +313,7 @@ extension SCSamplerViewController: UIGestureRecognizerDelegate {
     
     
     func handleGestureRecognizer(gestureRecognizer: UIGestureRecognizer) {
-        if SCAudioManager.shared.isRecording == true {
+        if SCAudioManager.shared.isRecordingSample == true {
             print("Recording in progress")
             return
         }

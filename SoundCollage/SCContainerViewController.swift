@@ -79,7 +79,7 @@ class SCContainerViewController: UIViewController {
         
         let recordNewSCBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: buttonHeight, height: buttonHeight))
         recordNewSCBtn.setBackgroundImage(UIImage.init(named: "lp1"), for: .normal)
-        recordNewSCBtn.addTarget(self, action: #selector(SCContainerViewController.recordMixerOutputBtnDidPress), for: .touchUpInside)
+        recordNewSCBtn.addTarget(self, action: #selector(SCContainerViewController.recordOutputBtnDidPress), for: .touchUpInside)
         
         let bankBarBtn = UIBarButtonItem.init(customView: bankBtn)
         let recordBarBtn = UIBarButtonItem.init(customView: recordBtn)
@@ -106,7 +106,7 @@ class SCContainerViewController: UIViewController {
         }
         postRecordBtnDidPressNotification()
     
-        switch SCAudioManager.shared.isRecording {
+        switch SCAudioManager.shared.isRecordingSample {
         case true:
             SCAudioManager.shared.stopRecordingSample()
             recordBtn.alpha = 0
@@ -150,17 +150,17 @@ class SCContainerViewController: UIViewController {
     
     
     
-    @objc func recordMixerOutputBtnDidPress(){
+    @objc func recordOutputBtnDidPress(){
         
         print("new recording sound collage did press.")
         
-        switch SCAudioManager.shared.isRecordingMixerOutput {
+        switch SCAudioManager.shared.isRecordingOutput {
         case true:
-            SCAudioManager.shared.stopRecordingMixerOutput()
-            SCAudioManager.shared.isRecordingMixerOutput = false
+            SCAudioManager.shared.stopRecordingOutput()
+            SCAudioManager.shared.isRecordingOutput = false
         case false:
-            SCAudioManager.shared.startRecordingMixerOutput()
-            SCAudioManager.shared.isRecordingMixerOutput = true
+            SCAudioManager.shared.startRecordingOutput()
+            SCAudioManager.shared.isRecordingOutput = true
         }
     }
     

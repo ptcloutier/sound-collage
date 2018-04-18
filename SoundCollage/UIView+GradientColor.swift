@@ -59,8 +59,4 @@ extension UIView {
         gradient.endPoint = orientation.endPoint
         self.layer.insertSublayer(gradient, at: 0)
     }
-    
-   
-    
-    
 }
