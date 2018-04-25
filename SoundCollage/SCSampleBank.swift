@@ -33,7 +33,7 @@ class SCSampleBank {
         guard let name = json["name"] as? String,
             let sbID = json["sbID"] as? Int,
             let samples = json["samples"] as? [String: String],
-            let effectJSON = json["effectSettings"] as? [[[Float]]],
+            let effectJSON = json["effectSettings"] as? [[[Float]]], // TODO: crashes occurs here
             let seqJSON = json["sequencerSettings"] as? [[Bool]]
             else {
                 print("json error")
