@@ -10,6 +10,7 @@
     import AVFoundation
     import UIKit
     
+    //TODO: Refactor with JUCE
     
     class SCAudioManager: NSObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
         
